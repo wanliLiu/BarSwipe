@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SwipeBackAppTheme" parent="@style/AppBaseTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+		 <!--这两句话必须弄 -->
+        <!--<item name="android:fitsSystemWindows">true</item>-->
+    </style>
+
+</resources>

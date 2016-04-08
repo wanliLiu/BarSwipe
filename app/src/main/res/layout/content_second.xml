@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dtesTe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="80dp"
+    tools:context="com.barswipe.SecondActivity">
+
+    <Button
+        android:id="@+id/crotuon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:drawableRight="@mipmap/ic_arrow_drop_down_black_24dp"
+        android:text="Crouton"
+        android:textAllCaps="false" />
+
+
+    <Button
+        android:id="@+id/Fourth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Fourth"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/webView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Fourth"
+        android:text="webView"
+        android:textAllCaps="false" />
+
+    <TextView
+        android:id="@+id/dsdsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/webView"
+        android:background="@drawable/triangle"
+        android:padding="15dp"
+        android:rotation="-45"
+        android:text="-30%" />
+
+
+</RelativeLayout>

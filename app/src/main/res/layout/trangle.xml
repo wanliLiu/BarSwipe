@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_marginTop="50dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.barswipe.TextView45
+            android:id="@+id/tes1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-88%"
+            android:textColor="@color/color_white"
+            android:textSize="14sp"
+            app:triangleangle="-45"
+            app:trianglebackground="@color/color_orange" />
+
+        <com.barswipe.TextView45
+            android:id="@+id/t2323"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tes1"
+            android:text="我是一条小狗，不是常常"
+            android:textColor="@color/color_white"
+            android:textSize="14sp"
+            app:triangleangle="-45" />
+
+        <com.barswipe.TextView45
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/t2323"
+            android:text="我是一条小狗，不是常常"
+            android:textColor="@color/color_white"
+            android:textSize="14sp"
+            app:triangleangle="-0" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextView45">
+        <attr name="triangleangle" format="integer"/>
+        <attr name="trianglebackground" format="color"/>
+    </declare-styleable>
+</resources>
