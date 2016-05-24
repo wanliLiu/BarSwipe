@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.barswipe.FloatView.FloatWindowService;
+import com.barswipe.Scroller.ScrollerActivity;
+import com.barswipe.snapscrollview.ProductDetailActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +51,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.startScrooller).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ScrollerActivity.class));
+            }
+        });
+        findViewById(R.id.startProduct).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ProductDetailActivity.class));
+            }
+        });
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -88,4 +102,5 @@ public class MainActivity extends AppCompatActivity {
 
         Crouton.cancelAllCroutons();
     }
+
 }

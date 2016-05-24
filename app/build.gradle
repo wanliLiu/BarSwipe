@@ -26,4 +26,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     //    compile 'de.keyboardsurfer.android.widget:crouton:1.8.5'
     compile files('libs/fastjson-1.1.27-android.jar')
+    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
 }
