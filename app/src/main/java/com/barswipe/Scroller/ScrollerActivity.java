@@ -43,7 +43,7 @@ public class ScrollerActivity extends Activity implements View.OnClickListener {
                 tv.scrollTo(-100, 0);
                 break;
             case R.id.bt_scrollBy:
-                tv.scrollBy(-30, 0);
+                tv.scrollBy(-30, -30);
                 break;
             case R.id.startScrooler:
                 startActivity(new Intent(this,MultiScreenActivity.class));

@@ -47,8 +47,6 @@ public class MultiScreenActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        // TODO Auto-generated method stub
-
         switch (v.getId()) {
             case R.id.bt_scrollLeft:
                 mulTiViewGroup.startMove(); //下一屏

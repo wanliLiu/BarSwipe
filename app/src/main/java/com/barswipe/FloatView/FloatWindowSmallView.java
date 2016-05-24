@@ -1,11 +1,13 @@
 package com.barswipe.FloatView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.barswipe.R;
@@ -69,6 +71,8 @@ public class FloatWindowSmallView extends LinearLayout {
 	 */
 	private float yInView;
 
+	private Scroller mScroller;
+
 	public FloatWindowSmallView(Context context) {
 		super(context);
 		windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -78,7 +82,22 @@ public class FloatWindowSmallView extends LinearLayout {
 		viewHeight = view.getLayoutParams().height;
 		TextView percentView = (TextView) findViewById(R.id.percent);
 		percentView.setText(MyWindowManager.getUsedPercentValue(context));
+
+		mScroller = new Scroller(context);
 	}
+
+	@Override
+	public void computeScroll() {
+		if (mScroller.computeScrollOffset())
+		{
+			xInScreen = mScroller.getCurrX();
+			Log.e("xInScreen computeScroll",xInScreen + "");
+//			yInScreen = mScroller.getCurrY();
+			updateViewPosition();
+			postInvalidate();
+		}
+	}
+
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -96,12 +115,26 @@ public class FloatWindowSmallView extends LinearLayout {
 			xInScreen = event.getRawX();
 			yInScreen = event.getRawY() - getStatusBarHeight();
 			// 手指移动的时候更新小悬浮窗的位置
+			Log.e("xInScreen ACTION_MOVE",xInScreen + "");
 			updateViewPosition();
 			break;
 		case MotionEvent.ACTION_UP:
 			// 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
 			if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
 				openBigWindow();
+			} else {
+				xInScreen = event.getRawX();
+				yInScreen = event.getRawY() - getStatusBarHeight();
+				Log.e("xInScreen ACTION_UP",xInScreen + "");
+				Log.e("screen width",(windowManager.getDefaultDisplay().getWidth() / 2) + "");
+				if ((int)xInScreen > windowManager.getDefaultDisplay().getWidth() / 2) {
+					Log.e("toRight","");
+					mScroller.startScroll((int)xInScreen,0,-1 * (windowManager.getDefaultDisplay().getWidth() - (int)xInScreen),0);
+				} else {
+					Log.e("toleft","");
+					mScroller.startScroll((int)xInScreen,0, (int)xInScreen,0);
+				}
+				invalidate();
 			}
 			break;
 		default:

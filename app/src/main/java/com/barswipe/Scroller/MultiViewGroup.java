@@ -35,6 +35,28 @@ public class MultiViewGroup extends ViewGroup {
         init();
     }
 
+
+    private void init() {
+
+        mScroller = new Scroller(mContext);
+
+        // 初始化3个 LinearLayout控件
+        LinearLayout oneLL = new LinearLayout(mContext);
+        oneLL.setBackgroundColor(Color.RED);
+        addView(oneLL);
+
+        LinearLayout twoLL = new LinearLayout(mContext);
+        twoLL.setBackgroundColor(Color.YELLOW);
+        addView(twoLL);
+
+        LinearLayout threeLL = new LinearLayout(mContext);
+        threeLL.setBackgroundColor(Color.BLUE);
+        addView(threeLL);
+
+        //初始化一个最小滑动距离
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    }
+
     //startScroll 滑屏
     public void startMove() {
         curScreen++;
@@ -42,8 +64,7 @@ public class MultiViewGroup extends ViewGroup {
 
         Log.i(TAG, "----width  " + getWidth());
         //采用Scroller类控制滑动过程
-        mScroller.startScroll((curScreen - 1) * getWidth(), 0,
-                getWidth(), 0, 3000);
+        mScroller.startScroll((curScreen - 1) * getWidth(), 0,getWidth(), 0);
         //暴力点直接到目标出
         //scrollTo(curScreen * getWidth(), 0);
         //其实在点击按钮的时候，就回触发View绘制流程，这儿我们在强制绘制下View
@@ -84,7 +105,6 @@ public class MultiViewGroup extends ViewGroup {
     // 只有当前LAYOUT中的某个CHILD导致SCROLL发生滚动，才会致使自己的COMPUTESCROLL被调用
     @Override
     public void computeScroll() {
-        // TODO Auto-generated method stub
         Log.e(TAG, "computeScroll");
         // 如果返回true，表示动画还没有结束
         // 因为前面startScroll，所以只有在startScroll完成时 才会为false
@@ -119,7 +139,6 @@ public class MultiViewGroup extends ViewGroup {
     // 这个感觉没什么作用 不管true还是false 都是会执行onTouchEvent的 因为子view里面onTouchEvent返回false了
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        // TODO Auto-generated method stub
         Log.e(TAG, "onInterceptTouchEvent-slop:" + mTouchSlop);
 
         final int action = ev.getAction();
@@ -208,7 +227,7 @@ public class MultiViewGroup extends ViewGroup {
 
                 int velocityX = (int) velocityTracker.getXVelocity();
 
-                Log.e(TAG, "---velocityX---" + velocityX);
+                Log.e(TAG, "---velocityX---(" + velocityX);
 
                 //滑动速率达到了一个标准(快速向右滑屏，返回上一个屏幕) 马上进行切屏处理
                 if (velocityX > SNAP_VELOCITY && curScreen > 0) {
@@ -287,27 +306,6 @@ public class MultiViewGroup extends ViewGroup {
 
     }
 
-    private void init() {
-
-        mScroller = new Scroller(mContext);
-
-        // 初始化3个 LinearLayout控件
-        LinearLayout oneLL = new LinearLayout(mContext);
-        oneLL.setBackgroundColor(Color.RED);
-        addView(oneLL);
-
-        LinearLayout twoLL = new LinearLayout(mContext);
-        twoLL.setBackgroundColor(Color.YELLOW);
-        addView(twoLL);
-
-        LinearLayout threeLL = new LinearLayout(mContext);
-        threeLL.setBackgroundColor(Color.BLUE);
-        addView(threeLL);
-
-        //初始化一个最小滑动距离
-        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-    }
-
     // measure过程
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -345,9 +343,7 @@ public class MultiViewGroup extends ViewGroup {
 
             //即使可见的，才划到屏幕上
             if (child.getVisibility() != View.GONE)
-                child.layout(startLeft, startTop,
-                        startLeft + getWidth(),
-                        startTop + MultiScreenActivity.scrrenHeight);
+                child.layout(startLeft, startTop,startLeft + getWidth(),startTop + MultiScreenActivity.scrrenHeight);
 
             startLeft = startLeft + getWidth(); //校准每个子View的起始布局位置
             //三个子视图的在屏幕中的分布如下 [0 , 320] / [320,640] / [640,960]
