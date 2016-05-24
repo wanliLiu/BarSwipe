@@ -1,17 +1,12 @@
 package com.barswipe;
 
 import android.app.Application;
-import android.provider.SyncStateContract;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.parse.Parse;
-import com.parse.ParseInstallation;
-
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,11 +17,6 @@ public class Myapplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Parse.initialize(this, "P8e4kwLZzMHeBl2ncep08igOTtfFDLkkGZuuMFZH", "0aJaQwEphVX7AyJauAb9g31BSBRXyX8etjR5KVWa");
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-        Parse.setLogLevel(Parse.LOG_LEVEL_VERBOSE);
-//        Localytics.registerPush(SyncStateContract.Constants.LOCALYTICS_SENDER_ID);
 
         JSONObject object = new JSONObject();
         object.put("UserToken","sssssdsdwqeewewe");

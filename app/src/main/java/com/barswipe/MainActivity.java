@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.barswipe.FloatView.FloatWindowService;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent intent = new Intent(MainActivity.this, FloatWindowService.class);
+        startService(intent);
 
         findViewById(R.id.Test).setOnClickListener(new View.OnClickListener() {
             @Override
