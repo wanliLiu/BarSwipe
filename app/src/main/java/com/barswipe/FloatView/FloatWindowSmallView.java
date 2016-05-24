@@ -128,11 +128,11 @@ public class FloatWindowSmallView extends LinearLayout {
 				Log.e("xInScreen ACTION_UP",xInScreen + "");
 				Log.e("screen width",(windowManager.getDefaultDisplay().getWidth() / 2) + "");
 				if ((int)xInScreen > windowManager.getDefaultDisplay().getWidth() / 2) {
-					Log.e("toRight","");
-					mScroller.startScroll((int)xInScreen,0,-1 * (windowManager.getDefaultDisplay().getWidth() - (int)xInScreen),0);
+					Log.e("toRight","toRight");
+					mScroller.startScroll((int)xInScreen,0,(windowManager.getDefaultDisplay().getWidth() - (int)xInScreen),0,400);
 				} else {
-					Log.e("toleft","");
-					mScroller.startScroll((int)xInScreen,0, (int)xInScreen,0);
+					Log.e("toleft","toleft");
+					mScroller.startScroll((int)xInScreen,0, - 1 * (int)xInScreen,0,400);
 				}
 				invalidate();
 			}
