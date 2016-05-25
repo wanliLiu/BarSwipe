@@ -61,7 +61,12 @@
             android:layout_height="wrap_content"
             android:text="商品详情学习"
             android:textAllCaps="false" />
-
+        <Button
+            android:id="@+id/studyViewDragHelper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ViewDragHelper学习"
+            android:textAllCaps="false" />
     </LinearLayout>
 </ScrollView>
 
