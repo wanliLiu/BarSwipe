@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.barswipe.EaseInterpolator.MainActivityAnimation;
 import com.barswipe.FloatView.FloatWindowService;
 import com.barswipe.Scroller.ScrollerActivity;
 import com.barswipe.snapscrollview.ProductDetailActivity;
@@ -65,12 +66,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.studyEaseAnimation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, MainActivityAnimation.class));
+            }
+        });
+
         findViewById(R.id.studyViewDragHelper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"需要抽空学习",Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "需要抽空学习", Toast.LENGTH_LONG).show();
             }
         });
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
