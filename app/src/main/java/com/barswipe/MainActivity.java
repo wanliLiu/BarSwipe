@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.barswipe.FloatView.FloatWindowService;
 import com.barswipe.Scroller.ScrollerActivity;
+import com.barswipe.ViewDragHelper.ViewDragHelperStudyActivity;
 import com.barswipe.snapscrollview.ProductDetailActivity;
 
 import org.json.JSONArray;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.studyViewDragHelper).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"需要抽空学习",Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainActivity.this, ViewDragHelperStudyActivity.class));
             }
         });
 

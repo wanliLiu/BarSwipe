@@ -45,6 +45,7 @@
         <activity android:name=".Scroller.MultiScreenActivity"/>
         <activity android:name=".Scroller.ScrollerActivity"/>
         <activity android:name=".snapscrollview.ProductDetailActivity"/>
+        <activity android:name=".ViewDragHelper.ViewDragHelperStudyActivity"/>
     </application>
 
 </manifest>
