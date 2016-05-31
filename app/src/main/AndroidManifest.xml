@@ -46,6 +46,7 @@
         <activity android:name=".Scroller.ScrollerActivity"/>
         <activity android:name=".snapscrollview.ProductDetailActivity"/>
         <activity android:name=".ViewDragHelper.ViewDragHelperStudyActivity"/>
+        <activity android:name=".EaseInterpolator.MainActivityAnimation" />
     </application>
 
 </manifest>

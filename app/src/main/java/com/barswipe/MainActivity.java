@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
+import com.barswipe.EaseInterpolator.MainActivityAnimation;
 import com.barswipe.FloatView.FloatWindowService;
 import com.barswipe.Scroller.ScrollerActivity;
 import com.barswipe.ViewDragHelper.ViewDragHelperStudyActivity;
@@ -63,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, ProductDetailActivity.class));
+            }
+        });
+
+        findViewById(R.id.studyEaseAnimation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, MainActivityAnimation.class));
             }
         });
 
