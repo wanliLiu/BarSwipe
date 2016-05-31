@@ -11,6 +11,14 @@ import android.widget.FrameLayout;
 
 /**
  * Created by soli on 5/29/16.
+ *
+ * refrences
+ * https://newfivefour.com/android-viewdraghelper-example-tutorial.html
+ * analytics.google.com/analytics/web/?hl=zh-CN&pli=1#realtime/rt-app-overview/a56523115w90729278p94392516/
+ * http://blog.csdn.net/lmj623565791/article/details/46858663
+ *
+ *
+ * http://www.it165.net/pro/html/201505/40127.html
  */
 public class DragView extends FrameLayout {
 
