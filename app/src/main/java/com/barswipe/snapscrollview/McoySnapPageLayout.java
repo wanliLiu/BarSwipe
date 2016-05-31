@@ -10,9 +10,11 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Scroller;
 
+import com.barswipe.R;
+
 /**
  * @author jiangxinxing---mcoy in English
- *         <p/>
+ *         <p>
  *         了解此ViewGroup之前， 有两点一定要做到心中有数
  *         一个是对Scroller的使用， 另一个是对onInterceptTouchEvent和onTouchEvent要做到很熟悉
  *         以下几个网站可以做参考用
@@ -102,21 +104,28 @@ public class McoySnapPageLayout extends ViewGroup {
 
         gapBetweenTopAndBottom = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         mMaximumVelocity = ViewConfiguration.get(getContext()).getScaledMaximumFlingVelocity();
+        Init();
+    }
+
+    private View getView(int id) {
+        return View.inflate(getContext(), id, null);
+    }
+
+    /**
+     *
+     */
+    private void Init() {
+        removeAllViews();
+        addView(getView(R.layout.mcoy_produt_detail_layout_test));
+        addView(getView(R.layout.mcoy_product_content_page));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        // The children are given the same width and height as the workspace
-        final int count = getChildCount();
-        for (int i = 0; i < count; i++) {
-            try {
-                getChildAt(i).measure(widthMeasureSpec, heightMeasureSpec);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        for (int i = 0; i < getChildCount(); i++) {
+            getChildAt(i).measure(widthMeasureSpec, heightMeasureSpec);
+//            measureChild(getChildAt(i),widthMeasureSpec,heightMeasureSpec);
         }
     }
 
@@ -124,13 +133,14 @@ public class McoySnapPageLayout extends ViewGroup {
     protected void onLayout(boolean arg0, int arg1, int arg2, int arg3, int arg4) {
         int childTop = 0;
         int count = getChildCount();
-//		 DLog.i(TAG, "onLayout mDataIndex = " + mDataIndex);
-        // 设置布局，将子视图顺序竖屏排列
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != View.GONE) {
-                final int childWidth = child.getMeasuredWidth();
-                final int childHeight = child.getMeasuredHeight();
+//                final int childWidth = child.getMeasuredWidth();
+//                final int childHeight = child.getMeasuredHeight();
+//                childTop = childHeight * i;
+                final int childWidth = getMeasuredWidth();
+                final int childHeight = getMeasuredHeight();
                 childTop = childHeight * i;
                 child.layout(0, childTop, childWidth, childTop + childHeight);
             }
@@ -153,6 +163,7 @@ public class McoySnapPageLayout extends ViewGroup {
     }
 
     private void addPagesAndRefresh() {
+        removeAllViews();
         // 设置页面id
         mPageTop.getRootView().setId(0);
         mPageBottom.getRootView().setId(1);
@@ -166,13 +177,14 @@ public class McoySnapPageLayout extends ViewGroup {
      * computeScroll方法会调用postInvalidate()方法， 而postInvalidate()方法中系统
      * 又会调用computeScroll方法， 因此会一直在循环互相调用， 循环的终结点是在computeScrollOffset()
      * 当computeScrollOffset这个方法返回false时，说明已经结束滚动。
-     * <p/>
+     * <p>
      * 重要：真正的实现此view的滚动是调用scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
      */
     @Override
     public void computeScroll() {
         //先判断mScroller滚动是否完成
         if (mScroller.computeScrollOffset()) {
+            Log.e(TAG, "computeScroll--getScrollY = " + getScrollY());
             if (mScroller.getCurrY() == (mScroller.getFinalY())) {
                 if (mNextDataIndex > mDataIndex) {
                     mFlipDrection = FLIP_DIRECTION_DOWN;
@@ -301,11 +313,13 @@ public class McoySnapPageLayout extends ViewGroup {
         final float y = ev.getY();
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+                Log.e(TAG, "getScrollY is ACTION_DOWN----" + getScrollY());
                 if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                Log.e(TAG, "getScrollY is ACTION_MOVE----" + getScrollY());
                 if (mTouchState != TOUCH_STATE_SCROLLING) {
                     // 记录y与mLastMotionY差值的绝对值。
                     // yDiff大于gapBetweenTopAndBottom时就认为界面拖动了足够大的距离，屏幕就可以移动了。
@@ -335,9 +349,11 @@ public class McoySnapPageLayout extends ViewGroup {
                         }
                     }
                 }
+                Log.e(TAG, "computeScroll--getScrollY = " + getScrollY());
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                Log.e(TAG, "getScrollY is ACTION_UP----" + getScrollY());
                 // 弹起手指后，切换屏幕的处理
                 if (mTouchState == TOUCH_STATE_SCROLLING) {
                     final VelocityTracker velocityTracker = mVelocityTracker;
@@ -387,7 +403,7 @@ public class McoySnapPageLayout extends ViewGroup {
         Log.e(TAG, "--x--topEdge = " + topEdge);
         Log.e(TAG, "--x--getScrollY = " + getScrollY());
         if (topEdge < getScrollY() && (getScrollY() - topEdge) >= flipHeight && mCurrentScreen == 0) {
-            //向下滑动    
+            //向下滑动
             whichScreen = mDataIndex + 1;
         } else if (topEdge > getScrollY() && (topEdge - getScrollY()) >= flipHeight && mCurrentScreen == 1) {
             //向上滑动
