@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.barswipe.DragGridView.gridview.MainActivityDragGridView;
 import com.barswipe.EaseInterpolator.MainActivityAnimation;
 import com.barswipe.FloatView.FloatWindowService;
 import com.barswipe.Scroller.ScrollerActivity;
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, MainActivityAnimation.class));
+            }
+        });
+
+        findViewById(R.id.studyDragr).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, MainActivityDragGridView.class));
             }
         });
 
