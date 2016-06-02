@@ -1,13 +1,13 @@
 package com.barswipe.EaseInterpolator;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Interpolator;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ import cimi.com.easeinterpolator.EaseSineInInterpolator;
 import cimi.com.easeinterpolator.EaseSineInOutInterpolator;
 import cimi.com.easeinterpolator.EaseSineOutInterpolator;
 
-public class MainActivityAnimation extends AppCompatActivity {
+public class MainActivityAnimation extends BaseActivity {
     private static final long DURATION = 1200;
 
     private ListView listView;

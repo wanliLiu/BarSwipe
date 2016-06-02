@@ -1,9 +1,6 @@
 package com.barswipe;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -16,7 +13,7 @@ import android.widget.Toast;
 /**
  * Created by SoLi on 2016/2/24.
  */
-public class WebViewActivity extends Activity {
+public class WebViewActivity extends BaseActivity {
 
     private WebView myWebView;
 

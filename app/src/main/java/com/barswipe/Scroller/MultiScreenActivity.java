@@ -1,19 +1,19 @@
 package com.barswipe.Scroller;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 
 /**
  * @author http://http://blog.csdn.net/qinjuning
  */
 //带有可以切换屏的Activity
-public class MultiScreenActivity extends Activity implements OnClickListener {
+public class MultiScreenActivity extends BaseActivity implements OnClickListener {
 
     private Button bt_scrollLeft;
     private Button bt_scrollRight;

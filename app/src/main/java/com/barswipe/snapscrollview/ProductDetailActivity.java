@@ -1,11 +1,11 @@
 package com.barswipe.snapscrollview;
 
-import android.app.Activity;
 import android.os.Bundle;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 
-public class ProductDetailActivity extends Activity {
+public class ProductDetailActivity extends BaseActivity {
 
     private McoySnapPageLayout mcoySnapPageLayout = null;
 

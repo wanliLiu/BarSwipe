@@ -1,6 +1,5 @@
 package com.barswipe.DragGridView.gridview;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -10,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.DragGridView.gridview.lib.DragReorderGridView;
 import com.barswipe.DragGridView.gridview.lib.DragReorderListener;
 import com.barswipe.R;
@@ -17,7 +17,7 @@ import com.barswipe.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivityDragGridView extends Activity {
+public class MainActivityDragGridView extends BaseActivity {
 
     private DragReorderGridView mGridView;
     private MyAdapter mAdapter;
