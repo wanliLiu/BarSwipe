@@ -3,13 +3,13 @@
     package="com.barswipe">
 
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
         android:name=".Myapplication"
@@ -40,14 +40,34 @@
 
         <activity android:name=".FourthActivity" />
         <activity android:name=".WebViewActivity" />
-        <activity android:name=".TrignalActivity"/>
-        <service android:name=".FloatView.FloatWindowService"/>
-        <activity android:name=".Scroller.MultiScreenActivity"/>
-        <activity android:name=".Scroller.ScrollerActivity"/>
-        <activity android:name=".snapscrollview.ProductDetailActivity"/>
-        <activity android:name=".ViewDragHelper.ViewDragHelperStudyActivity"/>
-        <activity android:name=".EaseInterpolator.MainActivityAnimation" />
-        <activity android:name=".DragGridView.gridview.MainActivityDragGridView" />
+        <activity android:name=".TrignalActivity" />
+
+        <service android:name=".FloatView.FloatWindowService" />
+
+        <activity
+            android:name=".Scroller.ScrollerActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Scroller scrollBy scrollTo offsetLeftAndRight学习" />
+        <activity
+            android:name=".Scroller.MultiScreenActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Scroller 水平滑动ViewGroup 学习" />
+        <activity
+            android:name=".snapscrollview.ProductDetailActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="商品详情 scroller onInterTouch onTouch 学习" />
+        <activity
+            android:name=".ViewDragHelper.ViewDragHelperStudyActivity"
+            android:icon="@mipmap/ic_launcher"
+            android:label="ViewDragHelper 学习" />
+        <activity
+            android:name=".EaseInterpolator.MainActivityAnimation"
+            android:icon="@mipmap/ic_launcher"
+            android:label="EaseAnimation interpor getInterpolation 学习" />
+        <activity
+            android:name=".DragGridView.gridview.MainActivityDragGridView"
+            android:icon="@mipmap/ic_launcher"
+            android:label="DragGridView Animation  TranslateAnimation  Animation.ABSOLUTE Animation.RELATIVE_TO_SELF  Animation.RELATIVE_TO_PARENT学习" />
     </application>
 
 </manifest>
