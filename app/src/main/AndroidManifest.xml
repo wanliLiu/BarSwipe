@@ -32,7 +32,8 @@
         <activity
             android:name=".MainActivity"
             android:icon="@mipmap/icon"
-            android:label="Swipelayout 以及其他的学习" />
+            android:description="@string/des_base"
+            android:label="滑动删除" />
         <activity android:name=".SecondActivity" />
 
         <activity android:name=".ThirdActivity" />
@@ -45,6 +46,7 @@
         <activity
             android:name=".TrignalActivity"
             android:icon="@mipmap/ic_launcher"
+            android:description="@string/des_Test"
             android:label="倾斜Textview" />
 
         <service android:name=".FloatView.FloatWindowService" />
@@ -52,27 +54,33 @@
         <activity
             android:name=".Scroller.ScrollerActivity"
             android:icon="@mipmap/ic_launcher"
-            android:label="Scroller scrollBy scrollTo offsetLeftAndRight学习" />
+            android:description="@string/str_scroller"
+            android:label="Scroller学习" />
         <activity
             android:name=".Scroller.MultiScreenActivity"
             android:icon="@mipmap/ic_launcher"
-            android:label="Scroller 水平滑动ViewGroup 学习" />
+            android:description="@string/str_scroller1"
+            android:label="Scroller进一步学习" />
         <activity
             android:name=".snapscrollview.ProductDetailActivity"
             android:icon="@mipmap/ic_launcher"
-            android:label="商品详情 scroller onInterTouch onTouch 学习" />
+            android:description="@string/str_prode"
+            android:label="商品详情学习" />
         <activity
             android:name=".ViewDragHelper.ViewDragHelperStudyActivity"
             android:icon="@mipmap/ic_launcher"
-            android:label="ViewDragHelper 学习" />
+            android:description="@string/str_viewDrageHelper"
+            android:label="ViewDragHelper学习" />
         <activity
             android:name=".EaseInterpolator.MainActivityAnimation"
             android:icon="@mipmap/ic_launcher"
-            android:label="EaseAnimation interpor getInterpolation 学习" />
+            android:description="@string/str_ainimation"
+            android:label="EaseAnimation学习" />
         <activity
             android:name=".DragGridView.gridview.MainActivityDragGridView"
             android:icon="@mipmap/ic_launcher"
-            android:label="DragGridView Animation  TranslateAnimation  Animation.ABSOLUTE Animation.RELATIVE_TO_SELF  Animation.RELATIVE_TO_PARENT学习" />
+            android:description="@string/str_drage"
+            android:label="DragGridView 学习" />
     </application>
 
 </manifest>

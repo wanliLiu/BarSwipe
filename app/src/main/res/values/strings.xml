@@ -4,4 +4,13 @@
         <string name="translucent_background">Example of how you can make an
             activity have a translucent background, compositing over
             whatever is behind it.</string>
+
+    <string name="des_base">Swipelayout Curton .......</string>
+    <string name="des_Test">自定义倾斜TextView</string>
+    <string name="str_scroller">Scroller scrollBy scrollTo offsetLeftAndRight学习</string>
+    <string name="str_scroller1">用Scroller 自定义水平滑动ViewGroup </string>
+    <string name="str_prode">用Scroller 实现下滑翻页的效果</string>
+    <string name="str_viewDrageHelper">ViewDragHelper基础学习，源码需要看</string>
+    <string name="str_ainimation">Animation不同效果的加速度实现</string>
+    <string name="str_drage">DragGridView 具体实现方式，以及TranslateAnimation的几种使用方式 Animation  TranslateAnimation  Animation.ABSOLUTE Animation.RELATIVE_TO_SELF  Animation.RELATIVE_TO_PARENT</string>
 </resources>

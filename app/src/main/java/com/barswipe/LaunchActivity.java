@@ -128,7 +128,8 @@ public class LaunchActivity extends AppCompatActivity {
             }
 
             ActivityInfo info = getItem(position);
-            holder.studyDesc.setText(info.nonLocalizedLabel);
+            holder.studyItem.setText(info.nonLocalizedLabel);
+            holder.studyDesc.setText(info.descriptionRes);
             holder.icon.setImageResource(info.icon);
 
 
@@ -138,10 +139,11 @@ public class LaunchActivity extends AppCompatActivity {
 
         private class ViewHolder {
             private ImageView icon;
-            private TextView studyDesc;
+            private TextView studyDesc, studyItem;
 
             public ViewHolder(View view) {
                 icon = (ImageView) view.findViewById(R.id.icon);
+                studyItem = (TextView) view.findViewById(R.id.studyItem);
                 studyDesc = (TextView) view.findViewById(R.id.studyDesc);
                 view.setTag(this);
             }
