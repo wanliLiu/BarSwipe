@@ -31,8 +31,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:icon="@mipmap/icon"
             android:description="@string/des_base"
+            android:icon="@mipmap/icon"
             android:label="滑动删除" />
         <activity android:name=".SecondActivity" />
 
@@ -45,42 +45,48 @@
         <activity android:name=".WebViewActivity" />
         <activity
             android:name=".TrignalActivity"
-            android:icon="@mipmap/ic_launcher"
             android:description="@string/des_Test"
+            android:icon="@mipmap/ic_launcher"
             android:label="倾斜Textview" />
 
         <service android:name=".FloatView.FloatWindowService" />
 
         <activity
             android:name=".Scroller.ScrollerActivity"
-            android:icon="@mipmap/ic_launcher"
             android:description="@string/str_scroller"
+            android:icon="@mipmap/ic_launcher"
             android:label="Scroller学习" />
         <activity
             android:name=".Scroller.MultiScreenActivity"
-            android:icon="@mipmap/ic_launcher"
             android:description="@string/str_scroller1"
+            android:icon="@mipmap/ic_launcher"
             android:label="Scroller进一步学习" />
         <activity
             android:name=".snapscrollview.ProductDetailActivity"
-            android:icon="@mipmap/ic_launcher"
             android:description="@string/str_prode"
+            android:icon="@mipmap/ic_launcher"
             android:label="商品详情学习" />
         <activity
             android:name=".ViewDragHelper.ViewDragHelperStudyActivity"
-            android:icon="@mipmap/ic_launcher"
             android:description="@string/str_viewDrageHelper"
+            android:icon="@mipmap/ic_launcher"
             android:label="ViewDragHelper学习" />
         <activity
             android:name=".EaseInterpolator.MainActivityAnimation"
-            android:icon="@mipmap/ic_launcher"
             android:description="@string/str_ainimation"
+            android:icon="@mipmap/ic_launcher"
             android:label="EaseAnimation学习" />
         <activity
             android:name=".DragGridView.gridview.MainActivityDragGridView"
-            android:icon="@mipmap/ic_launcher"
             android:description="@string/str_drage"
+            android:icon="@mipmap/ic_launcher"
             android:label="DragGridView 学习" />
+
+        <activity
+            android:name=".ExpandableTextView.DemoActivity"
+            android:description="@string/str_ExpanAbleTextView"
+            android:icon="@mipmap/ic_launcher"
+            android:label="ExpandableTextView 学习" />
     </application>
 
 </manifest>
