@@ -83,10 +83,17 @@
             android:label="DragGridView 学习" />
 
         <activity
+            android:name=".DragGridView.custom.DraggableGridViewSampleActivity"
+            android:description="@string/str_ExpanAbleTextView1"
+            android:icon="@mipmap/ic_launcher"
+            android:label="DraggableGridView学习" />
+
+        <activity
             android:name=".ExpandableTextView.DemoActivity"
             android:description="@string/str_ExpanAbleTextView"
             android:icon="@mipmap/ic_launcher"
             android:label="ExpandableTextView 学习" />
+
     </application>
 
 </manifest>

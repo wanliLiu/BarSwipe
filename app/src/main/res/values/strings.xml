@@ -25,6 +25,9 @@
     <string name="title_demo1">In ScrollView</string>
     <string name="title_demo2">In ListView</string>
 
+    <string name="button1Text">Add Word</string>
+    <string name="button2Text">View Poem</string>
+
 
     <string name="des_base">Swipelayout Curton .......</string>
     <string name="des_Test">自定义倾斜TextView</string>
@@ -35,4 +38,5 @@
     <string name="str_ainimation">Animation不同效果的加速度实现</string>
     <string name="str_drage">DragGridView 具体实现方式，以及TranslateAnimation的几种使用方式 Animation  TranslateAnimation  Animation.ABSOLUTE Animation.RELATIVE_TO_SELF  Animation.RELATIVE_TO_PARENT</string>
     <string name="str_ExpanAbleTextView">主要通过动画Linearlayout实现的</string>
+    <string name="str_ExpanAbleTextView1">和上面这个不一样，这个是自定义的，不是extend GridView,还没有看哦，你要看哦</string>
 </resources>

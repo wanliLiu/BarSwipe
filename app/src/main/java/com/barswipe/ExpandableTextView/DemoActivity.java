@@ -7,13 +7,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 
 
@@ -22,7 +22,7 @@ import com.barswipe.R;
  *
  * @author Manabu-GT
  */
-public class DemoActivity extends AppCompatActivity {
+public class DemoActivity extends BaseActivity {
 
     private static final String POSITION = "POSITION";
 
