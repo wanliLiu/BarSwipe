@@ -4,11 +4,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/test"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="test" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Animation test"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
 
     <com.barswipe.DragGridView.gridview.lib.DragReorderGridView
         android:id="@+id/grid"

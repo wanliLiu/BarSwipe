@@ -30,13 +30,13 @@ public class MainActivityDragGridView extends BaseActivity {
             R.mipmap.ht_irzrj, R.mipmap.ht_isjkh, R.mipmap.ht_ithbeh,
             R.mipmap.ht_iwdzx, R.mipmap.ht_ixgsg};
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
         mGridView = (DragReorderGridView) findViewById(R.id.grid);
-
         initData();
 
         mAdapter = new MyAdapter(mItems, this);

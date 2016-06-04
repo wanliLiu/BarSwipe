@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -59,6 +60,8 @@ public class DragReorderGridView extends GridView {
     private int mLastEventX = 0;// 最后touch位置的x坐标
 
     private boolean mEnableItemClick = true;
+
+    private int selectPostion = -1;
 
     public DragReorderGridView(Context context) {
         this(context, null);
@@ -145,6 +148,75 @@ public class DragReorderGridView extends GridView {
         mGridViewScrollStep = (int) (GRIDVIEW_SCROLL_STEP * metrics.density + 0.5f);
     }
 
+    /*****************************************************************************/
+    /**
+     * 移动删除动画
+     */
+    private void showDeletePostionAnimation() {
+        View desView = findViewByPosition(3);
+        View draggingView = findViewByPosition(selectPostion);
+//        int x = (desView.getLeft() - draggingView.getLeft()) / desView.getWidth();
+//        int y = (draggingView.getTop() - desView.getTop()) / desView.getHeight();
+
+        /************使用系统的Animation****************/
+//        TranslateAnimation translate = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,x,
+//                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -y);
+//        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f,0.0f);
+//        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f,0.0f,1.0f,0.0f,0.5f,0.5f);
+////        TranslateAnimation translate = new TranslateAnimation(Animation.ABSOLUTE, 0, Animation.ABSOLUTE,draggingView.getWidth(),
+////                Animation.ABSOLUTE, 0, Animation.ABSOLUTE, -draggingView.getHeight());
+//
+//        AnimationSet set = new AnimationSet(true);
+//        set.addAnimation(translate);
+//        set.addAnimation(alphaAnimation);
+//        set.addAnimation(scaleAnimation);
+//
+//        set.setDuration(2000);
+//        set.setFillEnabled(true);
+//        set.setFillAfter(false);
+//        draggingView.clearAnimation();
+//        draggingView.startAnimation(set);
+
+        /************使用nielod animation****************/
+//        AnimatorSet setAnim = new AnimatorSet();
+//        setAnim.playTogether(ObjectAnimator.ofFloat(draggingView,"translationX",0.0f,x*draggingView.getWidth() + draggingView.getWidth() / 2),
+//                ObjectAnimator.ofFloat(draggingView,"translationY",0.0f,-(y*draggingView.getHeight() - draggingView.getWidth() / 2)),
+//                ObjectAnimator.ofFloat(draggingView,"alpha",1.0f,0.0f),
+//                ObjectAnimator.ofFloat(draggingView,"scaleX",1.0f,0.0f),
+//                ObjectAnimator.ofFloat(draggingView,"scaleY",1.0f,0.0f),
+//                ObjectAnimator.ofFloat(draggingView,"pivotX",0.5f),
+//                ObjectAnimator.ofFloat(draggingView,"pivotY",0.5f)
+//        );
+
+//        setAnim.setDuration(2000);
+//        setAnim.start();
+
+
+        createHoverDrawable(draggingView);
+        invalidate();
+        final int dx = desView.getLeft() - draggingView.getLeft();
+        final int dy = desView.getTop() - draggingView.getTop();
+
+        Animation animation = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                super.applyTransformation(interpolatedTime, t);
+
+                if (interpolatedTime == 1.0f) {
+                    mHoverView = null;
+                    postInvalidate();
+                } else {
+                    hoverViewFollow((int) (mLastEventY + interpolatedTime * dx), (int) (mLastEventY + interpolatedTime * dy));
+                }
+
+            }
+        };
+
+        animation.setDuration(2000);
+        draggingView.startAnimation(animation);
+    }
+    /*****************************************************************************/
+
     /**
      * item左上角delete点击监听器
      */
@@ -153,9 +225,10 @@ public class DragReorderGridView extends GridView {
         @Override
         public void onClick(View arg0) {
             if (mDragReorderListener != null) {
-                mDragReorderListener.onEditAction(mEditingPosition);
+                showDeletePostionAnimation();
+//                mDragReorderListener.onEditAction(mEditingPosition);
             }
-            quitEditMode();
+//            quitEditMode();
         }
     };
 
@@ -637,6 +710,8 @@ public class DragReorderGridView extends GridView {
                 mIsWaitingForScrollFinish = true;
                 return;
             }
+
+            selectPostion = mDraggingPosition;
 
             View draggingView = findViewByPosition(mDraggingPosition);
             TranslateAnimation translate = new TranslateAnimation(Animation.ABSOLUTE, mHoverViewBounds.left - draggingView.getLeft(), Animation.ABSOLUTE, 0,
