@@ -33,11 +33,12 @@
             android:textSize="16sp"
             tools:text="这是怎么回事？？？" />
 
-        <ImageButton
+        <ImageView
             android:id="@id/expand_collapse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
+            android:padding="5dp"
             android:background="@android:color/transparent" />
     </com.barswipe.ExpandableTextView.ExpandableTextView>
 

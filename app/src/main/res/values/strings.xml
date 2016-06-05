@@ -41,5 +41,5 @@
         3.自定义视图中通过dispatchDraw来绘制想要的东西
     </string>
     <string name="str_ExpanAbleTextView">1.TabLayout google官方出的可以学习一下\n2.Linearlayout 和textview同时动画\n3.测量的时候获取Textview内容的高度，以此作为动画的高度差</string>
-    <string name="str_ExpanAbleTextView1">和上面这个不一样，这个是自定义的，不是extend GridView,还没有看哦，你要看哦</string>
+    <string name="str_ExpanAbleTextView1">1.完全自定义，需要自己实现获取相应位置的视图，移动，滚动\n2.上下滑动屏幕是通过不断layout所有childview，同样移动视图也是通过layout来实现\n3.有空自己可以写一个通过移动，通过layout移动某个视图到某个位置</string>
 </resources>

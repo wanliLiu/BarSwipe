@@ -199,8 +199,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
     protected Point getCoorFromIndex(int index) {
         int col = index % colCount;
         int row = index / colCount;
-        return new Point(padding + (childSize + padding) * col,
-                padding + (childSize + padding) * row - scroll);
+        return new Point(padding + (childSize + padding) * col, padding + (childSize + padding) * row - scroll);
     }
 
     public int getIndexOf(View child) {
@@ -262,7 +261,7 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
                     clampScroll();
                     if (Math.abs(delta) > 2)
                         enabled = false;
-                    onLayout(true, getLeft(), getTop(), getRight(), getBottom());
+//                    onLayout(true, getLeft(), getTop(), getRight(), getBottom());
                 }
                 lastX = (int) event.getX();
                 lastY = (int) event.getY();
@@ -414,7 +413,8 @@ public class DraggableGridView extends ViewGroup implements View.OnTouchListener
     }
 
     protected int getMaxScroll() {
-        int rowCount = (int) Math.ceil((double) getChildCount() / colCount), max = rowCount * childSize + (rowCount + 1) * padding - getHeight();
+        int rowCount = (int) Math.ceil((double) getChildCount() / colCount);
+        int max = rowCount * childSize + (rowCount + 1) * padding - getHeight();
         return max;
     }
 

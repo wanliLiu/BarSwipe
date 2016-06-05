@@ -28,7 +28,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,7 +35,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,7 +57,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
 
     protected TextView mTv;
 
-    protected ImageButton mButton; // Button to expand/collapse
+    protected ImageView mButton; // Button to expand/collapse
 
     private boolean mRelayout;
 
@@ -126,7 +125,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         setOrientation(LinearLayout.VERTICAL);
 
         // default visibility is gone
-        setVisibility(GONE);
+//        setVisibility(GONE);
     }
 
     @Override
@@ -142,11 +141,6 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
         if (mButton.getVisibility() != View.VISIBLE) {
             return;
         }
-
-        Log.e("getHeight:", getHeight() + "");
-        Log.e("mCollapsedHeight:", mCollapsedHeight + "");
-        Log.e("HeightWithMaxLines:", mTextHeightWithMaxLines + "");
-        Log.e("mTv.getHeight():", mTv.getHeight() + "");
 
         mCollapsed = !mCollapsed;
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
@@ -213,7 +207,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
     private void findViews() {
         mTv = (TextView) findViewById(R.id.expandable_text);
 //        mTv.setOnClickListener(this);
-        mButton = (ImageButton) findViewById(R.id.expand_collapse);
+        mButton = (ImageView) findViewById(R.id.expand_collapse);
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
         mButton.setOnClickListener(this);
     }
