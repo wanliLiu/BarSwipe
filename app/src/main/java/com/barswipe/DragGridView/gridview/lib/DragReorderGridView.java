@@ -24,6 +24,8 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import cimi.com.easeinterpolator.EaseBounceInOutInterpolator;
+
 /**
  * 可拖拽排序的gridview，支持添加和删除cell
  *
@@ -153,8 +155,8 @@ public class DragReorderGridView extends GridView {
      * 移动删除动画
      */
     private void showDeletePostionAnimation() {
-        View desView = findViewByPosition(3);
-        View draggingView = findViewByPosition(selectPostion);
+        View desView = findViewByPosition(getFirstVisiblePosition() + 3);
+        final View draggingView = findViewByPosition(selectPostion);
 //        int x = (desView.getLeft() - draggingView.getLeft()) / desView.getWidth();
 //        int y = (draggingView.getTop() - desView.getTop()) / desView.getHeight();
 
@@ -194,7 +196,7 @@ public class DragReorderGridView extends GridView {
 
         createHoverDrawable(draggingView);
         invalidate();
-        final int dx = desView.getLeft() - draggingView.getLeft();
+        final int dx = desView.getLeft() - draggingView.getLeft();//
         final int dy = desView.getTop() - draggingView.getTop();
 
         Animation animation = new Animation() {
@@ -206,15 +208,35 @@ public class DragReorderGridView extends GridView {
                     mHoverView = null;
                     postInvalidate();
                 } else {
-                    hoverViewFollow((int) (mLastEventY + interpolatedTime * dx), (int) (mLastEventY + interpolatedTime * dy));
+                    hoverViewFollowToDest((int) (draggingView.getLeft() + interpolatedTime * dx), (int) (draggingView.getTop() + interpolatedTime * dy));
                 }
 
             }
         };
 
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (mDragReorderListener != null) {
+                    mDragReorderListener.onEditAction(mEditingPosition);
+                }
+                quitEditMode();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animation.setInterpolator(new EaseBounceInOutInterpolator());
         animation.setDuration(2000);
         draggingView.startAnimation(animation);
     }
+
     /*****************************************************************************/
 
     /**
@@ -224,11 +246,7 @@ public class DragReorderGridView extends GridView {
 
         @Override
         public void onClick(View arg0) {
-            if (mDragReorderListener != null) {
-                showDeletePostionAnimation();
-//                mDragReorderListener.onEditAction(mEditingPosition);
-            }
-//            quitEditMode();
+            showDeletePostionAnimation();
         }
     };
 
@@ -380,6 +398,18 @@ public class DragReorderGridView extends GridView {
         mHoverViewBounds.offsetTo(x + mHoverViewOffsetX, y + mHoverViewOffsetY);
         Log.e("mHoverViewBounds", mHoverViewBounds.toString());
 //        mHoverViewBounds.offsetTo(x - mHoverViewBounds.width() / 2, y - mHoverViewBounds.height() / 2);
+        mHoverView.setBounds(mHoverViewBounds);
+        invalidate();
+    }
+
+    /**
+     * 拖拽的hover veiw重绘
+     *
+     * @param x
+     * @param y
+     */
+    private void hoverViewFollowToDest(int x, int y) {
+        mHoverViewBounds.offsetTo(x, y);
         mHoverView.setBounds(mHoverViewBounds);
         invalidate();
     }
