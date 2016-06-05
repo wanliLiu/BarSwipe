@@ -35,8 +35,11 @@
     <string name="str_scroller1">用Scroller 自定义水平滑动ViewGroup </string>
     <string name="str_prode">用Scroller 实现下滑翻页的效果</string>
     <string name="str_viewDrageHelper">ViewDragHelper基础学习，源码需要看</string>
-    <string name="str_ainimation">Animation不同效果的加速度实现</string>
-    <string name="str_drage">DragGridView 具体实现方式，以及TranslateAnimation的几种使用方式 Animation  TranslateAnimation  Animation.ABSOLUTE Animation.RELATIVE_TO_SELF  Animation.RELATIVE_TO_PARENT</string>
-    <string name="str_ExpanAbleTextView">主要通过动画Linearlayout实现的</string>
+    <string name="str_ainimation">1.使用path绘制多边形\n2.曲线绘制的实现根据可绘制宽高和时间，然后根据加速度，来获取曲线上的点，然后用path绘制\n3.各种不同的动画加载效果\n</string>
+    <string name="str_drage">1.DragGridView 具体实现方式\n
+        2.Animation的几种使用方式进一步加强  TranslateAnimation  Animation.ABSOLUTE Animation.RELATIVE_TO_SELF  Animation.RELATIVE_TO_PARENT\n
+        3.自定义视图中通过dispatchDraw来绘制想要的东西
+    </string>
+    <string name="str_ExpanAbleTextView">1.TabLayout google官方出的可以学习一下\n2.Linearlayout 和textview同时动画\n3.测量的时候获取Textview内容的高度，以此作为动画的高度差</string>
     <string name="str_ExpanAbleTextView1">和上面这个不一样，这个是自定义的，不是extend GridView,还没有看哦，你要看哦</string>
 </resources>

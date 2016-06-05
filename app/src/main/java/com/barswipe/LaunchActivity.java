@@ -9,14 +9,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class LaunchActivity extends AppCompatActivity {
 
             ActivityInfo[] info = packageInfo.activities;
 
-            for (int i = 0; info != null && i < info.length; i++) {
+            for (int i = info.length - 1; info != null && i >= 0; i--) {
                 if (!TextUtils.isEmpty(info[i].nonLocalizedLabel)) {
                     list.add(info[i]);
                 }
@@ -96,6 +97,12 @@ public class LaunchActivity extends AppCompatActivity {
     private class activityListAdapter extends BaseAdapter {
 
         private List<ActivityInfo> list;
+        private final SparseBooleanArray mCollapsedStatus;
+
+        public activityListAdapter() {
+            mCollapsedStatus = new SparseBooleanArray();
+
+        }
 
         public void setList(List<ActivityInfo> list) {
             this.list = list;
@@ -128,10 +135,8 @@ public class LaunchActivity extends AppCompatActivity {
             }
 
             ActivityInfo info = getItem(position);
-            holder.studyItem.setText(info.nonLocalizedLabel);
-            holder.studyDesc.setText(info.descriptionRes);
             holder.icon.setImageResource(info.icon);
-
+            holder.expand_text_view.setText(info.nonLocalizedLabel + "\n" + getResources().getString(info.descriptionRes), mCollapsedStatus, position);
 
             return convertView;
         }
@@ -139,12 +144,11 @@ public class LaunchActivity extends AppCompatActivity {
 
         private class ViewHolder {
             private ImageView icon;
-            private TextView studyDesc, studyItem;
+            private ExpandableTextView expand_text_view;
 
             public ViewHolder(View view) {
                 icon = (ImageView) view.findViewById(R.id.icon);
-                studyItem = (TextView) view.findViewById(R.id.studyItem);
-                studyDesc = (TextView) view.findViewById(R.id.studyDesc);
+                expand_text_view = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
                 view.setTag(this);
             }
         }

@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -142,6 +143,11 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
             return;
         }
 
+        Log.e("getHeight:", getHeight() + "");
+        Log.e("mCollapsedHeight:", mCollapsedHeight + "");
+        Log.e("HeightWithMaxLines:", mTextHeightWithMaxLines + "");
+        Log.e("mTv.getHeight():", mTv.getHeight() + "");
+
         mCollapsed = !mCollapsed;
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
 
@@ -206,7 +212,7 @@ public class ExpandableTextView extends LinearLayout implements View.OnClickList
      */
     private void findViews() {
         mTv = (TextView) findViewById(R.id.expandable_text);
-        mTv.setOnClickListener(this);
+//        mTv.setOnClickListener(this);
         mButton = (ImageButton) findViewById(R.id.expand_collapse);
         mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
         mButton.setOnClickListener(this);
