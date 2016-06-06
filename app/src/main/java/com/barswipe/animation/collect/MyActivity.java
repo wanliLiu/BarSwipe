@@ -10,9 +10,10 @@ import android.widget.Toast;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
+import com.daimajia.easing.Techniques;
+import com.daimajia.easing.YoYo;
 import com.nineoldandroids.animation.Animator;
+
 
 public class MyActivity extends BaseActivity {
 
@@ -29,7 +30,7 @@ public class MyActivity extends BaseActivity {
         mTarget = findViewById(R.id.hello_world);
         mAdapter = new EffectAdapter(this);
         mListView.setAdapter(mAdapter);
-        rope = YoYo.with(Techniques.FadeIn).duration(1000).playOn(mTarget);// after start,just click mTarget view, rope is not init 
+        rope = YoYo.with(Techniques.FadeIn).duration(1000).playOn(mTarget);// after start,just click mTarget view, rope is not init
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

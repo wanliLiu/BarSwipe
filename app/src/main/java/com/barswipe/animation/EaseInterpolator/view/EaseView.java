@@ -1,4 +1,4 @@
-package com.barswipe.EaseInterpolator.view;
+package com.barswipe.animation.EaseInterpolator.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

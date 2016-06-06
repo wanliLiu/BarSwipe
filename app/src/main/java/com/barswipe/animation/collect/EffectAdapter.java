@@ -8,7 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.barswipe.R;
-import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.easing.Techniques;
+
 
 public class EffectAdapter extends BaseAdapter {
 

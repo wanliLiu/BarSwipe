@@ -1,4 +1,4 @@
-package com.barswipe.EaseInterpolator;
+package com.barswipe.animation.EaseInterpolator;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,9 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.barswipe.EaseInterpolator.view.CursorView;
-import com.barswipe.EaseInterpolator.view.EaseView;
 import com.barswipe.R;
+import com.barswipe.animation.EaseInterpolator.view.CursorView;
+import com.barswipe.animation.EaseInterpolator.view.EaseView;
 
 import java.util.List;
 

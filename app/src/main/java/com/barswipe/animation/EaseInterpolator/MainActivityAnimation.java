@@ -49,7 +49,7 @@ public class MainActivityAnimation extends BaseActivity {
     private static final long DURATION = 1200;
 
     private ListView listView;
-    private com.barswipe.EaseInterpolator.EaseAdapter adapter;
+    private EaseAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class MainActivityAnimation extends BaseActivity {
 
         init();
         listView = (ListView) findViewById(R.id.list);
-        adapter = new com.barswipe.EaseInterpolator.EaseAdapter(this, nameList, interpolatorList, DURATION);
+        adapter = new EaseAdapter(this, nameList, interpolatorList, DURATION);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

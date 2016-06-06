@@ -1,21 +1,11 @@
 package com.barswipe;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.barswipe.SwipeBackLayout.app.SwipeBackActivity;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
