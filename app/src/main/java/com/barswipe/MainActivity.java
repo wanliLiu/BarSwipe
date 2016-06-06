@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.barswipe.DragGridView.gridview.MainActivityDragGridView;
-import com.barswipe.EaseInterpolator.MainActivityAnimation;
 import com.barswipe.Scroller.ScrollerActivity;
 import com.barswipe.ViewDragHelper.ViewDragHelperStudyActivity;
+import com.barswipe.animation.EaseInterpolator.MainActivityAnimation;
 import com.barswipe.snapscrollview.ProductDetailActivity;
 
 import org.json.JSONArray;

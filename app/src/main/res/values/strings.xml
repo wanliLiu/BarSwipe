@@ -42,4 +42,5 @@
     </string>
     <string name="str_ExpanAbleTextView">1.TabLayout google官方出的可以学习一下\n2.Linearlayout 和textview同时动画\n3.测量的时候获取Textview内容的高度，以此作为动画的高度差</string>
     <string name="str_ExpanAbleTextView1">1.完全自定义，需要自己实现获取相应位置的视图，移动，滚动\n2.上下滑动屏幕是通过不断layout所有childview，同样移动视图也是通过layout来实现\n3.有空自己可以写一个通过移动，通过layout移动某个视图到某个位置</string>
+    <string name="str_collectAnimation">1.主要是看具体的实现方式，用的时候，我想我会拿出我想要的部分\n2.把一些常用的动画封装起来，简单易用</string>
 </resources>

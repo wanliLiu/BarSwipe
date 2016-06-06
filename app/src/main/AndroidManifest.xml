@@ -72,10 +72,16 @@
             android:icon="@mipmap/ic_launcher"
             android:label="ViewDragHelper学习" />
         <activity
-            android:name=".EaseInterpolator.MainActivityAnimation"
+            android:name=".animation.EaseInterpolator.MainActivityAnimation"
             android:description="@string/str_ainimation"
             android:icon="@mipmap/ic_launcher"
             android:label="EaseAnimation学习" />
+        <activity android:name=".animation.collect.ExampleActivity" />
+        <activity
+            android:name=".animation.collect.MyActivity"
+            android:description="@string/str_collectAnimation"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Animation使用集合学习" />
         <activity
             android:name=".DragGridView.gridview.MainActivityDragGridView"
             android:description="@string/str_drage"
