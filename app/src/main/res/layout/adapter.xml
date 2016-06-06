@@ -14,14 +14,14 @@
         android:textSize="15sp"
         android:textStyle="bold" />
 
-    <com.barswipe.EaseInterpolator.view.CursorView
+    <com.barswipe.animation.EaseInterpolator.view.CursorView
         android:id="@+id/cursor"
         android:layout_width="20dp"
         android:layout_height="8dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp" />
 
-    <com.barswipe.EaseInterpolator.view.EaseView
+    <com.barswipe.animation.EaseInterpolator.view.EaseView
         android:id="@+id/easeView"
         android:layout_width="100dp"
         android:layout_height="100dp"
