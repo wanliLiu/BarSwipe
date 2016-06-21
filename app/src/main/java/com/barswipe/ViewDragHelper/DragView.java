@@ -2,22 +2,20 @@ package com.barswipe.ViewDragHelper;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 /**
  * Created by soli on 5/29/16.
- *
+ * <p/>
  * refrences
- * https://newfivefour.com/android-viewdraghelper-example-tutorial.html
- * analytics.google.com/analytics/web/?hl=zh-CN&pli=1#realtime/rt-app-overview/a56523115w90729278p94392516/
  * http://blog.csdn.net/lmj623565791/article/details/46858663
- *
- *
  * http://www.it165.net/pro/html/201505/40127.html
  */
 public class DragView extends FrameLayout {
@@ -27,6 +25,8 @@ public class DragView extends FrameLayout {
     private View dragView;
 
     private ViewDragHelper dragHelper;
+
+    private int initLeft, initRight;
 
     public DragView(Context context) {
         super(context);
@@ -48,6 +48,7 @@ public class DragView extends FrameLayout {
      */
     private void Init(Context ctx) {
         dragHelper = ViewDragHelper.create(this, 1.0f, new dragCallback());
+        dragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_RIGHT);
     }
 
 //    @Override
@@ -62,8 +63,17 @@ public class DragView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        if (getChildCount() > 0)
+        if (getChildCount() > 0) {
             dragView = getChildAt(0);
+            dragView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    initLeft = dragView.getLeft();
+                    initRight = dragView.getRight();
+                    Log.e(TAG, "X-" + dragView.getLeft() + ";" + dragView.getRight() + "Y");
+                }
+            });
+        }
     }
 
 //    @Override
@@ -93,6 +103,14 @@ public class DragView extends FrameLayout {
         return true;
     }
 
+    @Override
+    public void computeScroll() {
+        super.computeScroll();
+        if (dragHelper.continueSettling(true)) {
+            ViewCompat.postInvalidateOnAnimation(this);
+        }
+    }
+
     /**
      *
      */
@@ -103,7 +121,6 @@ public class DragView extends FrameLayout {
             return child == dragView;
         }
 
-
         @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
             Log.e(TAG, "clampViewPositionHorizontal " + left + "," + dx);
@@ -112,8 +129,42 @@ public class DragView extends FrameLayout {
             final int rightbound = getMeasuredWidth() - getPaddingRight() - child.getMeasuredWidth();
 
 
-//            return Math.min(Math.max(leftbound,left),rightbound);
-            return left;
+            return Math.min(Math.max(leftbound, left), rightbound);
+//            return left;
+        }
+
+        @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            Log.e(TAG, "clampViewPositionVertical " + top + "," + dy);
+            final int topbound = getPaddingTop();
+            final int bottombound = getMeasuredHeight() - getPaddingBottom() - child.getMeasuredHeight();
+
+            return Math.min(Math.max(top, topbound), bottombound);
+        }
+
+        @Override
+        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+//            super.onViewReleased(releasedChild, xvel, yvel);
+            dragHelper.smoothSlideViewTo(releasedChild, initLeft, initRight);
+            invalidate();
+        }
+
+        @Override
+        public int getViewHorizontalDragRange(View child) {
+            return getMeasuredWidth() - child.getMeasuredWidth();
+        }
+
+        @Override
+        public int getViewVerticalDragRange(View child) {
+            return getMeasuredHeight() - child.getMeasuredHeight();
+        }
+
+        @Override
+        public void onEdgeDragStarted(int edgeFlags, int pointerId) {
+            super.onEdgeDragStarted(edgeFlags, pointerId);
+            if ((edgeFlags & ViewDragHelper.EDGE_RIGHT) != 0) {
+                dragHelper.captureChildView(dragView, pointerId);
+            }
         }
     }
 }

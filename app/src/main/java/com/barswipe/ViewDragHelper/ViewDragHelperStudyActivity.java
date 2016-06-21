@@ -2,6 +2,7 @@ package com.barswipe.ViewDragHelper;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
@@ -16,5 +17,12 @@ public class ViewDragHelperStudyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.view_drag_helper);
+
+        findViewById(R.id.testBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }

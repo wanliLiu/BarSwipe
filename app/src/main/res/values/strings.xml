@@ -34,7 +34,7 @@
     <string name="str_scroller">Scroller scrollBy scrollTo offsetLeftAndRight学习</string>
     <string name="str_scroller1">用Scroller 自定义水平滑动ViewGroup </string>
     <string name="str_prode">用Scroller 实现下滑翻页的效果</string>
-    <string name="str_viewDrageHelper">ViewDragHelper基础学习，源码需要看</string>
+    <string name="str_viewDrageHelper">1.大致理解差不多了，主要是要多看类似的运用\n2.ViewDragHelper本质通过Scroller的StartScroll以及View的offsetTopAndBottomOffset and OffsetLeftandRightOffset来实现移动的</string>
     <string name="str_ainimation">1.使用path绘制多边形\n2.曲线绘制的实现根据可绘制宽高和时间，然后根据加速度，来获取曲线上的点，然后用path绘制\n3.各种不同的动画加载效果\n</string>
     <string name="str_drage">1.DragGridView 具体实现方式\n
         2.Animation的几种使用方式进一步加强  TranslateAnimation  Animation.ABSOLUTE Animation.RELATIVE_TO_SELF  Animation.RELATIVE_TO_PARENT\n
