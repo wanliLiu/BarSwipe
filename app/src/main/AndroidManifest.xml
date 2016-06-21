@@ -66,11 +66,7 @@
             android:description="@string/str_prode"
             android:icon="@mipmap/ic_launcher"
             android:label="商品详情学习" />
-        <activity
-            android:name=".ViewDragHelper.ViewDragHelperStudyActivity"
-            android:description="@string/str_viewDrageHelper"
-            android:icon="@mipmap/ic_launcher"
-            android:label="ViewDragHelper学习" />
+
         <activity
             android:name=".animation.EaseInterpolator.MainActivityAnimation"
             android:description="@string/str_ainimation"
@@ -100,6 +96,17 @@
             android:icon="@mipmap/ic_launcher"
             android:label="ExpandableTextView 学习" />
 
+        <activity
+            android:name=".WebView.AdvanceWebViewMainActivity"
+            android:description="@string/str_AdvenceView"
+            android:icon="@mipmap/ic_launcher"
+            android:label="AdvanceWebView 学习" />
+
+        <activity
+            android:name=".ViewDragHelper.ViewDragHelperStudyActivity"
+            android:description="@string/str_viewDrageHelper"
+            android:icon="@mipmap/ic_launcher"
+            android:label="ViewDragHelper学习" />
     </application>
 
 </manifest>

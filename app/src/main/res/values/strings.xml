@@ -43,4 +43,5 @@
     <string name="str_ExpanAbleTextView">1.TabLayout google官方出的可以学习一下\n2.Linearlayout 和textview同时动画\n3.测量的时候获取Textview内容的高度，以此作为动画的高度差</string>
     <string name="str_ExpanAbleTextView1">1.完全自定义，需要自己实现获取相应位置的视图，移动，滚动\n2.上下滑动屏幕是通过不断layout所有childview，同样移动视图也是通过layout来实现\n3.有空自己可以写一个通过移动，通过layout移动某个视图到某个位置</string>
     <string name="str_collectAnimation">1.学习ObjectAnimator.ofFloat的多参数使用，是一个连续的过程\n2.主要是看具体的实现方式，用的时候，我想我会拿出我想要的部分\n3.把一些常用的动画封装起来，简单易用</string>
+    <string name="str_AdvenceView">1.各个android版本---本地到浏览器的文件上传功能\n2.在webview基础上集成一些现有的功能，这个到时候可以借鉴一下</string>
 </resources>
