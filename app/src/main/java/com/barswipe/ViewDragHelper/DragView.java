@@ -144,8 +144,8 @@ public class DragView extends FrameLayout {
 
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
-//            super.onViewReleased(releasedChild, xvel, yvel);
-            dragHelper.smoothSlideViewTo(releasedChild, initLeft, initRight);
+//            dragHelper.smoothSlideViewTo(releasedChild, initLeft, initRight);
+            dragHelper.settleCapturedViewAt(initLeft, initRight);
             invalidate();
         }
 
