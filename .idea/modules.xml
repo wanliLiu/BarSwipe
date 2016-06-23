@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BarSwipe.iml" filepath="$PROJECT_DIR$/BarSwipe.iml" />
       <module fileurl="file://$PROJECT_DIR$/EaseInterpolatorLib/EaseInterpolatorLib.iml" filepath="$PROJECT_DIR$/EaseInterpolatorLib/EaseInterpolatorLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SwipeLayoutLibrary/SwipeLayoutLibrary.iml" filepath="$PROJECT_DIR$/SwipeLayoutLibrary/SwipeLayoutLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

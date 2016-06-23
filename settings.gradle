@@ -1,1 +1,1 @@
-include ':app', ':EaseInterpolatorLib'
+include ':app', ':EaseInterpolatorLib', ':SwipeLayoutLibrary'
