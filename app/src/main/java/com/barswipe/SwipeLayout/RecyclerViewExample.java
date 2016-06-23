@@ -4,13 +4,13 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.barswipe.SwipeLayout.adapter.RecyclerViewAdapter;
 import com.barswipe.SwipeLayout.adapter.util.DividerItemDecoration;
@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 
-public class RecyclerViewExample extends BaseActivity {
+public class RecyclerViewExample extends AppCompatActivity {
 
     /**
      * RecyclerView: The new recycler view replaces the list view. Its more modular and therefore we

@@ -3,18 +3,18 @@ package com.barswipe.SwipeLayout;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.daimajia.swipe.SwipeLayout;
 import com.nineoldandroids.view.ViewHelper;
 
-public class MyActivity extends BaseActivity {
+public class MyActivity extends AppCompatActivity {
 
     private SwipeLayout sample1, sample2, sample3;
 

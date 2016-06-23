@@ -1,22 +1,22 @@
 package com.barswipe.SwipeLayout;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
-import com.barswipe.BaseActivity;
 import com.barswipe.R;
 
 /**
  * Created by SoLi on 2016/5/16.
  */
-public class ScrollActivity extends BaseActivity {
+public class ScrollActivity extends AppCompatActivity {
 
     WebView myWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.swipeitem);
+//        setContentView(R.layout.swipeitem);
         setContentView(R.layout.activity_scroll);
 
 //        myWebView = (WebView)findViewById(R.id.webview);

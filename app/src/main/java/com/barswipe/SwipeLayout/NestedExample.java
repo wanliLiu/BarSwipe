@@ -1,14 +1,14 @@
 package com.barswipe.SwipeLayout;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.daimajia.swipe.SwipeLayout;
 
-public class NestedExample extends BaseActivity {
+public class NestedExample extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

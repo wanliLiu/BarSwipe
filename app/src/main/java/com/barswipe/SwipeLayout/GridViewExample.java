@@ -1,17 +1,17 @@
 package com.barswipe.SwipeLayout;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.barswipe.SwipeLayout.adapter.GridViewAdapter;
 import com.daimajia.swipe.util.Attributes;
 
-public class GridViewExample extends BaseActivity {
+public class GridViewExample extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

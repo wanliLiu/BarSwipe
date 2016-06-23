@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,13 +16,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.barswipe.SwipeLayout.adapter.ListViewAdapter;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.util.Attributes;
 
-public class ListViewExample extends BaseActivity {
+public class ListViewExample extends AppCompatActivity {
 
     private ListView mListView;
     private ListViewAdapter mAdapter;

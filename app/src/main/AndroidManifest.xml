@@ -108,17 +108,28 @@
             android:icon="@mipmap/ic_launcher"
             android:label="ViewDragHelper学习" />
 
-        <activity android:name=".SwipeLayout.GridViewExample" />
-        <activity android:name=".SwipeLayout.ListViewExample" />
-        <activity android:name=".SwipeLayout.NestedExample" />
-        <activity android:name=".SwipeLayout.RecyclerViewExample" />
-        <activity android:name=".SwipeLayout.ScrollActivity" />
+        <activity
+            android:name=".SwipeLayout.GridViewExample"
+            android:theme="@style/AppBeaseTitle" />
+        <activity
+            android:name=".SwipeLayout.ListViewExample"
+            android:theme="@style/AppBeaseTitle" />
+        <activity
+            android:name=".SwipeLayout.NestedExample"
+            android:theme="@style/AppBeaseTitle" />
+        <activity
+            android:name=".SwipeLayout.RecyclerViewExample"
+            android:theme="@style/AppBeaseTitle" />
+        <activity
+            android:name=".SwipeLayout.ScrollActivity"
+            android:theme="@style/AppBeaseTitle" />
 
         <activity
             android:name=".SwipeLayout.MyActivity"
             android:description="@string/str_swipeLayout"
             android:icon="@mipmap/ic_launcher"
-            android:label="万能SwipeLayout学习" />
+            android:label="万能SwipeLayout学习"
+            android:theme="@style/AppBeaseTitle" />
     </application>
 
 </manifest>
