@@ -201,15 +201,23 @@ public class SwipeLayout extends FrameLayout {
             addRevealListener(i, l);
     }
 
+    /**
+     * @param childId
+     * @param l
+     */
     public void removeRevealListener(int childId, OnRevealListener l) {
         View child = findViewById(childId);
 
         if (child == null) return;
 
         mShowEntirely.remove(child);
-        if (mRevealListeners.containsKey(child)) mRevealListeners.get(child).remove(l);
+        if (mRevealListeners.containsKey(child))
+            mRevealListeners.get(child).remove(l);
     }
 
+    /**
+     * @param childId
+     */
     public void removeAllRevealListeners(int childId) {
         View child = findViewById(childId);
         if (child != null) {
@@ -218,6 +226,9 @@ public class SwipeLayout extends FrameLayout {
         }
     }
 
+    /**
+     *
+     */
     private ViewDragHelper.Callback mDragHelperCallback = new ViewDragHelper.Callback() {
 
         @Override
@@ -239,7 +250,6 @@ public class SwipeLayout extends FrameLayout {
                         break;
                 }
             } else if (getCurrentBottomView() == child) {
-
                 switch (mCurrentDragEdge) {
                     case Top:
                     case Bottom:
@@ -355,7 +365,6 @@ public class SwipeLayout extends FrameLayout {
                     evTop = surfaceView.getTop(),
                     evBottom = surfaceView.getBottom();
             if (changedView == surfaceView) {
-
                 if (mShowMode == ShowMode.PullOut && currentBottomView != null) {
                     if (mCurrentDragEdge == DragEdge.Left || mCurrentDragEdge == DragEdge.Right) {
                         currentBottomView.offsetLeftAndRight(dx);
@@ -363,9 +372,7 @@ public class SwipeLayout extends FrameLayout {
                         currentBottomView.offsetTopAndBottom(dy);
                     }
                 }
-
             } else if (getBottomViews().contains(changedView)) {
-
                 if (mShowMode == ShowMode.PullOut) {
                     surfaceView.offsetLeftAndRight(dx);
                     surfaceView.offsetTopAndBottom(dy);
@@ -451,6 +458,16 @@ public class SwipeLayout extends FrameLayout {
         return r;
     }
 
+    /**
+     * @param child
+     * @param relativePosition
+     * @param availableEdge
+     * @param surfaceLeft
+     * @param surfaceTop
+     * @param surfaceRight
+     * @param surfaceBottom
+     * @return
+     */
     protected boolean isViewShowing(View child, Rect relativePosition, DragEdge availableEdge, int surfaceLeft,
                                     int surfaceTop, int surfaceRight, int surfaceBottom) {
         int childLeft = relativePosition.left;
@@ -499,6 +516,10 @@ public class SwipeLayout extends FrameLayout {
         return false;
     }
 
+    /**
+     * @param child
+     * @return
+     */
     protected Rect getRelativePosition(View child) {
         View t = child;
         Rect r = new Rect(t.getLeft(), t.getTop(), 0, 0);
@@ -601,8 +622,7 @@ public class SwipeLayout extends FrameLayout {
         for (Map.Entry<View, ArrayList<OnRevealListener>> entry : mRevealListeners.entrySet()) {
             View child = entry.getKey();
             Rect rect = getRelativePosition(child);
-            if (isViewShowing(child, rect, mCurrentDragEdge, surfaceLeft, surfaceTop,
-                    surfaceRight, surfaceBottom)) {
+            if (isViewShowing(child, rect, mCurrentDragEdge, surfaceLeft, surfaceTop, surfaceRight, surfaceBottom)) {
                 mShowEntirely.put(child, false);
                 int distance = 0;
                 float fraction = 0f;
@@ -1036,12 +1056,18 @@ public class SwipeLayout extends FrameLayout {
         this.mSwipesEnabled[DragEdge.Top.ordinal()] = topSwipeEnabled;
     }
 
+    /**
+     * @return
+     */
     public boolean isBottomSwipeEnabled() {
         View bottomView = mDragEdges.get(DragEdge.Bottom);
         return bottomView != null && bottomView.getParent() == this
                 && bottomView != getSurfaceView() && mSwipesEnabled[DragEdge.Bottom.ordinal()];
     }
 
+    /**
+     * @param bottomSwipeEnabled
+     */
     public void setBottomSwipeEnabled(boolean bottomSwipeEnabled) {
         this.mSwipesEnabled[DragEdge.Bottom.ordinal()] = bottomSwipeEnabled;
     }
@@ -1339,35 +1365,49 @@ public class SwipeLayout extends FrameLayout {
         }
         float willOpenPercent = (isCloseBeforeDragged ? mWillOpenPercentAfterClose : mWillOpenPercentAfterOpen);
         if (currentDragEdge == DragEdge.Left) {
-            if (xvel > minVelocity) open();
-            else if (xvel < -minVelocity) close();
+            //根据滑动的加速度来做决定
+            if (xvel > minVelocity)
+                open();
+            else if (xvel < -minVelocity)
+                close();
             else {
+                //没有加速度，慢慢的移动
                 float openPercent = 1f * getSurfaceView().getLeft() / mDragDistance;
-                if (openPercent > willOpenPercent) open();
+                if (openPercent > willOpenPercent)
+                    open();
                 else close();
             }
         } else if (currentDragEdge == DragEdge.Right) {
-            if (xvel > minVelocity) close();
-            else if (xvel < -minVelocity) open();
+            if (xvel > minVelocity)
+                close();
+            else if (xvel < -minVelocity)
+                open();
             else {
                 float openPercent = 1f * (-getSurfaceView().getLeft()) / mDragDistance;
-                if (openPercent > willOpenPercent) open();
+                if (openPercent > willOpenPercent)
+                    open();
                 else close();
             }
         } else if (currentDragEdge == DragEdge.Top) {
-            if (yvel > minVelocity) open();
-            else if (yvel < -minVelocity) close();
+            if (yvel > minVelocity)
+                open();
+            else if (yvel < -minVelocity)
+                close();
             else {
                 float openPercent = 1f * getSurfaceView().getTop() / mDragDistance;
-                if (openPercent > willOpenPercent) open();
+                if (openPercent > willOpenPercent)
+                    open();
                 else close();
             }
         } else if (currentDragEdge == DragEdge.Bottom) {
-            if (yvel > minVelocity) close();
-            else if (yvel < -minVelocity) open();
+            if (yvel > minVelocity)
+                close();
+            else if (yvel < -minVelocity)
+                open();
             else {
                 float openPercent = 1f * (-getSurfaceView().getTop()) / mDragDistance;
-                if (openPercent > willOpenPercent) open();
+                if (openPercent > willOpenPercent)
+                    open();
                 else close();
             }
         }
@@ -1380,10 +1420,17 @@ public class SwipeLayout extends FrameLayout {
         open(true, true);
     }
 
+    /**
+     * @param smooth
+     */
     public void open(boolean smooth) {
         open(smooth, true);
     }
 
+    /**
+     * @param smooth
+     * @param notify
+     */
     public void open(boolean smooth, boolean notify) {
         View surface = getSurfaceView(), bottom = getCurrentBottomView();
         if (surface == null) {
@@ -1413,16 +1460,28 @@ public class SwipeLayout extends FrameLayout {
         invalidate();
     }
 
+    /**
+     * @param edge
+     */
     public void open(DragEdge edge) {
         setCurrentDragEdge(edge);
         open(true, true);
     }
 
+    /**
+     * @param smooth
+     * @param edge
+     */
     public void open(boolean smooth, DragEdge edge) {
         setCurrentDragEdge(edge);
         open(smooth, true);
     }
 
+    /**
+     * @param smooth
+     * @param notify
+     * @param edge
+     */
     public void open(boolean smooth, boolean notify, DragEdge edge) {
         setCurrentDragEdge(edge);
         open(smooth, notify);
@@ -1435,6 +1494,9 @@ public class SwipeLayout extends FrameLayout {
         close(true, true);
     }
 
+    /**
+     * @param smooth
+     */
     public void close(boolean smooth) {
         close(smooth, true);
     }
@@ -1468,14 +1530,21 @@ public class SwipeLayout extends FrameLayout {
         invalidate();
     }
 
+    /**
+     *
+     */
     public void toggle() {
         toggle(true);
     }
 
+    /**
+     * @param smooth
+     */
     public void toggle(boolean smooth) {
         if (getOpenStatus() == Status.Open)
             close(smooth);
-        else if (getOpenStatus() == Status.Close) open(smooth);
+        else if (getOpenStatus() == Status.Close)
+            open(smooth);
     }
 
 
@@ -1538,6 +1607,10 @@ public class SwipeLayout extends FrameLayout {
         return new Rect(bl, bt, br, bb);
     }
 
+    /**
+     * @param dragEdge
+     * @return
+     */
     private Rect computeBottomLayDown(DragEdge dragEdge) {
         int bl = getPaddingLeft(), bt = getPaddingTop();
         int br, bb;
