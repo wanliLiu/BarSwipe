@@ -536,6 +536,12 @@ public class SwipeLayout extends FrameLayout {
 
     private int mEventCounter = 0;
 
+    /**
+     * @param surfaceLeft
+     * @param surfaceTop
+     * @param dx
+     * @param dy
+     */
     protected void dispatchSwipeEvent(int surfaceLeft, int surfaceTop, int dx, int dy) {
         DragEdge edge = getDragEdge();
         boolean open = true;
@@ -552,6 +558,11 @@ public class SwipeLayout extends FrameLayout {
         dispatchSwipeEvent(surfaceLeft, surfaceTop, open);
     }
 
+    /**
+     * @param surfaceLeft
+     * @param surfaceTop
+     * @param open
+     */
     protected void dispatchSwipeEvent(int surfaceLeft, int surfaceTop, boolean open) {
         safeBottomView();
         Status status = getOpenStatus();
@@ -1112,10 +1123,18 @@ public class SwipeLayout extends FrameLayout {
         this.mWillOpenPercentAfterClose = willOpenPercentAfterClose;
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean insideAdapterView() {
         return getAdapterView() != null;
     }
 
+    /**
+     *
+     * @return
+     */
     private AdapterView getAdapterView() {
         ViewParent t = getParent();
         if (t instanceof AdapterView) {
@@ -1124,6 +1143,9 @@ public class SwipeLayout extends FrameLayout {
         return null;
     }
 
+    /**
+     *
+     */
     private void performAdapterViewItemClick() {
         if (getOpenStatus() != Status.Close) return;
         ViewParent t = getParent();
@@ -1131,12 +1153,15 @@ public class SwipeLayout extends FrameLayout {
             AdapterView view = (AdapterView) t;
             int p = view.getPositionForView(SwipeLayout.this);
             if (p != AdapterView.INVALID_POSITION) {
-                view.performItemClick(view.getChildAt(p - view.getFirstVisiblePosition()), p, view
-                        .getAdapter().getItemId(p));
+                view.performItemClick(view.getChildAt(p - view.getFirstVisiblePosition()), p, view.getAdapter().getItemId(p));
             }
         }
     }
 
+    /**
+     *
+     * @return
+     */
     private boolean performAdapterViewItemLongClick() {
         if (getOpenStatus() != Status.Close) return false;
         ViewParent t = getParent();
@@ -1275,6 +1300,10 @@ public class SwipeLayout extends FrameLayout {
         requestLayout();
     }
 
+    /**
+     *
+     * @return
+     */
     public DragEdge getDragEdge() {
         return mCurrentDragEdge;
     }
@@ -1629,6 +1658,10 @@ public class SwipeLayout extends FrameLayout {
         return new Rect(bl, bt, br, bb);
     }
 
+    /**
+     *
+     * @param doubleClickListener
+     */
     public void setOnDoubleClickListener(DoubleClickListener doubleClickListener) {
         mDoubleClickListener = doubleClickListener;
     }
