@@ -854,6 +854,8 @@ public class SwipeLayout extends FrameLayout {
     private boolean mIsBeingDragged;
 
     /**
+     * check out drag direction
+     *
      * @param ev
      */
     private void checkCanDrag(MotionEvent ev) {
@@ -1754,6 +1756,8 @@ public class SwipeLayout extends FrameLayout {
     }
 
     /**
+     * 根据手势，决定当前滑动方向
+     *
      * @param dragEdge
      */
     private void setCurrentDragEdge(DragEdge dragEdge) {
@@ -1762,7 +1766,7 @@ public class SwipeLayout extends FrameLayout {
     }
 
     /**
-     * 这里随时都在进行
+     * 进行触发条件布局相应内容
      */
     private void updateBottomViews() {
         View currentBottomView = getCurrentBottomView();
