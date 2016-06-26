@@ -130,6 +130,12 @@
             android:icon="@mipmap/ic_launcher"
             android:label="万能SwipeLayout学习"
             android:theme="@style/AppBeaseTitle" />
+
+        <!--<activity-->
+        <!--android:name=".Test.TestDrawActivity"-->
+        <!--android:description="@string/str_swipeLayout"-->
+        <!--android:icon="@mipmap/ic_launcher"-->
+        <!--android:label="自定义 绘制" />-->
     </application>
 
 </manifest>
