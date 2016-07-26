@@ -136,6 +136,12 @@
         <!--android:description="@string/str_swipeLayout"-->
         <!--android:icon="@mipmap/ic_launcher"-->
         <!--android:label="自定义 绘制" />-->
+
+        <activity
+            android:name=".Fresco.FrescoStudyActivity"
+            android:description="@string/str_fresco"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Facebook Fresco 学习" />
     </application>
 
 </manifest>

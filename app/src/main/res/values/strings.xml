@@ -45,4 +45,5 @@
     <string name="str_collectAnimation">1.学习ObjectAnimator.ofFloat的多参数使用，是一个连续的过程\n2.主要是看具体的实现方式，用的时候，我想我会拿出我想要的部分\n3.把一些常用的动画封装起来，简单易用</string>
     <string name="str_AdvenceView">1.各个android版本---本地到浏览器的文件上传功能\n2.在webview基础上集成一些现有的功能，这个到时候可以借鉴一下</string>
     <string name="str_swipeLayout">1.有点学习困乏了这个，后面再看。。。\n2.结合实际，ViewDragHelper具体怎么用\n3.结合已经学习的Scroller ViewDragHelper,理解各种场景的运用</string>
+    <string name="str_fresco">学习facebook fresco</string>
 </resources>
