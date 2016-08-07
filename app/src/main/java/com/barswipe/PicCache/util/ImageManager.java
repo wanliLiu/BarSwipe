@@ -203,10 +203,11 @@ public class ImageManager {
             return;
         }
         if (resId >= 0) {
-            if (imageView.getBackground() == null) {
-                imageView.setBackgroundResource(resId);
-            }
-            imageView.setImageDrawable(null);
+            //            if (imageView.getBackground() == null) {
+//                imageView.setBackgroundResource(resId);
+//            }
+//            imageView.setImageDrawable(null);
+            imageView.setImageResource(resId);
 
         }
         if (url == null || url.equals("")) {
@@ -248,10 +249,11 @@ public class ImageManager {
         }
         if (resId >= 0) {
 
-            if (imageView.getBackground() == null) {
-                imageView.setImageResource(resId);
-            }
-            imageView.setImageDrawable(null);
+//            if (imageView.getBackground() == null) {
+//                imageView.setBackgroundResource(resId);
+//            }
+//            imageView.setImageDrawable(null);
+            imageView.setImageResource(resId);
 
         }
         if (url == null || url.equals("")) {

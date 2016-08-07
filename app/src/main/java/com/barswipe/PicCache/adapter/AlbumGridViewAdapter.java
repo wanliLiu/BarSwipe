@@ -80,11 +80,11 @@ public class AlbumGridViewAdapter extends BaseAdapter implements
         if (path.contains("default")) {
             viewHolder.imageView.setImageResource(R.mipmap.camera_default);
         } else {
-            if (!path.startsWith("http")) {
+//            if (!path.startsWith("http")) {
                 ImageManager.from(mContext).displayImage(viewHolder.imageView, path, R.mipmap.camera_default, 100, 100);
-            } else {
-                ImageManager.from(mContext).displayImage(viewHolder.imageView, path, R.mipmap.camera_default);
-            }
+//            } else {
+//                ImageManager.from(mContext).displayImage(viewHolder.imageView, path, R.mipmap.camera_default);
+//            }
         }
         viewHolder.toggleButton.setTag(position);
         viewHolder.toggleButton.setOnClickListener(this);

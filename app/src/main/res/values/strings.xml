@@ -46,5 +46,5 @@
     <string name="str_AdvenceView">1.各个android版本---本地到浏览器的文件上传功能\n2.在webview基础上集成一些现有的功能，这个到时候可以借鉴一下</string>
     <string name="str_swipeLayout">1.有点学习困乏了这个，后面再看。。。\n2.结合实际，ViewDragHelper具体怎么用\n3.结合已经学习的Scroller ViewDragHelper,理解各种场景的运用</string>
     <string name="str_fresco">学习facebook fresco</string>
-    <string name="str_multi">这个主要是学习自己写的图片缓存,加载大图片 \n 还需要在研究一下,实际项目是否可以用</string>
+    <string name="str_multi">这个主要是学习自己写的图片缓存,加载大图片\n还需要再研究一下,实际项目是否可以用</string>
 </resources>
