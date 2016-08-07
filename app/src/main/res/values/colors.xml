@@ -18,4 +18,8 @@
     <color name="red_press">#990000</color>
     <color name="dark_gray">#4C535B</color>
     <color name="dark_gray_press">#ff7e8a97</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="none_color">#00000000</color>
+    <color name="bule_overlay">#660D92DD</color>
 </resources>

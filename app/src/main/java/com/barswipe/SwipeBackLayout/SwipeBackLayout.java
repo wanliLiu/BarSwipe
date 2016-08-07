@@ -512,6 +512,9 @@ public class SwipeBackLayout extends FrameLayout {
         setContentView(decorChild);
         decor.addView(this);
 
+//        setFitsSystemWindows(true);
+//        setBackgroundColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+
 //        SystemBarTintManager tintManager = new SystemBarTintManager(activity);
 //        tintManager.setStatusBarTintEnabled(true);
 //        tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorAccent));

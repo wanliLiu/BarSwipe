@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <application
@@ -142,6 +144,13 @@
             android:description="@string/str_fresco"
             android:icon="@mipmap/ic_launcher"
             android:label="Facebook Fresco 学习" />
+
+        <activity android:name=".PicCache.AlbumActivity" />
+        <activity
+            android:name=".PicCache.PicMainActivity"
+            android:description="@string/str_multi"
+            android:icon="@mipmap/ic_launcher"
+            android:label="自己写图片缓存 学习" />
     </application>
 
 </manifest>
