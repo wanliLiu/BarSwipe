@@ -48,12 +48,12 @@ public class ImageManager {
     /**
      * 图片加载队列，后进先出
      */
-    private Stack<ImageRef> mImageQueue = new Stack<ImageRef>();
+    private Stack<ImageRef> mImageQueue = new Stack<>();
 
     /**
      * 图片请求队列，先进先出，用于存放已发送的请求。
      */
-    private Queue<ImageRef> mRequestQueue = new LinkedList<ImageRef>();
+    private Queue<ImageRef> mRequestQueue = new LinkedList<>();
 
     /**
      * 图片加载线程消息处理器
@@ -113,8 +113,7 @@ public class ImageManager {
      * @param context
      */
     private ImageManager(Context context) {
-        int memClass = ((ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        int memClass = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
         memClass = memClass > 32 ? 32 : memClass;
         // 使用可用内存的1/8作为图片缓存
         final int cacheSize = 1024 * 1024 * memClass / 7;
@@ -313,8 +312,7 @@ public class ImageManager {
         // 发送请求
         if (mImageLoaderIdle && mImageQueue.size() > 0) {
             ImageRef imageRef = mImageQueue.pop();
-            Message message = mImageLoaderHandler.obtainMessage(MSG_REQUEST,
-                    imageRef);
+            Message message = mImageLoaderHandler.obtainMessage(MSG_REQUEST, imageRef);
             mImageLoaderHandler.sendMessage(message);
             mImageLoaderIdle = false;
             mRequestQueue.add(imageRef);
@@ -374,10 +372,8 @@ public class ImageManager {
                             // ToolUtil.log("从disk缓存读取");
                             // 写入map缓存
                             if (imageRef.width != 0 && imageRef.height != 0) {
-                                if (mMemoryCache.get(url + imageRef.width
-                                        + imageRef.height) == null)
-                                    mMemoryCache.put(url + imageRef.width
-                                            + imageRef.height, bitmap);
+                                if (mMemoryCache.get(url + imageRef.width + imageRef.height) == null)
+                                    mMemoryCache.put(url + imageRef.width + imageRef.height, bitmap);
                             } else {
                                 if (mMemoryCache.get(url) == null)
                                     mMemoryCache.put(url, bitmap);
@@ -391,22 +387,16 @@ public class ImageManager {
 
                                     BitmapFactory.Options opt = new BitmapFactory.Options();
                                     opt.inSampleSize = 1;
-
                                     opt.inJustDecodeBounds = true;
-                                    BitmapFactory.decodeByteArray(data, 0,
-                                            data.length, opt);
-                                    int bitmapSize = opt.outHeight * opt.outWidth
-                                            * 4;// pixels*3 if it's RGB and pixels*4
+                                    BitmapFactory.decodeByteArray(data, 0, data.length, opt);
+                                    int bitmapSize = opt.outHeight * opt.outWidth * 4;// pixels*3 if it's RGB and pixels*4
                                     // if it's ARGB
                                     if (bitmapSize > 1000 * 1200)
                                         opt.inSampleSize = 2;
                                     opt.inJustDecodeBounds = false;
-                                    tBitmap = BitmapFactory.decodeByteArray(data,
-                                            0, data.length, opt);
+                                    tBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opt);
                                     if (imageRef.width != 0 && imageRef.height != 0) {
-                                        bitmap = ThumbnailUtils
-                                                .extractThumbnail(
-                                                        tBitmap,
+                                        bitmap = ThumbnailUtils.extractThumbnail(tBitmap,
                                                         imageRef.width,
                                                         imageRef.height,
                                                         ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
@@ -417,12 +407,9 @@ public class ImageManager {
 
                                     if (bitmap != null && url != null) {
                                         // 写入SD卡
-                                        if (imageRef.width != 0
-                                                && imageRef.height != 0) {
-                                            mDiskCache.put(url + imageRef.width
-                                                    + imageRef.height, bitmap);
-                                            mMemoryCache.put(url + imageRef.width
-                                                    + imageRef.height, bitmap);
+                                        if (imageRef.width != 0 && imageRef.height != 0) {
+                                            mDiskCache.put(url + imageRef.width + imageRef.height, bitmap);
+                                            mMemoryCache.put(url + imageRef.width + imageRef.height, bitmap);
                                         } else {
                                             mDiskCache.put(url, bitmap);
                                             mMemoryCache.put(url, bitmap);
@@ -439,8 +426,7 @@ public class ImageManager {
                     }
 
                     if (mImageManagerHandler != null) {
-                        Message message = mImageManagerHandler.obtainMessage(
-                                MSG_REPLY, bitmap);
+                        Message message = mImageManagerHandler.obtainMessage(MSG_REPLY, bitmap);
                         mImageManagerHandler.sendMessage(message);
                     }
                     break;
