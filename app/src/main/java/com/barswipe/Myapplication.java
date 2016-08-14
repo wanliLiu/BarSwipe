@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
@@ -35,6 +36,8 @@ public class Myapplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Fresco.initialize(this);
 
         httpClient = this.createHttpClient();
 

@@ -151,6 +151,19 @@
             android:description="@string/str_multi"
             android:icon="@mipmap/ic_launcher"
             android:label="自己写图片缓存 学习" />
+
+        <activity
+            android:name=".materials.MainActivity_Material"
+            android:description="@string/str_material"
+            android:icon="@mipmap/ic_launcher_material"
+            android:label="Materials Design"
+            android:launchMode="singleTop"
+            android:theme="@style/AppThemeMaterial" />
+
+        <activity
+            android:name=".materials.DetailActivity"
+            android:theme="@style/AppThemeMaterial" />
+
     </application>
 
 </manifest>
