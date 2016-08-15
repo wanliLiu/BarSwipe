@@ -4,7 +4,7 @@ android {
     compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
-    useLibrary 'org.apache.http.legacy'
+//    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.barswipe"

@@ -1,7 +1,5 @@
 package com.barswipe.PicCache.adapter;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -9,11 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.barswipe.PicCache.util.ImageManager;
 import com.barswipe.R;
+import com.barswipe.materials.widgets.SquareImageView;
+
+import java.util.ArrayList;
 
 public class GridImageAdapter extends BaseAdapter {
 
@@ -48,14 +48,12 @@ public class GridImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+        SquareImageView imageView;
         if (convertView == null) {
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(dipToPx(100), dipToPx(100)));
-            imageView.setAdjustViewBounds(true);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView = new SquareImageView(mContext);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else
-            imageView = (ImageView) convertView;
+            imageView = (SquareImageView) convertView;
         String path;
         if (dataList != null && position < dataList.size())
             path = dataList.get(position);

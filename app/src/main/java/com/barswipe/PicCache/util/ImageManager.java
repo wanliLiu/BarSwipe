@@ -19,13 +19,12 @@ import android.widget.ImageView;
 
 import com.barswipe.Myapplication;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -126,8 +125,7 @@ public class ImageManager {
 
         };
 
-//		File cacheDir = DiskLruCache.getDiskCacheDir(context, DISK_CACHE_SUBDIR);
-        File cacheDir = new File(Environment.getExternalStorageDirectory().toString() + File.separator + "mydownloads_liuwanli" + File.separator + DISK_CACHE_SUBDIR);
+        File cacheDir = new File(Environment.getExternalStorageDirectory(), "Android/data/" + context.getApplicationInfo().packageName + "/download" + File.separator + DISK_CACHE_SUBDIR);
         mDiskCache = DiskLruCache.openCache(context, cacheDir, DISK_CACHE_SIZE);
 
     }
@@ -274,6 +272,14 @@ public class ImageManager {
             return;
         }
 
+        if (url.startsWith("http") && new File(filePath).exists()) {
+            Bitmap bitmap1 = mDiskCache.get(url);
+            if (bitmap1 != null) {
+                setImageBitmap(imageView, bitmap1, false);
+                return;
+            }
+        }
+
         queueImage(new ImageRef(imageView, url, filePath, resId, width, height));
     }
 
@@ -379,7 +385,7 @@ public class ImageManager {
                                     mMemoryCache.put(url, bitmap);
                             }
 
-                        } else {
+                        } else if (url.startsWith("http")) {
                             try {
                                 byte[] data = loadByteArrayFromNetwork(url);
 
@@ -397,9 +403,9 @@ public class ImageManager {
                                     tBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, opt);
                                     if (imageRef.width != 0 && imageRef.height != 0) {
                                         bitmap = ThumbnailUtils.extractThumbnail(tBitmap,
-                                                        imageRef.width,
-                                                        imageRef.height,
-                                                        ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+                                                imageRef.width,
+                                                imageRef.height,
+                                                ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
                                     } else {
                                         bitmap = tBitmap;
                                         tBitmap = null;
@@ -408,8 +414,10 @@ public class ImageManager {
                                     if (bitmap != null && url != null) {
                                         // 写入SD卡
                                         if (imageRef.width != 0 && imageRef.height != 0) {
-                                            mDiskCache.put(url + imageRef.width + imageRef.height, bitmap);
-                                            mMemoryCache.put(url + imageRef.width + imageRef.height, bitmap);
+                                            mDiskCache.put(url, bitmap);
+                                            mMemoryCache.put(url, bitmap);
+//                                            mDiskCache.put(url + imageRef.width + imageRef.height, bitmap);
+//                                            mMemoryCache.put(url + imageRef.width + imageRef.height, bitmap);
                                         } else {
                                             mDiskCache.put(url, bitmap);
                                             mMemoryCache.put(url, bitmap);
@@ -512,17 +520,28 @@ public class ImageManager {
     /**
      * 从网络获取图片字节数组
      *
-     * @param url
+     * @param murl
      * @return
      */
-    private byte[] loadByteArrayFromNetwork(String url) {
+    private byte[] loadByteArrayFromNetwork(String murl) {
 
         try {
+            //创建按一个URL实例
+            URL url = new URL(murl);
+            //创建一个HttpURLConnection的链接对象
+            HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+            //获取所下载文件的InputStream对象
+            InputStream inputStream = httpConn.getInputStream();
 
-            HttpGet method = new HttpGet(url);
-            HttpResponse response = myapp.getHttpClient().execute(method);
-            HttpEntity entity = response.getEntity();
-            return EntityUtils.toByteArray(entity);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024 * 4];
+            int n = 0;
+            while ((n = inputStream.read(buffer)) != -1) {
+                out.write(buffer, 0, n);
+            }
+
+            return out.toByteArray();
 
         } catch (Exception e) {
             e.printStackTrace();
