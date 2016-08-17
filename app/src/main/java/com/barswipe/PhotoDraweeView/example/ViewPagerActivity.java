@@ -50,7 +50,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mDrawables.length + 1;
+            return mDrawables.length + 2;
         }
 
         @Override
@@ -67,8 +67,11 @@ public class ViewPagerActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup viewGroup, int position) {
             final PhotoDraweeView photoDraweeView = new PhotoDraweeView(viewGroup.getContext());
             PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
+            photoDraweeView.getHierarchy().setProgressBarImage(new ImageLoadingDrawable());
             controller.setAutoPlayAnimations(true);
-            if (position == getCount() - 1)
+            if (position == getCount() - 2)
+                controller.setUri("http://dynamic-image.yesky.com/740x-/uploadImages/2015/163/50/690V3VHW0P77.jpg");
+            else if (position == getCount() - 1)
                 controller.setUri("http://wimg.spriteapp.cn/ugc/2016/08/06/57a5b6fd46c06.gif");
             else
                 controller.setUri(Uri.parse("res:///" + mDrawables[position]));
