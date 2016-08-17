@@ -44,6 +44,10 @@
     <string name="button1Text">Add Word</string>
     <string name="button2Text">View Poem</string>
 
+    <string name="default_image">Default Image</string>
+    <string name="failure_image">Failure Image</string>
+    <string name="view_pager">ViewPager</string>
+
 
     <string name="des_base">Swipelayout Curton .......</string>
     <string name="des_Test">自定义倾斜TextView</string>
@@ -65,5 +69,6 @@
     <string name="str_multi">这个主要是学习自己写的图片缓存,加载大图片\n还需要再研究一下,实际项目是否可以用</string>
     <string name="str_material">还没有看\n 1.materials design学习,常用组件使用,这里最关心的就是启动动画过度的实现,用的suppport中的ActivityOptionsCompat</string>
 
-    <string name="str_fresco_photoview">还没有看\n 1.fresco 和photoview结合</string>
+    <string name="str_fresco_photoview">还没有看\n 1.fresco 和photoview结合 \n 这个是直接在继承Photoview 然用DraweeHolder freso加载图片，设置photoview bitmap,相对于上面那个效果不好，gif显示有问题</string>
+    <string name="str_fresco_photoview1">还没有看\n 1.PhotoDraweeView photview的复制品，但不是photoview  \n这个是直接模拟Photoview的操作，继承SimpleDraweeView，用photoview attecher来弄，相对原生，只是方式借鉴photoview </string>
 </resources>

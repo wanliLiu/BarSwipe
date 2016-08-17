@@ -168,12 +168,22 @@
             android:name=".draweePhotoView.activity.MainActivityPhoto"
             android:description="@string/str_fresco_photoview"
             android:icon="@mipmap/ic_launcher"
-            android:label="Fresco photoview"
+            android:label="Fresco photoview gif不能放"
             android:theme="@style/AppThemePhoto" />
 
         <activity
             android:name=".draweePhotoView.activity.MyPhotoViewActivity"
             android:theme="@style/AppThemePhoto" />
+
+        <activity
+            android:name=".PhotoDraweeView.example.SingleActivity"
+            android:description="@string/str_fresco_photoview1"
+            android:icon="@mipmap/ic_launcher"
+            android:label="PhotoDraweeView  这个可以放gif"
+            android:theme="@style/AppThemePhotDrawee" />
+        <activity
+            android:name=".PhotoDraweeView.example.ViewPagerActivity"
+            android:theme="@style/AppThemePhotDrawee" />
 
     </application>
 
