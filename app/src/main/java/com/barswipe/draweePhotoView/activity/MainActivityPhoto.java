@@ -13,9 +13,7 @@ import android.widget.LinearLayout;
 import com.barswipe.R;
 import com.barswipe.draweePhotoView.fragment.OneFragment;
 import com.barswipe.draweePhotoView.fragment.TwoFragment;
-import com.barswipe.draweePhotoView.lib.ImagePipelineConfigUtils;
 import com.barswipe.draweePhotoView.lib.MySimpleDraweeView;
-import com.facebook.drawee.backends.pipeline.Fresco;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

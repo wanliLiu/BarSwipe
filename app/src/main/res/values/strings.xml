@@ -63,7 +63,7 @@
     <string name="str_swipeLayout">1.有点学习困乏了这个，后面再看。。。\n2.结合实际，ViewDragHelper具体怎么用\n3.结合已经学习的Scroller ViewDragHelper,理解各种场景的运用</string>
     <string name="str_fresco">学习facebook fresco\n后续会把一些会用到的方式加进来</string>
     <string name="str_multi">这个主要是学习自己写的图片缓存,加载大图片\n还需要再研究一下,实际项目是否可以用</string>
-    <string name="str_material">1.materials design学习,常用组件使用,这里最关心的就是启动动画过度的实现,用的suppport中的ActivityOptionsCompat</string>
+    <string name="str_material">还没有看\n 1.materials design学习,常用组件使用,这里最关心的就是启动动画过度的实现,用的suppport中的ActivityOptionsCompat</string>
 
-    <string name="str_fresco_photoview">1.fresco 和photoview结合</string>
+    <string name="str_fresco_photoview">还没有看\n 1.fresco 和photoview结合</string>
 </resources>

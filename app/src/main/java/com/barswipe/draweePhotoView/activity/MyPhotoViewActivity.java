@@ -57,11 +57,6 @@ public class MyPhotoViewActivity extends BaseActivity {
             public void onPhotoTap(View view, float x, float y) {
                 finish();
             }
-
-            @Override
-            public void onOutsidePhotoTap() {
-                finish();
-            }
         });
     }
 }
