@@ -22,4 +22,11 @@
     <color name="black_overlay">#66000000</color>
     <color name="none_color">#00000000</color>
     <color name="bule_overlay">#660D92DD</color>
+
+    <color name="style_color_primary">#2d5d82</color>
+    <color name="style_color_primary_dark">#21425d</color>
+    <color name="style_color_accent">#01bcd5</color>
+    <color name="fab_color_pressed">#007787</color>
+    <color name="fab_color_shadow">#44000000</color>
+
 </resources>

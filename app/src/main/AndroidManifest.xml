@@ -164,6 +164,17 @@
             android:name=".materials.DetailActivity"
             android:theme="@style/AppThemeMaterial" />
 
+        <activity
+            android:name=".draweePhotoView.activity.MainActivityPhoto"
+            android:description="@string/str_fresco_photoview"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Fresco photoview"
+            android:theme="@style/AppThemePhoto" />
+
+        <activity
+            android:name=".draweePhotoView.activity.MyPhotoViewActivity"
+            android:theme="@style/AppThemePhoto" />
+
     </application>
 
 </manifest>

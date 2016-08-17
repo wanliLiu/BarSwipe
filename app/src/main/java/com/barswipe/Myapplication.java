@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.barswipe.draweePhotoView.lib.ImagePipelineConfigUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.util.ArrayList;
@@ -20,7 +21,9 @@ public class Myapplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Fresco.initialize(this);
+//        Fresco.initialize(this);
+
+        Fresco.initialize(this, ImagePipelineConfigUtils.getDefaultImagePipelineConfig(this));
 
         JSONObject object = new JSONObject();
         object.put("UserToken", "sssssdsdwqeewewe");
