@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="学习事例--------https://github.com/kaedea/fresco-sample-usage"
+        android:textSize="16sp" />
+
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/animated_gif"
         android:layout_width="400dp"
