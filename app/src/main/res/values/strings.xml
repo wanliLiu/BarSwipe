@@ -71,4 +71,5 @@
 
     <string name="str_fresco_photoview">还没有看\n 1.fresco 和photoview结合 \n 这个是直接在继承Photoview 然用DraweeHolder freso加载图片，设置photoview bitmap,相对于上面那个效果不好，gif显示有问题</string>
     <string name="str_fresco_photoview1">还没有看\n 1.PhotoDraweeView photview的复制品，但不是photoview  \n这个是直接模拟Photoview的操作，继承SimpleDraweeView，用photoview attecher来弄，相对原生，只是方式借鉴photoview </string>
+    <string name="str_jsWeb">还没看\n  在学习学习js 和java相关的东西</string>
 </resources>

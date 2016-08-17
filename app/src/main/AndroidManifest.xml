@@ -185,6 +185,11 @@
             android:name=".PhotoDraweeView.example.ViewPagerActivity"
             android:theme="@style/AppThemePhotDrawee" />
 
+        <activity
+            android:name=".jsWebview.jsbridge.demo.MainActivityJS"
+            android:description="@string/str_jsWeb"
+            android:icon="@mipmap/ic_launcher"
+            android:label="JSWebview 看下" />
     </application>
 
 </manifest>
