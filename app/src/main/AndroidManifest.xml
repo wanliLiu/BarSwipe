@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.barswipe">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,6 +14,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".Myapplication"
@@ -190,6 +197,29 @@
             android:description="@string/str_jsWeb"
             android:icon="@mipmap/ic_launcher"
             android:label="JSWebview 看下" />
+
+        <activity
+            android:name=".luban.MainActivity_luban"
+            android:description="@string/str_luban"
+            android:icon="@mipmap/ic_launcher"
+            android:label="LuBan 模仿wechat的图片压缩算法" />
+
+        <activity
+            android:name=".photopicker.MainActivity_photo"
+            android:description="@string/str_luban"
+            android:icon="@mipmap/ic_launcher_photo"
+            android:label="PhotoPicker 防微信图片选择" />
+
+        <activity
+            android:theme="@style/customTheme"
+            android:name="me.iwf.photopicker.PhotoPickerActivity"
+            />
+
+        <activity
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:name="me.iwf.photopicker.PhotoPagerActivity"
+            />
+
     </application>
 
 </manifest>

@@ -1,0 +1,26 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
+  buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+  resourcePrefix "__picker_"
+
+  defaultConfig {
+    minSdkVersion project.ANDROID_MIN_SDK_VERSION
+    targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
+    versionCode 1
+    versionName "0.8.5"
+  }
+}
+
+dependencies {
+  compile "com.android.support:appcompat-v7:${supportPackageVersion}"
+  compile "com.android.support:design:${supportPackageVersion}"
+  compile "com.android.support:cardview-v7:${supportPackageVersion}"
+  compile "com.android.support:palette-v7:${supportPackageVersion}"
+  compile "com.android.support:recyclerview-v7:${supportPackageVersion}"
+  compile 'com.android.support:support-annotations:23.4.0'
+  compile 'com.nineoldandroids:library:2.4.0'
+  compile 'com.github.bumptech.glide:glide:3.7.0'
+}
+
