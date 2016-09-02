@@ -219,19 +219,19 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <activity
-            android:name=".imagescale.davemorrissey.labs.subscaleview.sample.MainActivity_imageScale"
+            android:name=".imagescale.MainActivity_imageScale"
             android:description="@string/str_ImageScale"
             android:icon="@drawable/ic_launcher_imagecale"
             android:label="ImageScale 学习" />
 
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.basicfeatures.BasicFeaturesActivity" />
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.imagedisplay.ImageDisplayActivity" />
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.eventhandling.EventHandlingActivity" />
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.eventhandlingadvanced.AdvancedEventHandlingActivity" />
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.viewpager.ViewPagerActivity" />
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.animation.AnimationActivity" />
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.extension.ExtensionActivity" />
-        <activity android:name=".imagescale.davemorrissey.labs.subscaleview.sample.configuration.ConfigurationActivity" />
+        <activity android:name=".imagescale.basicfeatures.BasicFeaturesActivity" />
+        <activity android:name=".imagescale.imagedisplay.ImageDisplayActivity" />
+        <activity android:name=".imagescale.eventhandling.EventHandlingActivity" />
+        <activity android:name=".imagescale.eventhandlingadvanced.AdvancedEventHandlingActivity" />
+        <activity android:name=".imagescale.viewpager.ViewPagerActivity" />
+        <activity android:name=".imagescale.animation.AnimationActivity" />
+        <activity android:name=".imagescale.extension.ExtensionActivity" />
+        <activity android:name=".imagescale.configuration.ConfigurationActivity" />
     </application>
 
 </manifest>

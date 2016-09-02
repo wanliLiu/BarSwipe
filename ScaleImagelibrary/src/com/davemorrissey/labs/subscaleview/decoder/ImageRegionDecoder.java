@@ -26,7 +26,7 @@ public interface ImageRegionDecoder {
     Point init(Context context, Uri uri) throws Exception;
 
     /**
-     * Decode a region of the image with the given sample size. This method is called off the UI thread so it can safely
+     * Decode a region of the image with the given com.barswipe.imagescale size. This method is called off the UI thread so it can safely
      * load the image on the current thread. It is called from an {@link android.os.AsyncTask} running in a single
      * threaded executor, and while a synchronization lock is held on this object, so will never be called concurrently
      * even if the decoder implementation supports it.

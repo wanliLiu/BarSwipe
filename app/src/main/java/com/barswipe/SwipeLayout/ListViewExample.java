@@ -40,7 +40,7 @@ public class ListViewExample extends AppCompatActivity {
         }
 
         /**
-         * The following comment is the sample usage of ArraySwipeAdapter.
+         * The following comment is the com.barswipe.imagescale usage of ArraySwipeAdapter.
          */
 //        String[] adapterData = new String[]{"Activity", "Service", "Content Provider", "Intent", "BroadcastReceiver", "ADT", "Sqlite3", "HttpClient",
 //                "DDMS", "Android Studio", "Fragment", "Loader", "Activity", "Service", "Content Provider", "Intent",

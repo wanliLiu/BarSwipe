@@ -927,7 +927,7 @@ public class SubsamplingScaleImageView extends View {
 
         if (tileMap != null && isBaseLayerReady()) {
 
-            // Optimum sample size for current scale
+            // Optimum com.barswipe.imagescale size for current scale
             int sampleSize = Math.min(fullImageSampleSize, calculateInSampleSize(scale));
 
             // First check for missing tiles - if there are any we need the base layer underneath to avoid gaps
@@ -1118,7 +1118,7 @@ public class SubsamplingScaleImageView extends View {
     }
 
     /**
-     * Called on first draw when the view has dimensions. Calculates the initial sample size and starts async loading of
+     * Called on first draw when the view has dimensions. Calculates the initial com.barswipe.imagescale size and starts async loading of
      * the base layer image - the whole source subsampled as necessary.
      */
     private synchronized void initialiseBaseLayer(Point maxTileDimensions) {
@@ -1167,7 +1167,7 @@ public class SubsamplingScaleImageView extends View {
 
         int sampleSize = Math.min(fullImageSampleSize, calculateInSampleSize(scale));
 
-        // Load tiles of the correct sample size that are on screen. Discard tiles off screen, and those that are higher
+        // Load tiles of the correct com.barswipe.imagescale size that are on screen. Discard tiles off screen, and those that are higher
         // resolution than required, or lower res than required but not the base layer, so the base layer is always present.
         for (Map.Entry<Integer, List<Tile>> tileMapEntry : tileMap.entrySet()) {
             for (Tile tile : tileMapEntry.getValue()) {
@@ -1238,7 +1238,7 @@ public class SubsamplingScaleImageView extends View {
     }
 
     /**
-     * Calculates sample size to fit the source image in given bounds.
+     * Calculates com.barswipe.imagescale size to fit the source image in given bounds.
      */
     private int calculateInSampleSize(float scale) {
         if (minimumTileDpi > 0) {
@@ -1268,7 +1268,7 @@ public class SubsamplingScaleImageView extends View {
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
         }
 
-        // We want the actual sample size that will be used, so round down to nearest power of 2.
+        // We want the actual com.barswipe.imagescale size that will be used, so round down to nearest power of 2.
         int power = 1;
         while (power * 2 < inSampleSize) {
             power = power * 2;
@@ -1353,7 +1353,7 @@ public class SubsamplingScaleImageView extends View {
     }
 
     /**
-     * Once source image and view dimensions are known, creates a map of sample size to tile grid.
+     * Once source image and view dimensions are known, creates a map of com.barswipe.imagescale size to tile grid.
      */
     private void initialiseTileMap(Point maxTileDimensions) {
         this.tileMap = new LinkedHashMap<Integer, List<Tile>>();
