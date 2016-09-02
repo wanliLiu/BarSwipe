@@ -62,7 +62,7 @@
 
     </RelativeLayout>
 
-    <com.davemorrissey.labs.subscaleview.sample.extension.views.PinView
+    <com.barswipe.imagescale.extension.views.PinView
             android:id="@+id/imageView"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/text"
