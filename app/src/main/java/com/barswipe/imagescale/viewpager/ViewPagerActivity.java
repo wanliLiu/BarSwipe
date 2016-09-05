@@ -31,7 +31,8 @@ import com.barswipe.R.layout;
 
 public class ViewPagerActivity extends BaseActivity {
 
-    private static final String[] IMAGES = { "ness.jpg", "squirrel.jpg" };
+    private static final String[] IMAGES = { "ness.jpg", "squirrel.jpg", "big_pic.jpg"};
+
 
     private ViewPager page;
 

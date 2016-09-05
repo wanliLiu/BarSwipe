@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.barswipe.R;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.barswipe.R.id;
@@ -42,7 +43,7 @@ public class ViewPagerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(layout.view_pager_page, container, false);
+        View rootView = inflater.inflate(R.layout.view_pager_page, container, false);
 
         if (savedInstanceState != null) {
             if (asset == null && savedInstanceState.containsKey(BUNDLE_ASSET)) {
