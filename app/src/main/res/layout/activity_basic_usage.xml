@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.kaede.frescosample.basicusage.BasicUsageActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SimpleDraweeView"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_focus"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:actualImageScaleType="focusCrop" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ScaleType Focus on (0,0)"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_tile"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:placeholderImage="@drawable/pattern"
+                    fresco:placeholderImageScaleType="fitXY" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ScaleType Tile"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:placeholderImage="@color/placeHolder" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Placeholder Image"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_fade"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:fadeDuration="5000" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Fade Duration"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_radius"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:roundAsCircle="false"
+                    fresco:roundBottomLeft="true"
+                    fresco:roundBottomRight="true"
+                    fresco:roundTopLeft="true"
+                    fresco:roundTopRight="false"
+                    fresco:roundedCornerRadius="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Corner Radius"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_circle"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:roundAsCircle="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Circle"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_failure"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:failureImage="@drawable/image_failure"
+                    fresco:failureImageScaleType="fitXY" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Failure Image"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_retry"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:failureImage="@drawable/image_failure"
+                    fresco:failureImageScaleType="fitXY"
+                    fresco:retryImage="@drawable/image_retry"
+                    fresco:retryImageScaleType="fitXY" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Retry Image (Tap on the image)"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_progressbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ProgressBar Image"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="#000000"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_backround"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:backgroundImage="@drawable/image_background" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Background Image"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="#000000"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:overlayImage="@color/overlay" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Overlay Image"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="7dp" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4.0dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="#000000"
+                card_view:cardCornerRadius="0dp">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/drawee_basic_press"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    fresco:pressedStateOverlayImage="@color/pressState" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#99000000"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PressedStateOverlay Image"
+                        android:textColor="#ffffff" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
+
+

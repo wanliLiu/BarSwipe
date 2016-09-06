@@ -81,4 +81,5 @@
     <string name="str_luban">还没看\n  图片的压缩算法，类似于wechat图片压缩效果</string>
     <string name="str_photopicker">还没看\n  选择图片，空了可以研究一下</string>
     <string name="str_ImageScale">1.图片显示很好，但是gif和Fresco的融合还有问题\2.继续研究</string>
+    <string name="str_fresco_demo">1.Fresco 各种使用demo\n2.和其他第三方imageview的使用</string>
 </resources>

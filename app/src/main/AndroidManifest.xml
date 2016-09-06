@@ -232,6 +232,37 @@
         <activity android:name=".imagescale.animation.AnimationActivity" />
         <activity android:name=".imagescale.extension.ExtensionActivity" />
         <activity android:name=".imagescale.configuration.ConfigurationActivity" />
+
+        /****Fresco sample***/
+        <activity
+            android:name="me.kaede.frescosample.samplelist.SampleListActivity"
+            android:description="@string/str_fresco_demo"
+            android:icon="@drawable/ic_launcher"
+            android:label="Fresco 使用demo 各种实用的demo"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name="me.kaede.frescosample.basicusage.BasicUsageActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name="me.kaede.frescosample.gif.GifActivity"/>
+        <activity android:name="me.kaede.frescosample.lowres.LowResActivity" />
+        <activity android:name="me.kaede.frescosample.listener.ListenerActivity" />
+        <activity android:name="me.kaede.frescosample.progressivejpg.ProgressiveJPGActivity" />
+        <activity android:name="me.kaede.frescosample.resize.ResizeActivity" />
+        <activity android:name="me.kaede.frescosample.postprocessor.PostprocessorActivity" />
+        <activity android:name="me.kaede.frescosample.listview.ListViewActivity" />
+        <activity
+            android:name="me.kaede.frescosample.rec.RecyclerViewActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name="me.kaede.frescosample.photoview.PhotoViewActivity"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name="me.kaede.frescosample.subsampling.SubsamplingActvity"
+            android:theme="@style/NoActionBar" />
+        <activity android:name="me.kaede.frescosample.gifimageview.GifImageViewActivity" />
+        <activity android:name="me.kaede.frescosample.snippet.SnippetActivity" />
+
     </application>
 
 </manifest>

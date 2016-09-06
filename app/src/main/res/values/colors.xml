@@ -29,4 +29,10 @@
     <color name="fab_color_pressed">#007787</color>
     <color name="fab_color_shadow">#44000000</color>
 
+
+    <color name="placeHolder">#BDBDBD</color>
+    <color name="overlay">#553F51B5</color>
+    <color name="pressState">#55FF4081</color>
+    <color name="textColorPrimary">@android:color/white</color>
+
 </resources>
