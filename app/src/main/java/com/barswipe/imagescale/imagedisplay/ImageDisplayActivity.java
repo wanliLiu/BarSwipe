@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.barswipe.BaseActivity;
+import com.barswipe.R;
 import com.barswipe.R.id;
 import com.barswipe.R.layout;
 
@@ -40,7 +41,7 @@ public class ImageDisplayActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.extension_activity);
+        setContentView(R.layout.extension_activity);
 //        getActionBar().setTitle("Image display");
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_POSITION)) {

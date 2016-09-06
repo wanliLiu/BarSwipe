@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import com.barswipe.R;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.barswipe.R.id;
@@ -31,7 +32,7 @@ public class ImageDisplayLargeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(layout.imagedisplay_large_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.imagedisplay_large_fragment, container, false);
         rootView.findViewById(id.next).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

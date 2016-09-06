@@ -49,7 +49,7 @@
 
     </RelativeLayout>
 
-    <com.davemorrissey.labs.subscaleview.sample.extension.views.CircleView
+    <com.barswipe.imagescale.extension.views.CircleView
             android:id="@+id/imageView"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/text"

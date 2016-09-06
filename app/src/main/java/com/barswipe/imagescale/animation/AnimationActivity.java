@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.barswipe.BaseActivity;
+import com.barswipe.R;
 import com.barswipe.imagescale.extension.views.PinView;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
@@ -46,7 +47,7 @@ public class AnimationActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.animation_activity);
+        setContentView(R.layout.animation_activity);
 //        getActionBar().setTitle("Animation");
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(id.next).setOnClickListener(this);

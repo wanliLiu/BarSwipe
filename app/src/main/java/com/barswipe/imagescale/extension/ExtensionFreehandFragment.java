@@ -23,8 +23,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import com.barswipe.R;
 import com.barswipe.R.id;
-import com.barswipe.R.layout;
 import com.barswipe.imagescale.extension.views.FreehandView;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 
@@ -32,7 +32,7 @@ public class ExtensionFreehandFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(layout.extension_freehand_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.extension_freehand_fragment, container, false);
         rootView.findViewById(id.previous).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -19,6 +19,8 @@ package com.barswipe.imagescale.extension.views;
 import android.content.Context;
 import android.graphics.*;
 import android.util.AttributeSet;
+
+import com.barswipe.R;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.barswipe.R.drawable;
 
@@ -49,7 +51,7 @@ public class PinView extends SubsamplingScaleImageView {
 
     private void initialise() {
         float density = getResources().getDisplayMetrics().densityDpi;
-        pin = BitmapFactory.decodeResource(this.getResources(), drawable.pushpin_blue);
+        pin = BitmapFactory.decodeResource(this.getResources(), R.drawable.pushpin_blue);
         float w = (density/420f) * pin.getWidth();
         float h = (density/420f) * pin.getHeight();
         pin = Bitmap.createScaledBitmap(pin, (int)w, (int)h, true);

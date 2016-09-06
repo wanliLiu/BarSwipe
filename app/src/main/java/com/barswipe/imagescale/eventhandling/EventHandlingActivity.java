@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.barswipe.BaseActivity;
+import com.barswipe.R;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.barswipe.R.id;
@@ -43,7 +44,7 @@ public class EventHandlingActivity extends BaseActivity implements OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.notes_activity);
+        setContentView(R.layout.notes_activity);
 //        getActionBar().setTitle("Event handling");
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(id.next).setOnClickListener(this);

@@ -63,7 +63,7 @@
 
     </RelativeLayout>
 
-    <com.davemorrissey.labs.subscaleview.sample.extension.views.FreehandView
+    <com.barswipe.imagescale.extension.views.FreehandView
             android:id="@+id/imageView"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/text"

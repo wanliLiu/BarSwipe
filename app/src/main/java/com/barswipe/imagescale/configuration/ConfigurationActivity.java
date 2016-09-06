@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.barswipe.BaseActivity;
+import com.barswipe.R;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.barswipe.R.id;
@@ -43,7 +44,7 @@ public class ConfigurationActivity extends BaseActivity implements OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.notes_activity);
+        setContentView(R.layout.notes_activity);
 //        getActionBar().setTitle("Configuration");
 //        getActionBar().setDisplayHomeAsUpEnabled(true);
         findViewById(id.next).setOnClickListener(this);
@@ -52,16 +53,16 @@ public class ConfigurationActivity extends BaseActivity implements OnClickListen
             position = savedInstanceState.getInt(BUNDLE_POSITION);
         }
         notes = Arrays.asList(
-                new Note("Maximum scale", "The maximum scale has been set to 50dpi. You can zoom in until the image is very pixellated."),
-                new Note("Minimum tile DPI", "The minimum tile DPI has been set to 50dpi, to reduce memory usage. The next layer of tiles will not be loaded until the image is very pixellated."),
-                new Note("Pan disabled", "Dragging has been disabled. You can only zoom in to the centre point."),
-                new Note("Zoom disabled", "Zooming has been disabled. You can drag the image around."),
-                new Note("Double tap style", "On double tap, the tapped point is now zoomed to the center of the screen instead of remaining in the same place."),
-                new Note("Double tap style", "On double tap, the zoom now happens immediately."),
-                new Note("Double tap scale", "The double tap zoom scale has been set to 240dpi."),
-                new Note("Pan limit center", "The pan limit has been changed to PAN_LIMIT_CENTER. Panning stops when a corner reaches the centre of the screen."),
-                new Note("Pan limit outside", "The pan limit has been changed to PAN_LIMIT_OUTSIDE. Panning stops when the image is just off screen."),
-                new Note("Debug", "Debug has been enabled. This shows the tile boundaries and sizes.")
+                new Note("Maximum scale", "The maximum scale has been set to 50dpi. You can zoom in until the image is very pixellated."),//0
+                new Note("Minimum tile DPI", "The minimum tile DPI has been set to 50dpi, to reduce memory usage. The next layer of tiles will not be loaded until the image is very pixellated."),//1
+                new Note("Pan disabled", "Dragging has been disabled. You can only zoom in to the centre point."),//2
+                new Note("Zoom disabled", "Zooming has been disabled. You can drag the image around."),//3
+                new Note("Double tap style", "On double tap, the tapped point is now zoomed to the center of the screen instead of remaining in the same place."),//4
+                new Note("Double tap style", "On double tap, the zoom now happens immediately."),//5
+                new Note("Double tap scale", "The double tap zoom scale has been set to 240dpi."),//6
+                new Note("Pan limit center", "The pan limit has been changed to PAN_LIMIT_CENTER. Panning stops when a corner reaches the centre of the screen."),//7
+                new Note("Pan limit outside", "The pan limit has been changed to PAN_LIMIT_OUTSIDE. Panning stops when the image is just off screen."),//8
+                new Note("Debug", "Debug has been enabled. This shows the tile boundaries and sizes.")//9
         );
 
         initialiseImage();
@@ -93,7 +94,8 @@ public class ConfigurationActivity extends BaseActivity implements OnClickListen
 
     private void initialiseImage() {
         SubsamplingScaleImageView imageView = (SubsamplingScaleImageView)findViewById(id.imageView);
-        imageView.setImage(ImageSource.asset("squirrel.jpg"));
+//        imageView.setImage(ImageSource.asset("squirrel.jpg"));
+        imageView.setImage(ImageSource.asset("big_pic.jpg"));
     }
 
     private void updateNotes() {
@@ -124,7 +126,7 @@ public class ConfigurationActivity extends BaseActivity implements OnClickListen
             imageView.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
         }
         if (position == 6) {
-            imageView.setDoubleTapZoomDpi(240);
+            imageView.setDoubleTapZoomDpi(120);
         } else {
             imageView.setDoubleTapZoomScale(1F);
         }
@@ -135,11 +137,11 @@ public class ConfigurationActivity extends BaseActivity implements OnClickListen
         } else {
             imageView.setPanLimit(SubsamplingScaleImageView.PAN_LIMIT_INSIDE);
         }
-        if (position == 9) {
+//        if (position == 9) {
+//            imageView.setDebug(true);
+//        } else {
             imageView.setDebug(true);
-        } else {
-            imageView.setDebug(false);
-        }
+//        }
         if (position == 2) {
             imageView.setScaleAndCenter(0f, new PointF(1228, 816));
             imageView.setPanEnabled(false);
@@ -147,7 +149,7 @@ public class ConfigurationActivity extends BaseActivity implements OnClickListen
             imageView.setPanEnabled(true);
         }
         if (position == 3) {
-            imageView.setScaleAndCenter(1f, new PointF(1228, 816));
+            imageView.setScaleAndCenter(2f, new PointF(0, 0));
             imageView.setZoomEnabled(false);
         } else {
             imageView.setZoomEnabled(true);

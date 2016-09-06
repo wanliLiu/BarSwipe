@@ -80,5 +80,5 @@
     <string name="str_jsWeb">还没看\n  在学习学习js 和java相关的东西</string>
     <string name="str_luban">还没看\n  图片的压缩算法，类似于wechat图片压缩效果</string>
     <string name="str_photopicker">还没看\n  选择图片，空了可以研究一下</string>
-    <string name="str_ImageScale">还没看\n  图片缩放  或者放大</string>
+    <string name="str_ImageScale">1.图片显示很好，但是gif和Fresco的融合还有问题\2.继续研究</string>
 </resources>

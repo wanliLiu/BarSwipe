@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import com.barswipe.R;
 import com.barswipe.imagescale.extension.views.PinView;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.barswipe.R.id;
@@ -34,7 +35,7 @@ public class ExtensionPinFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(layout.extension_pin_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.extension_pin_fragment, container, false);
         rootView.findViewById(id.next).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
