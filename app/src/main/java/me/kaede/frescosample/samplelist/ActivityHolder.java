@@ -22,7 +22,7 @@ public class ActivityHolder {
 		nameList = new ArrayList<>();
 	}
 
-	public void addActivity(String name,Class<?extends Activity> activity){
+	public void addActivity(String name, Class<? extends Activity> activity) {
 		if (!activityMap.containsKey(name)) {
 			nameList.add(name);
 			activityMap.put(name,activity);

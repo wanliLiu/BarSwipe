@@ -77,21 +77,14 @@ import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.DraweeHolder;
-import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.core.ImagePipeline;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.image.CloseableStaticBitmap;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.memory.PooledByteBuffer;
-import com.facebook.imagepipeline.memory.PooledByteBufferInputStream;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -104,9 +97,9 @@ import java.util.Map;
  * Displays an image subsampled as necessary to avoid loading too much image data into memory. After a pinch to zoom in,
  * a set of image tiles subsampled at higher resolution are loaded and displayed over the base layer. During pinch and
  * zoom, tiles off screen or higher/lower resolution than required are discarded from memory.
- * <p>
+ * <p/>
  * Tiles are no larger than the max supported bitmap size, so with large images tiling may be used even when zoomed out.
- * <p>
+ * <p/>
  * v prefixes - coordinates, translations and distances measured in screen (view) pixels
  * s prefixes - coordinates, translations and distances measured in source image pixels (scaled)
  */
@@ -426,7 +419,7 @@ public class SubsamplingScaleImageView extends View {
     /**
      * Set the image source from a bitmap, resource, asset, file or other URI, providing a preview image to be
      * displayed until the full size image is loaded.
-     * <p>
+     * <p/>
      * You must declare the dimensions of the full size image by calling {@link ImageSource#dimensions(int, int)}
      * on the imageSource object. The preview source will be ignored if you don't provide dimensions,
      * and if you provide a bitmap for the full size image.
@@ -443,7 +436,7 @@ public class SubsamplingScaleImageView extends View {
      * displayed until the full size image is loaded, starting with a given orientation setting, scale and center.
      * This is the best method to use when you want scale and center to be restored after screen orientation change;
      * it avoids any redundant loading of tiles in the wrong orientation.
-     * <p>
+     * <p/>
      * You must declare the dimensions of the full size image by calling {@link ImageSource#dimensions(int, int)}
      * on the imageSource object. The preview source will be ignored if you don't provide dimensions,
      * and if you provide a bitmap for the full size image.
@@ -2793,58 +2786,10 @@ public class SubsamplingScaleImageView extends View {
         mDraweeHolder.onAttach();
     }
 
-    public void setImageUri(final String url) {
-        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url)).build();
-        ImagePipeline imagePipeline = Fresco.getImagePipeline();
-        final DataSource<CloseableReference<PooledByteBuffer>> dataSource = imagePipeline.fetchEncodedImage(imageRequest, this);
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setOldController(mDraweeHolder.getController())
-                .setImageRequest(imageRequest)
-                .setControllerListener(new BaseControllerListener<ImageInfo>() {
-                    @Override
-                    public void onFinalImageSet(String s, @Nullable ImageInfo imageInfo, @Nullable Animatable animatable) {
-                        try {
-                            bytes = dataSource.getResult();
-                            if (bytes != null) {
-                                PooledByteBuffer pooledByteBuffer = bytes.get();
-                                PooledByteBufferInputStream sourceIs = new PooledByteBufferInputStream(pooledByteBuffer);
-                                BufferedInputStream bis = new BufferedInputStream(sourceIs);
-                                String filename = String.valueOf(url.hashCode());
-                                FileCache fileCache = new FileCache(getContext());
-                                File f = new File(fileCache.getCacheDir(), filename);
-                                try {
-                                    f.createNewFile();
-                                    OutputStream os = new FileOutputStream(f);
-                                    FileUtils.CopyStream(bis, os);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                setImage(ImageSource.uri(f.getAbsolutePath()));
-                                setMaxScale(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM);
-                                int width = getWidth();
-                                int height = getHeight();
-                                if (width == 0 || height == 0) {
-                                    width = AndroidUtils.getScreenWidth(getContext());
-                                    height = AndroidUtils.getScreenHeight(getContext());
-                                }
-                                if ((getSHeight() > height) && getSHeight() / getSWidth() > height / width) {
-                                    PointF center = new PointF(getSWidth() / 2, 0);
-                                    float targetScale = Math.max(width / (float) getSWidth(), height / (float) getSHeight());
-                                    setScaleAndCenter(targetScale, center);
-                                }
-                            }
-                        } finally {
-                            dataSource.close();
-                            CloseableReference.closeSafely(bytes);
-                        }
-                    }
-                })
-                .setTapToRetryEnabled(true)
-                .build();
-        mDraweeHolder.setController(controller);
-    }
-
-    public void setImageUri(String uri, final int width, int height) {
+    /**
+     * @param uri
+     */
+    public void setImageUri(String uri) {
         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(uri))
                 .setAutoRotateEnabled(true)
 //                .setResizeOptions(new ResizeOptions(width, height))
@@ -2865,9 +2810,10 @@ public class SubsamplingScaleImageView extends View {
                                     CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
                                     Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
                                     if (bitmap != null) {
+//                                        setImage(ImageSource.bitmap(bitmap),new ImageViewState(2f,new PointF(0,0),0));
                                         setImage(ImageSource.bitmap(bitmap));
                                         setMaxScale(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM);
-//                                        setMinimumScaleType(SCALE_TYPE_CUSTOM);
+                                        setMinimumScaleType(SCALE_TYPE_CUSTOM);
                                         int width = getWidth();
                                         int height = getHeight();
                                         if (width == 0 || height == 0) {
@@ -2877,9 +2823,12 @@ public class SubsamplingScaleImageView extends View {
                                         if ((getSHeight() > height) && getSHeight() / getSWidth() > height / width) {
                                             PointF center = new PointF(getSWidth() / 2, 0);
                                             float targetScale = Math.max(width / (float) getSWidth(), height / (float) getSHeight());
-                                            float minScale = Math.min(width / (float) getSWidth(), height / (float) getSHeight());
                                             setScaleAndCenter(targetScale, center);
-//                                            setMinScale(minScale);
+                                            setMinScale(targetScale);
+                                        }
+
+                                        if (getSWidth() * 4 < getSHeight()) {
+                                            SubsamplingScaleImageView.this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                                         }
                                     }
                                 }
