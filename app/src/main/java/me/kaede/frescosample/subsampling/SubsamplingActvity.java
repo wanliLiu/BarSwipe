@@ -15,6 +15,6 @@ public class SubsamplingActvity extends AppCompatActivity {
 		setContentView(R.layout.activity_subsampling_actvity);
 
 		SubsamplingScaleImageView subsamplingScaleImageView = (SubsamplingScaleImageView) this.findViewById(R.id.scaleimageview);
-		subsamplingScaleImageView.setImageUri(ImageApi.other.getUrlByName("longimage", ".jpg"));
+		subsamplingScaleImageView.setImageUri(ImageApi.other.getUrlByName("longimage", ".jpg"),300,500);
 	}
 }

@@ -61,6 +61,7 @@ import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
 import com.davemorrissey.labs.subscaleview.R.styleable;
 import com.davemorrissey.labs.subscaleview.decoder.CompatDecoderFactory;
 import com.davemorrissey.labs.subscaleview.decoder.DecoderFactory;
@@ -2846,7 +2847,7 @@ public class SubsamplingScaleImageView extends View {
     public void setImageUri(String uri, final int width, int height) {
         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(uri))
                 .setAutoRotateEnabled(true)
-                .setResizeOptions(new ResizeOptions(width, height))
+//                .setResizeOptions(new ResizeOptions(width, height))
                 .build();
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
         final DataSource<CloseableReference<CloseableImage>> dataSource = imagePipeline.fetchDecodedImage(imageRequest, this);
@@ -2866,6 +2867,7 @@ public class SubsamplingScaleImageView extends View {
                                     if (bitmap != null) {
                                         setImage(ImageSource.bitmap(bitmap));
                                         setMaxScale(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM);
+//                                        setMinimumScaleType(SCALE_TYPE_CUSTOM);
                                         int width = getWidth();
                                         int height = getHeight();
                                         if (width == 0 || height == 0) {
@@ -2875,7 +2877,9 @@ public class SubsamplingScaleImageView extends View {
                                         if ((getSHeight() > height) && getSHeight() / getSWidth() > height / width) {
                                             PointF center = new PointF(getSWidth() / 2, 0);
                                             float targetScale = Math.max(width / (float) getSWidth(), height / (float) getSHeight());
+                                            float minScale = Math.min(width / (float) getSWidth(), height / (float) getSHeight());
                                             setScaleAndCenter(targetScale, center);
+//                                            setMinScale(minScale);
                                         }
                                     }
                                 }
