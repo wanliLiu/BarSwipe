@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.barswipe.draweePhotoView.lib.FrescoUtil;
 import com.barswipe.draweePhotoView.lib.ImagePipelineConfigUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -22,7 +23,7 @@ public class Myapplication extends Application {
         super.onCreate();
 
 //        Fresco.initialize(this);
-
+//        FrescoUtil.Init(this);
         Fresco.initialize(this, ImagePipelineConfigUtils.getDefaultImagePipelineConfig(this));
 
         JSONObject object = new JSONObject();

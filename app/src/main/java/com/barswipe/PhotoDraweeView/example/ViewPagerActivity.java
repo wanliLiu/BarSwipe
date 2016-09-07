@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.barswipe.PhotoDraweeView.lib.OnPhotoTapListener;
 import com.barswipe.PhotoDraweeView.lib.PhotoDraweeView;
 import com.barswipe.R;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -50,7 +51,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mDrawables.length + 2;
+            return mDrawables.length + 3;
         }
 
         @Override
@@ -65,44 +66,58 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup viewGroup, int position) {
-            final PhotoDraweeView photoDraweeView = new PhotoDraweeView(viewGroup.getContext());
-            PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
-            photoDraweeView.getHierarchy().setProgressBarImage(new ImageLoadingDrawable());
-            controller.setAutoPlayAnimations(true);
-            if (position == getCount() - 2)
-                controller.setUri("http://dynamic-image.yesky.com/740x-/uploadImages/2015/163/50/690V3VHW0P77.jpg");
-            else if (position == getCount() - 1)
-                controller.setUri("http://wimg.spriteapp.cn/ugc/2016/08/06/57a5b6fd46c06.gif");
-            else
-                controller.setUri(Uri.parse("res:///" + mDrawables[position]));
-            controller.setOldController(photoDraweeView.getController());
-            controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
-                @Override
-                public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                    super.onFinalImageSet(id, imageInfo, animatable);
-                    if (imageInfo == null) {
-                        return;
+            if (position != getCount() - 1) {
+                final PhotoDraweeView photoDraweeView = new PhotoDraweeView(viewGroup.getContext());
+                PipelineDraweeControllerBuilder controller = Fresco.newDraweeControllerBuilder();
+                photoDraweeView.getHierarchy().setProgressBarImage(new ImageLoadingDrawable());
+                controller.setAutoPlayAnimations(true);
+                if (position == getCount() - 3)
+                    controller.setUri("http://dynamic-image.yesky.com/740x-/uploadImages/2015/163/50/690V3VHW0P77.jpg");
+                else if (position == getCount() - 2)
+                    controller.setUri("http://wimg.spriteapp.cn/ugc/2016/08/06/57a5b6fd46c06.gif");
+                else
+                    controller.setUri(Uri.parse("res:///" + mDrawables[position]));
+                controller.setOldController(photoDraweeView.getController());
+                controller.setControllerListener(new BaseControllerListener<ImageInfo>() {
+                    @Override
+                    public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                        super.onFinalImageSet(id, imageInfo, animatable);
+                        if (imageInfo == null) {
+                            return;
+                        }
+                        photoDraweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
                     }
-                    photoDraweeView.update(imageInfo.getWidth(), imageInfo.getHeight());
-                }
-            });
-            photoDraweeView.setController(controller.build());
+                });
+                photoDraweeView.setController(controller.build());
 
-            try {
-                viewGroup.addView(photoDraweeView, ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT);
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    viewGroup.addView(photoDraweeView, ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                photoDraweeView.setOnPhotoTapListener(new OnPhotoTapListener() {
+                    @Override
+                    public void onPhotoTap(View view, float x, float y) {
+                        ViewPagerActivity.this.finish();
+                    }
+                });
+
+                return photoDraweeView;
+            } else {
+                SubsamplingScaleImageView subsamplingScaleImageView = new SubsamplingScaleImageView(viewGroup.getContext());
+                subsamplingScaleImageView.setImageUri("http://xusong.bceimg.com/100016_0cbf1e5246d28f4b5b89e352e528a039_1360.jpg");
+
+                try {
+                    viewGroup.addView(subsamplingScaleImageView, ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return subsamplingScaleImageView;
             }
-
-            photoDraweeView.setOnPhotoTapListener(new OnPhotoTapListener() {
-                @Override
-                public void onPhotoTap(View view, float x, float y) {
-                    ViewPagerActivity.this.finish();
-                }
-            });
-
-            return photoDraweeView;
         }
     }
 }

@@ -110,7 +110,6 @@ public class SubsamplingScaleImageView extends View {
 
     DraweeHolder<GenericDraweeHierarchy> mDraweeHolder;
     private CloseableReference<CloseableImage> imageReference = null;
-    private CloseableReference<PooledByteBuffer> bytes;
 
     /**
      * Attempt to use EXIF information on the image to rotate it. Works for external files only.
@@ -2810,7 +2809,6 @@ public class SubsamplingScaleImageView extends View {
                                     CloseableStaticBitmap closeableStaticBitmap = (CloseableStaticBitmap) image;
                                     Bitmap bitmap = closeableStaticBitmap.getUnderlyingBitmap();
                                     if (bitmap != null) {
-//                                        setImage(ImageSource.bitmap(bitmap),new ImageViewState(2f,new PointF(0,0),0));
                                         setImage(ImageSource.bitmap(bitmap));
                                         setMaxScale(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM);
                                         setMinimumScaleType(SCALE_TYPE_CUSTOM);
