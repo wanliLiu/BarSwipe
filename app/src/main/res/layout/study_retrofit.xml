@@ -12,11 +12,13 @@
         android:text="点我"
         android:textSize="16sp" />
 
-    <TextView
+    <com.barswipe.retrofit.clickTextview
         android:id="@+id/result_TV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/click_me_BN"
+        android:layout_marginTop="50dp"
         android:text="Hello World!"
+        android:textColorLink="@drawable/tv_selector"
         android:textSize="16sp" />
 </RelativeLayout>

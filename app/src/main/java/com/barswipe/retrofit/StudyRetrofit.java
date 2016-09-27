@@ -2,7 +2,6 @@ package com.barswipe.retrofit;
 
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
@@ -29,7 +28,7 @@ public class StudyRetrofit extends BaseActivity {
     @Bind(R.id.click_me_BN)
     Button clickMeBN;
     @Bind(R.id.result_TV)
-    TextView resultTV;
+    clickTextview resultTV;
 
     private SubscriberOnNextListener getTopMovieOnNext;
 
