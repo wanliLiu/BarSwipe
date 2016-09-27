@@ -76,10 +76,11 @@
     <string name="str_material">还没有看\n 1.materials design学习,常用组件使用,这里最关心的就是启动动画过度的实现,用的suppport中的ActivityOptionsCompat</string>
 
     <string name="str_fresco_photoview">还没有看\n 1.fresco 和photoview结合 \n 这个是直接在继承Photoview 然用DraweeHolder freso加载图片，设置photoview bitmap,相对于上面那个效果不好，gif显示有问题</string>
-    <string name="str_fresco_photoview1">还没有看\n 1.PhotoDraweeView photview的复制品，但不是photoview  \n这个是直接模拟Photoview的操作，继承SimpleDraweeView，用photoview attecher来弄，相对原生，只是方式借鉴photoview </string>
+    <string name="str_fresco_photoview1">1.PhotoDraweeView photview的复制品，但不是photoview  \n这个是直接模拟Photoview的操作，继承SimpleDraweeView，用photoview attecher来弄，相对原生，只是方式借鉴photoview \n2.和ScaleImage合用实现长图的显示</string>
     <string name="str_jsWeb">还没看\n  在学习学习js 和java相关的东西</string>
-    <string name="str_luban">还没看\n  图片的压缩算法，类似于wechat图片压缩效果</string>
+    <string name="str_luban">1.这里使用RxJava方式了，初步接触响应式编程\n2.图片的压缩算法，类似于wechat图片压缩效果</string>
     <string name="str_photopicker">1.大致看了一下,还可以,但是需要改进,实际情况。\n2.查询图片可以借鉴,比如需要显示gif,就可以把查询条件上加上gif,反之不加,这样就没有gif图片,这个地方可以借鉴\n3.这里gif显示是用的google glide显示的,但是长图和大图还是不支持</string>
     <string name="str_ImageScale">1.图片显示很好，但是gif和Fresco的融合还有问题\2.继续研究</string>
     <string name="str_fresco_demo">1.Fresco 各种使用demo\n2.和其他第三方imageview的使用</string>
+    <string name="str_retrofit">1.Retrofit 寻求更好的网络请求框架</string>
 </resources>

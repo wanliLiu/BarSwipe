@@ -243,8 +243,7 @@
         <activity
             android:name="me.kaede.frescosample.basicusage.BasicUsageActivity"
             android:theme="@style/NoActionBar" />
-        <activity
-            android:name="me.kaede.frescosample.gif.GifActivity"/>
+        <activity android:name="me.kaede.frescosample.gif.GifActivity" />
         <activity android:name="me.kaede.frescosample.lowres.LowResActivity" />
         <activity android:name="me.kaede.frescosample.listener.ListenerActivity" />
         <activity android:name="me.kaede.frescosample.progressivejpg.ProgressiveJPGActivity" />
@@ -263,6 +262,11 @@
         <activity android:name="me.kaede.frescosample.gifimageview.GifImageViewActivity" />
         <activity android:name="me.kaede.frescosample.snippet.SnippetActivity" />
 
+        <activity
+            android:name=".retrofit.StudyRetrofit"
+            android:description="@string/str_retrofit"
+            android:icon="@drawable/ic_launcher"
+            android:label="Retrofit http网络请求库学习" />
     </application>
 
 </manifest>
