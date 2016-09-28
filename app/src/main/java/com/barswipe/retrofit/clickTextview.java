@@ -31,10 +31,21 @@ public class clickTextview extends TextView {
         init();
     }
 
+    private String getEmojiStringByUnicode(int unicode) {
+        return new String(Character.toChars(unicode));
+    }
+
+
     private void init() {
+
+        int unicodeJoy = 0x1F602;
+        String emojiString = getEmojiStringByUnicode(unicodeJoy);
+        setText(emojiString);
+
         //这句话很重要
         setMovementMethod(LinkMovementMethod.getInstance());
-        setText("开始到好似看电视了贷款 ");
+        append("开始到好似看电视了贷款 ");
+
         SpannableString sp = new SpannableString("@许嵩");
         sp.setSpan(new clickSpan(), 0, "@许嵩".length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         append(sp);
