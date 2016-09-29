@@ -52,4 +52,5 @@ dependencies {
     compile project(':SwipeLayoutLibrary')
     compile project(':PhotoPicker')
     compile project(':ScaleImagelibrary')
+    compile project(':emojiLibrary')
 }

@@ -34,6 +34,9 @@
     <string name="more">More</string>
     <string name="settings">Settings</string>
 
+    <string name="hint">Type emoji here</string>
+    <string name="i_love_emojicon">I \ue32d emojicon</string>
+    <string name="use_system_default">Use system default emojicon</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="cheese_ipsum"> 曾经有一份真诚的爱情放在我面前
@@ -83,4 +86,5 @@
     <string name="str_ImageScale">1.图片显示很好，但是gif和Fresco的融合还有问题\2.继续研究</string>
     <string name="str_fresco_demo">1.Fresco 各种使用demo\n2.和其他第三方imageview的使用</string>
     <string name="str_retrofit">1.Retrofit 寻求更好的网络请求框架</string>
+    <string name="str_emjoin">还没看\n  1.主要是学习一下自定义这块，用这个有个平台</string>
 </resources>

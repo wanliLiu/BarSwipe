@@ -267,6 +267,16 @@
             android:description="@string/str_retrofit"
             android:icon="@drawable/ic_launcher"
             android:label="Retrofit http网络请求库学习" />
+
+        <activity
+            android:name=".emojic.MainActivityEmjo"
+            android:description="@string/str_emjoin"
+            android:icon="@drawable/ic_launcher_emjo"
+            android:label="表情学习"
+            android:theme="@style/AppThemeemjo" />
+        <activity
+            android:name=".emojic.EmojiconsActivity"
+            android:theme="@style/AppThemeemjo" />
     </application>
 
 </manifest>

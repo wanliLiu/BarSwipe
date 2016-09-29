@@ -19,8 +19,9 @@ import butterknife.OnClick;
 
 /**
  * Created by Soli on 2016/9/27.
+ *
+ * http://blog.csdn.net/jackiandroid/article/details/44564697
  */
-
 public class StudyRetrofit extends BaseActivity {
 
     /**
@@ -69,12 +70,57 @@ public class StudyRetrofit extends BaseActivity {
     @OnClick(R.id.test)
     public void onViewclick()
     {
-        String temp = "aA我是010x1F602";
+        String temp = "aA我是010x1F602 我想问一下\uD83D\uDE33";
         char[] chars = temp.toCharArray();
+
         for (int i = 0 ; i < chars.length; i++)
         {
             Log.e("chars",chars[i] + "");
         }
+        toCodePointArray(temp);
+        toCodePointArray_1(temp);
+        char[] test = Character.toChars(65);
+        for (int i = 0 ; i < test.length; i++)
+        {
+            Log.e("chars",test[i] + "");
+        }
+    }
+
+    private int[] toCodePointArray(String str) { // Example 1-1
+        int len = str.length();          // the length of str
+        int[] acp = new int[len];        // an array of code points
+
+        for (int i = 0, j = 0; i < len; i++) {
+            acp[j++] = str.charAt(i);
+        }
+        return acp;
+    }
+
+    private int[] toCodePointArray_1(String str) { // Example 1-2
+        int len = str.length();          // the length of str
+        int[] acp;                       // an array of code points
+        int surrogatePairCount = 0;      // the count of surrogate pairs
+
+        for (int i = 1; i < len; i++) {
+            if (Character.isSurrogatePair(str.charAt(i - 1), str.charAt(i))) {
+                surrogatePairCount++;
+                i++;
+            }
+        }
+        acp = new int[len - surrogatePairCount];
+        for (int i = 0, j = 0; i < len; i++) {
+            char ch0 = str.charAt(i);         // the current char
+            if (Character.isHighSurrogate(ch0) && i + 1 < len) {
+                char ch1 = str.charAt(i + 1); // the next char
+                if (Character.isLowSurrogate(ch1)) {
+                    acp[j++] = Character.toCodePoint(ch0, ch1);
+                    i++;
+                    continue;
+                }
+            }
+            acp[j++] = ch0;
+        }
+        return acp;
     }
 
     //进行网络请求

@@ -33,7 +33,6 @@ import android.os.Environment;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Base64;
-import android.view.InputEvent;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -583,17 +582,17 @@ public class AdvancedWebView extends WebView {
                 }
             }
 
-            @SuppressLint("NewApi")
-            @SuppressWarnings("all")
-            public void onUnhandledInputEvent(WebView view, InputEvent event) {
-                if (Build.VERSION.SDK_INT >= 21) {
-                    if (mCustomWebViewClient != null) {
-                        mCustomWebViewClient.onUnhandledInputEvent(view, event);
-                    } else {
-                        super.onUnhandledInputEvent(view, event);
-                    }
-                }
-            }
+//            @SuppressLint("NewApi")
+//            @SuppressWarnings("all")
+//            public void onUnhandledInputEvent(WebView view, InputEvent event) {
+//                if (Build.VERSION.SDK_INT >= 21) {
+//                    if (mCustomWebViewClient != null) {
+//                        mCustomWebViewClient.onUnhandledInputEvent(view, event);
+//                    } else {
+//                        super.onUnhandledInputEvent(view, event);
+//                    }
+//                }
+//            }
 
             @Override
             public void onScaleChanged(WebView view, float oldScale, float newScale) {

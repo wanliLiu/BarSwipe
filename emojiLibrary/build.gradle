@@ -1,0 +1,22 @@
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion project.ANDROID_MIN_SDK_VERSION
+        targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:24.1.1'
+    compile 'com.android.support:support-annotations:24.1.1'
+    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.android.support:design:24.1.1'
+}
