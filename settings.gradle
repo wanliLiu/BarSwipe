@@ -1,1 +1,1 @@
-include ':app', ':EaseInterpolatorLib', ':SwipeLayoutLibrary', ':PhotoPicker', ':ScaleImagelibrary', ':emojiLibrary'
+include ':app', ':EaseInterpolatorLib', ':SwipeLayoutLibrary', ':PhotoPicker', ':ScaleImagelibrary', ':emojiLibrary', ':emojiAllLibrary'

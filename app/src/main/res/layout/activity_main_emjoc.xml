@@ -27,6 +27,11 @@
         android:layout_height="wrap_content"
         android:text="EmojiconsView"
         android:onClick="openEmojiconsActivity"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EmojiconsView ALl Activity"
+        android:onClick="open23EmojiconsActivity"/>
     <CheckBox
         android:id="@+id/use_system_default"
         android:layout_width="wrap_content"

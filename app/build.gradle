@@ -53,4 +53,5 @@ dependencies {
     compile project(':PhotoPicker')
     compile project(':ScaleImagelibrary')
     compile project(':emojiLibrary')
+    compile project(':emojiAllLibrary')
 }

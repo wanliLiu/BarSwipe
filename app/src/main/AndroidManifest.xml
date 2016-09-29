@@ -277,6 +277,8 @@
         <activity
             android:name=".emojic.EmojiconsActivity"
             android:theme="@style/AppThemeemjo" />
+        <activity android:name=".emojic.MainActivityAllEm"
+            android:theme="@style/AppThemeemjo" />
     </application>
 
 </manifest>
