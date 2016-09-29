@@ -43,7 +43,7 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
     public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
         int action = event.getAction();
 
-        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN  || action == MotionEvent.ACTION_CANCEL ) {
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_OUTSIDE) {
             int x = (int) event.getX();
             int y = (int) event.getY();
 
@@ -70,15 +70,15 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
 
             if (link.length != 0) {
                 tempLick = link[0];
-                if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL ) {
+                if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_OUTSIDE) {
                     link[0].onClick(widget);
-                    setSelect(false,buffer);
+                    setSelect(false, buffer);
                 } else if (action == MotionEvent.ACTION_DOWN) {
-                    setSelect(true,buffer);
+                    setSelect(true, buffer);
                 }
                 return true;
             } else {
-                setSelect(false,buffer);
+                setSelect(false, buffer);
                 Selection.removeSelection(buffer);
                 Touch.onTouchEvent(widget, buffer, event);
                 return false;
@@ -89,14 +89,11 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
     }
 
     /**
-     *
      * @param isSelect
      * @param buffer
      */
-    private void setSelect(boolean isSelect,Spannable buffer)
-    {
-        if (tempLick != null)
-        {
+    private void setSelect(boolean isSelect, Spannable buffer) {
+        if (tempLick != null) {
             buffer.setSpan(new BackgroundColorSpan(isSelect ? clickColor : Color.TRANSPARENT), buffer.getSpanStart(tempLick),
                     buffer.getSpanEnd(tempLick), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }

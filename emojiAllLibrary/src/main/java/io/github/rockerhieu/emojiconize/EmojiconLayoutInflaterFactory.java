@@ -50,6 +50,7 @@ class EmojiconLayoutInflaterFactory implements LayoutInflaterFactory {
             try {
                 view = inflater.createView(name, null, attrs);
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
         }
 

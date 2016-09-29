@@ -35,7 +35,8 @@ project.ext {
     VERSION_CODE = "22"
 
     // Google Stuffs
-    supportPackageVersion = "23.4.0"
+    supportPackageVersion = "24.1.1"
+
     rxjava_version="1.1.9"
     rxandroid_version="1.2.1"
 }
