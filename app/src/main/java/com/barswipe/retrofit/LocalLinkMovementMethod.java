@@ -43,7 +43,7 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
     public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
         int action = event.getAction();
 
-        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN ) {
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN  || action == MotionEvent.ACTION_CANCEL ) {
             int x = (int) event.getX();
             int y = (int) event.getY();
 
@@ -70,7 +70,7 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
 
             if (link.length != 0) {
                 tempLick = link[0];
-                if (action == MotionEvent.ACTION_UP) {
+                if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL ) {
                     link[0].onClick(widget);
                     setSelect(false,buffer);
                 } else if (action == MotionEvent.ACTION_DOWN) {
@@ -84,6 +84,7 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
                 return false;
             }
         }
+
         return Touch.onTouchEvent(widget, buffer, event);
     }
 
