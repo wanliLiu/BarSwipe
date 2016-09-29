@@ -1,24 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/click_me_BN"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <com.barswipe.retrofit.clickTextview
+            android:id="@+id/result_TV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="Hello World!"
+            android:textSize="16sp" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/temp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="5dp"
-        android:text="点我"
-        android:textSize="16sp" />
+        android:orientation="horizontal">
 
-    <com.barswipe.retrofit.clickTextview
-        android:id="@+id/result_TV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/click_me_BN"
-        android:layout_marginTop="50dp"
-        android:text="Hello World!"
-        android:textColorLink="@drawable/tv_selector"
-        android:textSize="16sp" />
-</RelativeLayout>
+        <Button
+            android:id="@+id/click_me_BN"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="点我"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/test"
+            android:layout_width="0.0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="测试"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.barswipe.retrofit;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import com.barswipe.BaseActivity;
@@ -24,6 +25,7 @@ public class StudyRetrofit extends BaseActivity {
 
     /**
      * 学习研究 地址：http://gank.io/post/56e80c2c677659311bed9841
+     * retrofit study---------http://square.github.io/retrofit/
      */
     @Bind(R.id.click_me_BN)
     Button clickMeBN;
@@ -41,7 +43,8 @@ public class StudyRetrofit extends BaseActivity {
         getTopMovieOnNext = new SubscriberOnNextListener<List<Subject>>() {
             @Override
             public void onNext(List<Subject> subjects) {
-                resultTV.setText(subjects.toString());
+//                resultTV.setText(subjects.toString());
+                resultTV.append(subjects.toString());
             }
         };
     }
@@ -61,6 +64,17 @@ public class StudyRetrofit extends BaseActivity {
     @OnClick(R.id.click_me_BN)
     public void onClick() {
         getMovie();
+    }
+
+    @OnClick(R.id.test)
+    public void onViewclick()
+    {
+        String temp = "aA我是010x1F602";
+        char[] chars = temp.toCharArray();
+        for (int i = 0 ; i < chars.length; i++)
+        {
+            Log.e("chars",chars[i] + "");
+        }
     }
 
     //进行网络请求
@@ -88,7 +102,6 @@ public class StudyRetrofit extends BaseActivity {
 //                resultTV.setText(t.getMessage());
 //            }
 //        });
-
 
         /******************************************
          * 用Rxjava 主要是用addCallAdapterFactory
