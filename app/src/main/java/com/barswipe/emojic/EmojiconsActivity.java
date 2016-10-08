@@ -23,23 +23,42 @@ import com.barswipe.R;
 
 import java.util.Arrays;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import io.github.rockerhieu.emojicon.EmojiconEditText;
+import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconPage;
+import io.github.rockerhieu.emojicon.EmojiconsFragment;
 import io.github.rockerhieu.emojicon.EmojiconsView;
 import io.github.rockerhieu.emojicon.emoji.Emojicon;
 
 public class EmojiconsActivity extends AppCompatActivity {
 
+    @Bind(R.id.input)
+    EmojiconEditText input;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        Emojiconize.activity(this).go();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emojicons);
+        ButterKnife.bind(this);
+
         EmojiconsView emojiconsView = (EmojiconsView) findViewById(R.id.emojicons_view);
+        //
         emojiconsView.setPages(Arrays.asList(
                 new EmojiconPage(Emojicon.TYPE_PEOPLE, null, false, R.drawable.ic_emoji_people_light),
                 new EmojiconPage(Emojicon.TYPE_NATURE, null, false, R.drawable.ic_emoji_nature_light),
                 new EmojiconPage(Emojicon.TYPE_OBJECTS, null, false, R.drawable.ic_emoji_objects_light),
                 new EmojiconPage(Emojicon.TYPE_PLACES, null, false, R.drawable.ic_emoji_places_light),
-                new EmojiconPage(Emojicon.TYPE_SYMBOLS, null, false, R.drawable.ic_emoji_symbols_light)
+                new EmojiconPage(Emojicon.TYPE_SYMBOLS, null, false, R.drawable.ic_emoji_symbols_light),
+                new EmojiconPage(Emojicon.TYPE_Weibo, null, false, R.drawable.ic_emoji_symbols_light)
         ));
+        emojiconsView.setListener(new EmojiconGridFragment.OnEmojiconClickedListener() {
+            @Override
+            public void onEmojiconClicked(Emojicon emojicon) {
+                EmojiconsFragment.input(input, emojicon);
+            }
+        });
     }
 }

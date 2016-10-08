@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="CustomTextView:   😀😬😁😂😃😄😅😆" />
+        android:text="CustomTextView:   😀😬😁😂😃😄😅😆 [丘比特]" />
 
     <Button
         android:id="@+id/button"

@@ -74,8 +74,7 @@ public final class Emojiconize {
         public void go() {
             checkGone();
             if (activity != null) {
-                LayoutInflaterCompat.setFactory(activity.getLayoutInflater(),
-                        new EmojiconLayoutInflaterFactory(this));
+                LayoutInflaterCompat.setFactory(activity.getLayoutInflater(),new EmojiconLayoutInflaterFactory(this));
             } else {
                 emojiconize(view);
             }

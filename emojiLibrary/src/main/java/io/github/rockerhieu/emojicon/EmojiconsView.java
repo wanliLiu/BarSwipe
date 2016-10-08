@@ -36,12 +36,15 @@ import android.widget.LinearLayout;
 import java.util.Arrays;
 import java.util.List;
 
+import io.github.rockerhieu.emojicon.emoji.Emojicon;
 import io.github.rockerhieu.emojicon.util.Utils;
 
 /**
  * Created by rockerhieu on 8/31/16.
  */
 public class EmojiconsView extends FrameLayout implements ViewPager.OnPageChangeListener {
+
+    private static EmojiconGridFragment.OnEmojiconClickedListener listener;
     ViewPager mViewPager;
     private List<EmojiconPage> mPages;
     private ViewGroup mTabsContainer;
@@ -145,6 +148,10 @@ public class EmojiconsView extends FrameLayout implements ViewPager.OnPageChange
     public void onPageScrollStateChanged(int state) {
     }
 
+    public void setListener(EmojiconGridFragment.OnEmojiconClickedListener listener) {
+        this.listener = listener;
+    }
+
     static class EmojiconGridViewPagerAdapter extends PagerAdapter {
         private Context context;
         private final List<EmojiconPage> pages;
@@ -172,6 +179,17 @@ public class EmojiconsView extends FrameLayout implements ViewPager.OnPageChange
                 sparseArray.put(emojiGridView.getId(), savedStates[position]);
                 emojiGridView.restoreHierarchyState(sparseArray);
             }
+
+            emojiGridView.setOnEmojiconClickedListener(new EmojiconGridFragment.OnEmojiconClickedListener() {
+                @Override
+                public void onEmojiconClicked(Emojicon emojicon) {
+                    if (listener != null)
+                    {
+                        listener.onEmojiconClicked(emojicon);
+                    }
+                }
+            });
+
             return emojiGridView;
         }
 

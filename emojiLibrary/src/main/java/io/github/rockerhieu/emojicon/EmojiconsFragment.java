@@ -72,7 +72,8 @@ public class EmojiconsFragment extends Fragment implements ViewPager.OnPageChang
                 EmojiconGridFragment.newInstance(Emojicon.TYPE_NATURE, recents, mUseSystemDefault),
                 EmojiconGridFragment.newInstance(Emojicon.TYPE_OBJECTS, recents, mUseSystemDefault),
                 EmojiconGridFragment.newInstance(Emojicon.TYPE_PLACES, recents, mUseSystemDefault),
-                EmojiconGridFragment.newInstance(Emojicon.TYPE_SYMBOLS, recents, mUseSystemDefault)
+                EmojiconGridFragment.newInstance(Emojicon.TYPE_SYMBOLS, recents, mUseSystemDefault),
+                EmojiconGridFragment.newInstance(Emojicon.TYPE_Weibo, recents, mUseSystemDefault)
         ));
         mViewPager.setAdapter(mEmojisAdapter);
 

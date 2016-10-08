@@ -21,6 +21,10 @@ import android.util.SparseIntArray;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.github.rockerhieu.emojicon.util.PinYinUtil;
 
 /**
  * @author Hieu Rocker (rockerhieu@gmail.com)
@@ -1720,6 +1724,31 @@ public final class EmojiconHandler {
 
             if (icon > 0) {
                 text.setSpan(new EmojiconSpan(context, icon, emojiSize, emojiAlignment, textSize), i, i + skip, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
+        //自定义表情
+
+        Pattern pattern = Pattern.compile("\\[[\u4e00-\u9fa5\\w]+\\]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            String value = matcher.group();
+            int start = matcher.start();
+            int end = start + value.length();
+            String resourceName = "lxh" + "_" + PinYinUtil.getSelling(value.substring(1, value.length() - 1));
+
+            int resourceId = 0;
+            if (sEmojisModifiedMap.containsKey(resourceName)) {
+                resourceId = sEmojisModifiedMap.get(resourceName);
+            } else {
+                resourceId = context.getResources().getIdentifier(resourceName, "drawable", context.getApplicationContext().getPackageName());
+                if (resourceId != 0) {
+                    sEmojisModifiedMap.put(resourceName, resourceId);
+                }
+            }
+
+            if (resourceId > 0) {
+                text.setSpan(new EmojiconSpan(context, resourceId, emojiSize, emojiAlignment, textSize), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }
