@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,13 @@ import com.barswipe.FloatView.FloatWindowService;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * Created by soli on 6/2/16.
@@ -69,6 +73,9 @@ public class LaunchActivity extends AppCompatActivity {
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer position) {
+                        if (position == 0) {
+                            RxJavaStudy();
+                        }
                         ActivityInfo info = adapter.getItem(position);
                         Intent intent = new Intent();
                         intent.setClassName(getPackageName(), info.name);
@@ -169,4 +176,66 @@ public class LaunchActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Rxjava学习
+     *http://www.jianshu.com/p/88779bda6691
+     http://blog.csdn.net/lzyzsd/article/details/44094895
+     http://blog.chinaunix.net/uid-20771867-id-5187376.html
+     *
+     */
+    private void RxJavaStudy() {
+        final String Tag = "Rxjava学习";
+        //Map
+        Observable.just("Hellp Map Operator")
+                .map(new Func1<String, Integer>() {
+                    @Override
+                    public Integer call(String s) {
+                        return 156;
+                    }
+                }).map(new Func1<Integer, String>() {
+            @Override
+            public String call(Integer integer) {
+                return "Secon" + String.valueOf(integer);
+            }
+        }).doOnNext(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                Log.e(Tag + "----Map--doOnNext", s);
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                Log.e(Tag + "----Map--subscribe", s);
+            }
+        });
+
+        //From
+        List<String> s = Arrays.asList("Java", "Android", "Ruby", "Ios", "Swift");
+        Observable.from(s).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                Log.e(Tag + "----From", s);
+            }
+        });
+
+        //FlatMap
+        Observable.just(s)
+                .flatMap(new Func1<List<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(List<String> strings) {
+                        return Observable.from(strings);
+                    }
+                }).flatMap(new Func1<String, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(String s) {
+                        return Observable.just("addpre_" + s);
+                    }
+                }).subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(Tag + "----FlatMap", s);
+                    }
+                });
+    }
 }
