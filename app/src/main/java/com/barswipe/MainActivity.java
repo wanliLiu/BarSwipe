@@ -5,18 +5,23 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.barswipe.DragGridView.gridview.MainActivityDragGridView;
 import com.barswipe.Scroller.ScrollerActivity;
 import com.barswipe.ViewDragHelper.ViewDragHelperStudyActivity;
 import com.barswipe.animation.EaseInterpolator.MainActivityAnimation;
 import com.barswipe.snapscrollview.ProductDetailActivity;
+import com.jakewharton.rxbinding.view.RxView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
 
@@ -69,12 +74,20 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.studyDragr).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MainActivityDragGridView.class));
-            }
-        });
+        RxView.clicks(findViewById(R.id.studyDragr))
+                .throttleFirst(ViewConfiguration.getDoubleTapTimeout(), TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(MainActivity.this, MainActivityDragGridView.class));
+                    }
+                });
+//        findViewById(R.id.studyDragr).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(MainActivity.this, MainActivityDragGridView.class));
+//            }
+//        });
 
         findViewById(R.id.studyViewDragHelper).setOnClickListener(new View.OnClickListener() {
             @Override

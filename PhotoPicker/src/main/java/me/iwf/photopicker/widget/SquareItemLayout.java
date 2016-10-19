@@ -23,8 +23,7 @@ public class SquareItemLayout extends RelativeLayout {
   @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     setMeasuredDimension(getDefaultSize(0, widthMeasureSpec), getDefaultSize(0, heightMeasureSpec));
     int childWidthSize = getMeasuredWidth();
-    heightMeasureSpec =
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);
+    heightMeasureSpec = widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);
     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
   }
 }

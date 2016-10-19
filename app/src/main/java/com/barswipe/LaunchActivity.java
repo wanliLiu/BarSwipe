@@ -12,16 +12,19 @@ import android.text.TextUtils;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
+import com.jakewharton.rxbinding.widget.RxAdapterView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.functions.Action1;
 
 /**
  * Created by soli on 6/2/16.
@@ -51,15 +54,27 @@ public class LaunchActivity extends AppCompatActivity {
         adapter = new activityListAdapter();
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ActivityInfo info = adapter.getItem(position);
-                Intent intent = new Intent();
-                intent.setClassName(getPackageName(), info.name);
-                startActivity(intent);
-            }
-        });
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                ActivityInfo info = adapter.getItem(position);
+//                Intent intent = new Intent();
+//                intent.setClassName(getPackageName(), info.name);
+//                startActivity(intent);
+//            }
+//        });
+
+        RxAdapterView.itemClicks(listView)
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer position) {
+                        ActivityInfo info = adapter.getItem(position);
+                        Intent intent = new Intent();
+                        intent.setClassName(getPackageName(), info.name);
+                        startActivity(intent);
+                    }
+                });
 
         adapter.setList(getAllActivityLists());
         listView.setAdapter(adapter);
