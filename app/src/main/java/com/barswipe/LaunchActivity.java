@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -179,10 +180,9 @@ public class LaunchActivity extends AppCompatActivity {
 
     /**
      * Rxjava学习
-     *http://www.jianshu.com/p/88779bda6691
-     http://blog.csdn.net/lzyzsd/article/details/44094895
-     http://blog.chinaunix.net/uid-20771867-id-5187376.html
-     *
+     * http://www.jianshu.com/p/88779bda6691
+     * http://blog.csdn.net/lzyzsd/article/details/44094895
+     * http://blog.chinaunix.net/uid-20771867-id-5187376.html
      */
     private void RxJavaStudy() {
         final String Tag = "Rxjava学习";
@@ -193,31 +193,35 @@ public class LaunchActivity extends AppCompatActivity {
                     public Integer call(String s) {
                         return 156;
                     }
-                }).map(new Func1<Integer, String>() {
-            @Override
-            public String call(Integer integer) {
-                return "Secon" + String.valueOf(integer);
-            }
-        }).doOnNext(new Action1<String>() {
-            @Override
-            public void call(String s) {
-                Log.e(Tag + "----Map--doOnNext", s);
-            }
-        }).subscribe(new Action1<String>() {
-            @Override
-            public void call(String s) {
-                Log.e(Tag + "----Map--subscribe", s);
-            }
-        });
+                })
+                .map(new Func1<Integer, String>() {
+                    @Override
+                    public String call(Integer integer) {
+                        return "Secon" + String.valueOf(integer);
+                    }
+                })
+                .doOnNext(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(Tag + "----Map--doOnNext", s);
+                    }
+                })
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(Tag + "----Map--subscribe", s);
+                    }
+                });
 
         //From
         List<String> s = Arrays.asList("Java", "Android", "Ruby", "Ios", "Swift");
-        Observable.from(s).subscribe(new Action1<String>() {
-            @Override
-            public void call(String s) {
-                Log.e(Tag + "----From", s);
-            }
-        });
+        Observable.from(s)
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(Tag + "----From", s);
+                    }
+                });
 
         //FlatMap
         Observable.just(s)
@@ -226,15 +230,85 @@ public class LaunchActivity extends AppCompatActivity {
                     public Observable<String> call(List<String> strings) {
                         return Observable.from(strings);
                     }
-                }).flatMap(new Func1<String, Observable<String>>() {
+                })
+                .flatMap(new Func1<String, Observable<String>>() {
                     @Override
                     public Observable<String> call(String s) {
                         return Observable.just("addpre_" + s);
                     }
-                }).subscribe(new Action1<String>() {
+                })
+                .filter(new Func1<String, Boolean>() {
+                    @Override
+                    public Boolean call(String s) {
+                        return s.contains("a");
+                    }
+                })
+                .take(3)
+//                .subscribe(new Subscriber<String>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(String s) {
+//
+//                    }
+//                })
+                .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
                         Log.e(Tag + "----FlatMap", s);
+                    }
+                });
+
+        Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> observer) {
+                try {
+                    if (!observer.isUnsubscribed()) {
+                        for (int i = 1; i < 5; i++) {
+                            observer.onNext(i);
+                        }
+                        observer.onCompleted();
+                    }
+                } catch (Exception e) {
+                    observer.onError(e);
+                }
+            }
+        }).subscribe(new Subscriber<Integer>() {
+            @Override
+            public void onNext(Integer item) {
+                System.out.println("Next: " + item);
+            }
+
+            @Override
+            public void onError(Throwable error) {
+                System.err.println("Error: " + error.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Sequence complete.");
+            }
+        });
+
+        Observable.just("dsdsd")
+                .map(new Func1<String, Integer>() {
+                    @Override
+                    public Integer call(String s) {
+                        return s.hashCode();
+                    }
+                })
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+
                     }
                 });
     }
