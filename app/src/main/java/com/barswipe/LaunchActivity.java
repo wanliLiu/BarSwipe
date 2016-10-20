@@ -35,6 +35,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
+import rx.observables.GroupedObservable;
 import rx.schedulers.Schedulers;
 
 /**
@@ -135,6 +136,133 @@ public class LaunchActivity extends AppCompatActivity {
      */
     private void RxJavaTransformingObservables() {
 
+        final String Tag = "Rxjava学习";
+
+        //Buffer map flatmap flatmapIterable
+        Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .flatMap(new Func1<Integer, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> call(Integer integer) {
+                        return Observable.just(integer + 1);
+                    }
+                })
+                .map(new Func1<Integer, Integer>() {
+                    @Override
+                    public Integer call(Integer integer) {
+                        return integer + 1;
+                    }
+                })
+                .flatMapIterable(new Func1<Integer, Iterable<Integer>>() {
+                    @Override
+                    public Iterable<Integer> call(Integer integer) {
+                        ArrayList<Integer> s = new ArrayList<>();
+                        for (int i = 0; i < integer; i++) {
+                            s.add(i);
+                        }
+
+                        return s;
+                    }
+                })
+                .filter(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return integer % 2 == 0;
+                    }
+                })
+//                .subscribe(new Action1<Integer>() {
+//                    @Override
+//                    public void call(Integer integer) {
+//                        Log.e(Tag + "buffer", integer + "");
+//                    }
+//                });
+                .buffer(5)
+                .subscribe(new Action1<List<Integer>>() {
+                    @Override
+                    public void call(List<Integer> integers) {
+                        Log.e(Tag + "buffer", integers.toString());
+                    }
+                });
+
+        Observable.interval(300, TimeUnit.MILLISECONDS)
+                .buffer(3, TimeUnit.SECONDS)
+                .take(3)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<Long>>() {
+                    @Override
+                    public void call(List<Long> longs) {
+                        Log.e(Tag + "bufferTime", longs.toString());
+                    }
+                });
+
+
+        //GroupBy
+
+        Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9)
+                .groupBy(new Func1<Integer, Integer>() {
+                    @Override
+                    public Integer call(Integer integer) {
+                        return integer % 2;
+                    }
+                })
+                .subscribe(new Action1<GroupedObservable<Integer, Integer>>() {
+                    @Override
+                    public void call(final GroupedObservable<Integer, Integer> groupedObservable) {
+                        groupedObservable.count().subscribe(new Action1<Integer>() {
+                            @Override
+                            public void call(Integer integer) {
+                                Log.e(Tag + "groupBy", "key-" + groupedObservable.getKey() + ",contains:" + integer);
+                            }
+                        });
+                    }
+                });
+//                .subscribe(new Subscriber<GroupedObservable<Integer, Integer>>() {
+//                    @Override
+//                    public void onCompleted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(final GroupedObservable<Integer, Integer> groupedObservable) {
+//                        groupedObservable.count().subscribe(new Action1<Integer>() {
+//                            @Override
+//                            public void call(Integer integer) {
+//                                Log.e(Tag + "groupBy", "key-" + groupedObservable.getKey() + "contains:" + integer);
+//                            }
+//                        });
+//
+//                    }
+//                });
+
+        Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .groupBy(new Func1<Integer, Integer>() {
+                    @Override
+                    public Integer call(Integer integer) {
+                        return integer % 2;
+                    }
+                }, new Func1<Integer, String>() {
+                    @Override
+                    public String call(Integer integer) {
+                        return "groupByKeyValue:" + integer;
+                    }
+                })
+                .subscribe(new Action1<GroupedObservable<Integer, String>>() {
+                    @Override
+                    public void call(GroupedObservable<Integer, String> integerStringGroupedObservable) {
+                        if (integerStringGroupedObservable.getKey() == 0){
+                            integerStringGroupedObservable.subscribe(new Action1<String>() {
+                                @Override
+                                public void call(String s) {
+                                    Log.e(Tag + "groupBy", s);
+                                }
+                            });
+                        }
+                    }
+                });
     }
 
     /**
