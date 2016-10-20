@@ -89,7 +89,9 @@ public class LaunchActivity extends AppCompatActivity {
                     @Override
                     public void call(Integer position) {
                         if (position == 0) {
-                            RxJavaStudy();
+                            RxJavaCreatingObservables();
+                        } else if (position == 1) {
+                            RxJavaTransformingObservables();
                         }
                         ActivityInfo info = adapter.getItem(position);
                         Intent intent = new Intent();
@@ -129,12 +131,17 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     /**
+     * http://blog.chinaunix.net/uid-20771867-id-5192193.html
+     */
+    private void RxJavaTransformingObservables() {
+
+    }
+
+    /**
      * Rxjava学习
-     * http://www.jianshu.com/p/88779bda6691
-     * http://blog.csdn.net/lzyzsd/article/details/44094895
      * http://blog.chinaunix.net/uid-20771867-id-5187376.html
      */
-    private void RxJavaStudy() {
+    private void RxJavaCreatingObservables() {
         final String Tag = "Rxjava学习";
         //Map
         Observable.just("Hellp Map Operator")
@@ -273,7 +280,7 @@ public class LaunchActivity extends AppCompatActivity {
 
         //Timer
         Observable.timer(1, TimeUnit.SECONDS)
-                .delay(4,TimeUnit.SECONDS)
+                .delay(4, TimeUnit.SECONDS)
                 .repeat(3)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {
