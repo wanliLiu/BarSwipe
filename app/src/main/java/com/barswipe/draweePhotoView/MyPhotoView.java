@@ -48,9 +48,8 @@ import uk.co.senab.photoview.PhotoView;
  */
 public class MyPhotoView extends PhotoView {
 
-    private DraweeHolder<GenericDraweeHierarchy> mDraweeHolder;
-
     private static final int OPGL_MAX_TEXTURE = 4000;
+    private DraweeHolder<GenericDraweeHierarchy> mDraweeHolder;
 
     public MyPhotoView(Context context) {
         this(context, null);

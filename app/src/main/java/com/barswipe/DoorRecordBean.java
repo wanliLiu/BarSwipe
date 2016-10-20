@@ -11,27 +11,27 @@ public class DoorRecordBean implements Serializable {
     private long DoorID;
     private String OpenDoorTime;
 
-    public void setOrderID(long orderID) {
-        OrderID = orderID;
-    }
-
-    public void setDoorID(long doorID) {
-        DoorID = doorID;
-    }
-
-    public void setOpenDoorTime(String openDoorTime) {
-        OpenDoorTime = openDoorTime;
-    }
-
     public long getOrderID() {
         return OrderID;
+    }
+
+    public void setOrderID(long orderID) {
+        OrderID = orderID;
     }
 
     public long getDoorID() {
         return DoorID;
     }
 
+    public void setDoorID(long doorID) {
+        DoorID = doorID;
+    }
+
     public String getOpenDoorTime() {
         return OpenDoorTime;
+    }
+
+    public void setOpenDoorTime(String openDoorTime) {
+        OpenDoorTime = openDoorTime;
     }
 }

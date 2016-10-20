@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:id="@+id/parent_framelayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_framelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,24 +15,24 @@
 
             <ImageView
                 android:id="@+id/trash"
-                android:src="@drawable/trash"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="#FF3B30"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
-                android:layout_height="match_parent" />
+                android:src="@drawable/trash" />
         </LinearLayout>
 
         <LinearLayout
-            android:padding="10dp"
-            android:background="#ffffff"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:padding="10dp">
 
             <TextView
-                android:text="SeekBar"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="SeekBar" />
         </LinearLayout>
     </com.daimajia.swipe.SwipeLayout>
 </FrameLayout>

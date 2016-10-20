@@ -49,7 +49,7 @@ public class WebViewActivity extends BaseActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Toast.makeText(WebViewActivity.this,url,Toast.LENGTH_SHORT).show();
+                Toast.makeText(WebViewActivity.this, url, Toast.LENGTH_SHORT).show();
                 view.loadUrl(url);
                 return true;
             }

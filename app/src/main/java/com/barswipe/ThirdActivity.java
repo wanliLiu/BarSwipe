@@ -1,31 +1,20 @@
 package com.barswipe;
 
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorSet;
 import com.nineoldandroids.animation.ObjectAnimator;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.view.ViewHelper;
 
 import de.greenrobot.event.EventBus;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -61,11 +50,9 @@ public class ThirdActivity extends BaseActivity {
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                if (isProgressShow)
-                {
+                if (isProgressShow) {
                     dissMissProgress();
-                }else
-                {
+                } else {
                     showProgress();
                     startActivity(new Intent(ThirdActivity.this, BlurActivity.class));
                 }
@@ -93,16 +80,15 @@ public class ThirdActivity extends BaseActivity {
         findViewById(R.id.Fourth).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ThirdActivity.this,FourthActivity.class));
+                startActivity(new Intent(ThirdActivity.this, FourthActivity.class));
             }
         });
     }
 
 
-    public void onEvent(String dsd)
-    {
+    public void onEvent(String dsd) {
         View view = findViewById(R.id.back);
-        view.setVisibility(view.getVisibility() == View.VISIBLE ? View.GONE :View.VISIBLE);
+        view.setVisibility(view.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -123,12 +109,10 @@ public class ThirdActivity extends BaseActivity {
 //        Snackbar.make(findViewById(R.id.another), "Fist show in Screen", Snackbar.LENGTH_LONG).show();
     }
 
-    private void showProgress()
-    {
-        if (!isProgressShow)
-        {
+    private void showProgress() {
+        if (!isProgressShow) {
             isProgressShow = true;
-            ViewGroup view =(ViewGroup)(getWindow().getDecorView().findViewById(android.R.id.content));
+            ViewGroup view = (ViewGroup) (getWindow().getDecorView().findViewById(android.R.id.content));
             bar = new ImageView(this);
 //            bar.setBackgroundResource(R.anim.loading_dialog);
 //            AnimationDrawable an=(AnimationDrawable) bar.getBackground();
@@ -142,19 +126,17 @@ public class ThirdActivity extends BaseActivity {
             animator.setDuration(500);
             animator.start();
 
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER;
             bar.setLayoutParams(params);
             view.addView(bar);
         }
     }
 
-    public void dissMissProgress()
-    {
-        if (isProgressShow)
-        {
+    public void dissMissProgress() {
+        if (isProgressShow) {
             isProgressShow = false;
-            ObjectAnimator animator =  ObjectAnimator.ofFloat(bar,"alpha",1.0f,0.0f).setDuration(500);
+            ObjectAnimator animator = ObjectAnimator.ofFloat(bar, "alpha", 1.0f, 0.0f).setDuration(500);
             animator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {

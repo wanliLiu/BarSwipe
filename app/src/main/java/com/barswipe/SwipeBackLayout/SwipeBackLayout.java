@@ -17,31 +17,19 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.barswipe.R;
-import com.barswipe.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SwipeBackLayout extends FrameLayout {
     /**
-     * Minimum velocity that will be detected as a fling
-     */
-    private static final int MIN_FLING_VELOCITY = 400; // dips per second
-
-    private static final int DEFAULT_SCRIM_COLOR = 0xDC000000;
-
-    private static final int FULL_ALPHA = 255;
-
-    /**
      * Edge flag indicating that the left edge should be affected.
      */
     public static final int EDGE_LEFT = ViewDragHelper.EDGE_LEFT;
-
     /**
      * Edge flag indicating that the right edge should be affected.
      */
     public static final int EDGE_RIGHT = ViewDragHelper.EDGE_RIGHT;
-
     /**
      * Edge flag indicating that the bottom edge should be affected.
      */
@@ -54,79 +42,64 @@ public class SwipeBackLayout extends FrameLayout {
      * Edge flag set indicating all edges should be affected.
      */
     public static final int EDGE_ALL = EDGE_LEFT | EDGE_RIGHT | EDGE_BOTTOM | EDGE_TOP;
-
     /**
      * A view is not currently being dragged or animating as a result of a
      * fling/snap.
      */
     public static final int STATE_IDLE = ViewDragHelper.STATE_IDLE;
-
     /**
      * A view is currently being dragged. The position is currently changing as
      * a result of user input or simulated user input.
      */
     public static final int STATE_DRAGGING = ViewDragHelper.STATE_DRAGGING;
-
     /**
      * A view is currently settling into place as a result of a fling or
      * predefined non-interactive motion.
      */
     public static final int STATE_SETTLING = ViewDragHelper.STATE_SETTLING;
-
+    /**
+     * The default system bar tint color value.
+     */
+    public static final int DEFAULT_TINT_COLOR = 0x99000000;
+    /**
+     * Minimum velocity that will be detected as a fling
+     */
+    private static final int MIN_FLING_VELOCITY = 400; // dips per second
+    private static final int DEFAULT_SCRIM_COLOR = 0xDC000000;
+    private static final int FULL_ALPHA = 255;
     /**
      * Default threshold of scroll
      */
     private static final float DEFAULT_SCROLL_THRESHOLD = 0.3f;
-
     private static final int OVERSCROLL_DISTANCE = 10;
-
     private static final int[] EDGE_FLAGS = {
             EDGE_LEFT, EDGE_RIGHT, EDGE_BOTTOM, EDGE_TOP, EDGE_ALL
     };
-
     private int mEdgeFlag;
-
     /**
      * Threshold of scroll, we will close the activity, when scrollPercent over
      * this value;
      */
     private float mScrollThreshold = DEFAULT_SCROLL_THRESHOLD;
-
     private Activity mActivity;
-
     private boolean mEnable = true;
-
     private View mContentView;
-
     private ViewDragHelper mDragHelper;
-
     private float mScrollPercent;
-
     private int mContentLeft;
-
     private int mContentTop;
-
     /**
      * The set of listeners to be sent events through.
      */
     private List<SwipeListener> mListeners;
-
     private Drawable mShadowLeft;
-
     private Drawable mShadowRight;
-
     private Drawable mShadowBottom;
-
     private Drawable mShadowTop;
-
     private float mScrimOpacity;
-
     private int mScrimColor = DEFAULT_SCRIM_COLOR;
-
     private boolean mInLayout;
-
     private Rect mTmpRect = new Rect();
-
     /**
      * Edge being dragged
      */
@@ -266,34 +239,6 @@ public class SwipeBackLayout extends FrameLayout {
             return;
         }
         mListeners.remove(listener);
-    }
-
-    public static interface SwipeListener {
-        /**
-         * Invoke when state change
-         *
-         * @param state         flag to describe scroll state
-         * @param scrollPercent scroll percent of this view
-         * @see #STATE_IDLE
-         * @see #STATE_DRAGGING
-         * @see #STATE_SETTLING
-         */
-        public void onScrollStateChange(int state, float scrollPercent);
-
-        /**
-         * Invoke when edge touched
-         *
-         * @param edgeFlag edge flag describing the edge being touched
-         * @see #EDGE_LEFT
-         * @see #EDGE_RIGHT
-         * @see #EDGE_BOTTOM
-         */
-        public void onEdgeTouch(int edgeFlag);
-
-        /**
-         * Invoke when scroll percent over the threshold for the first time
-         */
-        public void onScrollOverThreshold();
     }
 
     /**
@@ -478,11 +423,6 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     /**
-     * The default system bar tint color value.
-     */
-    public static final int DEFAULT_TINT_COLOR = 0x99000000;
-
-    /**
      * @param context
      * @param decorViewGroup
      */
@@ -529,6 +469,34 @@ public class SwipeBackLayout extends FrameLayout {
         if (mDragHelper.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
+    }
+
+    public static interface SwipeListener {
+        /**
+         * Invoke when state change
+         *
+         * @param state         flag to describe scroll state
+         * @param scrollPercent scroll percent of this view
+         * @see #STATE_IDLE
+         * @see #STATE_DRAGGING
+         * @see #STATE_SETTLING
+         */
+        public void onScrollStateChange(int state, float scrollPercent);
+
+        /**
+         * Invoke when edge touched
+         *
+         * @param edgeFlag edge flag describing the edge being touched
+         * @see #EDGE_LEFT
+         * @see #EDGE_RIGHT
+         * @see #EDGE_BOTTOM
+         */
+        public void onEdgeTouch(int edgeFlag);
+
+        /**
+         * Invoke when scroll percent over the threshold for the first time
+         */
+        public void onScrollOverThreshold();
     }
 
     private class ViewDragCallback extends ViewDragHelper.Callback {
@@ -597,8 +565,7 @@ public class SwipeBackLayout extends FrameLayout {
             }
 
             if (mScrollPercent >= 1) {
-                if (!mActivity.isFinishing())
-                {
+                if (!mActivity.isFinishing()) {
                     mActivity.finish();
                     mActivity.overridePendingTransition(0, 0);
                 }

@@ -1,181 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
-    <LinearLayout android:orientation="vertical"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-                android:layout_width="300dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
+
+            <TextView
+                android:id="@+id/basicFeatures"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Basic features"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
 
             <TextView
-                    android:id="@+id/basicFeatures"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Basic features"/>
+                android:id="@+id/imageDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Image display"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
 
             <TextView
-                    android:id="@+id/imageDisplay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Image display"/>
+                android:id="@+id/eventHandling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Event handling"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
 
             <TextView
-                    android:id="@+id/eventHandling"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Event handling"/>
+                android:id="@+id/advancedEventHandling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Advanced event handling"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
 
             <TextView
-                    android:id="@+id/advancedEventHandling"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Advanced event handling"/>
+                android:id="@+id/viewPagerGalleries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="View pager galleries"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
 
             <TextView
-                    android:id="@+id/viewPagerGalleries"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="View pager galleries"/>
+                android:id="@+id/animation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Animation"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
 
             <TextView
-                    android:id="@+id/animation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Animation"/>
+                android:id="@+id/extension"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Extension"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
 
             <TextView
-                    android:id="@+id/extension"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Extension"/>
+                android:id="@+id/configuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/buttonstate_transparent"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="Configuration"
+                android:textSize="18sp" />
 
             <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
-
-            <TextView
-                    android:id="@+id/configuration"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/buttonstate_transparent"
-                    android:gravity="center_horizontal"
-                    android:padding="10dp"
-                    android:textSize="18sp"
-                    android:text="Configuration"/>
-
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#333333"/>
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#333333" />
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/self"
+            android:id="@+id/self"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstate_transparent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/buttonstate_transparent"
-                android:padding="10dp"
-                android:orientation="vertical">
-
-            <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/daffy"/>
+                android:src="@drawable/daffy" />
 
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="center_horizontal"
-                    android:textSize="13sp"
-                    android:textColor="#777777"
-                    android:text="by Dave Morrissey"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center_horizontal"
+                android:text="by Dave Morrissey"
+                android:textColor="#777777"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
         <Button
-                android:id="@+id/github"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_gravity="center_horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:textSize="16sp"
-                android:text="View on GitHub"/>
+            android:id="@+id/github"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="View on GitHub"
+            android:textSize="16sp" />
 
     </LinearLayout>
 </ScrollView>

@@ -19,7 +19,7 @@ import android.util.Log;
 
 /**
  * Posts events in background.
- * 
+ *
  * @author Markus
  */
 final class BackgroundPoster implements Runnable {

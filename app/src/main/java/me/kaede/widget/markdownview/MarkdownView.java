@@ -1,17 +1,16 @@
 package me.kaede.widget.markdownview;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import me.kaede.widget.markdownview.util.HttpHelper;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.webkit.WebView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import me.kaede.widget.markdownview.markdownprocessor.MarkdownProcessor;
+import me.kaede.widget.markdownview.util.HttpHelper;
 
 /**
  * @author Feras Alnatsheh

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android" >
+<set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 不动的 -->
     <translate
@@ -7,9 +7,9 @@
         android:fromYDelta="0"
         android:toYDelta="0" />
 
-<!--     <alpha -->
-<!--         android:duration="500" -->
-<!--         android:fromAlpha="1.0" -->
-<!--         android:toAlpha="1.0" /> -->
+    <!--     <alpha -->
+    <!--         android:duration="500" -->
+    <!--         android:fromAlpha="1.0" -->
+    <!--         android:toAlpha="1.0" /> -->
 
 </set>

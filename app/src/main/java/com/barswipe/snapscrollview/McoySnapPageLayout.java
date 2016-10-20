@@ -23,27 +23,22 @@ import com.barswipe.R;
  *         http://blog.csdn.net/xujainxing/article/details/8985063
  */
 public class McoySnapPageLayout extends ViewGroup {
-    private final String TAG = "McoySnapPageLayout";
-    private final boolean MCOY_DEBUG = true;
-
-    private VelocityTracker mVelocityTracker;
-    private int mMaximumVelocity;
-    private static final int SNAP_VELOCITY = 1000;
-
     public static final int FLIP_DIRECTION_CUR = 0;
     public static final int FLIP_DIRECTION_UP = -1;
     public static final int FLIP_DIRECTION_DOWN = 1;
-
-    private int mFlipDrection = FLIP_DIRECTION_CUR;
-
-    private int mDataIndex = 0; // 当前View中的数据在总数据所在位置
-    private int mCurrentScreen = 0;
-    private int mNextDataIndex = 0;
-
-    private float mLastMotionY;
+    private static final int SNAP_VELOCITY = 1000;
     // 记录触摸状态
     private final static int TOUCH_STATE_REST = 0;
     private final static int TOUCH_STATE_SCROLLING = 1;
+    private final String TAG = "McoySnapPageLayout";
+    private final boolean MCOY_DEBUG = true;
+    private VelocityTracker mVelocityTracker;
+    private int mMaximumVelocity;
+    private int mFlipDrection = FLIP_DIRECTION_CUR;
+    private int mDataIndex = 0; // 当前View中的数据在总数据所在位置
+    private int mCurrentScreen = 0;
+    private int mNextDataIndex = 0;
+    private float mLastMotionY;
     private int mTouchState = TOUCH_STATE_REST;
 
     private Scroller mScroller;  //mcoy add view滑动的矢量， 并没有真正滑动的功能
@@ -55,41 +50,6 @@ public class McoySnapPageLayout extends ViewGroup {
     //这个值表示需要第一页和第二页之间的鸿沟
     private int gapBetweenTopAndBottom;
 
-    public interface McoySnapPage {
-        /**
-         * 返回page根节点
-         *
-         * @return
-         */
-        View getRootView();
-
-        /**
-         * 是否滑动到最顶端
-         * 第二页必须自己实现此方法，来判断是否已经滑动到第二页的顶部
-         * 并决定是否要继续滑动到第一页
-         */
-        boolean isAtTop();
-
-        /**
-         * 是否滑动到最底部
-         * 第一页必须自己实现此方法，来判断是否已经滑动到第二页的底部
-         * 并决定是否要继续滑动到第二页
-         */
-        boolean isAtBottom();
-    }
-
-    public interface PageSnapedListener {
-
-        /**
-         * @mcoy 当从某一页滑动到另一页完成时的回调函数
-         */
-        void onSnapedCompleted(int derection);
-    }
-
-    public void setPageSnapListener(PageSnapedListener listener) {
-        mPageSnapedListener = listener;
-    }
-
     public McoySnapPageLayout(Context context, AttributeSet att) {
         this(context, att, 0);
     }
@@ -97,6 +57,10 @@ public class McoySnapPageLayout extends ViewGroup {
     public McoySnapPageLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initViews();
+    }
+
+    public void setPageSnapListener(PageSnapedListener listener) {
+        mPageSnapedListener = listener;
     }
 
     private void initViews() {
@@ -471,6 +435,37 @@ public class McoySnapPageLayout extends ViewGroup {
     public void snapToCurrent() {
         snapToScreen(mCurrentScreen);
         clearOnTouchEvents();
+    }
+
+    public interface McoySnapPage {
+        /**
+         * 返回page根节点
+         *
+         * @return
+         */
+        View getRootView();
+
+        /**
+         * 是否滑动到最顶端
+         * 第二页必须自己实现此方法，来判断是否已经滑动到第二页的顶部
+         * 并决定是否要继续滑动到第一页
+         */
+        boolean isAtTop();
+
+        /**
+         * 是否滑动到最底部
+         * 第一页必须自己实现此方法，来判断是否已经滑动到第二页的底部
+         * 并决定是否要继续滑动到第二页
+         */
+        boolean isAtBottom();
+    }
+
+    public interface PageSnapedListener {
+
+        /**
+         * @mcoy 当从某一页滑动到另一页完成时的回调函数
+         */
+        void onSnapedCompleted(int derection);
     }
 
 }

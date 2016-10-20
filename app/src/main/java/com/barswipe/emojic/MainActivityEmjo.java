@@ -38,8 +38,8 @@ public class MainActivityEmjo extends AppCompatActivity implements EmojiconGridF
 
     /**
      * 自定义表情符号
-     http://blog.csdn.net/jackiandroid/article/details/44564697
-
+     * http://blog.csdn.net/jackiandroid/article/details/44564697
+     *
      * @param savedInstanceState
      */
     @Override

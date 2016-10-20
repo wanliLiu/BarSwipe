@@ -18,7 +18,7 @@ package de.greenrobot.event;
 
 /**
  * Posts events in background.
- * 
+ *
  * @author Markus
  */
 class AsyncPoster implements Runnable {
@@ -40,7 +40,7 @@ class AsyncPoster implements Runnable {
     @Override
     public void run() {
         PendingPost pendingPost = queue.poll();
-        if(pendingPost == null) {
+        if (pendingPost == null) {
             throw new IllegalStateException("No pending post available");
         }
         eventBus.invokeSubscriber(pendingPost);

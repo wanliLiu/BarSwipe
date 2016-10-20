@@ -2,10 +2,12 @@ package me.kaede.frescosample.listener;
 
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.Toast;
+
+import com.barswipe.R;
 import com.facebook.common.logging.FLog;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -17,8 +19,8 @@ import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.image.QualityInfo;
+
 import me.kaede.frescosample.ImageApi;
-import com.barswipe.R;
 
 public class ListenerActivity extends AppCompatActivity {
 

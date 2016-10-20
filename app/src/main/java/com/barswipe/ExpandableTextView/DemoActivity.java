@@ -80,42 +80,6 @@ public class DemoActivity extends BaseActivity {
         mViewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if (position == 0) {
-                return new Demo1Fragment();
-            } else {
-                return new Demo2Fragment();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_demo1);
-                case 1:
-                    return getString(R.string.title_demo2);
-            }
-            return null;
-        }
-    }
-
     public static class Demo1Fragment extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -150,6 +114,42 @@ public class DemoActivity extends BaseActivity {
             super.onViewCreated(view, savedInstanceState);
             SampleTextListAdapter adapter = new SampleTextListAdapter(getActivity());
             setListAdapter(adapter);
+        }
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new Demo1Fragment();
+            } else {
+                return new Demo2Fragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return getString(R.string.title_demo1);
+                case 1:
+                    return getString(R.string.title_demo2);
+            }
+            return null;
         }
     }
 }

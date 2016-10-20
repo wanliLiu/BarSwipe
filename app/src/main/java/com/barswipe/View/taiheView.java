@@ -20,8 +20,11 @@ import com.barswipe.R;
  */
 public class taiheView extends View {
 
+    private final Paint maskPaint = new Paint();
     private BitmapDrawable mHoverView;
     private Rect mHoverViewBounds;
+    private int roundWidth;
+    private Paint paint;
 
     public taiheView(Context context) {
         this(context, null);
@@ -30,16 +33,10 @@ public class taiheView extends View {
     public taiheView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
     public taiheView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
-
-    private int roundWidth;
-
-    private Paint paint;
-    private final Paint maskPaint = new Paint();
 
     public void init() {
         // 创建画笔

@@ -14,7 +14,7 @@
         android:id="@+id/mymultiViewGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_hello"/>
+        android:layout_below="@id/tv_hello" />
 
     <Button
         android:id="@+id/bt_scrollLeft"

@@ -24,10 +24,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.barswipe.R;
+import com.barswipe.R.id;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.barswipe.R.id;
-import com.barswipe.R.layout;
 public class ImageDisplayLargeFragment extends Fragment {
 
     @Override

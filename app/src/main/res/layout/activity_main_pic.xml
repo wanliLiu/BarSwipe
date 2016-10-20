@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/colorPrimaryDark"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -16,9 +16,9 @@
         android:id="@+id/myGrid"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/system_theme_color"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="2dp"
+        android:background="@color/system_theme_color"
         android:horizontalSpacing="2dp"
         android:listSelector="@null"
         android:numColumns="3"

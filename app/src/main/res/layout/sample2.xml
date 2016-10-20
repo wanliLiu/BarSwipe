@@ -5,56 +5,56 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:tag="Bottom2"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:tag="Bottom2">
 
         <ImageView
             android:id="@+id/magnifier"
-            android:src="@drawable/magnifier"
             android:layout_width="70dp"
+            android:layout_height="match_parent"
             android:background="#f7e79c"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:layout_height="match_parent" />
+            android:src="@drawable/magnifier" />
 
         <ImageView
             android:id="@+id/star"
-            android:src="@drawable/star"
             android:layout_width="70dp"
+            android:layout_height="match_parent"
             android:background="#4cd964"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:layout_height="match_parent" />
+            android:src="@drawable/star" />
 
         <ImageView
             android:id="@+id/trash"
-            android:src="@drawable/trash"
             android:layout_width="70dp"
+            android:layout_height="match_parent"
             android:background="@drawable/red"
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
-            android:layout_height="match_parent" />
+            android:src="@drawable/trash" />
     </LinearLayout>
 
     <LinearLayout
-        android:padding="10dp"
-        android:orientation="vertical"
-        android:background="@drawable/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/white"
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
-            android:tag="Hover"
-            android:text="理解（りかい）されるということは、一種（いっしゅ）の贅沢（ぜいたく）である。"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:tag="Hover"
+            android:text="理解（りかい）されるということは、一種（いっしゅ）の贅沢（ぜいたく）である。" />
 
         <Button
-            android:visibility="invisible"
             android:id="@+id/click"
-            android:text="Click"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Click"
+            android:visibility="invisible" />
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

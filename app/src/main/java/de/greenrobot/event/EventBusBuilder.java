@@ -39,25 +39,33 @@ public class EventBusBuilder {
     EventBusBuilder() {
     }
 
-    /** Default: true */
+    /**
+     * Default: true
+     */
     public EventBusBuilder logSubscriberExceptions(boolean logSubscriberExceptions) {
         this.logSubscriberExceptions = logSubscriberExceptions;
         return this;
     }
 
-    /** Default: true */
+    /**
+     * Default: true
+     */
     public EventBusBuilder logNoSubscriberMessages(boolean logNoSubscriberMessages) {
         this.logNoSubscriberMessages = logNoSubscriberMessages;
         return this;
     }
 
-    /** Default: true */
+    /**
+     * Default: true
+     */
     public EventBusBuilder sendSubscriberExceptionEvent(boolean sendSubscriberExceptionEvent) {
         this.sendSubscriberExceptionEvent = sendSubscriberExceptionEvent;
         return this;
     }
 
-    /** Default: true */
+    /**
+     * Default: true
+     */
     public EventBusBuilder sendNoSubscriberEvent(boolean sendNoSubscriberEvent) {
         this.sendNoSubscriberEvent = sendNoSubscriberEvent;
         return this;
@@ -128,7 +136,9 @@ public class EventBusBuilder {
         }
     }
 
-    /** Builds an EventBus based on the current configuration. */
+    /**
+     * Builds an EventBus based on the current configuration.
+     */
     public EventBus build() {
         return new EventBus(this);
     }

@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import me.kaede.frescosample.ImageApi;
-
 import com.barswipe.R;
 
 import java.util.List;
+
+import me.kaede.frescosample.ImageApi;
 
 
 public class RecyclerViewFragment extends Fragment {

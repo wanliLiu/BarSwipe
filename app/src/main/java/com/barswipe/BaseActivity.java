@@ -44,7 +44,7 @@ public class BaseActivity extends SwipeBackActivity {
     }
 
     @SuppressLint("NewApi")
-    public  void hideSystemUI(View view) {
+    public void hideSystemUI(View view) {
         view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }

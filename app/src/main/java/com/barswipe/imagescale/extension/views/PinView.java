@@ -17,12 +17,15 @@ limitations under the License.
 package com.barswipe.imagescale.extension.views;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 
 import com.barswipe.R;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.barswipe.R.drawable;
 
 
 public class PinView extends SubsamplingScaleImageView {

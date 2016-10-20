@@ -213,6 +213,47 @@ public class AlbumActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+//    	super.onBackPressed();
+    }
+
+    @Override
+    public void finish() {
+        // TODO Auto-generated method stub
+        super.finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+//    	ImageManager.from(AlbumActivity.this).mDiskCache.clearCache();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            checkPicture.cancel(true);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            checkPicture.cancel(true);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     private class CheckPicture extends AsyncTask<String, String, ArrayList<String>> {
         @Override
         protected void onPreExecute() {
@@ -305,47 +346,5 @@ public class AlbumActivity extends BaseActivity {
                 }
             }
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-//    	super.onBackPressed();
-    }
-
-    @Override
-    public void finish() {
-        // TODO Auto-generated method stub
-        super.finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-//    	ImageManager.from(AlbumActivity.this).mDiskCache.clearCache();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            checkPicture.cancel(true);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            checkPicture.cancel(true);
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }

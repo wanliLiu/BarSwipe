@@ -21,7 +21,7 @@ public class ScrollerActivity extends BaseActivity implements View.OnClickListen
 
         setContentView(R.layout.main);
 
-        tv =  findViewById(R.id.tv_scroll);
+        tv = findViewById(R.id.tv_scroll);
 
         bt_scrollLeft = (Button) findViewById(R.id.bt_scrollLeft);
         bt_scrollRight = (Button) findViewById(R.id.bt_scrollRight);
@@ -46,7 +46,7 @@ public class ScrollerActivity extends BaseActivity implements View.OnClickListen
                 findViewById(R.id.test).scrollBy(-30, -30);
                 break;
             case R.id.startScrooler:
-                startActivity(new Intent(this,MultiScreenActivity.class));
+                startActivity(new Intent(this, MultiScreenActivity.class));
                 break;
             case R.id.bt_offset:
                 tv.offsetLeftAndRight(10);

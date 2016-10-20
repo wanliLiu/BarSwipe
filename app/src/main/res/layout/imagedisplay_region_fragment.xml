@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/text"
@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="#333">
+
         <ImageView
             android:id="@+id/previous"
             android:layout_width="wrap_content"
@@ -16,11 +17,11 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:background="@drawable/buttonstate_transparent"
+            android:paddingBottom="18dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="18dp"
-            android:paddingBottom="18dp"
-            android:src="@drawable/previous"/>
+            android:src="@drawable/previous" />
 
         <ImageView
             android:id="@+id/next"
@@ -29,45 +30,45 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/buttonstate_transparent"
-            android:visibility="invisible"
+            android:paddingBottom="18dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="18dp"
-            android:paddingBottom="18dp"
-            android:src="@drawable/next"/>
+            android:src="@drawable/next"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/rotate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/next"
             android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/next"
             android:background="@drawable/buttonstate_transparent"
+            android:paddingBottom="18dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="18dp"
-            android:paddingBottom="18dp"
-            android:src="@drawable/rotate"/>
+            android:src="@drawable/rotate" />
 
         <TextView
             android:id="@+id/note"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/rotate"
             android:layout_toRightOf="@id/previous"
-            android:layout_centerVertical="true"
-            android:text="Set the region to display instead of the whole image."
             android:padding="10dp"
-            android:textSize="14sp"
-            android:textColor="#FFFFFF"/>
+            android:text="Set the region to display instead of the whole image."
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/text"
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>

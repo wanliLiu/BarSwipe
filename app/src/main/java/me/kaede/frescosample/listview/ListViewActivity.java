@@ -1,13 +1,12 @@
 package me.kaede.frescosample.listview;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
-import me.kaede.frescosample.ImageApi;
+
 import com.barswipe.R;
+
+import me.kaede.frescosample.ImageApi;
 
 public class ListViewActivity extends AppCompatActivity {
 

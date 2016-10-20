@@ -1,11 +1,12 @@
 package de.greenrobot.event.util;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import android.util.Log;
 import de.greenrobot.event.EventBus;
 
 

@@ -5,14 +5,13 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
- *
  * @author byl
- *
  */
 public class EmojiUtil {
 
     /**
      * 判断是否有emoji
+     *
      * @param str
      * @return
      */
@@ -42,6 +41,7 @@ public class EmojiUtil {
 
     /**
      * 过滤emoji 或者 其他非文字类型的字符
+     *
      * @param str
      * @return
      */
@@ -49,7 +49,7 @@ public class EmojiUtil {
 
         if (!containsEmoji(str)) {
             return str;//如果不包含，直接返回
-        }else{
+        } else {
             Log.e("jj", "字符串中含有emoji表情");
         }
         //到这里铁定包含

@@ -21,7 +21,9 @@ final class SubscriberMethod {
     final Method method;
     final ThreadMode threadMode;
     final Class<?> eventType;
-    /** Used for efficient comparison */
+    /**
+     * Used for efficient comparison
+     */
     String methodString;
 
     SubscriberMethod(Method method, ThreadMode threadMode, Class<?> eventType) {
@@ -34,7 +36,7 @@ final class SubscriberMethod {
     public boolean equals(Object other) {
         if (other instanceof SubscriberMethod) {
             checkMethodString();
-            SubscriberMethod otherSubscriberMethod = (SubscriberMethod)other;
+            SubscriberMethod otherSubscriberMethod = (SubscriberMethod) other;
             otherSubscriberMethod.checkMethodString();
             // Don't use method.equals because of http://code.google.com/p/android/issues/detail?id=7811#c6
             return methodString.equals(otherSubscriberMethod.methodString);

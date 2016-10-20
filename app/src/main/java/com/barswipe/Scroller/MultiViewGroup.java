@@ -15,26 +15,35 @@ import android.widget.Scroller;
 //自定义ViewGroup ， 包含了三个LinearLayout控件，存放在不同的布局位置，通过scrollBy或者scrollTo方法切换
 public class MultiViewGroup extends ViewGroup {
 
-    private Context mContext;
-
+    private static final int TOUCH_STATE_REST = 0;
+    private static final int TOUCH_STATE_SCROLLING = 1;
+    //--------------------------
+    //处理触摸事件 ~
+    public static int SNAP_VELOCITY = 600;
     private static String TAG = "MultiViewGroup";
+    private Context mContext;
     private int curScreen = 0;  //当前屏
-
     private Scroller mScroller = null;
-
-
+    private int mTouchState = TOUCH_STATE_REST;
+    private int mTouchSlop = 0;
+    private float mLastionMotionX = 0;
+    /////以上可以演示Scroller类的使用
+    //// --------------------------------
+    /////--------------------------------
+    private float mLastMotionY = 0;
+    //处理触摸的速率
+    private VelocityTracker mVelocityTracker = null;
+    private int curPage = 0;
     public MultiViewGroup(Context context) {
         super(context);
         mContext = context;
         init();
     }
-
     public MultiViewGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         init();
     }
-
 
     private void init() {
 
@@ -64,7 +73,7 @@ public class MultiViewGroup extends ViewGroup {
 
         Log.i(TAG, "----width  " + getWidth());
         //采用Scroller类控制滑动过程
-        mScroller.startScroll((curScreen - 1) * getWidth(), 0,getWidth(), 0);
+        mScroller.startScroll((curScreen - 1) * getWidth(), 0, getWidth(), 0);
         //暴力点直接到目标出
         //scrollTo(curScreen * getWidth(), 0);
         //其实在点击按钮的时候，就回触发View绘制流程，这儿我们在强制绘制下View
@@ -120,21 +129,6 @@ public class MultiViewGroup extends ViewGroup {
         } else
             Log.i(TAG, "have done the scoller -----");
     }
-    /////以上可以演示Scroller类的使用
-    //// --------------------------------
-    /////--------------------------------
-
-    private static final int TOUCH_STATE_REST = 0;
-    private static final int TOUCH_STATE_SCROLLING = 1;
-    private int mTouchState = TOUCH_STATE_REST;
-    //--------------------------
-    //处理触摸事件 ~
-    public static int SNAP_VELOCITY = 600;
-    private int mTouchSlop = 0;
-    private float mLastionMotionX = 0;
-    private float mLastMotionY = 0;
-    //处理触摸的速率
-    private VelocityTracker mVelocityTracker = null;
 
     // 这个感觉没什么作用 不管true还是false 都是会执行onTouchEvent的 因为子view里面onTouchEvent返回false了
     @Override
@@ -326,8 +320,6 @@ public class MultiViewGroup extends ViewGroup {
         }
     }
 
-    private int curPage = 0;
-
     // layout过程
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -343,7 +335,7 @@ public class MultiViewGroup extends ViewGroup {
 
             //即使可见的，才划到屏幕上
             if (child.getVisibility() != View.GONE)
-                child.layout(startLeft, startTop,startLeft + getWidth(),startTop + MultiScreenActivity.scrrenHeight);
+                child.layout(startLeft, startTop, startLeft + getWidth(), startTop + MultiScreenActivity.scrrenHeight);
 
             startLeft = startLeft + getWidth(); //校准每个子View的起始布局位置
             //三个子视图的在屏幕中的分布如下 [0 , 320] / [320,640] / [640,960]

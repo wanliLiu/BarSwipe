@@ -67,6 +67,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         onItemClickListener.onItemClick(v, (ViewModel) v.getTag());
     }
 
+    public interface OnItemClickListener {
+
+        void onItemClick(View view, ViewModel viewModel);
+
+    }
+
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
         public TextView text;
@@ -76,11 +82,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             image = (ImageView) itemView.findViewById(R.id.image);
             text = (TextView) itemView.findViewById(R.id.text);
         }
-    }
-
-    public interface OnItemClickListener {
-
-        void onItemClick(View view, ViewModel viewModel);
-
     }
 }

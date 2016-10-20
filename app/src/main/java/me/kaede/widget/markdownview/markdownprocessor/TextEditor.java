@@ -35,11 +35,11 @@ software, even if advised of the possibility of such damage.
 
 package me.kaede.widget.markdownview.markdownprocessor;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**

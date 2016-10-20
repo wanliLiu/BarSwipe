@@ -3,5 +3,5 @@
     android:layout_width="52dp"
     android:layout_height="52dp"
     android:layout_margin="2dp"
-    android:src="@mipmap/camera_default"
-    android:scaleType="centerCrop" />
+    android:scaleType="centerCrop"
+    android:src="@mipmap/camera_default" />

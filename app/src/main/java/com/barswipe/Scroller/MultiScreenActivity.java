@@ -15,13 +15,11 @@ import com.barswipe.R;
 //带有可以切换屏的Activity
 public class MultiScreenActivity extends BaseActivity implements OnClickListener {
 
+    public static int screenWidth;  // 屏幕宽度
+    public static int scrrenHeight;  //屏幕高度
     private Button bt_scrollLeft;
     private Button bt_scrollRight;
     private MultiViewGroup mulTiViewGroup;
-
-    public static int screenWidth;  // 屏幕宽度
-    public static int scrrenHeight;  //屏幕高度
-
     private int curscreen = 0;   // 当前位于第几屏幕  ，共3个"屏幕"， 3个LinearLayout
 
     protected void onCreate(Bundle savedInstanceState) {

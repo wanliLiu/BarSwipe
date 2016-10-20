@@ -17,10 +17,14 @@ limitations under the License.
 package com.barswipe.imagescale.extension.views;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.graphics.Paint.Style;
+import android.graphics.PointF;
 import android.util.AttributeSet;
+
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 public class CircleView extends SubsamplingScaleImageView {

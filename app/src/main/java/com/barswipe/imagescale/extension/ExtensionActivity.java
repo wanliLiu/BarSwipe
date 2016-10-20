@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.barswipe.R.id;
-import com.barswipe.R.layout;
 
 import java.util.Arrays;
 import java.util.List;

@@ -25,12 +25,11 @@ import android.widget.TextView;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
+import com.barswipe.R.id;
 import com.barswipe.imagescale.extension.views.PinView;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView.AnimationBuilder;
-import com.barswipe.R.id;
-import com.barswipe.R.layout;
 
 import java.util.Arrays;
 import java.util.List;

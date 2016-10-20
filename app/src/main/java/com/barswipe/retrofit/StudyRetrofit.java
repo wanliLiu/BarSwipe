@@ -19,7 +19,7 @@ import butterknife.OnClick;
 
 /**
  * Created by Soli on 2016/9/27.
- *
+ * <p>
  * http://blog.csdn.net/jackiandroid/article/details/44564697
  */
 public class StudyRetrofit extends BaseActivity {
@@ -68,21 +68,18 @@ public class StudyRetrofit extends BaseActivity {
     }
 
     @OnClick(R.id.test)
-    public void onViewclick()
-    {
+    public void onViewclick() {
         String temp = "aA我是010x1F602 我想问一下\uD83D\uDE33";
         char[] chars = temp.toCharArray();
 
-        for (int i = 0 ; i < chars.length; i++)
-        {
-            Log.e("chars",chars[i] + "");
+        for (int i = 0; i < chars.length; i++) {
+            Log.e("chars", chars[i] + "");
         }
         toCodePointArray(temp);
         toCodePointArray_1(temp);
         char[] test = Character.toChars(65);
-        for (int i = 0 ; i < test.length; i++)
-        {
-            Log.e("chars",test[i] + "");
+        for (int i = 0; i < test.length; i++) {
+            Log.e("chars", test[i] + "");
         }
     }
 

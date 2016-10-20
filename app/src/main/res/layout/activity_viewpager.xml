@@ -9,16 +9,16 @@
         android:layout_height="?actionBarSize"
         android:background="?colorPrimary"
         android:theme="@style/AppThemePhotDrawee"
+        app:navigationIcon="@drawable/dark_gray"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="@string/view_pager"
-        app:navigationIcon="@drawable/dark_gray"/>
+        app:title="@string/view_pager" />
 
 
     <com.barswipe.PhotoDraweeView.example.MultiTouchViewPager
         android:id="@+id/view_pager"
-        android:layout_marginTop="?actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize" />
 
 
 </FrameLayout>

@@ -24,6 +24,22 @@ import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
 public class RecyclerViewExample extends AppCompatActivity {
 
     /**
+     * Substitute for our onScrollListener for RecyclerView
+     */
+    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            Log.e("ListView", "onScrollStateChanged");
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            // Could hide open views here if you wanted. //
+        }
+    };
+    /**
      * RecyclerView: The new recycler view replaces the list view. Its more modular and therefore we
      * must implement some of the functionality ourselves and attach it to our recyclerview.
      * <p>
@@ -34,7 +50,6 @@ public class RecyclerViewExample extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
-
     private ArrayList<String> mDataSet;
 
     @Override
@@ -66,24 +81,6 @@ public class RecyclerViewExample extends AppCompatActivity {
         /* Listeners */
         recyclerView.setOnScrollListener(onScrollListener);
     }
-
-    /**
-     * Substitute for our onScrollListener for RecyclerView
-     */
-    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            Log.e("ListView", "onScrollStateChanged");
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            // Could hide open views here if you wanted. //
-        }
-    };
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

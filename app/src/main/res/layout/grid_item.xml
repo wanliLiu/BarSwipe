@@ -6,24 +6,24 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:tag="Bottom2"
-        android:background="#333"
         android:layout_width="40dp"
+        android:layout_height="120dp"
+        android:background="#333"
         android:gravity="center"
-        android:layout_height="120dp">
+        android:tag="Bottom2">
 
         <ImageView
             android:id="@+id/trash"
-            android:src="@drawable/trash"
             android:layout_width="22dp"
-            android:layout_height="22dp" />
+            android:layout_height="22dp"
+            android:src="@drawable/trash" />
     </LinearLayout>
 
     <LinearLayout
-        android:padding="10dp"
-        android:background="#ffffff"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/position"
@@ -31,9 +31,9 @@
             android:layout_height="wrap_content" />
 
         <TextView
-            android:tag="Hover"
-            android:text="If winter comes , can spring be far behind ? \n"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:tag="Hover"
+            android:text="If winter comes , can spring be far behind ? \n" />
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

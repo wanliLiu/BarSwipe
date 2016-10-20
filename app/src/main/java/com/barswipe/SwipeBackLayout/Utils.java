@@ -1,4 +1,3 @@
-
 package com.barswipe.SwipeBackLayout;
 
 import android.app.Activity;
@@ -54,10 +53,10 @@ public class Utils {
                     translucentConversionListenerClazz = clazz;
                 }
             }
-            Method method = Activity.class.getDeclaredMethod("convertToTranslucent",translucentConversionListenerClazz);
+            Method method = Activity.class.getDeclaredMethod("convertToTranslucent", translucentConversionListenerClazz);
             method.setAccessible(true);
-            method.invoke(activity, new Object[] {
-                null
+            method.invoke(activity, new Object[]{
+                    null
             });
         } catch (Throwable t) {
         }

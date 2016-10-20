@@ -115,70 +115,6 @@ public class LaunchActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     */
-    private class activityListAdapter extends BaseAdapter {
-
-        private List<ActivityInfo> list;
-        private final SparseBooleanArray mCollapsedStatus;
-
-        public activityListAdapter() {
-            mCollapsedStatus = new SparseBooleanArray();
-
-        }
-
-        public void setList(List<ActivityInfo> list) {
-            this.list = list;
-        }
-
-        @Override
-        public int getCount() {
-            return list != null ? list.size() : 0;
-        }
-
-        @Override
-        public ActivityInfo getItem(int position) {
-            return list != null ? list.get(position) : null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ViewHolder holder = null;
-            if (convertView == null) {
-                convertView = View.inflate(LaunchActivity.this, R.layout.activity_list_item, null);
-                holder = new ViewHolder(convertView);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            ActivityInfo info = getItem(position);
-            holder.icon.setImageResource(info.icon);
-            holder.expand_text_view.setText(info.nonLocalizedLabel + "\n" + getResources().getString(info.descriptionRes), mCollapsedStatus, position);
-
-            return convertView;
-        }
-
-
-        private class ViewHolder {
-            private ImageView icon;
-            private ExpandableTextView expand_text_view;
-
-            public ViewHolder(View view) {
-                icon = (ImageView) view.findViewById(R.id.icon);
-                expand_text_view = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
-                view.setTag(this);
-            }
-        }
-    }
-
-
-    /**
      * Rxjava学习
      * http://www.jianshu.com/p/88779bda6691
      * http://blog.csdn.net/lzyzsd/article/details/44094895
@@ -311,5 +247,68 @@ public class LaunchActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    /**
+     *
+     */
+    private class activityListAdapter extends BaseAdapter {
+
+        private final SparseBooleanArray mCollapsedStatus;
+        private List<ActivityInfo> list;
+
+        public activityListAdapter() {
+            mCollapsedStatus = new SparseBooleanArray();
+
+        }
+
+        public void setList(List<ActivityInfo> list) {
+            this.list = list;
+        }
+
+        @Override
+        public int getCount() {
+            return list != null ? list.size() : 0;
+        }
+
+        @Override
+        public ActivityInfo getItem(int position) {
+            return list != null ? list.get(position) : null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder holder = null;
+            if (convertView == null) {
+                convertView = View.inflate(LaunchActivity.this, R.layout.activity_list_item, null);
+                holder = new ViewHolder(convertView);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            ActivityInfo info = getItem(position);
+            holder.icon.setImageResource(info.icon);
+            holder.expand_text_view.setText(info.nonLocalizedLabel + "\n" + getResources().getString(info.descriptionRes), mCollapsedStatus, position);
+
+            return convertView;
+        }
+
+
+        private class ViewHolder {
+            private ImageView icon;
+            private ExpandableTextView expand_text_view;
+
+            public ViewHolder(View view) {
+                icon = (ImageView) view.findViewById(R.id.icon);
+                expand_text_view = (ExpandableTextView) view.findViewById(R.id.expand_text_view);
+                view.setTag(this);
+            }
+        }
     }
 }

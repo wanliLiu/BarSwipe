@@ -2,10 +2,10 @@ package me.kaede.frescosample.basicusage;
 
 import android.graphics.PointF;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -17,6 +17,7 @@ import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+
 import me.kaede.frescosample.ImageApi;
 
 public class BasicUsageActivity extends AppCompatActivity {

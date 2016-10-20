@@ -2,6 +2,7 @@ package de.greenrobot.event.util;
 
 import android.content.res.Resources;
 import android.util.Log;
+
 import de.greenrobot.event.EventBus;
 
 public class ErrorDialogConfig {

@@ -15,12 +15,13 @@
  */
 package de.greenrobot.event.util;
 
+import android.app.Activity;
+import android.util.Log;
+
 import java.lang.reflect.Constructor;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import android.app.Activity;
-import android.util.Log;
 import de.greenrobot.event.EventBus;
 
 /**

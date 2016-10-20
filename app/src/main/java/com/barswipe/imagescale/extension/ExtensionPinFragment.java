@@ -25,10 +25,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.barswipe.R;
+import com.barswipe.R.id;
 import com.barswipe.imagescale.extension.views.PinView;
 import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.barswipe.R.id;
-import com.barswipe.R.layout;
 
 
 public class ExtensionPinFragment extends Fragment {

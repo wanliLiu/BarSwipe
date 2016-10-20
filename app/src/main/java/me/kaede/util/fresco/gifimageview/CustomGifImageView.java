@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.barswipe.R;
 import com.davemorrissey.labs.subscaleview.CustomProgressbarDrawable;
 import com.davemorrissey.labs.subscaleview.ImageDownloadListener;
 import com.facebook.common.references.CloseableReference;
@@ -29,8 +30,6 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-
-import com.barswipe.R;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;

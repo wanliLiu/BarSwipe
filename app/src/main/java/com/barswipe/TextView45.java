@@ -23,11 +23,11 @@ public class TextView45 extends TextView {
     private int extra;
 
     public TextView45(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public TextView45(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public TextView45(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -36,17 +36,15 @@ public class TextView45 extends TextView {
     }
 
     /**
-     *
      * @param ctx
      * @param attrs
      */
-    private void Init(Context ctx,AttributeSet attrs)
-    {
-        TypedArray type =ctx.obtainStyledAttributes(attrs,R.styleable.TextView45);
+    private void Init(Context ctx, AttributeSet attrs) {
+        TypedArray type = ctx.obtainStyledAttributes(attrs, R.styleable.TextView45);
         angle = type.getInteger(R.styleable.TextView45_triangleangle, 0);
         triangleBackground = type.getColor(R.styleable.TextView45_trianglebackground, Color.BLUE);
 
-        extra =(int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10,getContext().getResources().getDisplayMetrics());
+        extra = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getContext().getResources().getDisplayMetrics());
 //        setPadding(extra / 2,0,0,0);
     }
 
@@ -56,14 +54,14 @@ public class TextView45 extends TextView {
         width = getMeasuredWidth() + extra;
         orignalHeight = getMeasuredHeight();
 //        offset = (float)Math.sqrt(Math.pow(width,2) / 2) ;
-        offset =  width *1 / 2 ;
-        setMeasuredDimension(width,width);
+        offset = width * 1 / 2;
+        setMeasuredDimension(width, width);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         drawBackGroundTriangle(canvas);
-        canvas.translate(-6,offset - 5);
+        canvas.translate(-6, offset - 5);
         canvas.rotate(angle);
 //        canvas.rotate(angle,getMeasuredWidth()/2,getMeasuredHeight()/2);
 //        canvas.rotate(angle,width, width);
@@ -71,12 +69,10 @@ public class TextView45 extends TextView {
     }
 
     /**
-     *
      * @param canvas
      */
-    private void drawBackGroundTriangle(Canvas canvas)
-    {
-        int save =  canvas.save();
+    private void drawBackGroundTriangle(Canvas canvas) {
+        int save = canvas.save();
         Paint p = new Paint();
         p.setColor(triangleBackground);
 

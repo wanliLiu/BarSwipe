@@ -8,6 +8,7 @@ import android.widget.ScrollView;
 public class McoyScrollView extends ScrollView {
     // 滑动距离及坐标
     private float xDistance, yDistance, xLast, yLast;
+    private OnJDScrollListener onScrollListener;
 
     public McoyScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,8 +46,6 @@ public class McoyScrollView extends ScrollView {
             onScrollListener.onScroll(x, y, oldx, oldy);
         }
     }
-
-    private OnJDScrollListener onScrollListener;
 
     public OnJDScrollListener getOnScrollListener() {
         return onScrollListener;
