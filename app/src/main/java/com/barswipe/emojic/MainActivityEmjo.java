@@ -23,8 +23,10 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import com.barswipe.NotificationEvent;
 import com.barswipe.R;
 
+import de.greenrobot.event.EventBus;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconTextView;
@@ -77,6 +79,7 @@ public class MainActivityEmjo extends AppCompatActivity implements EmojiconGridF
     @Override
     public void onEmojiconClicked(Emojicon emojicon) {
         EmojiconsFragment.input(mEditEmojicon, emojicon);
+        EventBus.getDefault().post(new NotificationEvent("Rxjava学习"));
     }
 
     @Override

@@ -21,15 +21,21 @@ import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import de.greenrobot.event.EventBus;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func0;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by soli on 6/2/16.
@@ -40,15 +46,23 @@ public class LaunchActivity extends AppCompatActivity {
 
     private activityListAdapter adapter;
 
+    private Observable<Long> defer, just, interval;
+    private Subscriber<Long> intervalSubscriber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
+        EventBus.getDefault().register(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        defer = DeferObserver();
+        just = JustObserver();
+        interval = IntervalObserver();
+        intervalSubscriber = getTntervalSubscriber("Rxjava学习");
 
         Intent intent = new Intent(this, FloatWindowService.class);
         startService(intent);
@@ -149,7 +163,7 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 });
 
-        //From
+        //From  一个一个发送出去
         List<String> s = Arrays.asList("Java", "Android", "Ruby", "Ios", "Swift");
         Observable.from(s)
                 .subscribe(new Action1<String>() {
@@ -180,73 +194,145 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 })
                 .take(3)
-//                .subscribe(new Subscriber<String>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onNext(String s) {
-//
-//                    }
-//                })
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
                         Log.e(Tag + "----FlatMap", s);
                     }
                 });
+        //just more  将整个对象一起全部发送出去
+        Observable.just("23", 233)
+                .filter(new Func1<Serializable, Boolean>() {
+                    @Override
+                    public Boolean call(Serializable serializable) {
+                        Object tes = (Object) serializable;
+                        if (tes != null && tes instanceof String)
+                            return true;
+                        else
+                            return false;
+                    }
+                })
+                .subscribe(new Action1<Serializable>() {
+                    @Override
+                    public void call(Serializable serializable) {
+                        Log.e(Tag + "----just-more", serializable.toString());
+                    }
+                });
 
+        //Create
         Observable.create(new Observable.OnSubscribe<Integer>() {
             @Override
-            public void call(Subscriber<? super Integer> observer) {
-                try {
-                    if (!observer.isUnsubscribed()) {
-                        for (int i = 1; i < 5; i++) {
-                            observer.onNext(i);
+            public void call(Subscriber<? super Integer> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    for (int i = 0; i < 5; i++) {
+                        int temp = new Random().nextInt(10);
+                        if (temp > 8) {
+                            //if value>8, we make an error
+                            subscriber.onError(new Throwable("value >8"));
+                            break;
+                        } else {
+                            subscriber.onNext(temp);
                         }
-                        observer.onCompleted();
+                        // on error,complete the job
+                        if (i == 4) {
+                            subscriber.onCompleted();
+                        }
                     }
-                } catch (Exception e) {
-                    observer.onError(e);
                 }
             }
-        }).subscribe(new Subscriber<Integer>() {
+        }).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Integer>() {
             @Override
             public void onNext(Integer item) {
-                System.out.println("Next: " + item);
+                Log.e(Tag + "----create---onNext", item + "");
             }
 
             @Override
             public void onError(Throwable error) {
-                System.err.println("Error: " + error.getMessage());
+                Log.e(Tag + "----create---onError", error.getMessage());
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Sequence complete.");
+                Log.e(Tag + "----create--onCompleted", "onCompleted");
             }
         });
 
-        Observable.just("dsdsd")
-                .map(new Func1<String, Integer>() {
-                    @Override
-                    public Integer call(String s) {
-                        return s.hashCode();
-                    }
-                })
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
+        //range
+        Observable.range(23, 10).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag + "----range", String.valueOf(integer));
+            }
+        });
 
+        //defer  repeat
+        deferJust(Tag);
+
+        //Interval
+        interval.subscribe(intervalSubscriber);
+
+        //Timer
+        Observable.timer(1, TimeUnit.SECONDS)
+                .delay(4,TimeUnit.SECONDS)
+                .repeat(3)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        Log.e(Tag + "----timer", String.valueOf(aLong));
                     }
                 });
+    }
+
+    /**
+     * @param Tag
+     * @return
+     */
+    private Subscriber<Long> getTntervalSubscriber(final String Tag) {
+        return new Subscriber<Long>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+                Log.e(Tag + "----Interval", String.valueOf(aLong));
+            }
+        };
+    }
+
+    /**
+     * @return
+     */
+    private Observable<Long> DeferObserver() {
+        return Observable.defer(new Func0<Observable<Long>>() {
+            @Override
+            public Observable<Long> call() {
+                return Observable.just(System.currentTimeMillis());
+            }
+        }).delay(3, TimeUnit.SECONDS).repeat(10);
+    }
+
+    /**
+     * @return
+     */
+    private Observable<Long> JustObserver() {
+        return Observable.just(System.currentTimeMillis())
+                .delay(3, TimeUnit.SECONDS).repeat(10);
+    }
+
+    /**
+     * @return
+     */
+    private Observable<Long> IntervalObserver() {
+        return Observable.interval(1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -310,5 +396,39 @@ public class LaunchActivity extends AppCompatActivity {
                 view.setTag(this);
             }
         }
+    }
+
+    /**
+     * @param Tag
+     */
+    private void deferJust(final String Tag) {
+        //defer
+        defer.subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long t) {
+                Log.e(Tag + "----defer-repeat", String.valueOf(t));
+            }
+        });
+        just.subscribe(new Action1<Long>() {
+            @Override
+            public void call(Long aLong) {
+                Log.e(Tag + "----defer-just-repeat", String.valueOf(aLong));
+            }
+        });
+    }
+
+    /**
+     * @param test
+     */
+    public void onEvent(NotificationEvent test) {
+//        deferJust(test.event);
+        if (intervalSubscriber != null)
+            intervalSubscriber.unsubscribe();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

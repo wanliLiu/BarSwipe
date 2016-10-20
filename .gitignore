@@ -7,6 +7,5 @@
 /build
 /captures
 .gitignore
-gradle.properties
 proguard-rules.pro
 .idea/
