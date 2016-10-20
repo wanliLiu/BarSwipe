@@ -6,3 +6,6 @@
 .DS_Store
 /build
 /captures
+.gitignore
+gradle.properties
+proguard-rules.pro
