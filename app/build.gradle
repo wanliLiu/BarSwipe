@@ -51,7 +51,6 @@ dependencies {
     compile project(':emojiAllLibrary')
 
     //constraint-layout 学习  constraint_layout.xml
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
 
     compile "com.jakewharton:butterknife:${butterknife_version}"
 
@@ -59,4 +58,5 @@ dependencies {
     compile "io.reactivex:rxjava:${rxjava_version}"
     compile "io.reactivex:rxandroid:${rxandroid_version}"
     compile "com.jakewharton.rxbinding:rxbinding:${RxBing_version}"
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta1'
 }
