@@ -196,7 +196,6 @@ public class LaunchActivity extends AppCompatActivity {
 
 
         //GroupBy
-
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9)
                 .groupBy(new Func1<Integer, Integer>() {
                     @Override
@@ -253,7 +252,7 @@ public class LaunchActivity extends AppCompatActivity {
                 .subscribe(new Action1<GroupedObservable<Integer, String>>() {
                     @Override
                     public void call(GroupedObservable<Integer, String> integerStringGroupedObservable) {
-                        if (integerStringGroupedObservable.getKey() == 0){
+                        if (integerStringGroupedObservable.getKey() == 0) {
                             integerStringGroupedObservable.subscribe(new Action1<String>() {
                                 @Override
                                 public void call(String s) {
@@ -263,6 +262,47 @@ public class LaunchActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        //cast Cast将Observable发射的数据强制转化为另外一种类型，属于Map的一种具体的实现
+        Observable.just(getAnimal()).cast(Dog.class).subscribe(new Action1<Dog>() {
+            @Override
+            public void call(Dog dog) {
+                log("Cast:" + dog.getName());
+            }
+        });
+
+        //Scan
+
+    }
+
+    private Animal getAnimal() {
+        return new Dog();
+    }
+
+    /**
+     * @param tag
+     */
+    private void log(String tag) {
+        Log.e("Rxjava学习" + "cast", tag);
+    }
+
+    private class Animal {
+        protected String name = "Animal";
+
+        Animal() {
+            log("create " + name);
+        }
+
+        String getName() {
+            return name;
+        }
+    }
+
+    private class Dog extends Animal {
+        Dog() {
+            name = getClass().getSimpleName();
+            log("create " + name);
+        }
     }
 
     /**
