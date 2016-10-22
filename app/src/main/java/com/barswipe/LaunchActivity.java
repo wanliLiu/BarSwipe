@@ -35,6 +35,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.observables.GroupedObservable;
 import rx.schedulers.Schedulers;
 
@@ -89,10 +90,16 @@ public class LaunchActivity extends AppCompatActivity {
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer position) {
-                        if (position == 0) {
-                            RxJavaCreatingObservables();
-                        } else if (position == 1) {
-                            RxJavaTransformingObservables();
+                        switch (position) {
+                            case 0:
+                                RxJavaCreatingObservables();
+                                break;
+                            case 1:
+                                RxJavaTransformingObservables();
+                                break;
+                            case 2:
+                                RxJavaFiltering();
+                                break;
                         }
                         ActivityInfo info = adapter.getItem(position);
                         Intent intent = new Intent();
@@ -129,6 +136,13 @@ public class LaunchActivity extends AppCompatActivity {
         }
 
         return list;
+    }
+
+    /**
+     * http://blog.chinaunix.net/uid-20771867-id-5194384.html
+     */
+    private void RxJavaFiltering() {
+
     }
 
     /**
@@ -194,6 +208,22 @@ public class LaunchActivity extends AppCompatActivity {
                     }
                 });
 
+        Observable.interval(300, TimeUnit.MILLISECONDS)
+                .window(3, TimeUnit.SECONDS)
+                .take(3)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Observable<Long>>() {
+                    @Override
+                    public void call(Observable<Long> longObservable) {
+                        Log.e(Tag + "window 集合开始", longObservable.toString());
+                        longObservable.subscribe(new Action1<Long>() {
+                            @Override
+                            public void call(Long aLong) {
+                                Log.e(Tag + "window", aLong + "");
+                            }
+                        });
+                    }
+                });
 
         //GroupBy
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9)
@@ -271,7 +301,20 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
 
+
         //Scan
+        List<Integer> list = Arrays.asList(1, 2, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+        Observable.from(list).scan(new Func2<Integer, Integer, Integer>() {
+            @Override
+            public Integer call(Integer x, Integer y) {
+                return x * y;
+            }
+        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "scan---result:" + integer);
+            }
+        });
 
     }
 
