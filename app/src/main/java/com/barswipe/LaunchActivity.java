@@ -44,6 +44,8 @@ import rx.schedulers.Schedulers;
  */
 public class LaunchActivity extends AppCompatActivity {
 
+    final String Tag = "Rxjava学习";
+
     private ListView listView;
 
     private activityListAdapter adapter;
@@ -143,14 +145,73 @@ public class LaunchActivity extends AppCompatActivity {
      */
     private void RxJavaFiltering() {
 
+        //throttleWithTimeOut
+        Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> subscriber) {
+
+                for (int i = 0; i < 18; i++) {
+                    if (!subscriber.isUnsubscribed()) {
+                        subscriber.onNext(i);
+                    }
+
+                    int sleep = 100;
+                    if (i % 3 == 0) {
+                        sleep = 300;
+                    }
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        subscriber.onError(e);
+                    }
+                }
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.computation())
+//                .debounce(200,TimeUnit.MILLISECONDS)
+                .throttleWithTimeout(200, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.e(Tag, "throttleWithTimeout-" + String.valueOf(integer));
+                    }
+                });
+
+
+        //debounce
+        Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+//                .debounce(200, TimeUnit.MILLISECONDS)
+                .debounce(new Func1<Integer, Observable<Integer>>() {
+                    @Override
+                    public Observable<Integer> call(final Integer integer) {
+                        Log.e(Tag, "debounce-过滤前" + String.valueOf(integer));
+                        return Observable.create(new Observable.OnSubscribe<Integer>() {
+                            @Override
+                            public void call(Subscriber<? super Integer> subscriber) {
+                                Log.e(Tag, "debounce-complete:" + String.valueOf(integer));
+                                if (integer % 2 == 0 && !subscriber.isUnsubscribed()) {
+                                    subscriber.onNext(integer);
+                                    subscriber.onCompleted();
+                                }
+                            }
+                        });
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.e(Tag, "debounce-结果:" + String.valueOf(integer));
+                    }
+                });
     }
 
     /**
      * http://blog.chinaunix.net/uid-20771867-id-5192193.html
      */
     private void RxJavaTransformingObservables() {
-
-        final String Tag = "Rxjava学习";
 
         //Buffer map flatmap flatmapIterable
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -353,7 +414,6 @@ public class LaunchActivity extends AppCompatActivity {
      * http://blog.chinaunix.net/uid-20771867-id-5187376.html
      */
     private void RxJavaCreatingObservables() {
-        final String Tag = "Rxjava学习";
         //Map
         Observable.just("Hellp Map Operator")
                 .map(new Func1<String, Integer>() {
@@ -371,13 +431,13 @@ public class LaunchActivity extends AppCompatActivity {
                 .doOnNext(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Log.e(Tag + "----Map--doOnNext", s);
+                        Log.e(Tag, "----Map--doOnNext-" + s);
                     }
                 })
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String s) {
-                        Log.e(Tag + "----Map--subscribe", s);
+                        Log.e(Tag, "----Map--subscribe-" + s);
                     }
                 });
 
@@ -401,8 +461,17 @@ public class LaunchActivity extends AppCompatActivity {
                 })
                 .flatMap(new Func1<String, Observable<String>>() {
                     @Override
-                    public Observable<String> call(String s) {
-                        return Observable.just("addpre_" + s);
+                    public Observable<String> call(final String s) {
+                        return Observable.create(new Observable.OnSubscribe<String>() {
+                            @Override
+                            public void call(Subscriber<? super String> subscriber) {
+                                if (!subscriber.isUnsubscribed()) {
+                                    subscriber.onNext("addpre_" + s);
+                                    subscriber.onCompleted();
+                                }
+                            }
+                        });
+//                        return Observable.just("addpre_" + s);
                     }
                 })
                 .filter(new Func1<String, Boolean>() {
@@ -461,17 +530,17 @@ public class LaunchActivity extends AppCompatActivity {
         }).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Integer>() {
             @Override
             public void onNext(Integer item) {
-                Log.e(Tag + "----create---onNext", item + "");
+                Log.e(Tag, "----create---onNext-" + item + "");
             }
 
             @Override
             public void onError(Throwable error) {
-                Log.e(Tag + "----create---onError", error.getMessage());
+                Log.e(Tag, "--create--onError-" + error.getMessage());
             }
 
             @Override
             public void onCompleted() {
-                Log.e(Tag + "----create--onCompleted", "onCompleted");
+                Log.e(Tag, "----create--onCompleted onCompleted");
             }
         });
 
