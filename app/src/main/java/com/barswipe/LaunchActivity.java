@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,10 @@ import android.widget.ListView;
 
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 
 import java.io.Serializable;
@@ -36,6 +41,7 @@ import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.functions.FuncN;
 import rx.observables.GroupedObservable;
 import rx.schedulers.Schedulers;
 
@@ -50,6 +56,11 @@ public class LaunchActivity extends AppCompatActivity {
 
     private Observable<Long> defer, just, interval;
     private Subscriber<Long> intervalSubscriber;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,7 +109,10 @@ public class LaunchActivity extends AppCompatActivity {
                                 RxJavaTransformingObservables();
                                 break;
                             case 2:
-                                RxJavaFiltering();
+                                RxJavaFilteringObservables();
+                                break;
+                            case 3:
+                                RxJavaCombiningObservables();
                                 break;
                         }
                         ActivityInfo info = adapter.getItem(position);
@@ -110,6 +124,9 @@ public class LaunchActivity extends AppCompatActivity {
 
         adapter.setList(getAllActivityLists());
         listView.setAdapter(adapter);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     /**
@@ -129,19 +146,224 @@ public class LaunchActivity extends AppCompatActivity {
                     list.add(info[i]);
                 }
             }
-
-
         } catch (Exception e) {
-
         }
 
         return list;
     }
 
     /**
+     * @param index
+     * @return
+     */
+    private Observable<Integer> createObserver(final int index) {
+        return Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> subscriber) {
+                for (int i = 1; i < 6; i++) {
+                    subscriber.onNext(i * index);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.newThread());
+    }
+
+    /**
+     * http://blog.chinaunix.net/uid-20771867-id-5197584.html
+     */
+    private void RxJavaCombiningObservables() {
+        final String Tag = "Rxjava学习";
+
+        //CombineLatest
+        //满足条件1的时候任何一个Observable发射一个数据，就将所有Observable最新发射的数据按照提供的函数组装起来发射出去。
+        Observable.combineLatest(createObserver(1), createObserver(2), new Func2<Integer, Integer, Integer>() {
+            @Override
+            public Integer call(Integer num1, Integer num2) {
+                Log.e(Tag, "combineLatest--call---left:" + num1 + " right:" + num2);
+                return num1 + num2;
+            }
+        }).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "combineLatest--result:" + integer);
+            }
+        });
+
+        List<Observable<Integer>> list = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            list.add(createObserver(i));
+        }
+        Observable.combineLatest(list, new FuncN<Integer>() {
+            @Override
+            public Integer call(Object... args) {
+                int temp = 0;
+                for (Object i : args) {
+                    Log.e(Tag, "combineLatest--list:" + i);
+                    temp += (Integer) i;
+                }
+                return temp;
+            }
+        }).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "combineLatest--list--result:" + integer);
+            }
+        });
+
+        //join
+        Observable.just("Left-").join(
+                Observable.create(new Observable.OnSubscribe<String>() {
+                    @Override
+                    public void call(Subscriber<? super String> subscriber) {
+                        for (int i = 1; i < 5; i++) {
+                            subscriber.onNext("Right-" + i);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        subscriber.onCompleted();
+                    }
+                }).subscribeOn(Schedulers.newThread()),
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String integer) {
+                        return Observable.timer(3000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String Long) {
+                        return Observable.timer(2000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func2<String, String, String>() {
+                    @Override
+                    public String call(String left, String Right) {
+                        return left + Right;
+                    }
+                })
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(Tag, "join:" + s);
+                    }
+                });
+
+        //groupJoin
+        Observable.just("Left-").groupJoin(
+                Observable.create(new Observable.OnSubscribe<String>() {
+                    @Override
+                    public void call(Subscriber<? super String> subscriber) {
+                        for (int i = 1; i < 5; i++) {
+                            subscriber.onNext("Right-" + i);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        subscriber.onCompleted();
+                    }
+                }).subscribeOn(Schedulers.newThread()),
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String integer) {
+                        return Observable.timer(3000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String Long) {
+                        return Observable.timer(2000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func2<String, Observable<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(final String sB, Observable<String> stringObservable) {
+                        return stringObservable.map(new Func1<String, String>() {
+                            @Override
+                            public String call(String s) {
+                                return sB + s;
+                            }
+                        });
+                    }
+                })
+                .subscribe(new Action1<Observable<String>>() {
+                    @Override
+                    public void call(Observable<String> stringObservable) {
+                        stringObservable.subscribe(new Action1<String>() {
+                            @Override
+                            public void call(String s) {
+                                Log.e(Tag, "groupJoin:" + s);
+                            }
+                        });
+                    }
+                });
+
+        //concat
+        Observable.concat(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "concat-:" + integer);
+            }
+        });
+
+        //Merge
+        Observable.merge(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "merge-:" + integer);
+            }
+        });
+
+        //mergeDelayError
+        Observable.mergeDelayError(
+                Observable.create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 5; i++) {
+                            if (i == 3) {
+                                subscriber.onError(new Throwable("error"));
+                            }
+                            subscriber.onNext(i);
+                        }
+                    }
+                }),
+                Observable.create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 5; i++) {
+                            subscriber.onNext(5 + i);
+                        }
+                        subscriber.onCompleted();
+                    }
+                }))
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.e(Tag, "mergeDelayError-:" + integer);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.e(Tag, "mergeDelayError-:" + throwable.getMessage());
+                    }
+                });
+
+
+    }
+
+    /**
      * http://blog.chinaunix.net/uid-20771867-id-5194384.html
      */
-    private void RxJavaFiltering() {
+    private void RxJavaFilteringObservables() {
 
     }
 
@@ -327,6 +549,42 @@ public class LaunchActivity extends AppCompatActivity {
      */
     private void log(String tag) {
         Log.e("Rxjava学习" + "cast", tag);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Launch Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 
     private class Animal {
