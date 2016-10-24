@@ -59,4 +59,9 @@ dependencies {
     compile "io.reactivex:rxandroid:${rxandroid_version}"
     compile "com.jakewharton.rxbinding:rxbinding:${RxBing_version}"
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta1'
+
+    //Rxlife
+    compile "com.trello:rxlifecycle:${RxLifeCycle_version}"
+    compile "com.trello:rxlifecycle-android:${RxLifeCycle_version}"
+    compile "com.trello:rxlifecycle-components:${RxLifeCycle_version}"
 }

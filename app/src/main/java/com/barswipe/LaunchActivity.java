@@ -6,7 +6,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +19,7 @@ import android.widget.ListView;
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,13 +36,14 @@ import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.functions.FuncN;
 import rx.observables.GroupedObservable;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by soli on 6/2/16.
  */
-public class LaunchActivity extends AppCompatActivity {
+public class LaunchActivity extends RxAppCompatActivity {
 
     final String Tag = "Rxjava学习";
 
@@ -88,6 +89,7 @@ public class LaunchActivity extends AppCompatActivity {
 //        });
 
         RxAdapterView.itemClicks(listView)
+                .compose(this.<Integer>bindToLifecycle())
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Integer>() {
                     @Override
@@ -100,7 +102,10 @@ public class LaunchActivity extends AppCompatActivity {
                                 RxJavaTransformingObservables();
                                 break;
                             case 2:
-                                RxJavaFiltering();
+                                RxJavaFilteringObservables();
+                                break;
+                            case 3:
+                                RxJavaCombiningObservables();
                                 break;
                         }
                         ActivityInfo info = adapter.getItem(position);
@@ -131,19 +136,224 @@ public class LaunchActivity extends AppCompatActivity {
                     list.add(info[i]);
                 }
             }
-
-
         } catch (Exception e) {
-
         }
 
         return list;
     }
 
     /**
+     * @param index
+     * @return
+     */
+    private Observable<Integer> createObserver(final int index) {
+        return Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> subscriber) {
+                for (int i = 1; i < 6; i++) {
+                    subscriber.onNext(i * index);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.newThread());
+    }
+
+    /**
+     * http://blog.chinaunix.net/uid-20771867-id-5197584.html
+     */
+    private void RxJavaCombiningObservables() {
+        final String Tag = "Rxjava学习";
+
+        //CombineLatest
+        //满足条件1的时候任何一个Observable发射一个数据，就将所有Observable最新发射的数据按照提供的函数组装起来发射出去。
+        Observable.combineLatest(createObserver(1), createObserver(2), new Func2<Integer, Integer, Integer>() {
+            @Override
+            public Integer call(Integer num1, Integer num2) {
+                Log.e(Tag, "combineLatest--call---left:" + num1 + " right:" + num2);
+                return num1 + num2;
+            }
+        }).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "combineLatest--result:" + integer);
+            }
+        });
+
+        List<Observable<Integer>> list = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            list.add(createObserver(i));
+        }
+        Observable.combineLatest(list, new FuncN<Integer>() {
+            @Override
+            public Integer call(Object... args) {
+                int temp = 0;
+                for (Object i : args) {
+                    Log.e(Tag, "combineLatest--list:" + i);
+                    temp += (Integer) i;
+                }
+                return temp;
+            }
+        }).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "combineLatest--list--result:" + integer);
+            }
+        });
+
+        //join
+        Observable.just("Left-").join(
+                Observable.create(new Observable.OnSubscribe<String>() {
+                    @Override
+                    public void call(Subscriber<? super String> subscriber) {
+                        for (int i = 1; i < 5; i++) {
+                            subscriber.onNext("Right-" + i);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        subscriber.onCompleted();
+                    }
+                }).subscribeOn(Schedulers.newThread()),
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String integer) {
+                        return Observable.timer(3000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String Long) {
+                        return Observable.timer(2000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func2<String, String, String>() {
+                    @Override
+                    public String call(String left, String Right) {
+                        return left + Right;
+                    }
+                })
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.e(Tag, "join:" + s);
+                    }
+                });
+
+        //groupJoin
+        Observable.just("Left-").groupJoin(
+                Observable.create(new Observable.OnSubscribe<String>() {
+                    @Override
+                    public void call(Subscriber<? super String> subscriber) {
+                        for (int i = 1; i < 5; i++) {
+                            subscriber.onNext("Right-" + i);
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        subscriber.onCompleted();
+                    }
+                }).subscribeOn(Schedulers.newThread()),
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String integer) {
+                        return Observable.timer(3000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func1<String, Observable<Long>>() {
+                    @Override
+                    public Observable<Long> call(String Long) {
+                        return Observable.timer(2000, TimeUnit.MILLISECONDS);
+                    }
+                },
+                new Func2<String, Observable<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(final String sB, Observable<String> stringObservable) {
+                        return stringObservable.map(new Func1<String, String>() {
+                            @Override
+                            public String call(String s) {
+                                return sB + s;
+                            }
+                        });
+                    }
+                })
+                .subscribe(new Action1<Observable<String>>() {
+                    @Override
+                    public void call(Observable<String> stringObservable) {
+                        stringObservable.subscribe(new Action1<String>() {
+                            @Override
+                            public void call(String s) {
+                                Log.e(Tag, "groupJoin:" + s);
+                            }
+                        });
+                    }
+                });
+
+        //concat
+        Observable.concat(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "concat-:" + integer);
+            }
+        });
+
+        //Merge
+        Observable.merge(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                Log.e(Tag, "merge-:" + integer);
+            }
+        });
+
+        //mergeDelayError
+        Observable.mergeDelayError(
+                Observable.create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 5; i++) {
+                            if (i == 3) {
+                                subscriber.onError(new Throwable("error"));
+                            }
+                            subscriber.onNext(i);
+                        }
+                    }
+                }),
+                Observable.create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 5; i++) {
+                            subscriber.onNext(5 + i);
+                        }
+                        subscriber.onCompleted();
+                    }
+                }))
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        Log.e(Tag, "mergeDelayError-:" + integer);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.e(Tag, "mergeDelayError-:" + throwable.getMessage());
+                    }
+                });
+
+
+    }
+
+    /**
      * http://blog.chinaunix.net/uid-20771867-id-5194384.html
      */
-    private void RxJavaFiltering() {
+    private void RxJavaFilteringObservables() {
 
         //throttleWithTimeOut
         Observable.create(new Observable.OnSubscribe<Integer>() {
@@ -259,6 +469,7 @@ public class LaunchActivity extends AppCompatActivity {
                 });
 
         Observable.interval(300, TimeUnit.MILLISECONDS)
+//                .compose(this.<Long>bindToLifecycle())
                 .buffer(3, TimeUnit.SECONDS)
                 .take(3)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -270,6 +481,7 @@ public class LaunchActivity extends AppCompatActivity {
                 });
 
         Observable.interval(300, TimeUnit.MILLISECONDS)
+//                .compose(this.<Long>bindToLifecycle())
                 .window(3, TimeUnit.SECONDS)
                 .take(3)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -389,6 +601,7 @@ public class LaunchActivity extends AppCompatActivity {
     private void log(String tag) {
         Log.e("Rxjava学习" + "cast", tag);
     }
+
 
     private class Animal {
         protected String name = "Animal";
@@ -611,6 +824,7 @@ public class LaunchActivity extends AppCompatActivity {
      */
     private Observable<Long> JustObserver() {
         return Observable.just(System.currentTimeMillis())
+//                .compose(this.<Long>bindToLifecycle())
                 .delay(3, TimeUnit.SECONDS).repeat(10);
     }
 
@@ -619,6 +833,7 @@ public class LaunchActivity extends AppCompatActivity {
      */
     private Observable<Long> IntervalObserver() {
         return Observable.interval(1, TimeUnit.SECONDS)
+//                .compose(this.<Long>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
