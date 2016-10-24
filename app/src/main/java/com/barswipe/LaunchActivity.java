@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,11 +18,8 @@ import android.widget.ListView;
 
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,7 +43,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by soli on 6/2/16.
  */
-public class LaunchActivity extends AppCompatActivity {
+public class LaunchActivity extends RxAppCompatActivity {
 
     private ListView listView;
 
@@ -56,11 +51,6 @@ public class LaunchActivity extends AppCompatActivity {
 
     private Observable<Long> defer, just, interval;
     private Subscriber<Long> intervalSubscriber;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,6 +87,7 @@ public class LaunchActivity extends AppCompatActivity {
 //        });
 
         RxAdapterView.itemClicks(listView)
+                .compose(this.<Integer>bindToLifecycle())
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Integer>() {
                     @Override
@@ -124,9 +115,6 @@ public class LaunchActivity extends AppCompatActivity {
 
         adapter.setList(getAllActivityLists());
         listView.setAdapter(adapter);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     /**
@@ -420,6 +408,7 @@ public class LaunchActivity extends AppCompatActivity {
                 });
 
         Observable.interval(300, TimeUnit.MILLISECONDS)
+//                .compose(this.<Long>bindToLifecycle())
                 .buffer(3, TimeUnit.SECONDS)
                 .take(3)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -431,6 +420,7 @@ public class LaunchActivity extends AppCompatActivity {
                 });
 
         Observable.interval(300, TimeUnit.MILLISECONDS)
+//                .compose(this.<Long>bindToLifecycle())
                 .window(3, TimeUnit.SECONDS)
                 .take(3)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -551,41 +541,6 @@ public class LaunchActivity extends AppCompatActivity {
         Log.e("Rxjava学习" + "cast", tag);
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Launch Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
 
     private class Animal {
         protected String name = "Animal";
@@ -800,6 +755,7 @@ public class LaunchActivity extends AppCompatActivity {
      */
     private Observable<Long> JustObserver() {
         return Observable.just(System.currentTimeMillis())
+//                .compose(this.<Long>bindToLifecycle())
                 .delay(3, TimeUnit.SECONDS).repeat(10);
     }
 
@@ -808,6 +764,7 @@ public class LaunchActivity extends AppCompatActivity {
      */
     private Observable<Long> IntervalObserver() {
         return Observable.interval(1, TimeUnit.SECONDS)
+//                .compose(this.<Long>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
