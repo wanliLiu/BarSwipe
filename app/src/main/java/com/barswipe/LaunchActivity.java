@@ -167,7 +167,6 @@ public class LaunchActivity extends RxAppCompatActivity {
      * http://blog.chinaunix.net/uid-20771867-id-5197584.html
      */
     private void RxJavaCombiningObservables() {
-        final String Tag = "Rxjava学习";
 
         //CombineLatest
         //满足条件1的时候任何一个Observable发射一个数据，就将所有Observable最新发射的数据按照提供的函数组装起来发射出去。
