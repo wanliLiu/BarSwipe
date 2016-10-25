@@ -24,6 +24,7 @@ import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imageformat.DefaultImageFormats;
 import com.facebook.imageformat.ImageFormat;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.image.ImageInfo;
@@ -62,7 +63,7 @@ public class MySimpleDraweeView extends SimpleDraweeView {
     private double mHeightRatio;                        // 宽高比例
     private int mTargetImageSize = -1;                  // 指定的图片尺寸
     private int mIsReplacePngBg2TargetColor = -1;      // 是否处理PNG图片的透明背景为指定颜色
-    private ImageFormat mImageFormat = ImageFormat.JPEG;// 图片类型-默认JPEG
+    private ImageFormat mImageFormat = DefaultImageFormats.JPEG;// 图片类型-默认JPEG
     private ImageRequest.RequestLevel mLowestPermittedRequestLevel;// 图片加载的请求类型-默认FULL_FETCH
     private String uriPathTag;                          // 加载图片的TAG，用于不重复加载图片
 
@@ -353,9 +354,9 @@ public class MySimpleDraweeView extends SimpleDraweeView {
     }
 
     private ImageRequest getImageRequest(MySimpleDraweeView view, Uri uri) {
-        switch (mImageFormat) {
-            case JPEG:
-            case PNG:
+        switch (mImageFormat.getName()) {
+            case "JPEG":
+            case "PNG":
                 return ImageRequestBuilder
                         .newBuilderWithSource(uri)
                         .setLowestPermittedRequestLevel(view.getLowestPermittedRequestLevel())
@@ -365,7 +366,7 @@ public class MySimpleDraweeView extends SimpleDraweeView {
                         .setLocalThumbnailPreviewsEnabled(true)
                         .setProgressiveRenderingEnabled(false)
                         .build();
-            case GIF:
+            case "GIF":
                 if (uri.getScheme().toLowerCase().contains("file") && isCutGif()) {
                     // 针对本地Gif预览时做特殊处理，裁剪出第一帧并显示
                     File file = new File(uri.getPath());
@@ -502,7 +503,7 @@ public class MySimpleDraweeView extends SimpleDraweeView {
         opts.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(getResources(), resId, opts);
         if (opts.outMimeType.equals("image/png")) {
-            mImageFormat = ImageFormat.PNG;
+            mImageFormat = DefaultImageFormats.PNG;
         }
 
         return new Uri.Builder().scheme("res").path(String.valueOf(resId)).build();
@@ -521,11 +522,11 @@ public class MySimpleDraweeView extends SimpleDraweeView {
 
     private void setImageFormat(final String url) {
         if (url.toLowerCase().endsWith("gif")) {
-            mImageFormat = ImageFormat.GIF;
+            mImageFormat = DefaultImageFormats.GIF;
         } else if (url.toLowerCase().endsWith("jpeg") || url.toLowerCase().endsWith("jpg")) {
-            mImageFormat = ImageFormat.JPEG;
+            mImageFormat = DefaultImageFormats.JPEG;
         } else if (url.toLowerCase().endsWith("png")) {
-            mImageFormat = ImageFormat.PNG;
+            mImageFormat = DefaultImageFormats.PNG;
         }
     }
 

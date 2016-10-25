@@ -8,7 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 
 import com.facebook.common.references.CloseableReference;
-import com.facebook.imageformat.ImageFormat;
+import com.facebook.imageformat.DefaultImageFormats;
 import com.facebook.imagepipeline.bitmaps.PlatformBitmapFactory;
 import com.facebook.imagepipeline.request.BasePostprocessor;
 
@@ -46,12 +46,12 @@ public class MyBasePostProcessor extends BasePostprocessor {
         }
 
         // 将PNG图片转换成JPG，并将背景色设置为指定颜色
-        else if (ImageFormat.PNG.equals(draweeView.getImageFormat()) && draweeView.isReplacePNGBackground() != -1) {
+        else if (DefaultImageFormats.PNG.equals(draweeView.getImageFormat()) && draweeView.isReplacePNGBackground() != -1) {
             replaceTransparent2TargetColor(sourceBitmap, draweeView.isReplacePNGBackground());
         }
 
         // PNG图片，并且设置了图片最大宽高，如果加载的PNG图片宽高超过指定宽高，并截取指定大小
-        else if (ImageFormat.PNG.equals(draweeView.getImageFormat())
+        else if (DefaultImageFormats.PNG.equals(draweeView.getImageFormat())
                 && draweeView.getTargetImageSize() != -1
                 && (sourceBitmap.getWidth() > draweeView.getTargetImageSize() || sourceBitmap.getHeight() > draweeView.getTargetImageSize())) {
 
