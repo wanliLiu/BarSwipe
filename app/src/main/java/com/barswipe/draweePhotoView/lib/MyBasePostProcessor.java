@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 
 import com.facebook.common.references.CloseableReference;
-import com.facebook.imageformat.DefaultImageFormats;
 import com.facebook.imagepipeline.bitmaps.PlatformBitmapFactory;
 import com.facebook.imagepipeline.request.BasePostprocessor;
 
@@ -36,38 +35,118 @@ public class MyBasePostProcessor extends BasePostprocessor {
     }
 
     @Override
+    public String getName() {
+        return "MyBasePostProcessor";
+    }
+
+//    @Override
+//    public void process(Bitmap destBitmap, Bitmap sourceBitmap) {
+//        for (int x = 0; x < destBitmap.getWidth(); x++) {
+//            for (int y = 0; y < destBitmap.getHeight(); y++) {
+//                destBitmap.setPixel(destBitmap.getWidth() - x, y, sourceBitmap.getPixel(x, y));
+//            }
+//        }
+//    }
+//    @Override
+//    public void process(Bitmap bitmap) {
+//        for (int x = 0; x < bitmap.getWidth(); x+=2) {
+//            for (int y = 0; y < bitmap.getHeight(); y+=2) {
+//                bitmap.setPixel(x, y, Color.RED);
+//            }
+//        }
+//    }
+
+    @Override
     public CloseableReference<Bitmap> process(Bitmap sourceBitmap, PlatformBitmapFactory bitmapFactory) {
+        CloseableReference<Bitmap> bitmapRef = bitmapFactory.createBitmap(sourceBitmap.getWidth(), sourceBitmap.getHeight());
+        try {
+            Bitmap destBitmap = bitmapRef.get();
+            int width = sourceBitmap.getWidth();         //获取位图的宽
+            int height = sourceBitmap.getHeight();       //获取位图的高
 
-        // 默认宽高比例显示 W:H = 1:2
-        // 按照宽高比例截取图片区域
-        if (sourceBitmap.getHeight() > (int) (sourceBitmap.getWidth() * MySimpleDraweeView.DEF_RATIO)) {
-            Bitmap bitmap = decodeRegion(sourceBitmap, sourceBitmap.getWidth(), (int) (sourceBitmap.getWidth() * MySimpleDraweeView.DEF_RATIO));
-            return super.process(bitmap, bitmapFactory);
+            int[] pixels = new int[width * height]; //通过位图的大小创建像素点数组
+            sourceBitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+            int alpha = 0xFF << 24;
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    int grey = pixels[width * i + j];
+
+                    int red = ((grey & 0x00FF0000) >> 16);
+                    int green = ((grey & 0x0000FF00) >> 8);
+                    int blue = (grey & 0x000000FF);
+
+                    grey = (int) ((float) red * 0.3 + (float) green * 0.59 + (float) blue * 0.11);
+                    grey = alpha | (grey << 16) | (grey << 8) | grey;
+                    pixels[width * i + j] = grey;
+                }
+            }
+            destBitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+            return CloseableReference.cloneOrNull(bitmapRef);
+        } finally {
+            CloseableReference.closeSafely(bitmapRef);
         }
+//
+//        // 默认宽高比例显示 W:H = 1:2
+//        // 按照宽高比例截取图片区域
+//        if (sourceBitmap.getHeight() > (int) (sourceBitmap.getWidth() * MySimpleDraweeView.DEF_RATIO)) {
+//            Bitmap bitmap = decodeRegion(sourceBitmap, sourceBitmap.getWidth(), (int) (sourceBitmap.getWidth() * MySimpleDraweeView.DEF_RATIO));
+//            return super.process(bitmap, bitmapFactory);
+//        }
+//
+//        // 将PNG图片转换成JPG，并将背景色设置为指定颜色
+//        else if (DefaultImageFormats.PNG.equals(draweeView.getImageFormat()) && draweeView.isReplacePNGBackground() != -1) {
+//            replaceTransparent2TargetColor(sourceBitmap, draweeView.isReplacePNGBackground());
+//        }
+//
+//        // PNG图片，并且设置了图片最大宽高，如果加载的PNG图片宽高超过指定宽高，并截取指定大小
+//        else if (DefaultImageFormats.PNG.equals(draweeView.getImageFormat())
+//                && draweeView.getTargetImageSize() != -1
+//                && (sourceBitmap.getWidth() > draweeView.getTargetImageSize() || sourceBitmap.getHeight() > draweeView.getTargetImageSize())) {
+//
+//            // 压缩图片
+//            Bitmap bitmap = Utils.decodeSampledBitmapFromByteArray(
+//                    bitmap2Bytes(sourceBitmap, 100),
+//                    draweeView.getTargetImageSize(),
+//                    draweeView.getTargetImageSize());
+//
+//            // 截取图片
+//            Bitmap region = decodeRegion(bitmap, draweeView.getTargetImageSize(), draweeView.getTargetImageSize());
+//            bitmap.recycle();
+//
+//            return super.process(region, bitmapFactory);
+//        }
+//        return super.process(sourceBitmap, bitmapFactory);
+    }
 
-        // 将PNG图片转换成JPG，并将背景色设置为指定颜色
-        else if (DefaultImageFormats.PNG.equals(draweeView.getImageFormat()) && draweeView.isReplacePNGBackground() != -1) {
-            replaceTransparent2TargetColor(sourceBitmap, draweeView.isReplacePNGBackground());
+    /**
+     * 将彩色图转换为黑白图
+     *
+     * @return 返回转换好的位图
+     */
+    public static Bitmap convertToBlackWhite(Bitmap img) {
+        int width = img.getWidth();         //获取位图的宽
+        int height = img.getHeight();       //获取位图的高
+
+        int[] pixels = new int[width * height]; //通过位图的大小创建像素点数组
+
+        img.getPixels(pixels, 0, width, 0, 0, width, height);
+        int alpha = 0xFF << 24;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int grey = pixels[width * i + j];
+
+                int red = ((grey & 0x00FF0000) >> 16);
+                int green = ((grey & 0x0000FF00) >> 8);
+                int blue = (grey & 0x000000FF);
+
+                grey = (int) ((float) red * 0.3 + (float) green * 0.59 + (float) blue * 0.11);
+                grey = alpha | (grey << 16) | (grey << 8) | grey;
+                pixels[width * i + j] = grey;
+            }
         }
-
-        // PNG图片，并且设置了图片最大宽高，如果加载的PNG图片宽高超过指定宽高，并截取指定大小
-        else if (DefaultImageFormats.PNG.equals(draweeView.getImageFormat())
-                && draweeView.getTargetImageSize() != -1
-                && (sourceBitmap.getWidth() > draweeView.getTargetImageSize() || sourceBitmap.getHeight() > draweeView.getTargetImageSize())) {
-
-            // 压缩图片
-            Bitmap bitmap = Utils.decodeSampledBitmapFromByteArray(
-                    bitmap2Bytes(sourceBitmap, 100),
-                    draweeView.getTargetImageSize(),
-                    draweeView.getTargetImageSize());
-
-            // 截取图片
-            Bitmap region = decodeRegion(bitmap, draweeView.getTargetImageSize(), draweeView.getTargetImageSize());
-            bitmap.recycle();
-
-            return super.process(region, bitmapFactory);
-        }
-        return super.process(sourceBitmap, bitmapFactory);
+        Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        result.setPixels(pixels, 0, width, 0, 0, width, height);
+        return result;
     }
 
     private void replaceTransparent2TargetColor(Bitmap sourceBitmap, int color) {
