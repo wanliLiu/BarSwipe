@@ -86,6 +86,6 @@
     <string name="str_ImageScale">1.图片显示很好，但是gif和Fresco的融合还有问题\2.继续研究</string>
     <string name="str_fresco_demo">1.Fresco 各种使用demo\n2.和其他第三方imageview的使用</string>
     <string name="str_retrofit">1.Retrofit 寻求更好的网络请求框架</string>
-    <string name="str_emjoin">还没看\n  1.主要是学习一下自定义这块，用这个有个平台</string>
+    <string name="str_emjoin">1.主要是学习一下自定义这块，用这个有个平台</string>
     <string name="str_viewView">natvie使用VideoView播放视频，提供网络视频播放demo,具体的可以修改，先放到这里</string>
 </resources>
