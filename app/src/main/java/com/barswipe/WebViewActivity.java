@@ -1,5 +1,6 @@
 package com.barswipe;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -21,6 +22,7 @@ public class WebViewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.webview);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         myWebView = (WebView) findViewById(R.id.webView);
         // 设置支持javascript
@@ -85,7 +87,8 @@ public class WebViewActivity extends BaseActivity {
                 " </body>\n" +
                 "</html>";
 
-        myWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+//        myWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
 //        myWebView.loadUrl("http://boutique.m.milanoo.com/fr?source=app&currency=EUR");
+        myWebView.loadUrl("http://www.tudou.com/programs/view/html5embed.action?code=wF4rLKHTPks&autoPlay=false&playType=AUTO");
     }
 }
