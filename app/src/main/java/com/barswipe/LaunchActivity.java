@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -32,6 +33,7 @@ import de.greenrobot.event.EventBus;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
@@ -117,6 +119,26 @@ public class LaunchActivity extends RxAppCompatActivity {
 
         adapter.setList(getAllActivityLists());
         listView.setAdapter(adapter);
+
+
+        MakeItRunOnUIThread();
+
+    }
+
+    /**
+     * 运行于ui线程
+     */
+    private void MakeItRunOnUIThread() {
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+
+        } else {
+            AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
+                @Override
+                public void call() {
+
+                }
+            });
+        }
     }
 
     /**
@@ -626,6 +648,7 @@ public class LaunchActivity extends RxAppCompatActivity {
      * http://blog.chinaunix.net/uid-20771867-id-5187376.html
      */
     private void RxJavaCreatingObservables() {
+
         //Map
         Observable.just("Hellp Map Operator")
                 .map(new Func1<String, Integer>() {
