@@ -3,6 +3,7 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter() // If not already there
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
@@ -14,6 +15,7 @@ buildscript {
 
 allprojects {
     repositories {
+        jcenter() // If not already there
         maven { url "https://jitpack.io" }
         mavenCentral()
     }
@@ -29,7 +31,7 @@ project.ext {
     ANDROID_BUILD_TOOLS_VERSION = "25.0.0"
 
     ANDROID_MIN_SDK_VERSION = 16
-    ANDROID_TARGET_SDK_VERSION = 22
+    ANDROID_TARGET_SDK_VERSION = 25
 
     VERSION_NAME = "1.2.0"
     VERSION_CODE = "22"

@@ -186,6 +186,7 @@ public class LaunchActivity extends RxAppCompatActivity {
     }
 
     /**
+     * RxJava操作符（十）自定义操作符-------------http://mushuichuan.com/2016/02/05/rxjava-operator-10/
      * http://blog.chinaunix.net/uid-20771867-id-5197584.html
      */
     private void RxJavaCombiningObservables() {
