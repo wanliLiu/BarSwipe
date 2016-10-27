@@ -125,6 +125,9 @@ public class LaunchActivity extends RxAppCompatActivity {
     }
 
     /**
+     *借鉴
+     * http://www.open-open.com/lib/view/open1450578678148.html
+     * http://www.cnblogs.com/cr330326/p/5181283.html
      *
      */
     private void studyPressionsRequest() {
