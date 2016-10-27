@@ -71,8 +71,7 @@ public class LaunchActivity extends RxAppCompatActivity {
         interval = IntervalObserver();
         intervalSubscriber = getTntervalSubscriber("Rxjava学习");
 
-        Intent intent = new Intent(this, FloatWindowService.class);
-        startService(intent);
+        studyPressionsRequest();
 
         listView = (ListView) findViewById(R.id.lis);
 
@@ -123,6 +122,31 @@ public class LaunchActivity extends RxAppCompatActivity {
 
         MakeItRunOnUIThread();
 
+    }
+
+    /**
+     *
+     */
+    private void studyPressionsRequest() {
+
+//        RxPermissions.getInstance(this)
+//                .request("android.permission.SYSTEM_ALERT_WINDOW")
+//                .subscribe(new Action1<Boolean>() {
+//                    @Override
+//                    public void call(Boolean aBoolean) {
+//                        if (aBoolean)
+//                        {
+//                            Intent intent = new Intent(LaunchActivity.this, FloatWindowService.class);
+//                            startService(intent);
+//                        }else {
+//                            Toast.makeText(LaunchActivity.this,"android.permission.SYSTEM_ALERT_WINDOW",Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+
+
+        Intent intent = new Intent(LaunchActivity.this, FloatWindowService.class);
+        startService(intent);
     }
 
     /**

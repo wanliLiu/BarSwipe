@@ -1,0 +1,34 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion project.ANDROID_MIN_SDK_VERSION
+        targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
+
+    //RxBinding
+    compile "io.reactivex:rxjava:${rxjava_version}"
+    compile "io.reactivex:rxandroid:${rxandroid_version}"
+    compile "com.jakewharton.rxbinding:rxbinding:${RxBing_version}"
+
+    //Rxlife
+    compile "com.trello:rxlifecycle:${RxLifeCycle_version}"
+    compile "com.trello:rxlifecycle-android:${RxLifeCycle_version}"
+    compile "com.trello:rxlifecycle-components:${RxLifeCycle_version}"
+}
+
