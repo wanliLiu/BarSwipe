@@ -24,6 +24,7 @@ android {
             targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
         }
         pre23 {
+            applicationId "com.barswipe.tes"
             targetSdkVersion 22
         }
     }
