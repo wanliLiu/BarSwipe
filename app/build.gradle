@@ -17,6 +17,17 @@ android {
 //        multiDexEnabled true
 
     }
+
+    productFlavors {
+
+        marshmallow {
+            targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
+        }
+        pre23 {
+            targetSdkVersion 22
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
