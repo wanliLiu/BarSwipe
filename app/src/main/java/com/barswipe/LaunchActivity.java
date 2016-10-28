@@ -1,12 +1,18 @@
 package com.barswipe;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +26,7 @@ import android.widget.ListView;
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
+import com.tbruyelle.rxpermissions.RxPermissions;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.io.Serializable;
@@ -71,7 +78,7 @@ public class LaunchActivity extends RxAppCompatActivity {
         interval = IntervalObserver();
         intervalSubscriber = getTntervalSubscriber("Rxjava学习");
 
-        studyPressionsRequest();
+        studySpecialGrantPermisson();
 
         listView = (ListView) findViewById(R.id.lis);
 
@@ -125,31 +132,67 @@ public class LaunchActivity extends RxAppCompatActivity {
     }
 
     /**
-     *借鉴
-     * http://www.open-open.com/lib/view/open1450578678148.html
-     * http://www.cnblogs.com/cr330326/p/5181283.html
      *
      */
-    private void studyPressionsRequest() {
-
-//        RxPermissions.getInstance(this)
-//                .request("android.permission.SYSTEM_ALERT_WINDOW")
-//                .subscribe(new Action1<Boolean>() {
-//                    @Override
-//                    public void call(Boolean aBoolean) {
-//                        if (aBoolean)
-//                        {
-//                            Intent intent = new Intent(LaunchActivity.this, FloatWindowService.class);
-//                            startService(intent);
-//                        }else {
-//                            Toast.makeText(LaunchActivity.this,"android.permission.SYSTEM_ALERT_WINDOW",Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-
-
+    private void shotFloatView() {
         Intent intent = new Intent(LaunchActivity.this, FloatWindowService.class);
         startService(intent);
+    }
+
+    /**
+     * 借鉴
+     * http://www.open-open.com/lib/view/open1450578678148.html
+     * http://www.cnblogs.com/cr330326/p/5181283.html
+     * “android.permission.SYSTEM_ALERT_WINDOW”
+     * “android.permission.WRITE_SETTINGS”
+     */
+    private void studySpecialGrantPermisson() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(this))
+                shotFloatView();
+            else
+                showRationaleDialog("需要开启必要的访问权限");
+        } else {
+            shotFloatView();
+        }
+    }
+
+    /**
+     * @param messageResId
+     */
+    private void showRationaleDialog(String messageResId) {
+        new AlertDialog.Builder(this)
+                .setPositiveButton("允许", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        RxPermissions.getInstance(LaunchActivity.this)
+                                .setLogging(true)
+                                .request(Manifest.permission.CAMERA,
+                                        Manifest.permission.BODY_SENSORS,
+                                        Manifest.permission.SYSTEM_ALERT_WINDOW,
+                                        Manifest.permission.WRITE_SETTINGS)
+                                .subscribe(new Action1<Boolean>() {
+                                    @Override
+                                    public void call(Boolean aBoolean) {
+                                        if (aBoolean) {
+                                            shotFloatView();
+                                        } else {
+                                            showRationaleDialog("需要开启必要的访问权限");
+                                        }
+                                    }
+                                });
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setTitle("帮助")
+                .setCancelable(false)
+                .setMessage(messageResId)
+                .show();
     }
 
     /**
@@ -982,5 +1025,10 @@ public class LaunchActivity extends RxAppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -1,12 +1,12 @@
 package com.barswipe.luban;
 
+import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,9 +15,12 @@ import com.barswipe.R;
 import com.barswipe.luban.library.Luban;
 import com.barswipe.luban.library.OnCompressListener;
 import com.bumptech.glide.Glide;
+import com.jakewharton.rxbinding.view.RxView;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import me.iwf.photopicker.PhotoPicker;
 import rx.Observable;
@@ -48,18 +51,22 @@ public class MainActivity_luban extends AppCompatActivity {
         image = (ImageView) findViewById(R.id.image);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PhotoPicker.builder()
-                        .setPhotoCount(1)
-                        .setShowCamera(true)
-                        .setShowGif(true)
-                        .setPreviewEnabled(false)
-                        .start(MainActivity_luban.this, PhotoPicker.REQUEST_CODE);
-
-            }
-        });
+        RxView.clicks(fab)
+                .throttleFirst(500, TimeUnit.MICROSECONDS)
+                .compose(RxPermissions.getInstance(this).ensure(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE))
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        if (aBoolean) {
+                            PhotoPicker.builder()
+                                    .setPhotoCount(1)
+                                    .setShowCamera(true)
+                                    .setShowGif(true)
+                                    .setPreviewEnabled(false)
+                                    .start(MainActivity_luban.this, PhotoPicker.REQUEST_CODE);
+                        }
+                    }
+                });
     }
 
     /**

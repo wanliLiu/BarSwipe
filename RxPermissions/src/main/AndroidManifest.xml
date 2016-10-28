@@ -6,6 +6,6 @@
         <activity
             android:name="ShadowActivity"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/RxAppBaseTheme" />
     </application>
 </manifest>

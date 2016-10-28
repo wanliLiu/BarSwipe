@@ -14,12 +14,14 @@
 
 package com.tbruyelle.rxpermissions;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -55,8 +57,9 @@ public class RxPermissions {
         mCtx = ctx;
     }
 
-    public void setLogging(boolean logging) {
+    public RxPermissions setLogging(boolean logging) {
         mLogging = logging;
+        return this;
     }
 
     private void log(String message) {
@@ -173,6 +176,7 @@ public class RxPermissions {
         // At the end, the observables are combined to have a unique response.
         for (String permission : permissions) {
             log("Requesting permission " + permission);
+
             if (isGranted(permission)) {
                 // Already granted, or not Android M
                 // Return a granted Permission object.
@@ -267,6 +271,12 @@ public class RxPermissions {
 
     @TargetApi(Build.VERSION_CODES.M)
     private boolean isGranted_(String permission) {
+        //special grant permissions
+        if (Manifest.permission.SYSTEM_ALERT_WINDOW.equals(permission)) {
+            return Settings.canDrawOverlays(mCtx);
+        } else if (Manifest.permission.WRITE_SETTINGS.equals(permission)) {
+            return Settings.System.canWrite(mCtx);
+        }
         return mCtx.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -276,12 +286,12 @@ public class RxPermissions {
     }
 
     void onRequestPermissionsResult(int requestCode,
-                                    String permissions[], int[] grantResults) {
+                                    String permissions[], Integer[] grantResults) {
         onRequestPermissionsResult(requestCode, permissions, grantResults, new boolean[permissions.length]);
     }
 
     void onRequestPermissionsResult(int requestCode,
-                                    String permissions[], int[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
+                                    String permissions[], Integer[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
         for (int i = 0, size = permissions.length; i < size; i++) {
             log("onRequestPermissionsResult  " + permissions[i]);
             // Find the corresponding subject
