@@ -2,8 +2,11 @@ package com.tbruyelle.rxpermissions;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 @TargetApi(Build.VERSION_CODES.M)
 public class ShadowActivity extends EnsureSameProcessActivity {
@@ -12,6 +15,12 @@ public class ShadowActivity extends EnsureSameProcessActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FrameLayout layout = new FrameLayout(this);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        layout.setBackgroundColor(Color.TRANSPARENT);
+        setContentView(layout);
+
         if (savedInstanceState == null) {
             handleIntent(getIntent());
         }
