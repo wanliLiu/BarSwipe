@@ -158,7 +158,8 @@
     </style>
 
     <style name="lightTheme" parent="Theme.AppCompat.Light">
-
+        <item name="colorPrimary">#ffffff</item>
+        <item name="colorPrimaryDark">#ffffff</item>
     </style>
 
     <style name="darkTheme" parent="Theme.AppCompat.Light">

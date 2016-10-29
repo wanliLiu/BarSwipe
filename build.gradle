@@ -46,7 +46,7 @@ project.ext {
     rxandroid_version = "1.2.1"
     RxBing_version = "0.4.0"
     RxLifeCycle_version = "0.8.0"
-    OKHTTP_VERSION="3.4.1"
+    OKHTTP_VERSION="3.3.0"//3.4.1
     retrofit2_version="2.1.0"
     glide_version="3.7.0"
 }

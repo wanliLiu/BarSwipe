@@ -15,11 +15,17 @@
     <style name="DayTheme" parent="AppTheme.NoActionBar">
         <item name="myTheme">day</item>
         <!--ActionBar背景  -->
-        <item name="colorPrimary">@color/topbar_Background_Day</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--<item name="colorPrimary">@color/topbar_Background_Day</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <item name="colorPrimary">#ffffff</item>
+        <item name="colorPrimaryDark">#ffffff</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="toolbar_Menu_Text_Color">@color/toolbar_Menu_Text_Color_Day</item>
-        <item name="toolbar_Text_Color">@color/toolbar_Text_Color_Day</item>
+        <!--<item name="toolbar_Text_Color">@color/toolbar_Text_Color_Day</item>-->
+        <item name="toolbar_Text_Color">@color/topbar_Background_Night</item>
+
+
+
         <!--页面背景-->
         <item name="android:windowBackground">@color/background_Day</item>
         <!--主页item背景色-->
