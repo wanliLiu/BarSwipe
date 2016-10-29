@@ -2,6 +2,7 @@ package com.barswipe;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.barswipe.SwipeBackLayout.app.SwipeBackActivity;
@@ -80,5 +81,13 @@ public class BaseActivity extends SwipeBackActivity {
 //        }
 //        super.onResume();
 //    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            scrollToFinishActivity();
+        }
+        return true;
+    }
 
 }
