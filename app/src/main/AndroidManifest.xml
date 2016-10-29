@@ -75,7 +75,7 @@
             android:name=".MainActivity"
             android:description="@string/des_base"
             android:icon="@mipmap/icon"
-            android:label="滑动删除" />
+            android:label="滑动删除--main" />
         <activity android:name=".SecondActivity" />
 
         <activity android:name=".ThirdActivity" />
@@ -271,11 +271,8 @@
             android:name="me.kaede.frescosample.samplelist.SampleListActivity"
             android:description="@string/str_fresco_demo"
             android:icon="@drawable/ic_launcher"
-            android:label="Fresco 使用demo 各种实用的demo"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name="me.kaede.frescosample.basicusage.BasicUsageActivity"
-            android:theme="@style/NoActionBar" />
+            android:label="Fresco 使用demo 各种实用的demo" />
+        <activity android:name="me.kaede.frescosample.basicusage.BasicUsageActivity" />
         <activity android:name="me.kaede.frescosample.gif.GifActivity" />
         <activity android:name="me.kaede.frescosample.lowres.LowResActivity" />
         <activity android:name="me.kaede.frescosample.listener.ListenerActivity" />
@@ -283,15 +280,9 @@
         <activity android:name="me.kaede.frescosample.resize.ResizeActivity" />
         <activity android:name="me.kaede.frescosample.postprocessor.PostprocessorActivity" />
         <activity android:name="me.kaede.frescosample.listview.ListViewActivity" />
-        <activity
-            android:name="me.kaede.frescosample.rec.RecyclerViewActivity"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name="me.kaede.frescosample.photoview.PhotoViewActivity"
-            android:theme="@style/NoActionBar" />
-        <activity
-            android:name="me.kaede.frescosample.subsampling.SubsamplingActvity"
-            android:theme="@style/NoActionBar" />
+        <activity android:name="me.kaede.frescosample.rec.RecyclerViewActivity" />
+        <activity android:name="me.kaede.frescosample.photoview.PhotoViewActivity" />
+        <activity android:name="me.kaede.frescosample.subsampling.SubsamplingActvity" />
         <activity android:name="me.kaede.frescosample.gifimageview.GifImageViewActivity" />
         <activity android:name="me.kaede.frescosample.snippet.SnippetActivity" />
 
@@ -319,6 +310,12 @@
             android:description="@string/str_viewView"
             android:icon="@drawable/ic_launcher"
             android:label="VideoView播放网络视频" />
+
+        <activity
+            android:name=".fram.NewFramActivity"
+            android:description="@string/str_newFramge"
+            android:icon="@drawable/ic_launcher"
+            android:label="新框架搭建" />
     </application>
 
 </manifest>

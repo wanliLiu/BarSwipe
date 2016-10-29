@@ -32,6 +32,10 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setStatusBarTintColor(getResources().getColor(R.color.color_orange));
+
         findViewById(R.id.Test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

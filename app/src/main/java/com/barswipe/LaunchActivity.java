@@ -1,6 +1,7 @@
 package com.barswipe;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -12,7 +13,6 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,7 +27,6 @@ import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by soli on 6/2/16.
  */
-public class LaunchActivity extends RxAppCompatActivity {
+public class LaunchActivity extends BaseActivity {
 
     final String Tag = "Rxjava学习";
 
@@ -68,10 +67,13 @@ public class LaunchActivity extends RxAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
+        setSwipeBackEnable(false);
+
         EventBus.getDefault().register(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setTitle("Android 学习汇总");
 
         defer = DeferObserver();
         just = JustObserver();

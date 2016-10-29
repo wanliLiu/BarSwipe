@@ -4,9 +4,9 @@ import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.facebook.common.logging.FLog;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -22,7 +22,7 @@ import com.facebook.imagepipeline.image.QualityInfo;
 
 import me.kaede.frescosample.ImageApi;
 
-public class ListenerActivity extends AppCompatActivity {
+public class ListenerActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

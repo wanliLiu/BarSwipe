@@ -5,10 +5,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.facebook.common.util.UriUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -20,7 +20,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import me.kaede.frescosample.ImageApi;
 
-public class BasicUsageActivity extends AppCompatActivity {
+public class BasicUsageActivity extends BaseActivity {
 
 	Handler handler = new Handler(Looper.getMainLooper());
 
@@ -30,6 +30,7 @@ public class BasicUsageActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_basic_usage);
 		Toolbar toolbar = (Toolbar) this.findViewById(R.id.toolbar);
 		this.setSupportActionBar(toolbar);
+		setTitle("BasicUsageActivity");
 
 		SimpleDraweeView draweeView;
 		DraweeController controller;

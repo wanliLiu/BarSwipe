@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
         <item name="android:windowBackground">@color/system_theme_color</item>
 
         <item name="android:textAllCaps">false</item>
@@ -129,19 +130,6 @@
         <item name="colorPrimaryDark">#CCa500</item>
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppThemeFres" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="NoActionBar" parent="AppThemeFres">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
 
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -150,5 +138,30 @@
     <style name="AppThemeemjo" parent="Base.Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="emojiconGridViewStyle">@style/EmojiconGridView</item>
+    </style>
+
+
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabPaddingStart">12dp</item>
+        <item name="tabPaddingEnd">12dp</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+        <item name="tabSelectedTextColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="lightTheme" parent="Theme.AppCompat.Light">
+
+    </style>
+
+    <style name="darkTheme" parent="Theme.AppCompat.Light">
+
     </style>
 </resources>

@@ -1,13 +1,13 @@
 package me.kaede.frescosample.snippet;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 
 import me.kaede.widget.markdownview.MarkdownView;
 
-public class SnippetActivity extends AppCompatActivity {
+public class SnippetActivity extends BaseActivity {
 
     public static final String EXTRA_FILE = "EXTRA_FILE";
 

@@ -1,7 +1,6 @@
 package com.barswipe;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -19,23 +18,23 @@ public class BaseActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        overridePendingTransition(R.anim.push_left_in, R.anim.quiet_fixedly);
-    }
+//    @Override
+//    public void startActivity(Intent intent) {
+//        super.startActivity(intent);
+//        overridePendingTransition(R.anim.push_left_in, R.anim.quiet_fixedly);
+//    }
+//
+//    @Override
+//    public void startActivityForResult(Intent intent, int requestCode) {
+//        super.startActivityForResult(intent, requestCode);
+//        overridePendingTransition(R.anim.push_left_in, R.anim.quiet_fixedly);
+//    }
 
-    @Override
-    public void startActivityForResult(Intent intent, int requestCode) {
-        super.startActivityForResult(intent, requestCode);
-        overridePendingTransition(R.anim.push_left_in, R.anim.quiet_fixedly);
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.quiet_fixedly, R.anim.push_right_out);
-    }
+//    @Override
+//    public void finish() {
+//        super.finish();
+//        overridePendingTransition(R.anim.quiet_fixedly, R.anim.push_right_out);
+//    }
 
     @Override
     protected void onDestroy() {

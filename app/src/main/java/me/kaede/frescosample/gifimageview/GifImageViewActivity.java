@@ -1,15 +1,15 @@
 package me.kaede.frescosample.gifimageview;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.barswipe.BaseActivity;
 import com.davemorrissey.labs.subscaleview.ImageDownloadListener;
 
 import me.kaede.frescosample.ImageApi;
 import me.kaede.util.fresco.gifimageview.CustomGifImageView;
 
-public class GifImageViewActivity extends AppCompatActivity {
+public class GifImageViewActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

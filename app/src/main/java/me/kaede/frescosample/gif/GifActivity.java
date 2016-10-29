@@ -2,8 +2,8 @@ package me.kaede.frescosample.gif;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
@@ -14,7 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import me.kaede.frescosample.ImageApi;
 
-public class GifActivity extends AppCompatActivity {
+public class GifActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

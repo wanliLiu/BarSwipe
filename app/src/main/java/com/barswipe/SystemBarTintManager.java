@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -354,10 +355,17 @@ public class SystemBarTintManager {
      * 设置状态栏原色
      */
     private void setStatusbarTextColor(Activity activity) {
-        if (android.os.Build.BRAND.contains("Xiaomi")) {
-            XiaoMisetStatusBarDarkMode(true, activity);
-        } else if (android.os.Build.BRAND.contains("Meizu")) {
-            MeizusetStatusBarDarkIcon(true, activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            activity.getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }else{
+            if (android.os.Build.BRAND.contains("Xiaomi")) {
+                XiaoMisetStatusBarDarkMode(true, activity);
+            } else if (android.os.Build.BRAND.contains("Meizu")) {
+                MeizusetStatusBarDarkIcon(true, activity);
+            }
         }
     }
 

@@ -2,14 +2,14 @@
 package com.barswipe.SwipeBackLayout.app;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.barswipe.SwipeBackLayout.SwipeBackLayout;
 import com.barswipe.SwipeBackLayout.Utils;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 
-public class SwipeBackActivity extends AppCompatActivity implements SwipeBackActivityBase {
+public class SwipeBackActivity extends RxAppCompatActivity implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;
 
     @Override

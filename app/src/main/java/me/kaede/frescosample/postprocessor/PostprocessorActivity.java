@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.drawable.ProgressBarDrawable;
@@ -20,7 +20,7 @@ import com.facebook.imagepipeline.request.Postprocessor;
 
 import me.kaede.frescosample.ImageApi;
 
-public class PostprocessorActivity extends AppCompatActivity {
+public class PostprocessorActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
