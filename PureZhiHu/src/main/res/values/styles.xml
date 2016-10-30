@@ -43,7 +43,7 @@
         <item name="myTheme">night</item>
         <!--ActionBar背景  -->
         <item name="colorPrimary">@color/topbar_Background_Night</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark_Night</item>
+        <item name="colorPrimaryDark">@color/topbar_Background_Night</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="toolbar_Menu_Text_Color">@color/toolbar_Menu_Text_Color_Night</item>
         <item name="toolbar_Text_Color">@color/toolbar_Text_Color_Night</item>

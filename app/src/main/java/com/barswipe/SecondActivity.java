@@ -55,9 +55,9 @@ public class SecondActivity extends BaseActivity {
             }
         });
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setStatusBarTintColor(getResources().getColor(R.color.colorPrimaryDark));
 
         EventBus.getDefault().register(this);
 

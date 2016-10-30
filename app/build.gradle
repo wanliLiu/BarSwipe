@@ -69,9 +69,8 @@ dependencies {
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta1'
-
     //PermissionsDispatcher
     //    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.8.1@aar'
 
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
 }

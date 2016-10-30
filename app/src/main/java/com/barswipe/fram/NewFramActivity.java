@@ -2,10 +2,10 @@ package com.barswipe.fram;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ToggleButton;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.jakewharton.rxbinding.widget.RxCompoundButton;
 
@@ -17,7 +17,7 @@ import rx.functions.Action1;
  * Created by soli on 29/10/2016.
  */
 
-public class NewFramActivity extends AppCompatActivity {
+public class NewFramActivity extends BaseActivity {
 
     @Bind(R.id.themeCheck)
     ToggleButton btn;

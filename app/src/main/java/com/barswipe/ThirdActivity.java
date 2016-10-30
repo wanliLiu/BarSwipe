@@ -36,9 +36,9 @@ public class ThirdActivity extends BaseActivity {
 
         setTitle("ThirdActivity");
 
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setStatusBarTintColor(getResources().getColor(R.color.color_white));
+//        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//        tintManager.setStatusBarTintEnabled(true);
+//        tintManager.setStatusBarTintColor(getResources().getColor(R.color.color_white));
 
 //        ViewGroup decorView = (ViewGroup)getWindow().getDecorView();
 //        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN ;// SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

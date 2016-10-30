@@ -2,7 +2,7 @@
     <!-- Application theme. -->
     <style name="SwipeBackAppTheme" parent="AppBaseTheme">
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -11,9 +11,20 @@
 
 
     <style name="AppThemeMaterial" parent="BaseThemeMatr">
-        <item name="android:windowTranslucentStatus">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:colorControlHighlight">@color/accent_translucent</item> 
         <item name="android:windowSharedElementsUseOverlay">false</item>
     </style>
+
+    <style name="lightTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">#ffffff</item>
+        <item name="colorPrimaryDark">#ffffff</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
 
 </resources>
