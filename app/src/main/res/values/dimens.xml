@@ -19,6 +19,8 @@
     <dimen name="card_margin">16dp</dimen>
 
     <dimen name="actionBarSize">32dip</dimen>
+    <dimen name="app_bar_height">280dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>
 

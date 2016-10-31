@@ -1,5 +1,6 @@
 package com.barswipe.fram;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -38,7 +39,10 @@ public class NewFramActivity extends BaseActivity {
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
+//                        setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
+                        if (aBoolean) {
+                            startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
+                        }
                     }
                 });
 
