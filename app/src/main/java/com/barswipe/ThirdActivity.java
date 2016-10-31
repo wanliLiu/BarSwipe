@@ -36,6 +36,7 @@ public class ThirdActivity extends BaseActivity {
 
         setTitle("ThirdActivity");
 
+//        StatusBarUtil.setStatusBarColor();
 //        SystemBarTintManager tintManager = new SystemBarTintManager(this);
 //        tintManager.setStatusBarTintEnabled(true);
 //        tintManager.setStatusBarTintColor(getResources().getColor(R.color.color_white));
