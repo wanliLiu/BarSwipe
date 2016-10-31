@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BarSwipe</string>
+    <string name="app_name">ColStu</string>
     <string name="title_activity_second">SecondActivity</string>
         <string name="translucent_background">Example of how you can make an
             activity have a translucent background, compositing over
