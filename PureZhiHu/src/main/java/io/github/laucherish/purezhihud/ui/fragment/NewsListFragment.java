@@ -1,5 +1,6 @@
 package io.github.laucherish.purezhihud.ui.fragment;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.tbruyelle.rxpermissions.RxPermissions;
 import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
@@ -84,7 +86,7 @@ public class NewsListFragment extends BaseFragment implements PullToRefreshView.
         curDate = getArguments().getString(EXTRA_CURDATE);
         init();
         if (mNewsListAdapter.getmNewsList().size() == 0) {
-            loadLatestNews();
+            checkPermissions();
         }
     }
 
@@ -92,7 +94,7 @@ public class NewsListFragment extends BaseFragment implements PullToRefreshView.
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_POSITION, position);
         bundle.putInt(EXTRA_SCROLL, scroll);
-        bundle.putString(EXTRA_CURDATE,curDate);
+        bundle.putString(EXTRA_CURDATE, curDate);
         NewsListFragment fragment = new NewsListFragment();
         fragment.setArguments(bundle);
         fragment.mExtraAdapter = adapter;
@@ -131,7 +133,7 @@ public class NewsListFragment extends BaseFragment implements PullToRefreshView.
                 .setAction(R.string.refresh, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        loadLatestNews();
+                        checkPermissions();
                     }
                 });
         mLoadBeforeSnackbar = Snackbar.make(mRcvNewsList, R.string.load_more_fail, Snackbar.LENGTH_INDEFINITE)
@@ -187,6 +189,24 @@ public class NewsListFragment extends BaseFragment implements PullToRefreshView.
                 }
             }
         }
+    }
+
+    /**
+     *
+     */
+    private void checkPermissions() {
+        RxPermissions.getInstance(getActivity())
+                .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_NETWORK_STATE)
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        if (aBoolean) {
+                            loadLatestNews();
+                        } else {
+                            getActivity().finish();
+                        }
+                    }
+                });
     }
 
     private void loadLatestNews() {
@@ -330,12 +350,11 @@ public class NewsListFragment extends BaseFragment implements PullToRefreshView.
 //
 //        return imgList;
 //    }
-
     public void setmOnRecyclerViewCreated(OnRecyclerViewCreated mOnRecyclerViewCreated) {
         this.mOnRecyclerViewCreated = mOnRecyclerViewCreated;
     }
 
-    public String getCurDate(){
+    public String getCurDate() {
         return curDate;
     }
 
@@ -349,7 +368,7 @@ public class NewsListFragment extends BaseFragment implements PullToRefreshView.
 
     @Override
     public void onRefresh() {
-        loadLatestNews();
+        checkPermissions();
     }
 
     public void showProgress() {

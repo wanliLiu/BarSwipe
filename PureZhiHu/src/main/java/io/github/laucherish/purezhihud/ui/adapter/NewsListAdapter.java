@@ -38,7 +38,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsVi
     private long lastPos = -1;
     private NewDao newDao;
     private boolean isAnim = true;
-    private boolean isNight = PrefUtil.isNight();
+    private boolean isNight = PrefUtil.isDay();
 
     public NewsListAdapter(Context context, List<News> newsList) {
         this.mContext = context;

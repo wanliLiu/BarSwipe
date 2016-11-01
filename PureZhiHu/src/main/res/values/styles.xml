@@ -1,30 +1,24 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="AppTheme" parent="AppBaseTheme">
         <!-- Customize your theme here. -->
-
-    </style>
-
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <!--日间主题-->
-    <style name="DayTheme" parent="AppTheme.NoActionBar">
+    <style name="DayTheme" parent="AppTheme">
         <item name="myTheme">day</item>
         <!--ActionBar背景  -->
-        <!--<item name="colorPrimary">@color/topbar_Background_Day</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <item name="colorPrimary">#ffffff</item>
-        <item name="colorPrimaryDark">#ffffff</item>
+        <item name="colorPrimary">@color/topbar_Background_Day</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--<item name="colorPrimary">#ffffff</item>-->
+        <!--<item name="colorPrimaryDark">#ffffff</item>-->
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="toolbar_Menu_Text_Color">@color/toolbar_Menu_Text_Color_Day</item>
-        <!--<item name="toolbar_Text_Color">@color/toolbar_Text_Color_Day</item>-->
-        <item name="toolbar_Text_Color">@color/topbar_Background_Night</item>
-
-
+        <!--<item name="toolbar_Menu_Text_Color">@color/toolbar_Menu_Text_Color_Day</item>-->
+        <item name="toolbar_Text_Color">@color/toolbar_Text_Color_Day</item>
+        <!--<item name="toolbar_Text_Color">@color/topbar_Background_Night</item>-->
 
         <!--页面背景-->
         <item name="android:windowBackground">@color/background_Day</item>
@@ -39,12 +33,13 @@
     </style>
 
     <!--夜晚主题-->
-    <style name="NightTheme" parent="AppTheme.NoActionBar">
+    <style name="NightTheme" parent="AppTheme">
         <item name="myTheme">night</item>
         <!--ActionBar背景  -->
         <item name="colorPrimary">@color/topbar_Background_Night</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark_Night</item>
         <item name="colorAccent">@color/colorAccent</item>
+
         <item name="toolbar_Menu_Text_Color">@color/toolbar_Menu_Text_Color_Night</item>
         <item name="toolbar_Text_Color">@color/toolbar_Text_Color_Night</item>
         <!--页面背景-->

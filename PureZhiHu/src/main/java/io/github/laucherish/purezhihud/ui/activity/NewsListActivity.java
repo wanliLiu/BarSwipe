@@ -47,8 +47,10 @@ public class NewsListActivity extends BaseActivity {
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
+        getSwipeBackLayout().setEnableGesture(false);
         addFragment(0, 0, null, null);
     }
+
 
     private void addFragment(int position, int scroll, NewsListAdapter adapter, String curDate) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -76,7 +78,7 @@ public class NewsListActivity extends BaseActivity {
                 return true;
 
             case R.id.menu_action_daynight:
-                boolean isNight = PrefUtil.isNight();
+                boolean isNight = PrefUtil.isDay();
                 if (isNight) {
                     PrefUtil.setDay();
                     setTheme(Constant.RESOURCES_DAYTHEME);
@@ -142,4 +144,5 @@ public class NewsListActivity extends BaseActivity {
             startAnimation(mIvMain);
         }
     }
+
 }

@@ -141,7 +141,7 @@ public class NewsDetailFragment extends BaseFragment {
                             mTvTitle.setText(newsDetail.getTitle());
                             mTvSource.setText(newsDetail.getImage_source());
 
-                            boolean isNight = PrefUtil.isNight();
+                            boolean isNight = PrefUtil.isDay();
                             StringBuffer stringBuffer = HtmlUtil.handleHtml(newsDetail.getBody(),isNight);
                             mWvNews.setDrawingCacheEnabled(true);
                             mWvNews.loadDataWithBaseURL("file:///android_asset/", stringBuffer.toString(), "text/html", "utf-8", null);

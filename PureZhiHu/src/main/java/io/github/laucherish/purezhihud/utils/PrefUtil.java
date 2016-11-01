@@ -20,11 +20,11 @@ public class PrefUtil {
     }
 
     public static void setNight(){
-        getSharedPreferences().edit().putBoolean(PRE_NIGHT, true).commit();
+        getSharedPreferences().edit().putBoolean(PRE_NIGHT, false).commit();
     }
 
     public static void setDay(){
-        getSharedPreferences().edit().putBoolean(PRE_NIGHT, false).commit();
+        getSharedPreferences().edit().putBoolean(PRE_NIGHT, true).commit();
     }
 
     public static void changeDayNight(){
@@ -32,12 +32,12 @@ public class PrefUtil {
         getSharedPreferences().edit().putBoolean(PRE_NIGHT, change).commit();
     }
 
-    public static boolean isNight(){
-        return getSharedPreferences().getBoolean(PRE_NIGHT, false);
+    public static boolean isDay(){
+        return getSharedPreferences().getBoolean(PRE_NIGHT, true);
     }
 
     public static int getThemeRes(){
-        if (!isNight()) {
+        if (isDay()) {
             return Constant.RESOURCES_DAYTHEME;
         } else {
             return Constant.RESOURCES_NIGHTTHEME;

@@ -286,12 +286,12 @@ public class RxPermissions {
     }
 
     void onRequestPermissionsResult(int requestCode,
-                                    String permissions[], Integer[] grantResults) {
+                                    String permissions[], int[] grantResults) {
         onRequestPermissionsResult(requestCode, permissions, grantResults, new boolean[permissions.length]);
     }
 
     void onRequestPermissionsResult(int requestCode,
-                                    String permissions[], Integer[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
+                                    String permissions[], int[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
         for (int i = 0, size = permissions.length; i < size; i++) {
             log("onRequestPermissionsResult  " + permissions[i]);
             // Find the corresponding subject

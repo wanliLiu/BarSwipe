@@ -18,6 +18,7 @@
     <attr name="textColorFirst" format="color"/>
     <attr name="textColorSecond" format="color"/>
     <attr name="textColorThird" format="color"/>
+
     <attr name="toolbar_Text_Color" format="color"/>
     <attr name="toolbar_Background_Color" format="color"/>
     <attr name="toolbar_Menu_Text_Color" format="color"/>

@@ -20,7 +20,7 @@ public class ShadowActivity extends EnsureSameProcessActivity {
     private final int WriteSetting_request_code = 34;
 
     private List<String> permissions, specialpermissions;
-    private Integer[] specialGrantReult;
+    private int[] specialGrantReult;
     private int index = -1;
 
     @Override
@@ -58,7 +58,7 @@ public class ShadowActivity extends EnsureSameProcessActivity {
         }
 
         if (specialpermissions != null && specialpermissions.size() > 0) {
-            specialGrantReult = new Integer[specialpermissions.size()];
+            specialGrantReult = new int[specialpermissions.size()];
             index = 0;
             startRequest(index);
         } else {
@@ -134,7 +134,7 @@ public class ShadowActivity extends EnsureSameProcessActivity {
         int length = isHaveSpeicalGrant() ? permissions.length + specialpermissions.size() : permissions.length;
         boolean[] shouldShowRequestPermissionRationale = new boolean[length];
         String[] requestPermissions = new String[length];
-        Integer[] requestGrantResults = new Integer[length];
+        int[] requestGrantResults = new int[length];
 
         for (int i = 0; i < shouldShowRequestPermissionRationale.length; i++) {
             if (i >= permissions.length) {
