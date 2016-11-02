@@ -1,8 +1,8 @@
 package com.barswipe.fram;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
 import android.view.View;
 import android.widget.ToggleButton;
 
@@ -41,10 +41,19 @@ public class NewFramActivity extends BaseActivity {
                     public void call(Boolean aBoolean) {
 //                        setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
                         if (aBoolean) {
-                            startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
+//                            startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
+                            showBottomSheet();
                         }
                     }
                 });
 
+    }
+
+    private void showBottomSheet()
+    {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.setTitle("BottomSheetDialog 学习");
+        dialog.setContentView(R.layout.test_bottom_sheet);
+        dialog.show();
     }
 }
