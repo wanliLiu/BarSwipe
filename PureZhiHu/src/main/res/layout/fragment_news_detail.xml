@@ -16,9 +16,9 @@
             android:id="@+id/collapsingToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="256dp"
+            android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:contentScrim="?attr/colorPrimary"
-            android:fitsSystemWindows="true"
             app:expandedTitleMarginEnd="96dp"
             app:expandedTitleTextAppearance="@style/CollapsingToolbarTitleStyle.About"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">

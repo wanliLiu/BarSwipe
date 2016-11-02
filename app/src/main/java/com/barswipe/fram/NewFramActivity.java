@@ -1,5 +1,6 @@
 package com.barswipe.fram;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
@@ -8,6 +9,7 @@ import android.widget.ToggleButton;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
+import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxCompoundButton;
 
 import butterknife.Bind;
@@ -41,16 +43,25 @@ public class NewFramActivity extends BaseActivity {
                     public void call(Boolean aBoolean) {
 //                        setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
                         if (aBoolean) {
-//                            startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
-                            showBottomSheet();
+                            startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
                         }
                     }
                 });
 
+
+        RxView.clicks(findViewById(R.id.btnBottom))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        showBottomSheet();
+                    }
+                });
     }
 
-    private void showBottomSheet()
-    {
+    /**
+     *
+     */
+    private void showBottomSheet() {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setTitle("BottomSheetDialog 学习");
         dialog.setContentView(R.layout.test_bottom_sheet);
