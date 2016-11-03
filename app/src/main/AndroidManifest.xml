@@ -290,7 +290,11 @@
             android:label="新框架搭建" />
         <activity
             android:name=".fram.ScrollingActivity"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".fram.FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

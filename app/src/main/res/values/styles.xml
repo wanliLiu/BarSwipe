@@ -9,6 +9,7 @@
         <item name="android:windowBackground">@color/system_theme_color</item>
 
         <item name="android:textAllCaps">false</item>
+        <!--<item name="android:textIsSelectable">true</item>-->
     </style>
 
     <!-- Application theme. -->
@@ -182,6 +183,18 @@
 
         <!--<item name="android:windowIsTranslucent">true</item>-->
 
+    </style>
+
+    <style name="FullscreenTheme" parent="SwipeBackAppTheme">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 
 </resources>

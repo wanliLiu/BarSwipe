@@ -56,6 +56,15 @@ public class NewFramActivity extends BaseActivity {
                         showBottomSheet();
                     }
                 });
+
+
+        RxView.clicks(findViewById(R.id.button6))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(NewFramActivity.this, FullscreenActivity.class));
+                    }
+                });
     }
 
     /**
