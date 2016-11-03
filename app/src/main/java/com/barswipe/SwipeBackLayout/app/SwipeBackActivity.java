@@ -2,7 +2,9 @@
 package com.barswipe.SwipeBackLayout.app;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.barswipe.SwipeBackLayout.SwipeBackLayout;
 import com.barswipe.SwipeBackLayout.Utils;
@@ -11,6 +13,8 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 public class SwipeBackActivity extends RxAppCompatActivity implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;
+
+    private long lastClickTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,4 +52,23 @@ public class SwipeBackActivity extends RxAppCompatActivity implements SwipeBackA
         Utils.convertActivityToTranslucent(this);
         getSwipeBackLayout().scrollToFinishActivity();
     }
+
+    //重复点击，启动很多activity,统一处理
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        lastClickTime = time;
+        return timeD <= ViewConfiguration.getDoubleTapTimeout();
+    }
+
 }

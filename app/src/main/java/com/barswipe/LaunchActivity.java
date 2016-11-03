@@ -19,6 +19,7 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -101,7 +102,7 @@ public class LaunchActivity extends BaseActivity {
 
         RxAdapterView.itemClicks(listView)
                 .compose(this.<Integer>bindToLifecycle())
-                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .throttleFirst(ViewConfiguration.getDoubleTapTimeout(), TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer position) {
