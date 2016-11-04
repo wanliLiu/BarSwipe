@@ -49,4 +49,6 @@ project.ext {
     OKHTTP_VERSION="3.3.0"//3.4.1
     retrofit2_version="2.1.0"
     glide_version="3.7.0"
+
+    GPUIMAGE_VERSION="1.3.0"
 }
