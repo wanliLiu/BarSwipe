@@ -110,7 +110,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 processor = new GrayscalePostprocessor();
                 break;
             case Blur:
-                processor = new BlurPostprocessor(context, 25);
+                processor = new BlurPostprocessor(context, 10,5);
                 break;
             case Toon:
                 processor = new ToonFilterPostprocessor(context);

@@ -93,5 +93,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
     compile 'com.android.support:support-v4:25.0.0'
-    provided "jp.co.cyberagent.android.gpuimage:gpuimage-library:${GPUIMAGE_VERSION}"
+    compile "jp.co.cyberagent.android.gpuimage:gpuimage-library:${GPUIMAGE_VERSION}"
 }
