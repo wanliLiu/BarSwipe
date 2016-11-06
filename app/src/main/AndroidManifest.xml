@@ -295,12 +295,12 @@
             android:name=".fram.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/FullscreenTheme" />
-
         <activity
             android:name=".processor.MainActivityProcessor"
             android:description="@string/str_processors"
             android:icon="@drawable/ic_launcher"
             android:label="Fresco Porcessors" />
+        <activity android:name=".fram.CustomBehaviorActivity"></activity>
     </application>
 
 </manifest>

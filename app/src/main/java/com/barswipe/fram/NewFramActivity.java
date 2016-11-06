@@ -65,6 +65,14 @@ public class NewFramActivity extends BaseActivity {
                         startActivity(new Intent(NewFramActivity.this, FullscreenActivity.class));
                     }
                 });
+
+        RxView.clicks(findViewById(R.id.btnBehavior))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(NewFramActivity.this, CustomBehaviorActivity.class));
+                    }
+                });
     }
 
     /**
