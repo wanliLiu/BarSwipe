@@ -11,32 +11,6 @@ import com.barswipe.R;
 
 public class ScrollingActivity extends AppCompatActivity {
 
-
-    /**
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *CoordinatorLayout高级用法-自定义Behavior
-     * http://www.2cto.com/kf/201512/453913.html
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        setTheme(R.style.AppThemeNoActionBar);
