@@ -3,6 +3,8 @@ package com.barswipe.fram;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -121,10 +123,20 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void toggle() {
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)(findViewById(R.id.bottomBehavior).getLayoutParams());
         if (mVisible) {
             hide();
+            if ( params != null && params.getBehavior() != null && params.getBehavior() instanceof BottomSheetBehavior)
+            {
+                ((BottomSheetBehavior)(params.getBehavior())).setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
         } else {
             show();
+            if ( params != null && params.getBehavior() != null && params.getBehavior() instanceof BottomSheetBehavior)
+            {
+                ((BottomSheetBehavior)(params.getBehavior())).setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
         }
     }
 
