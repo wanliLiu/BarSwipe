@@ -27,12 +27,16 @@ public class ScrollBehavior extends CoordinatorLayout.Behavior {
 
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
-        child.setScrollY(target.getScrollY());
+        if (target instanceof NestedScrollingChildView)
+            child.setScrollY(dy);
+        else
+            child.setScrollY(target.getScrollY());
     }
 
     @Override
     public boolean onNestedFling(CoordinatorLayout coordinatorLayout, View child, View target, float velocityX, float velocityY, boolean consumed) {
-        ((NestedScrollView) child).fling((int) velocityY);
+        if (!(target instanceof NestedScrollingChildView))
+            ((NestedScrollView) child).fling((int) velocityY);
         return true;
     }
 }

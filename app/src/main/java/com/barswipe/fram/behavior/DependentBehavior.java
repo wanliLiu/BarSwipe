@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.barswipe.R;
+
 /**
  * Created by soli on 06/11/2016.
  */
@@ -22,6 +24,19 @@ public class DependentBehavior extends CoordinatorLayout.Behavior<TextView> {
         super(context, attrs);
     }
 
+
+    @Override
+    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, TextView child, View directTargetChild, View target, int nestedScrollAxes) {
+//        if (target instanceof NestedScrollingChildView)
+//            return true;
+            return (nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL) != 0;
+//        return false;
+    }
+
+    @Override
+    public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, TextView child, View target, int dx, int dy, int[] consumed) {
+        ViewCompat.offsetTopAndBottom(coordinatorLayout.findViewById(R.id.depentent), dy > 0 ? 5 : -5);
+    }
 
     @Override
     public boolean layoutDependsOn(CoordinatorLayout parent, TextView child, View dependency) {

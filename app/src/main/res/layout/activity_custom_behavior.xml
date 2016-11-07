@@ -28,7 +28,6 @@
         android:textColor="@android:color/white"
         app:layout_behavior="com.barswipe.fram.behavior.DependentBehavior" />
 
-
     <include
         layout="@layout/item_scroll"
         android:layout_width="100dp"
@@ -43,6 +42,13 @@
         android:layout_gravity="top|right"
         android:layout_marginTop="100dp"
         app:layout_behavior="com.barswipe.fram.behavior.ScrollBehavior" />
+
+    <com.barswipe.fram.behavior.NestedScrollingChildView
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="110dp"
+        android:layout_marginTop="100dp"
+        android:background="#FF00FF00" />
 
 
 </android.support.design.widget.CoordinatorLayout>
