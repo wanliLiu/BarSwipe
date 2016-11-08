@@ -88,7 +88,7 @@
     <string name="str_retrofit">1.Retrofit 寻求更好的网络请求框架</string>
     <string name="str_emjoin">1.主要是学习一下自定义这块，用这个有个平台</string>
     <string name="str_viewView">natvie使用VideoView播放视频，提供网络视频播放demo,具体的可以修改，先放到这里</string>
-    <string name="str_newFramge">在这里尝试新搭建Android框架,所有需要测试的工作</string>
+    <string name="str_newFramge">1.CoordinatorLayout Behavior 学习，还没看\n在这里尝试新搭建Android框架,所有需要测试的工作</string>
     <string name="str_processors">freso 各种processor 图片预处理</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
