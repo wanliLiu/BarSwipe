@@ -11,9 +11,9 @@ import rx.functions.Action1;
 
 /**
  * http://blog.csdn.net/max2005/article/details/51914246
+ * http://ms.csdn.net/geek/88224?from=timeline&isappinstalled=1
  * 上面已看
  *
- * http://ms.csdn.net/geek/88224?from=timeline&isappinstalled=1
  * http://www.cnblogs.com/zqlxtt/p/5206466.html
  * http://www.07net01.com/2015/12/1036890.html
  * http://blog.csdn.net/zhangke3016/article/details/52268136
