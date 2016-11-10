@@ -300,7 +300,8 @@
             android:description="@string/str_processors"
             android:icon="@drawable/ic_launcher"
             android:label="Fresco Porcessors" />
-        <activity android:name=".fram.CustomBehaviorActivity"></activity>
+        <activity android:name=".fram.CustomBehaviorActivity" />
+        <activity android:name=".GridLayoutStudy"/>
     </application>
 
 </manifest>

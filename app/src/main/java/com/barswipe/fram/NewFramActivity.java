@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ToggleButton;
 
 import com.barswipe.BaseActivity;
+import com.barswipe.GridLayoutStudy;
 import com.barswipe.R;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxCompoundButton;
@@ -71,6 +72,14 @@ public class NewFramActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(NewFramActivity.this, CustomBehaviorActivity.class));
+                    }
+                });
+
+        RxView.clicks(findViewById(R.id.btnGridLayout))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(NewFramActivity.this, GridLayoutStudy.class));
                     }
                 });
     }
