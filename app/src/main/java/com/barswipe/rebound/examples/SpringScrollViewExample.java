@@ -16,8 +16,10 @@ import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.barswipe.R;
 import com.barswipe.rebound.examples.scrollview.ExampleRowView;
@@ -44,6 +46,12 @@ public class SpringScrollViewExample extends FrameLayout {
       Integer color = (Integer) evaluator.evaluate((float) i / (float) ROW_COUNT, startColor, endColor);
       exampleRowView.setText("Row " + i);
       exampleRowView.setBackgroundColor(color);
+      exampleRowView.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Toast.makeText(getContext(),"点击了我",Toast.LENGTH_SHORT).show();
+        }
+      });
       content.addView(exampleRowView);
     }
   }

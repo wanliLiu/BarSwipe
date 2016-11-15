@@ -45,7 +45,7 @@ public class PhotoGalleryExample extends FrameLayout implements SpringListener {
       .create()
       .createSpring()
       .addListener(this)
-      .setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(40, 6));
+      .setSpringConfig(SpringConfig.fromOrigamiTensionAndFriction(40, 7));
 
   private int mActiveIndex;
   private int mPadding;
