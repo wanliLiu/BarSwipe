@@ -73,7 +73,7 @@
         <activity
             android:name=".MainActivity"
             android:description="@string/des_base"
-            android:icon="@drawable/icon"
+            android:icon="@mipmap/icon"
             android:label="滑动删除--main" />
         <activity android:name=".SecondActivity" />
         <activity android:name=".ThirdActivity" />
@@ -183,7 +183,7 @@
         <activity
             android:name=".materials.MainActivity_Material"
             android:description="@string/str_material"
-            android:icon="@drawable/ic_launcher_material"
+            android:icon="@mipmap/ic_launcher_material"
             android:label="Materials Design"
             android:launchMode="singleTop"
             android:theme="@style/AppThemeMaterial" />
@@ -221,7 +221,7 @@
         <activity
             android:name=".photopicker.MainActivity_photo"
             android:description="@string/str_luban"
-            android:icon="@drawable/ic_launcher_photo"
+            android:icon="@mipmap/ic_launcher_photo"
             android:label="PhotoPicker 防微信图片选择" />
         <activity
             android:name="me.iwf.photopicker.PhotoPickerActivity"
@@ -303,11 +303,10 @@
         <activity android:name=".fram.CustomBehaviorActivity" />
         <activity android:name=".GridLayoutStudy" />
         <activity
-            android:name=".rebound.ReboundMainActivity"
+            android:name=".rebound.app.PlaygroundActivity"
             android:description="@string/str_rebound"
             android:icon="@drawable/rebound_icon"
             android:label="Rebound Animation" />
-        <activity android:name=".rebound.app.PlaygroundActivity" />
     </application>
 
 </manifest>

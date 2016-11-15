@@ -56,8 +56,6 @@ public class PlaygroundActivity extends Activity implements AdapterView.OnItemCl
     private ExampleContainerView mCurrentExample;
     private boolean mAnimating;
 
-    private boolean isAllHide = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +98,6 @@ public class PlaygroundActivity extends Activity implements AdapterView.OnItemCl
         mCurrentExample = new ExampleContainerView(this);
         mCurrentExample.addView(sampleView);
         mRootView.addView(mCurrentExample);
-        isAllHide = false;
         mCurrentExample.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -122,9 +119,11 @@ public class PlaygroundActivity extends Activity implements AdapterView.OnItemCl
         }, 100);
     }
 
+
     @Override
     public void onBackPressed() {
         if (mAnimating || mCurrentExample == null) {
+            super.onBackPressed();
             return;
         }
         mAnimating = true;
@@ -143,13 +142,8 @@ public class PlaygroundActivity extends Activity implements AdapterView.OnItemCl
                 mCurrentExample.clearCallback();
                 mRootView.removeView(mCurrentExample);
                 mCurrentExample = null;
-                isAllHide = true;
             }
         });
-
-        if (isAllHide) {
-            onBackPressed();
-        }
     }
 
     private class ExampleListAdapter implements ListAdapter {
