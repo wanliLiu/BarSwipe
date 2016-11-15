@@ -39,6 +39,7 @@ project.ext {
     // Google Stuffs
     supportPackageVersion = "25.0.0"
 
+    REBOUND_VERSION = "0.3.8"
     FRESCO_VERSION = "0.14.1"
     butterknife_version = "7.0.1"
 

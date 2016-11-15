@@ -70,6 +70,8 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
 
 
+    compile "com.facebook.rebound:rebound:${REBOUND_VERSION}"
+
     compile project(':EaseInterpolatorLib')
     compile project(':SwipeLayoutLibrary')
     compile project(':PhotoPicker')
@@ -93,6 +95,4 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.17'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
-    compile 'com.android.support:support-v4:25.0.0'
-    compile 'com.android.support:appcompat-v7:25.0.0'
 }

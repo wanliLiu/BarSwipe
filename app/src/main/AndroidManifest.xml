@@ -73,7 +73,7 @@
         <activity
             android:name=".MainActivity"
             android:description="@string/des_base"
-            android:icon="@mipmap/icon"
+            android:icon="@drawable/icon"
             android:label="滑动删除--main" />
         <activity android:name=".SecondActivity" />
         <activity android:name=".ThirdActivity" />
@@ -85,7 +85,7 @@
         <activity
             android:name=".TrignalActivity"
             android:description="@string/des_Test"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="倾斜Textview" />
 
         <service android:name=".FloatView.FloatWindowService" />
@@ -93,53 +93,53 @@
         <activity
             android:name=".Scroller.ScrollerActivity"
             android:description="@string/str_scroller"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="Scroller学习" />
         <activity
             android:name=".Scroller.MultiScreenActivity"
             android:description="@string/str_scroller1"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="Scroller进一步学习" />
         <activity
             android:name=".snapscrollview.ProductDetailActivity"
             android:description="@string/str_prode"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="商品详情学习" />
         <activity
             android:name=".animation.EaseInterpolator.MainActivityAnimation"
             android:description="@string/str_ainimation"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="EaseAnimation学习" />
         <activity android:name=".animation.collect.ExampleActivity" />
         <activity
             android:name=".animation.collect.MyActivity"
             android:description="@string/str_collectAnimation"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="Animation使用集合学习" />
         <activity
             android:name=".DragGridView.gridview.MainActivityDragGridView"
             android:description="@string/str_drage"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="DragGridView 学习" />
         <activity
             android:name=".DragGridView.custom.DraggableGridViewSampleActivity"
             android:description="@string/str_ExpanAbleTextView1"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="DraggableGridView学习" />
         <activity
             android:name=".ExpandableTextView.DemoActivity"
             android:description="@string/str_ExpanAbleTextView"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="ExpandableTextView 学习" />
         <activity
             android:name=".WebView.AdvanceWebViewMainActivity"
             android:description="@string/str_AdvenceView"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="AdvanceWebView 学习" />
         <activity
             android:name=".ViewDragHelper.ViewDragHelperStudyActivity"
             android:description="@string/str_viewDrageHelper"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="ViewDragHelper学习" />
         <activity
             android:name=".SwipeLayout.GridViewExample"
@@ -159,31 +159,31 @@
         <activity
             android:name=".SwipeLayout.MyActivity"
             android:description="@string/str_swipeLayout"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="万能SwipeLayout学习"
             android:theme="@style/AppBeaseTitle" />
 
         <!-- <activity -->
         <!-- android:name=".Test.TestDrawActivity" -->
         <!-- android:description="@string/str_swipeLayout" -->
-        <!-- android:icon="@mipmap/ic_launcher" -->
+        <!-- android:icon="@drawable/ic_launcher" -->
         <!-- android:label="自定义 绘制" /> -->
 
         <activity
             android:name=".Fresco.FrescoStudyActivity"
             android:description="@string/str_fresco"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="Facebook Fresco 学习" />
         <activity android:name=".PicCache.AlbumActivity" />
         <activity
             android:name=".PicCache.PicMainActivity"
             android:description="@string/str_multi"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="自己写图片缓存 学习" />
         <activity
             android:name=".materials.MainActivity_Material"
             android:description="@string/str_material"
-            android:icon="@mipmap/ic_launcher_material"
+            android:icon="@drawable/ic_launcher_material"
             android:label="Materials Design"
             android:launchMode="singleTop"
             android:theme="@style/AppThemeMaterial" />
@@ -193,7 +193,7 @@
         <activity
             android:name=".draweePhotoView.activity.MainActivityPhoto"
             android:description="@string/str_fresco_photoview"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="Fresco photoview gif不能放"
             android:theme="@style/AppThemePhoto" />
         <activity
@@ -202,7 +202,7 @@
         <activity
             android:name=".PhotoDraweeView.example.SingleActivity"
             android:description="@string/str_fresco_photoview1"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="PhotoDraweeView  这个可以放gif"
             android:theme="@style/AppThemePhotDrawee" />
         <activity
@@ -211,17 +211,17 @@
         <activity
             android:name=".jsWebview.jsbridge.demo.MainActivityJS"
             android:description="@string/str_jsWeb"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="JSWebview 看下" />
         <activity
             android:name=".luban.MainActivity_luban"
             android:description="@string/str_luban"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@drawable/ic_launcher"
             android:label="LuBan 模仿wechat的图片压缩算法" />
         <activity
             android:name=".photopicker.MainActivity_photo"
             android:description="@string/str_luban"
-            android:icon="@mipmap/ic_launcher_photo"
+            android:icon="@drawable/ic_launcher_photo"
             android:label="PhotoPicker 防微信图片选择" />
         <activity
             android:name="me.iwf.photopicker.PhotoPickerActivity"
@@ -301,7 +301,13 @@
             android:icon="@drawable/ic_launcher"
             android:label="Fresco Porcessors" />
         <activity android:name=".fram.CustomBehaviorActivity" />
-        <activity android:name=".GridLayoutStudy"/>
+        <activity android:name=".GridLayoutStudy" />
+        <activity
+            android:name=".rebound.ReboundMainActivity"
+            android:description="@string/str_rebound"
+            android:icon="@drawable/rebound_icon"
+            android:label="Rebound Animation" />
+        <activity android:name=".rebound.app.PlaygroundActivity" />
     </application>
 
 </manifest>
