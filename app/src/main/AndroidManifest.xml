@@ -307,6 +307,11 @@
             android:description="@string/str_rebound"
             android:icon="@drawable/rebound_icon"
             android:label="Rebound Animation" />
+
+        <activity android:name=".marquee.app.MarqueeMainActivity"
+            android:description="@string/str_marquee"
+            android:icon="@drawable/ic_launcher"
+            android:label="MarqueLayout 学习"/>
     </application>
 
 </manifest>

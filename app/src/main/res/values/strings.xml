@@ -91,6 +91,7 @@
     <string name="str_newFramge">1.CoordinatorLayout Behavior 学习，还没看\n在这里尝试新搭建Android框架,所有需要测试的工作</string>
     <string name="str_processors">freso 各种processor 图片预处理</string>
     <string name="str_rebound">还没看\n SpringScrollViewExample的点击事件有问题--1.Rebound 各种demo 参考</string>
+    <string name="str_marquee">还没看\n 布局移动，left up right down 方向</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
