@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.Toast;
 
 import com.barswipe.DragGridView.gridview.MainActivityDragGridView;
 import com.barswipe.Scroller.ScrollerActivity;
@@ -83,6 +86,7 @@ public class MainActivity extends BaseActivity {
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
+                        showToastFullscreen();
                         startActivity(new Intent(MainActivity.this, MainActivityDragGridView.class));
                     }
                 });
@@ -140,4 +144,17 @@ public class MainActivity extends BaseActivity {
         Crouton.cancelAllCroutons();
     }
 
+
+    private void showToastFullscreen() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View layout = inflater.inflate(R.layout.test_toast_fullscreen, null, false);
+
+        Toast mToast = new Toast(this);
+        // 设置Toast的位置
+        mToast.setGravity(Gravity.FILL, 0, 0);
+        mToast.setDuration(Toast.LENGTH_LONG);
+        mToast.setView(layout);
+
+        mToast.show();
+    }
 }
