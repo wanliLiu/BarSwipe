@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#cc000000"
+
+    android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
     <TextView
@@ -9,6 +10,20 @@
         android:layout_gravity="center"
         android:textSize="20sp"
         android:textColor="#ffffff"
-        android:text="我在中间，am i"
+        android:text="Toast Dialog 全屏我在中间，am i"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:id="@+id/button7" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:id="@+id/button8" />
 </FrameLayout>

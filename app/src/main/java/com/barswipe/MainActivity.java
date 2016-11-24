@@ -1,5 +1,6 @@
 package com.barswipe;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -156,5 +157,11 @@ public class MainActivity extends BaseActivity {
         mToast.setView(layout);
 
         mToast.show();
+
+        Dialog dialog = new Dialog(this, R.style.Dialog_Fullscreen);
+        dialog.setContentView(R.layout.test_toast_fullscreen);
+        dialog.show();
     }
+
+
 }

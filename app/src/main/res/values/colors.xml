@@ -36,4 +36,6 @@
     <color name="pressState">#55FF4081</color>
     <color name="textColorPrimary">@android:color/white</color>
 
+    <color name="color_choujiang">#cc000000</color>
+
 </resources>
