@@ -312,6 +312,7 @@
             android:description="@string/str_marquee"
             android:icon="@drawable/ic_launcher"
             android:label="MarqueLayout 学习"/>
+        <activity android:name=".Test.TestDrawActivity"/>
     </application>
 
 </manifest>

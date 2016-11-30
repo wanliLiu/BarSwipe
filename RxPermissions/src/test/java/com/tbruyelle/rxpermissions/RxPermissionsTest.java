@@ -63,6 +63,7 @@ public class RxPermissionsTest {
         MockitoAnnotations.initMocks(this);
         when(mCtx.getApplicationContext()).thenReturn(mCtx);
         mRxPermissions = spy(new RxPermissions(mCtx));
+//        mRxPermissions.setLogging(true);
         RxPermissions.sSingleton = mRxPermissions;
         doNothing().when(mRxPermissions).startShadowActivity(any(String[].class));
         // Default deny all permissions
