@@ -5,4 +5,49 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
+    <string name="str_permission_grant_needed">你需要在“设置-运用-Vae-权限管理”中开启</string>
+    <string name="str_permission_conform">去设置</string>
+    <string name="str_permission_cancle">取消</string>
+
+    <!--******************************************************单个，提示**************************************************************************-->
+    <!-- 日历 -->
+    <string name="str_permission_android.permission_group.CALENDAR">日历权限，开通后你可以使用许嵩-行程的提醒功能。</string>
+    <!-- 相机 -->
+    <string name="str_permission_android.permission_group.CAMERA">相机权限，开通后你可以通过Vae进行照相并发布图片。</string>
+    <!-- 通讯录 -->
+    <string name="str_permission_android.permission_group.CONTACTS">联系人权限。</string>
+    <!-- 位置信息 -->
+    <string name="str_permission_android.permission_group.LOCATION">位置信息权限，开通后可以知道离你附近的V粉有哪些。</string>
+    <!-- 麦克风 -->
+    <string name="str_permission_android.permission_group.MICROPHONE">麦克风权限，开通后可以用语音和V粉们聊天。</string>
+    <!-- 电话 -->
+    <string name="str_permission_android.permission_group.PHONE">电话权限，这样可以更好的保护你的账号安全。</string>
+    <!-- 传感器 -->
+    <string name="str_permission_android.permission_group.SENSORS">传感器权限。</string>
+    <!-- 短信 -->
+    <string name="str_permission_android.permission_group.SMS">短信权限，谨慎使用。</string>
+    <!-- 存储 -->
+    <string name="str_permission_android.permission_group.STORAGE">储存空间权限，开通后你可以更好的使用Vae发布图片功能。</string>
+
+    <!--******************************************************多个，提示**************************************************************************-->
+
+    <!-- 日历 -->
+    <string name="str_permission_multe_android.permission_group.CALENDAR">日历</string>
+    <!-- 相机 -->
+    <string name="str_permission_multe_android.permission_group.CAMERA">相机</string>
+    <!-- 通讯录 -->
+    <string name="str_permission_multe_android.permission_group.CONTACTS">通讯录</string>
+    <!-- 位置信息 -->
+    <string name="str_permission_multe_android.permission_group.LOCATION">位置信息</string>
+    <!-- 麦克风 -->
+    <string name="str_permission_multe_android.permission_group.MICROPHONE">麦克风</string>
+    <!-- 电话 -->
+    <string name="str_permission_multe_android.permission_group.PHONE">电话</string>
+    <!-- 传感器 -->
+    <string name="str_permission_multe_android.permission_group.SENSORS">传感器</string>
+    <!-- 短信 -->
+    <string name="str_permission_multe_android.permission_group.SMS">短信权限，谨慎使用</string>
+    <!-- 存储 -->
+    <string name="str_permission_multe_android.permission_group.STORAGE">储存空间</string>
 </resources>

@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
@@ -105,25 +106,30 @@ public class LaunchActivity extends BaseActivity {
                 .throttleFirst(ViewConfiguration.getDoubleTapTimeout(), TimeUnit.MILLISECONDS)
                 .subscribe(new Action1<Integer>() {
                     @Override
-                    public void call(Integer position) {
-                        switch (position) {
-                            case 0:
-                                RxJavaCreatingObservables();
-                                break;
-                            case 1:
-                                RxJavaTransformingObservables();
-                                break;
-                            case 2:
-                                RxJavaFilteringObservables();
-                                break;
-                            case 3:
-                                RxJavaCombiningObservables();
-                                break;
-                        }
-                        ActivityInfo info = adapter.getItem(position);
-                        Intent intent = new Intent();
-                        intent.setClassName(getPackageName(), info.name);
-                        startActivity(intent);
+                    public void call(final Integer position) {
+                        RxPermissions.getInstance(LaunchActivity.this)
+                                .request(
+                                        Manifest.permission.CAMERA,
+                                        Manifest.permission.SYSTEM_ALERT_WINDOW,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.BODY_SENSORS,
+                                        Manifest.permission.WRITE_CALENDAR,
+                                        Manifest.permission.READ_PHONE_STATE,
+                                        Manifest.permission.SEND_SMS,
+                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.WRITE_CONTACTS,
+                                        Manifest.permission.RECORD_AUDIO,
+                                        Manifest.permission.WRITE_SETTINGS
+                                )
+                                .subscribe(new Action1<Boolean>() {
+                                    @Override
+                                    public void call(Boolean aBoolean) {
+                                        if (aBoolean) {
+                                            dealAciont(position);
+                                        } else
+                                            Toast.makeText(LaunchActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 });
 
@@ -133,6 +139,31 @@ public class LaunchActivity extends BaseActivity {
 
         MakeItRunOnUIThread();
 
+    }
+
+    /**
+     * @param position
+     */
+    private void dealAciont(int position) {
+        switch (position) {
+            case 0:
+                RxJavaCreatingObservables();
+                break;
+            case 1:
+                RxJavaTransformingObservables();
+                break;
+            case 2:
+                RxJavaFilteringObservables();
+                break;
+            case 3:
+                RxJavaCombiningObservables();
+                break;
+        }
+
+        ActivityInfo info = adapter.getItem(position);
+        Intent intent = new Intent();
+        intent.setClassName(getPackageName(), info.name);
+        startActivity(intent);
     }
 
     /**
@@ -171,9 +202,17 @@ public class LaunchActivity extends BaseActivity {
                     public void onClick(@NonNull DialogInterface dialog, int which) {
                         RxPermissions.getInstance(LaunchActivity.this)
                                 .setLogging(true)
-                                .request(Manifest.permission.CAMERA,
-                                        Manifest.permission.BODY_SENSORS,
+                                .request(
+                                        Manifest.permission.CAMERA,
                                         Manifest.permission.SYSTEM_ALERT_WINDOW,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.BODY_SENSORS,
+                                        Manifest.permission.WRITE_CALENDAR,
+                                        Manifest.permission.READ_PHONE_STATE,
+                                        Manifest.permission.SEND_SMS,
+                                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                        Manifest.permission.WRITE_CONTACTS,
+                                        Manifest.permission.RECORD_AUDIO,
                                         Manifest.permission.WRITE_SETTINGS)
                                 .subscribe(new Action1<Boolean>() {
                                     @Override
@@ -723,7 +762,6 @@ public class LaunchActivity extends BaseActivity {
      * http://blog.chinaunix.net/uid-20771867-id-5187376.html
      */
     private void RxJavaCreatingObservables() {
-
         //Map
         Observable.just("Hellp Map Operator")
                 .map(new Func1<String, Integer>() {
