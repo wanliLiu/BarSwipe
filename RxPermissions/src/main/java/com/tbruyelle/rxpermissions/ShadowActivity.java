@@ -23,7 +23,6 @@ public class ShadowActivity extends EnsureSameProcessActivity {
     private final int DangerousPermissions_request_code = 32;
     private final int SystemAlerWindow_request_code = 33;
     private final int WriteSetting_request_code = 34;
-    private final int OpenAppDetailSetting_managePermission = 35;
 
     private ArrayList<String> specialpermissions, permissions;
     private int[] specialGrantResult, grantResults;
@@ -173,6 +172,15 @@ public class ShadowActivity extends EnsureSameProcessActivity {
     }
 
     /**
+     *
+     */
+    private void dealNotShowAgain() {
+        if (permissions != null)
+            RxPermissions.getInstance(this).onRequestPermissionsResultFailure(DangerousPermissions_request_code, this, permissions.toArray(new String[permissions.size()]));
+        finish();
+    }
+
+    /**
      * 在不在提示的情况下，给出合理的解释
      *
      * @param content
@@ -187,7 +195,8 @@ public class ShadowActivity extends EnsureSameProcessActivity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, OpenAppDetailSetting_managePermission);
+                        startActivity(intent);
+                        dealNotShowAgain();
                     }
                 })
                 .setNegativeButton(R.string.str_permission_cancle, new DialogInterface.OnClickListener() {
@@ -241,28 +250,17 @@ public class ShadowActivity extends EnsureSameProcessActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (specialpermissions == null || specialGrantResult == null) {
-            if (permissions != null)
-                RxPermissions.getInstance(this).onRequestPermissionsResultFailure(DangerousPermissions_request_code, this, permissions.toArray(new String[permissions.size()]));
-            finish();
-            return;
+        if (requestCode == SystemAlerWindow_request_code) {
+            specialGrantResult[index] = Settings.canDrawOverlays(this) ? PackageManager.PERMISSION_GRANTED : PackageManager.PERMISSION_DENIED;
+        } else if (requestCode == WriteSetting_request_code) {
+            specialGrantResult[index] = Settings.System.canWrite(this) ? PackageManager.PERMISSION_GRANTED : PackageManager.PERMISSION_DENIED;
         }
 
-        if (requestCode == OpenAppDetailSetting_managePermission) {
+        index++;
+        if (index == specialpermissions.size()) {
             requestPerm();
         } else {
-            if (requestCode == SystemAlerWindow_request_code) {
-                specialGrantResult[index] = Settings.canDrawOverlays(this) ? PackageManager.PERMISSION_GRANTED : PackageManager.PERMISSION_DENIED;
-            } else if (requestCode == WriteSetting_request_code) {
-                specialGrantResult[index] = Settings.System.canWrite(this) ? PackageManager.PERMISSION_GRANTED : PackageManager.PERMISSION_DENIED;
-            }
-
-            index++;
-            if (index == specialpermissions.size()) {
-                requestPerm();
-            } else {
-                startRequest(index);
-            }
+            startRequest(index);
         }
     }
 
