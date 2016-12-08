@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -285,13 +286,14 @@ public class RxPermissions {
         return mCtx.getPackageManager().isPermissionRevokedByPolicy(permission, mCtx.getPackageName());
     }
 
-    void onRequestPermissionsResult(int requestCode,
-                                    String permissions[], int[] grantResults) {
-        onRequestPermissionsResult(requestCode, permissions, grantResults, new boolean[permissions.length]);
-    }
 
-    void onRequestPermissionsResult(int requestCode,
-                                    String permissions[], int[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
+    /**
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     * @param shouldShowRequestPermissionRationale
+     */
+    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
         for (int i = 0, size = permissions.length; i < size; i++) {
             log("onRequestPermissionsResult  " + permissions[i]);
             // Find the corresponding subject
@@ -305,5 +307,22 @@ public class RxPermissions {
             subject.onNext(new Permission(permissions[i], granted, shouldShowRequestPermissionRationale[i]));
             subject.onCompleted();
         }
+    }
+
+    /**
+     * @param requestCode
+     * @param activity
+     * @param permissions
+     */
+    void onRequestPermissionsResultFailure(int requestCode, Activity activity, String[] permissions) {
+        int[] grantResults = new int[permissions.length];
+        boolean[] shouldShowRequestPermissionRationale = new boolean[permissions.length];
+
+        for (int i = 0; i < permissions.length; i++) {
+            grantResults[i] = PackageManager.PERMISSION_DENIED;
+            shouldShowRequestPermissionRationale[i] = ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i]);
+        }
+
+        onRequestPermissionsResult(requestCode, permissions, grantResults, shouldShowRequestPermissionRationale);
     }
 }

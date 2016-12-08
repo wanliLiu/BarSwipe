@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -24,7 +25,7 @@ public class ShadowActivity extends EnsureSameProcessActivity {
     private final int WriteSetting_request_code = 34;
     private final int OpenAppDetailSetting_managePermission = 35;
 
-    private List<String> specialpermissions, permissions;
+    private ArrayList<String> specialpermissions, permissions;
     private int[] specialGrantResult, grantResults;
 
     private int index = -1;
@@ -34,6 +35,8 @@ public class ShadowActivity extends EnsureSameProcessActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
             handleIntent(getIntent());
+        } else {
+            RestoreInstanceState(savedInstanceState);
         }
     }
 
@@ -181,6 +184,7 @@ public class ShadowActivity extends EnsureSameProcessActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
                         startActivityForResult(intent, OpenAppDetailSetting_managePermission);
@@ -236,6 +240,13 @@ public class ShadowActivity extends EnsureSameProcessActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (specialpermissions == null || specialGrantResult == null) {
+            if (permissions != null)
+                RxPermissions.getInstance(this).onRequestPermissionsResultFailure(DangerousPermissions_request_code, this, permissions.toArray(new String[permissions.size()]));
+            finish();
+            return;
+        }
 
         if (requestCode == OpenAppDetailSetting_managePermission) {
             requestPerm();
@@ -311,6 +322,36 @@ public class ShadowActivity extends EnsureSameProcessActivity {
             if (isAllCanShowRequestPermissionRationale(permissions)) {
                 dealResult();
             }
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putInt("index", index);
+        outState.putIntArray("specialGrantResult", specialGrantResult);
+        outState.putIntArray("grantResults", grantResults);
+        outState.putStringArrayList("specialpermissions", specialpermissions);
+        outState.putStringArrayList("permissions", permissions);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        RestoreInstanceState(savedInstanceState);
+    }
+
+    /**
+     * @param bundle
+     */
+    private void RestoreInstanceState(Bundle bundle) {
+        if (bundle != null) {
+            index = bundle.getInt("index", -1);
+            specialGrantResult = bundle.getIntArray("specialGrantResult");
+            grantResults = bundle.getIntArray("grantResults");
+            specialpermissions = bundle.getStringArrayList("specialpermissions");
+            permissions = bundle.getStringArrayList("permissions");
         }
     }
 }
