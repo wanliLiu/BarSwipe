@@ -11,6 +11,7 @@ dependencies {
     compile "com.facebook.fresco:animated-gif:${FRESCO_VERSION}"
     compile "com.facebook.fresco:webpsupport:${FRESCO_VERSION}"
     compile "com.facebook.fresco:animated-webp:${FRESCO_VERSION}"
+    compile 'com.android.support:support-annotations:25.0.0'
 }
 
 android {

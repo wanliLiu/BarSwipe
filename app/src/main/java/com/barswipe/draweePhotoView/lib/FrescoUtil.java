@@ -139,7 +139,7 @@ public class FrescoUtil {
         ImageRequestBuilder imageRequestBuilder = ImageRequestBuilder.newBuilderWithSource(Uri.parse(loadUri));
         imageRequestBuilder.setLowestPermittedRequestLevel(ImageRequest.RequestLevel.DISK_CACHE);
         CacheKey cacheKey = MyCacheKeyFactory.getInstance().getEncodedCacheKey(imageRequestBuilder.build(), null);
-        BinaryResource resource = ImagePipelineFactory.getInstance().getMainDiskStorageCache().getResource(cacheKey);
+        BinaryResource resource = ImagePipelineFactory.getInstance().getMainFileCache().getResource(cacheKey);
         if (resource != null) {
             return ((FileBinaryResource) resource).getFile();
         }

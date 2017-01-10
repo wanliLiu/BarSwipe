@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.barswipe.draweePhotoView.lib.ImagePipelineConfigUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,8 @@ public class Myapplication extends Application {
         object.put("UseLogs", getRecordDatdsa());
         object.put("KeyID", "Array");
         Log.e("json2", JSON.toJSONString(object));
+
+        FlowManager.init(this);
     }
 
     /**
