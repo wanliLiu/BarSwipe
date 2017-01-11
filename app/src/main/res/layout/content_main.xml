@@ -3,10 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -53,15 +49,12 @@
     <android.support.v7.widget.CardView
         android:layout_width="100dp"
         android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="60dp"
-        android:layout_toRightOf="@id/temp"
+        android:layout_above="@id/temp"
         app:cardBackgroundColor="#ffffff"
         app:cardCornerRadius="15dp"
-        app:cardUseCompatPadding="true"
+        app:cardElevation="8dp"
         app:cardPreventCornerOverlap="true"
-        app:cardElevation="8dp">
+        app:cardUseCompatPadding="true">
 
         <ImageView
             android:layout_width="match_parent"
@@ -71,5 +64,28 @@
 
     </android.support.v7.widget.CardView>
 
+    <com.barswipe.widget.AutoScaleTextView
+        android:id="@+id/temp55"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_toRightOf="@id/bt_delete"
+        android:singleLine="true"
+        android:textColor="@color/red"
+        android:text="不是巴达克数量的开始了打开顺利的"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/temp55"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_toRightOf="@id/bt_delete"
+        android:textColor="@color/red"
+        android:text="不是巴达克数量的开始了打开顺利的"
+        android:textSize="16sp" />
 
 </RelativeLayout>
