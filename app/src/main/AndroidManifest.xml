@@ -308,11 +308,31 @@
             android:icon="@drawable/rebound_icon"
             android:label="Rebound Animation" />
 
-        <activity android:name=".marquee.app.MarqueeMainActivity"
+        <activity
+            android:name=".marquee.app.MarqueeMainActivity"
             android:description="@string/str_marquee"
             android:icon="@drawable/ic_launcher"
-            android:label="MarqueLayout 学习"/>
-        <activity android:name=".Test.TestDrawActivity"/>
+            android:label="MarqueLayout 学习" />
+        <activity android:name=".Test.TestDrawActivity" />
+
+        <activity
+            android:name=".arylayout.MainActivity_arclayout"
+            android:description="@string/str_arclayout"
+            android:icon="@drawable/ic_launcher_arclayout"
+            android:label="ArcLayout"
+            android:theme="@style/AppThemeArcLayout" />
+        <activity
+            android:name=".arylayout.DemoActivity"
+            android:theme="@style/AppThemeArcLayout" />
+        <activity
+            android:name=".arylayout.DemoFreeAngleActivity"
+            android:theme="@style/AppThemeArcLayout" />
+        <activity
+            android:name=".arylayout.DemoLikePathActivity"
+            android:theme="@style/AppThemeArcLayout" />
+        <activity
+            android:name=".arylayout.DemoLikeTumblrActivity"
+            android:theme="@style/AppThemeArcLayout" />
     </application>
 
 </manifest>

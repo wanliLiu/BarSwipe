@@ -93,6 +93,7 @@ dependencies {
     compile project(':emojiLibrary')
     compile project(':emojiAllLibrary')
     compile project(':RxPermissions')
+    compile project(':ArcLayoutLibrary')
 
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"

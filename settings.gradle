@@ -1,1 +1,1 @@
-include ':app', ':EaseInterpolatorLib', ':SwipeLayoutLibrary', ':PhotoPicker', ':ScaleImagelibrary', ':emojiLibrary', ':emojiAllLibrary', ':RxPermissions', ':PureZhiHu'
+include ':app', ':EaseInterpolatorLib', ':SwipeLayoutLibrary', ':PhotoPicker', ':ScaleImagelibrary', ':emojiLibrary', ':emojiAllLibrary', ':RxPermissions', ':PureZhiHu', ':ArcLayoutLibrary'

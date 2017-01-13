@@ -5,5 +5,7 @@
     <item name="uriPath" type="id" />
     <item name="expand_collapse" type="id" />
 
+    <item name="arc_layout" type="id"/>
+    <item name="note_text" type="id"/>
 
 </resources>
