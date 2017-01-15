@@ -118,6 +118,7 @@ public class DemoLikePathActivity extends AppCompatActivity implements View.OnCl
     animSet.setDuration(400);
     animSet.setInterpolator(new OvershootInterpolator());
     animSet.playTogether(animList);
+    animSet.playSequentially();
     animSet.start();
   }
 
@@ -133,7 +134,8 @@ public class DemoLikePathActivity extends AppCompatActivity implements View.OnCl
     AnimatorSet animSet = new AnimatorSet();
     animSet.setDuration(400);
     animSet.setInterpolator(new AnticipateInterpolator());
-    animSet.playTogether(animList);
+//    animSet.playTogether(animList);
+    animSet.playSequentially(animList);
     animSet.addListener(new AnimatorListenerAdapter() {
       @Override
       public void onAnimationEnd(Animator animation) {
