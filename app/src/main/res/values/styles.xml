@@ -206,6 +206,7 @@
     <!-- Base application theme. -->
     <style name="AppThemeArcLayout" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primaryarclayout</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Item" parent="">

@@ -333,6 +333,13 @@
         <activity
             android:name=".arylayout.DemoLikeTumblrActivity"
             android:theme="@style/AppThemeArcLayout" />
+
+        <activity
+            android:name=".volume.MainActivity_Volume"
+            android:description="@string/str_volume"
+            android:icon="@drawable/ic_launcher"
+            android:label="音频 学习"
+            android:theme="@style/AppThemeArcLayout" />
     </application>
 
 </manifest>
