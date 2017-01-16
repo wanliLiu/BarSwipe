@@ -20,7 +20,7 @@ import android.view.View;
 
 class Utils {
 
-  static final boolean DEBUG = false; //Set to true only when developing
+  static final boolean DEBUG = true; //Set to true only when developing
 
   private Utils() {}
 

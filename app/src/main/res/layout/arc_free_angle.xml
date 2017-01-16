@@ -13,6 +13,7 @@
       app:arc_color="@color/scrim"
       app:arc_freeAngle="true"
       app:arc_origin="center"
+      android:background="@color/__picker_item_photo_border_selected"
       app:arc_radius="@dimen/layout_radius_small"
       >
 

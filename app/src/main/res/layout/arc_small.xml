@@ -9,6 +9,7 @@
       android:id="@id/arc_layout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:background="@color/__picker_item_photo_border_selected"
       app:arc_axisRadius="@dimen/layout_child_offset_large"
       app:arc_origin="center"
       app:arc_radius="@dimen/layout_radius_large"
