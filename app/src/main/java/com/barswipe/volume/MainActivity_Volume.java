@@ -113,7 +113,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
             stopTimer();
 
             if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
-                size.append("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
+                size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
             }
         }
 
@@ -144,7 +144,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
             mediarecorder.setVisibility(View.VISIBLE);
 
             if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
-                size.append("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
+                size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
             }
         }
 
