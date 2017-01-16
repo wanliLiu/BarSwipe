@@ -43,6 +43,15 @@
         android:textColor="#ff0000"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="文件大小"
+        android:textColor="#ff0000"
+        android:textSize="18sp" />
+
     <Button
         android:id="@+id/play"
         android:layout_width="wrap_content"

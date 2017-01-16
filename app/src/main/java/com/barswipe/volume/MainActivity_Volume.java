@@ -2,7 +2,6 @@ package com.barswipe.volume;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -27,15 +26,13 @@ import rx.functions.Action1;
 
 public class MainActivity_Volume extends AppCompatActivity implements View.OnClickListener {
 
-    File extDir = Environment.getExternalStorageDirectory();
-
     public static MainActivity_Volume instance;
 
     public final String MEDIARECORDER = "mediarecorder";
 
     public final String AUDIORECORDER = "audiorecorder";
 
-    public TextView duration, voice;
+    public TextView duration, voice,size;
 
     private Button audiorecorder, mediarecorder, play;
 
@@ -65,6 +62,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         play = (Button) findViewById(R.id.play);
         audiorecorder = (Button) findViewById(R.id.audiorecorder);
         mediarecorder = (Button) findViewById(R.id.mediarecorder);
+        size = (TextView)findViewById(R.id.size);
         audiorecorder.setOnClickListener(this);
         mediarecorder.setOnClickListener(this);
         play.setOnClickListener(this);
@@ -107,7 +105,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                         }
                     });
                 }
-            }, 0, 1000);
+            }, 0, 500);
             MediaRecorderUtil.startRecordering(filePath);
         } else {
             MediaRecorderUtil.stopRecordering();
@@ -115,7 +113,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
             stopTimer();
 
             if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
-                voice.append("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
+                size.append("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
             }
         }
 
@@ -125,7 +123,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         if (!recordering) {
             recordering = true;
             mediarecorder.setVisibility(View.GONE);
-            filePath = new File(extDir, AUDIORECORDER + "_" + System.currentTimeMillis() + "").getAbsolutePath() + ".pcm";
+            filePath = FileUtil.getDownLoadFilePath(this, MEDIARECORDER + "_" + System.currentTimeMillis() + ".pcm").getAbsolutePath();
             startTimer();
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -144,6 +142,10 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
             stopTimer();
             AudioRecorderUtil.stopRecording();
             mediarecorder.setVisibility(View.VISIBLE);
+
+            if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
+                size.append("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
+            }
         }
 
     }

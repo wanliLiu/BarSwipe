@@ -19,10 +19,11 @@ public class AudioRecorderUtil {
 
     private static Object mLock = new Object();
 
-    private static boolean first = true;
+    private static boolean first = true, isRuning = false;
 
     private static AudioRecord audioRecord;
 
+    private static Timer timer;
     private static String currentFilePath;
 
     // 音频获取源
@@ -47,6 +48,14 @@ public class AudioRecorderUtil {
     }
 
     public static void stopRecording() {
+        first = true;
+        isRuning = false;
+
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+
         if (audioRecord != null) {
             try {
                 audioRecord.stop();
@@ -182,29 +191,33 @@ public class AudioRecorderUtil {
                     e.printStackTrace();
                 }
             }
-            Timer timer = new Timer();
-            if (first)
+            if (first) {
+                first = false;
+                isRuning = true;
+                timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        long v = 0;
-                        // 将 buffer 内容取出，进行平方和运算
-                        for (int i = 0; i < audiodata.length; i++) {
-                            v += audiodata[i] * audiodata[i];
-                        }
-                        // 平方和除以数据总长度，得到音量大小。
-                        double mean = v / (double) readsize;
-                        final double volume = 10 * Math.log10(mean);
-                        MainActivity_Volume.instance.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                MainActivity_Volume.instance.voice.setText(volume + "");
+                        if (isRuning) {
+                            long v = 0;
+                            // 将 buffer 内容取出，进行平方和运算
+                            for (int i = 0; i < audiodata.length; i++) {
+                                v += audiodata[i] * audiodata[i];
                             }
-                        });
-                    }
-                }, 0, 1000);
-            first = false;
+                            // 平方和除以数据总长度，得到音量大小。
+                            double mean = v / (double) readsize;
+                            final double volume = 10 * Math.log10(mean);
+                            MainActivity_Volume.instance.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MainActivity_Volume.instance.voice.setText(volume + "");
+                                }
+                            });
+                        }
 
+                    }
+                }, 0, 500);
+            }
         }
         try {
             fos.close();// 关闭写入流
