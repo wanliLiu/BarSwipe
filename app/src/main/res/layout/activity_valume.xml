@@ -2,64 +2,96 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:gravity="center"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/mediarecorder"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#bebebe"
-        android:padding="10dp"
-        android:text="MediaRecorder"
-        android:textSize="18sp" />
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-    <Button
-        android:id="@+id/audiorecorder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="#bebebe"
-        android:padding="10dp"
-        android:text="AudioRecorder"
-        android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="录制的时间"
+            android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="准备就绪"
-        android:textColor="#ff0000"
-        android:textSize="18sp" />
+        <EditText
+            android:id="@+id/timeInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:inputType="number"
+            android:hint="点击输入录制的时间,以秒为单位"
+            android:textColorHint="@color/red"
+            android:textSize="15sp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/voice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="预备起..."
-        android:textColor="#ff0000"
-        android:textSize="18sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/size"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="文件大小"
-        android:textColor="#ff0000"
-        android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="#bebebe"
-        android:padding="10dp"
-        android:text="Play"
-        android:textSize="18sp" />
+        <Button
+            android:id="@+id/mediarecorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#bebebe"
+            android:padding="10dp"
+            android:text="MediaRecorder"
+            android:textSize="18sp" />
 
+        <Button
+            android:id="@+id/audiorecorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#bebebe"
+            android:padding="10dp"
+            android:text="AudioRecorder"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="准备就绪"
+            android:textColor="#ff0000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="预备起..."
+            android:textColor="#ff0000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="文件大小"
+            android:textColor="#ff0000"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#bebebe"
+            android:padding="10dp"
+            android:text="Play"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 </LinearLayout>
+
+

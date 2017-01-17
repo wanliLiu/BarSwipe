@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,15 +33,19 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
 
     public final String AUDIORECORDER = "audiorecorder";
 
-    public TextView duration, voice,size;
+    public TextView duration, voice, size;
+    private EditText timeInput;
 
     private Button audiorecorder, mediarecorder, play;
 
     public boolean recordering = false;
 
+    private int isMediaRecord = 1;
+
     private long originalTime = -1l;
 
     private String filePath;
+    private CountDownTimer countDownTimer;
 
     private Timer timer;
 
@@ -62,31 +67,57 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         play = (Button) findViewById(R.id.play);
         audiorecorder = (Button) findViewById(R.id.audiorecorder);
         mediarecorder = (Button) findViewById(R.id.mediarecorder);
-        size = (TextView)findViewById(R.id.size);
+        size = (TextView) findViewById(R.id.size);
         audiorecorder.setOnClickListener(this);
         mediarecorder.setOnClickListener(this);
         play.setOnClickListener(this);
+
+        timeInput = (EditText) findViewById(R.id.timeInput);
+        countDownTimer = new CountDownTimer() {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                duration.setText("录制倒计时" + millisUntilFinished / 1000 + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                if (isMediaRecord == 1) {
+                    MediaRecorderUtil.stopRecordering();
+                    audiorecorder.setVisibility(View.VISIBLE);
+                    stopTimer();
+                } else {
+                    stopTimer();
+                    AudioRecorderUtil.stopRecording();
+                    mediarecorder.setVisibility(View.VISIBLE);
+                }
+
+                if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
+                    size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
+                }
+            }
+        };
     }
 
     public void mediarecorder() {
         if (!recordering) {
+            isMediaRecord = 1;
             audiorecorder.setVisibility(View.GONE);
             filePath = FileUtil.getDownLoadFilePath(this, MEDIARECORDER + "_" + System.currentTimeMillis() + ".amr").getAbsolutePath();
             startTimer();
             timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (recordering) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                duration.setText(getTime());
-                            }
-                        });
-                    }
-                }
-            }, 0, 1);
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    if (recordering) {
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                duration.setText(getTime());
+//                            }
+//                        });
+//                    }
+//                }
+//            }, 0, 1);
 
             timer.schedule(new TimerTask() {
                 @Override
@@ -108,50 +139,51 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
             }, 0, 500);
             MediaRecorderUtil.startRecordering(filePath);
         } else {
-            MediaRecorderUtil.stopRecordering();
-            audiorecorder.setVisibility(View.VISIBLE);
-            stopTimer();
-
-            if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
-                size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
-            }
+//            MediaRecorderUtil.stopRecordering();
+//            audiorecorder.setVisibility(View.VISIBLE);
+//            stopTimer();
+//
+//            if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
+//                size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
+//            }
         }
 
     }
 
     public void audiorecorder() {
         if (!recordering) {
+            isMediaRecord = 2;
             recordering = true;
             mediarecorder.setVisibility(View.GONE);
             filePath = FileUtil.getDownLoadFilePath(this, MEDIARECORDER + "_" + System.currentTimeMillis() + ".pcm").getAbsolutePath();
             startTimer();
             timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            duration.setText(getTime());
-                        }
-                    });
-                }
-            }, 0, 1);
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            duration.setText(getTime());
+//                        }
+//                    });
+//                }
+//            }, 0, 1);
             AudioRecorderUtil.startRecordering(filePath);
         } else {
-            stopTimer();
-            AudioRecorderUtil.stopRecording();
-            mediarecorder.setVisibility(View.VISIBLE);
-
-            if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
-                size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
-            }
+//            stopTimer();
+//            AudioRecorderUtil.stopRecording();
+//            mediarecorder.setVisibility(View.VISIBLE);
+//
+//            if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
+//                size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(filePath));
+//            }
         }
 
     }
 
     private void startTimer() {
-        originalTime = System.currentTimeMillis();
+//        originalTime = System.currentTimeMillis();
         recordering = true;
     }
 
@@ -168,12 +200,26 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                     @Override
                     public void call(Boolean aBoolean) {
                         switch (v.getId()) {
-                            case R.id.mediarecorder:
+                            case R.id.mediarecorder: {
+                                if (TextUtils.isEmpty(timeInput.getText().toString())) {
+                                    Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 mediarecorder();
-                                break;
-                            case R.id.audiorecorder:
+                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
+                                countDownTimer.start();
+                            }
+                            break;
+                            case R.id.audiorecorder: {
+                                if (TextUtils.isEmpty(timeInput.getText().toString())) {
+                                    Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 audiorecorder();
-                                break;
+                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
+                                countDownTimer.start();
+                            }
+                            break;
                             case R.id.play:
                                 startPlaying();
                                 break;
