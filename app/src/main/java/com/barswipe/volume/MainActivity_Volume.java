@@ -1,10 +1,13 @@
 package com.barswipe.volume;
 
 import android.Manifest;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,6 +51,8 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
     private CountDownTimer countDownTimer;
 
     private Timer timer;
+
+    private Uri uri;
 
     private String getTime() {
         long time = System.currentTimeMillis() - originalTime;
@@ -96,6 +101,22 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                 }
             }
         };
+    }
+
+    private void startRecord() {
+        AudioRecordManager manager = AudioRecordManager.getInstance();
+        manager.setMaxVoiceDuration(Integer.parseInt(timeInput.getText().toString()));
+        manager.setListener(new AudioRecordManager.StateListener() {
+            @Override
+            public void onComplete(Uri path) {
+                uri = path;
+                audiorecorder.setVisibility(View.VISIBLE);
+                if (!TextUtils.isEmpty(path.getPath()) && new File(path.getPath()).exists()) {
+                    size.setText("\n文件大小：" + FileSizeUtil.getAutoFileOrFilesSize(path.getPath()));
+                }
+            }
+        });
+        manager.startRecord(this.getWindow().getDecorView());
     }
 
     public void mediarecorder() {
@@ -205,9 +226,10 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                                     Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                mediarecorder();
-                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
-                                countDownTimer.start();
+//                                mediarecorder();
+//                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
+//                                countDownTimer.start();
+                                startRecord();
                             }
                             break;
                             case R.id.audiorecorder: {
@@ -215,9 +237,11 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                                     Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                audiorecorder();
-                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
-                                countDownTimer.start();
+//                                audiorecorder();
+//                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
+//                                countDownTimer.start();
+
+                                startRecord();
                             }
                             break;
                             case R.id.play:
@@ -232,11 +256,22 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
 
 
     private void startPlaying() {
-        if (!TextUtils.isEmpty(filePath) && new File(filePath).exists())
-            MediaPlayerUtil.startPlaying(filePath.contains(".pcm") ? filePath.replace(".pcm", ".wav") : filePath);
+//        if (!TextUtils.isEmpty(filePath) && new File(filePath).exists())
+//            MediaPlayerUtil.startPlaying(filePath.contains(".pcm") ? filePath.replace(".pcm", ".wav") : filePath);
+        if (uri != null)
+            AudioPlayManager.getInstance().startPlay(this, uri, null);
     }
 
     public void toast(String content) {
         Toast.makeText(this, content, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (null != this.getCurrentFocus()) {
+            InputMethodManager mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            return mInputMethodManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.onTouchEvent(event);
     }
 }

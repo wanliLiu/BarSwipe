@@ -65,4 +65,6 @@
     <color name="path_green">#5FB336</color>
     <color name="path_purple">#49098A</color>
 
+    <color name="rc_voice_cancel"> #CC933432</color>
+
 </resources>
