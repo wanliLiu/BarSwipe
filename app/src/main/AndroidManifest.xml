@@ -340,6 +340,12 @@
             android:icon="@drawable/ic_launcher"
             android:label="音频 学习"
             android:theme="@style/AppThemeArcLayout" />
+
+        <activity
+            android:name=".web.WebSocketActivity"
+            android:description="@string/str_websccket"
+            android:icon="@drawable/ic_launcher"
+            android:label="Websocket 学习" />
     </application>
 
 </manifest>

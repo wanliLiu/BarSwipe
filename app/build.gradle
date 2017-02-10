@@ -80,6 +80,8 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:${retrofit2_version}"
     compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
 
+    compile "com.squareup.okhttp3:okhttp-ws:3.4.2"
+
     apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
@@ -94,6 +96,7 @@ dependencies {
     compile project(':emojiAllLibrary')
     compile project(':RxPermissions')
     compile project(':ArcLayoutLibrary')
+    compile project(':autobahn')
 
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"
