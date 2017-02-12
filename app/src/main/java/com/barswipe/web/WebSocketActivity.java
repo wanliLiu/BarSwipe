@@ -76,6 +76,29 @@ public class WebSocketActivity extends AppCompatActivity {
     private CheckBox select;
     private ImageView pic;
 
+//    AsyncHttpClient client  = new AsyncHttpClient()
+//            WebSocketClient client = new WebSocketClient() {
+//    @Override
+//    public void onOpen(ServerHandshake handshakedata) {
+//
+//    }
+//
+//    @Override
+//    public void onMessage(String message) {
+//
+//    }
+//
+//    @Override
+//    public void onClose(int code, String reason, boolean remote) {
+//
+//    }
+//
+//    @Override
+//    public void onError(Exception ex) {
+//
+//    }
+//};
+
     private final WebSocket mConnection = new WebSocketConnection();
     private okhttp3.ws.WebSocket webSocket;
 
@@ -188,8 +211,11 @@ public class WebSocketActivity extends AppCompatActivity {
                     String dstr = message.source().readByteString().utf8();
                     str = dstr;
                 }else{
-                    Bitmap b1itmap = BitmapFactory.decodeStream(message.byteStream());
-                    bitmap = b1itmap;
+                    byte[] data = message.source().readByteArray();
+                    if (data != null && data.length > 0){
+                        Bitmap b1itmap = BitmapFactory.decodeByteArray(data,0,data.length);
+                        bitmap = b1itmap;
+                    }
                 }
 
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
