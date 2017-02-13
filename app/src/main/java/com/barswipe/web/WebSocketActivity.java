@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,8 +38,14 @@ import android.widget.Toast;
 
 import com.barswipe.R;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -75,6 +82,10 @@ public class WebSocketActivity extends AppCompatActivity {
     static ScrollView mLogScroller;
     private CheckBox select;
     private ImageView pic;
+
+    private Button sendVolume;
+    private AudioPlay record, play;
+    private boolean isRecord = false;
 
 //    AsyncHttpClient client  = new AsyncHttpClient()
 //            WebSocketClient client = new WebSocketClient() {
@@ -152,8 +163,8 @@ public class WebSocketActivity extends AppCompatActivity {
         });
     }
 
-    Bitmap bitmap = null;
     String str = null;
+    byte[] data = null;
 
     /**
      *
@@ -163,11 +174,19 @@ public class WebSocketActivity extends AppCompatActivity {
         Request request = new Request.Builder().url(wsuri).build();
         WebSocketCall webSocketCall = WebSocketCall.create(mOkHttpClient, request);
         webSocketCall.enqueue(new WebSocketListener() {
-//            private final ExecutorService sendExecutor = Executors.newSingleThreadExecutor();
 
             @Override
             public void onOpen(okhttp3.ws.WebSocket webSomcket, Response response) {
                 webSocket = webSomcket;
+                if (record == null) {
+                    record = new AudioPlay();
+                    record.initRecord(webSocket);
+                }
+
+                if (play == null) {
+                    play = new AudioPlay().initTrack();
+                }
+
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
                     @Override
                     public void call() {
@@ -175,6 +194,7 @@ public class WebSocketActivity extends AppCompatActivity {
                         savePrefs();
                         mSendMessage.setEnabled(true);
                         mMessage.setEnabled(true);
+                        setButtonDisconnect();
                     }
                 });
             }
@@ -199,6 +219,47 @@ public class WebSocketActivity extends AppCompatActivity {
                 });
             }
 
+            //定义一个根据图片url获取InputStream的方法
+            public byte[] getBytes(InputStream is) throws IOException {
+                ByteArrayOutputStream outstream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024]; // 用数据装
+                int len = -1;
+                while ((len = is.read(buffer)) != -1) {
+                    outstream.write(buffer, 0, len);
+                }
+                outstream.close();
+                // 关闭流一定要记得。
+                return outstream.toByteArray();
+            }
+
+            /**
+             * @param b
+             * @param ret
+             * @return
+             */
+            public void getFileFromBytes(byte[] b) {
+
+                File file = new File(Environment.getExternalStorageDirectory(), "test.jpg");
+                if (file.exists())
+                    file.delete();
+                BufferedOutputStream stream = null;
+                try {
+                    FileOutputStream fstream = new FileOutputStream(file);
+                    stream = new BufferedOutputStream(fstream);
+                    stream.write(b);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (stream != null) {
+                        try {
+                            stream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
             /**
              * 接收到消息
              * @param message
@@ -206,17 +267,19 @@ public class WebSocketActivity extends AppCompatActivity {
              */
             @Override
             public void onMessage(ResponseBody message) throws IOException {
-
+                str = "";
                 if (message.contentType() == okhttp3.ws.WebSocket.TEXT) {//
-                    String dstr = message.source().readByteString().utf8();
-                    str = dstr;
-                }else{
-                    byte[] data = message.source().readByteArray();
-                    if (data != null && data.length > 0){
-                        Bitmap b1itmap = BitmapFactory.decodeByteArray(data,0,data.length);
-                        bitmap = b1itmap;
-                    }
+                    str = message.source().readByteString().utf8();
+                } else {
+                    str = "";
+                    data = message.bytes();
+//                    if (data != null) {
+//                        play.playAudioData(data);
+//                        data = null;
+//                    }
                 }
+
+                message.source().close();
 
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
                     @Override
@@ -229,44 +292,24 @@ public class WebSocketActivity extends AppCompatActivity {
                                         mLogScroller.smoothScrollTo(0, mLog.getBottom());
                                     }
                                 });
-                            }else{
-                                if (bitmap != null)
-                                {
-                                    pic.setVisibility(View.VISIBLE);
-                                    pic.setImageBitmap(bitmap);
-                                }
                             }
 
+                            if (data != null) {
+//                                Log.e("data",new String(data));
+                                play.playAudioData(data);
+////                                getFileFromBytes(data);
+////                                Bitmap b1itmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+////                                if (b1itmap != null) {
+////                                    pic.setVisibility(View.VISIBLE);
+////                                    pic.setImageBitmap(b1itmap);
+////                                }
+                                data = null;
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 });
-                message.source().close();
-
-//                final RequestBody response;
-//                Log.d("WebSocketCall", "onMessage:" + message.source().readByteString().utf8());
-//                if (message.contentType() == okhttp3.ws.WebSocket.TEXT) {//
-//                    response = RequestBody.create(okhttp3.ws.WebSocket.TEXT, "你好");//文本格式发送消息
-//                } else {
-//                    BufferedSource source = message.source();
-//                    Log.d("WebSocketCall", "onMessage:" + source.readByteString());
-//                    response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, source.readByteString());
-//                }
-//                message.source().close();
-//                sendExecutor.execute(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            Thread.sleep(1000 * 60);
-//                            webSocket.sendMessage(response);//发送消息
-//                        } catch (IOException e) {
-//                            e.printStackTrace(System.out);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
             }
 
             @Override
@@ -333,6 +376,8 @@ public class WebSocketActivity extends AppCompatActivity {
      * @param test
      */
     private void sendMessage(String test) {
+
+
         if (isOkhttpWebSocket()) {
             if (webSocket != null) {
                 try {
@@ -346,6 +391,55 @@ public class WebSocketActivity extends AppCompatActivity {
             mConnection.sendTextMessage(test);
 //                mConnection.sendBinaryMessage(mMessage.getText().toString().getBytes());
         }
+    }
+
+    private void sendMessageBin(String filePath) {
+
+        byte[] stream = null;
+        try {
+            stream = readStream(new FileInputStream(filePath));
+        } catch (FileNotFoundException e) {
+
+        }
+
+        if (stream == null)
+            return;
+
+        if (isOkhttpWebSocket()) {
+            if (webSocket != null) {
+                try {
+                    final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, stream);//文本格式发送消息 new File(filePath)
+                    webSocket.sendMessage(response);
+                } catch (IOException e) {
+                    e.printStackTrace(System.out);
+                }
+            }
+        } else {
+            mConnection.sendBinaryMessage(stream);
+        }
+    }
+
+    /**
+     * @param inStream
+     * @return byte[]
+     * @throws Exception
+     */
+    public static byte[] readStream(InputStream inStream) {
+        try {
+            byte[] buffer = new byte[1024];
+            int len = -1;
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            while ((len = inStream.read(buffer)) != -1) {
+                outStream.write(buffer, 0, len);
+            }
+            byte[] data = outStream.toByteArray();
+            outStream.close();
+            inStream.close();
+            return data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -385,12 +479,11 @@ public class WebSocketActivity extends AppCompatActivity {
                 @Override
                 public void onBinaryMessage(byte[] payload) {
                     super.onBinaryMessage(payload);
-                    mLog.setText(new String(payload));
-                    mLogScroller.post(new Runnable() {
-                        public void run() {
-                            mLogScroller.smoothScrollTo(0, mLog.getBottom());
-                        }
-                    });
+                    Bitmap b1itmap = BitmapFactory.decodeByteArray(payload, 0, payload.length);
+                    if (b1itmap != null) {
+                        pic.setVisibility(View.VISIBLE);
+                        pic.setImageBitmap(b1itmap);
+                    }
                 }
 
                 @Override
@@ -423,8 +516,10 @@ public class WebSocketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ws_main);
 
-        pic = (ImageView)findViewById(R.id.pic);
+        pic = (ImageView) findViewById(R.id.pic);
         pic.setVisibility(View.GONE);
+
+        sendVolume = (Button) findViewById(R.id.sendVolume);
 
         mHostname = (EditText) findViewById(R.id.hostname);
         mPort = (EditText) findViewById(R.id.port);
@@ -469,6 +564,47 @@ public class WebSocketActivity extends AppCompatActivity {
                         .start(WebSocketActivity.this);
             }
         });
+
+        sendVolume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isRecord) {
+                    isRecord = true;
+                    record.startRecording();
+//                    tst();
+                    sendVolume.setText("结束语音");
+                } else {
+                    isRecord = false;
+                    record.stopRecording();
+                    sendVolume.setText("开始语音");
+                }
+            }
+        });
+    }
+
+    private void tst() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (isRecord) {
+                    try {
+                        byte[] test = new byte[640];
+                        RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, test);//文本格式发送消息
+                        webSocket.sendMessage(response);
+//                        isRecord = false;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    /**
+     *
+     */
+    private void startRecord() {
+
     }
 
 
@@ -484,12 +620,7 @@ public class WebSocketActivity extends AppCompatActivity {
                 photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
             }
             if (photos != null && photos.size() > 0) {
-                try {
-                    final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, new File(photos.get(0)));//文本格式发送消息
-                    webSocket.sendMessage(response);
-                } catch (IOException e) {
-                    e.printStackTrace(System.out);
-                }
+                sendMessageBin(photos.get(0));
             }
         }
     }
@@ -505,5 +636,9 @@ public class WebSocketActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         dissconnect();
+
+        if (play != null){
+            play.destory();
+        }
     }
 }

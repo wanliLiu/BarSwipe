@@ -101,6 +101,14 @@
                 android:layout_gravity="center"
                 android:bufferType="editable"
                 android:text="图片"></Button>
+
+            <Button
+                android:id="@+id/sendVolume"
+                android:layout_width="100dip"
+                android:layout_height="50dip"
+                android:layout_gravity="center"
+                android:bufferType="editable"
+                android:text="开始语音"></Button>
         </LinearLayout>
 
         <ScrollView
