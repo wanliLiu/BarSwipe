@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#028ec9">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#028ec9"
+        android:orientation="vertical"
+        android:padding="12dip"
+        android:weightSum="1">
+
+
+        <CheckBox
+            android:id="@+id/select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用Okhttp-websocket" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Autobahn Server Hostname / Port"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/lightgrey"></TextView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/hostname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/darkgrey"></EditText>
+
+            <EditText
+                android:id="@+id/port"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:textColor="@color/darkgrey"></EditText>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="100dip"
+            android:layout_height="50dip"
+            android:layout_gravity="center"
+            android:layout_margin="16dip"
+            android:bufferType="editable"
+            android:text="Button"></Button>
+
+        <TextView
+            android:id="@+id/statusline"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dip"
+            android:text="Ready."
+            android:textColor="@color/lightgrey"
+            android:textSize="14dip" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message to broadcast"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/lightgrey"></TextView>
+
+        <EditText
+            android:id="@+id/msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Hello, world!"
+            android:textColor="@color/darkgrey"></EditText>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/sendMsg"
+                android:layout_width="100dip"
+                android:layout_height="50dip"
+                android:layout_gravity="center"
+                android:bufferType="editable"
+                android:text="Send"></Button>
+
+            <Button
+                android:id="@+id/sendPic"
+                android:layout_width="100dip"
+                android:layout_height="50dip"
+                android:layout_gravity="center"
+                android:bufferType="editable"
+                android:text="图片"></Button>
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/logscroller"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <TextView
+                android:id="@+id/log"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.0" />
+
+        </ScrollView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pic"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="bottom|right" />
+</FrameLayout>
