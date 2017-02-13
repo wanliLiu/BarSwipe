@@ -296,7 +296,7 @@ public class WebSocketActivity extends AppCompatActivity {
 
                             if (data != null) {
 //                                Log.e("data",new String(data));
-                                play.playAudioData(data);
+                                play.onPlaying(data);
 ////                                getFileFromBytes(data);
 ////                                Bitmap b1itmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 ////                                if (b1itmap != null) {
