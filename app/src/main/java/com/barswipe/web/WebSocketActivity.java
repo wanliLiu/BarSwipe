@@ -85,7 +85,7 @@ public class WebSocketActivity extends AppCompatActivity {
 
     private Button sendVolume;
     private AudioPlay record, play;
-    private boolean isRecord = false;
+    private boolean isRecord = false, isSend = true;
 
 //    AsyncHttpClient client  = new AsyncHttpClient()
 //            WebSocketClient client = new WebSocketClient() {
@@ -178,13 +178,15 @@ public class WebSocketActivity extends AppCompatActivity {
             @Override
             public void onOpen(okhttp3.ws.WebSocket webSomcket, Response response) {
                 webSocket = webSomcket;
-                if (record == null) {
-                    record = new AudioPlay();
-                    record.initRecord(webSocket);
-                }
-
-                if (play == null) {
-                    play = new AudioPlay().initTrack();
+                if (isSend) {
+                    if (record == null) {
+                        record = new AudioPlay();
+                        record.initRecord(webSocket);
+                    }
+                } else {
+                    if (!isRecord && play == null) {
+                        play = new AudioPlay().initTrack();
+                    }
                 }
 
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
@@ -272,13 +274,18 @@ public class WebSocketActivity extends AppCompatActivity {
                     str = message.source().readByteString().utf8();
                 } else {
                     str = "";
-                    data = message.bytes();
+                    if (play != null) {
+                        play.onPlaying(message.bytes());
+//                        play.playAudioData(message.bytes());
+                    }
+
+//
+//                    data = message.bytes();
 //                    if (data != null) {
 //                        play.playAudioData(data);
 //                        data = null;
 //                    }
                 }
-
                 message.source().close();
 
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
@@ -294,17 +301,17 @@ public class WebSocketActivity extends AppCompatActivity {
                                 });
                             }
 
-                            if (data != null) {
-//                                Log.e("data",new String(data));
-                                play.onPlaying(data);
-////                                getFileFromBytes(data);
-////                                Bitmap b1itmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-////                                if (b1itmap != null) {
-////                                    pic.setVisibility(View.VISIBLE);
-////                                    pic.setImageBitmap(b1itmap);
-////                                }
-                                data = null;
-                            }
+//                            if (data != null) {
+////                                Log.e("data",new String(data));
+//                                play.onPlaying(data);
+//////                                getFileFromBytes(data);
+//////                                Bitmap b1itmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+//////                                if (b1itmap != null) {
+//////                                    pic.setVisibility(View.VISIBLE);
+//////                                    pic.setImageBitmap(b1itmap);
+//////                                }
+//                                data = null;
+//                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -355,68 +362,85 @@ public class WebSocketActivity extends AppCompatActivity {
      *
      */
     private void dissconnect() {
-        if (isOkhttpWebSocket()) {
-            if (webSocket != null) {
-                try {
-                    webSocket.close(1000, "主动关闭");
-                    webSocket = null;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (isOkhttpWebSocket()) {
+                    if (webSocket != null) {
+                        try {
+                            webSocket.close(1000, "主动关闭");
+                            webSocket = null;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
+                    }
+                } else {
+                    if (mConnection != null && mConnection.isConnected()) {
+                        mConnection.disconnect();
+                    }
+                }
             }
-        } else {
-            if (mConnection != null && mConnection.isConnected()) {
-                mConnection.disconnect();
-            }
-        }
+        }).start();
     }
 
     /**
      * @param test
      */
-    private void sendMessage(String test) {
+    private void sendMessage(final String test) {
 
-
-        if (isOkhttpWebSocket()) {
-            if (webSocket != null) {
-                try {
-                    final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.TEXT, test);//文本格式发送消息
-                    webSocket.sendMessage(response);
-                } catch (IOException e) {
-                    e.printStackTrace(System.out);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (isOkhttpWebSocket()) {
+                    if (webSocket != null) {
+                        try {
+                            final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.TEXT, test);//文本格式发送消息
+                            webSocket.sendMessage(response);
+                        } catch (IOException e) {
+                            e.printStackTrace(System.out);
+                        }
+                    }
+                } else {
+                    mConnection.sendTextMessage(test);
+//                mConnection.sendBinaryMessage(mMessage.getText().toString().getBytes());
                 }
             }
-        } else {
-            mConnection.sendTextMessage(test);
-//                mConnection.sendBinaryMessage(mMessage.getText().toString().getBytes());
-        }
+        }).start();
+
     }
 
-    private void sendMessageBin(String filePath) {
+    private void sendMessageBin(final String filePath) {
 
-        byte[] stream = null;
-        try {
-            stream = readStream(new FileInputStream(filePath));
-        } catch (FileNotFoundException e) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-        }
-
-        if (stream == null)
-            return;
-
-        if (isOkhttpWebSocket()) {
-            if (webSocket != null) {
+                byte[] stream = null;
                 try {
-                    final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, stream);//文本格式发送消息 new File(filePath)
-                    webSocket.sendMessage(response);
-                } catch (IOException e) {
-                    e.printStackTrace(System.out);
+                    stream = readStream(new FileInputStream(filePath));
+                } catch (FileNotFoundException e) {
+
+                }
+
+                if (stream == null)
+                    return;
+
+                if (isOkhttpWebSocket()) {
+                    if (webSocket != null) {
+                        try {
+                            final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, stream);//文本格式发送消息 new File(filePath)
+                            webSocket.sendMessage(response);
+                        } catch (IOException e) {
+                            e.printStackTrace(System.out);
+                        }
+                    }
+                } else {
+                    mConnection.sendBinaryMessage(stream);
                 }
             }
-        } else {
-            mConnection.sendBinaryMessage(stream);
-        }
+        }).start();
+
     }
 
     /**
@@ -580,31 +604,15 @@ public class WebSocketActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
-    private void tst() {
-        new Thread(new Runnable() {
+        final CheckBox box = (CheckBox) findViewById(R.id.action);
+        box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void run() {
-                while (isRecord) {
-                    try {
-                        byte[] test = new byte[640];
-                        RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, test);//文本格式发送消息
-                        webSocket.sendMessage(response);
-//                        isRecord = false;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isSend = isChecked;
+                box.setText(isChecked ? "发送" : "接收");
             }
-        }).start();
-    }
-
-    /**
-     *
-     */
-    private void startRecord() {
-
+        });
     }
 
 
@@ -637,7 +645,7 @@ public class WebSocketActivity extends AppCompatActivity {
         super.onDestroy();
         dissconnect();
 
-        if (play != null){
+        if (play != null) {
             play.destory();
         }
     }

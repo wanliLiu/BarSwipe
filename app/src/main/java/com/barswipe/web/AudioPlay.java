@@ -109,15 +109,16 @@ public class AudioPlay {
     /**
      * @param data
      */
-    public void playAudioData(byte[] data) {
+    public synchronized void playAudioData(byte[] data) {
         if (audioTrack != null && data != null && data.length > 0) {
-            byte[] bytes_pkg = null;
-            bytes_pkg = data.clone();
-            audioTrack.write(bytes_pkg, 0, bytes_pkg.length);
+            audioTrack.write(data, 0, data.length);
             Log.e("audioTrack", "音频有数据过来");
         }
     }
 
+    /**
+     * @param data
+     */
     public synchronized void onPlaying(byte[] data) {
         switch (currentBuffer) {
             case 0:
@@ -138,6 +139,9 @@ public class AudioPlay {
         }
     }
 
+    /**
+     *
+     */
     private class playTHread implements Runnable {
 
         /**
@@ -183,7 +187,10 @@ public class AudioPlay {
             // new一个byte数组用来存一些字节数据，大小为缓冲区大小
             byte[] audiodata;
             while (isRecording) {
-                audioRecord.read(inbytes, 0, bufferSizeRecord);
+                int result = audioRecord.read(inbytes, 0, bufferSizeRecord);
+                if (result == AudioTrack.ERROR_INVALID_OPERATION || result == AudioTrack.ERROR_BAD_VALUE) {
+                    continue;
+                }
                 audiodata = inbytes.clone();
                 if (sendTemp.size() >= 2) {
                     if (webSocket != null) {
