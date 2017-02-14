@@ -178,16 +178,16 @@ public class WebSocketActivity extends AppCompatActivity {
             @Override
             public void onOpen(okhttp3.ws.WebSocket webSomcket, Response response) {
                 webSocket = webSomcket;
-                if (isSend) {
+//                if (isSend) {
                     if (record == null) {
                         record = new AudioPlay();
                         record.initRecord(webSocket);
                     }
-                } else {
-                    if (!isRecord && play == null) {
+//                } else {
+//                    if (!isRecord && play == null) {
                         play = new AudioPlay().initTrack();
-                    }
-                }
+//                    }
+//                }
 
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
                     @Override
