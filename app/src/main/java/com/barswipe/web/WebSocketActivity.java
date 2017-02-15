@@ -164,7 +164,7 @@ public class WebSocketActivity extends AppCompatActivity {
     }
 
     String str = null;
-    byte[] data = null;
+    Bitmap bitmap = null;
 
     /**
      *
@@ -178,16 +178,16 @@ public class WebSocketActivity extends AppCompatActivity {
             @Override
             public void onOpen(okhttp3.ws.WebSocket webSomcket, Response response) {
                 webSocket = webSomcket;
-//                if (isSend) {
+                if (isSend) {
                     if (record == null) {
                         record = new AudioPlay();
                         record.initRecord(webSocket);
                     }
-//                } else {
-//                    if (!isRecord && play == null) {
+                } else {
+                    if (!isRecord && play == null) {
                         play = new AudioPlay().initTrack();
-//                    }
-//                }
+                    }
+                }
 
                 AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
                     @Override
@@ -269,22 +269,24 @@ public class WebSocketActivity extends AppCompatActivity {
              */
             @Override
             public void onMessage(ResponseBody message) throws IOException {
-                str = "";
-                if (message.contentType() == okhttp3.ws.WebSocket.TEXT) {//
-                    str = message.source().readByteString().utf8();
-                } else {
-                    str = "";
-                    if (play != null) {
-                        play.onPlaying(message.bytes());
-//                        play.playAudioData(message.bytes());
+                final byte[] dataRecive = message.bytes().clone();
+                if (dataRecive.length > 4) {
+                    switch (dataRecive[3]) {
+                        case 2:
+                            //图片
+                            bitmap = BitmapFactory.decodeByteArray(dataRecive, 4, dataRecive.length - 4);
+                            break;
+                        case 3:
+                            //文本
+                            str = new String(dataRecive, 4, dataRecive.length - 4);
+                            break;
+                        case 7:
+                            if (play != null) {
+//                        play.onPlaying(message.bytes());
+                                play.playAudioData(dataRecive);
+                            }
+                            break;
                     }
-
-//
-//                    data = message.bytes();
-//                    if (data != null) {
-//                        play.playAudioData(data);
-//                        data = null;
-//                    }
                 }
                 message.source().close();
 
@@ -294,6 +296,7 @@ public class WebSocketActivity extends AppCompatActivity {
                         try {
                             if (!TextUtils.isEmpty(str)) {//
                                 mLog.setText(mLog.getText() + "\n" + str);
+                                str = "";
                                 mLogScroller.post(new Runnable() {
                                     public void run() {
                                         mLogScroller.smoothScrollTo(0, mLog.getBottom());
@@ -301,17 +304,12 @@ public class WebSocketActivity extends AppCompatActivity {
                                 });
                             }
 
-//                            if (data != null) {
-////                                Log.e("data",new String(data));
-//                                play.onPlaying(data);
-//////                                getFileFromBytes(data);
-//////                                Bitmap b1itmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-//////                                if (b1itmap != null) {
-//////                                    pic.setVisibility(View.VISIBLE);
-//////                                    pic.setImageBitmap(b1itmap);
-//////                                }
-//                                data = null;
-//                            }
+                            if (bitmap != null) {
+                                pic.setVisibility(View.VISIBLE);
+                                pic.setImageBitmap(bitmap);
+//                                bitmap.recycle();
+                                bitmap = null;
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -384,6 +382,36 @@ public class WebSocketActivity extends AppCompatActivity {
         }).start();
     }
 
+    private void setdata(byte[] test) {
+        if (webSocket != null) {
+            try {
+                final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, test);//文本格式发送消息
+                webSocket.sendMessage(response);
+            } catch (IOException e) {
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+
+    /**
+     * 添加类型
+     * 2,图片
+     * 3：文本
+     *
+     * @param dsd
+     */
+    private byte[] dealData(int type, byte[] dsd) {
+        byte[] tdsk = new byte[4];
+        tdsk[3] = (byte) type;
+
+        byte[] send = new byte[dsd.length + 4];
+
+        System.arraycopy(tdsk, 0, send, 0, 4);
+        System.arraycopy(dsd, 0, send, 4, dsd.length);
+
+        return send;
+    }
+
     /**
      * @param test
      */
@@ -393,14 +421,7 @@ public class WebSocketActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (isOkhttpWebSocket()) {
-                    if (webSocket != null) {
-                        try {
-                            final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.TEXT, test);//文本格式发送消息
-                            webSocket.sendMessage(response);
-                        } catch (IOException e) {
-                            e.printStackTrace(System.out);
-                        }
-                    }
+                    setdata(dealData(0x03, test.getBytes()));
                 } else {
                     mConnection.sendTextMessage(test);
 //                mConnection.sendBinaryMessage(mMessage.getText().toString().getBytes());
@@ -427,14 +448,7 @@ public class WebSocketActivity extends AppCompatActivity {
                     return;
 
                 if (isOkhttpWebSocket()) {
-                    if (webSocket != null) {
-                        try {
-                            final RequestBody response = RequestBody.create(okhttp3.ws.WebSocket.BINARY, stream);//文本格式发送消息 new File(filePath)
-                            webSocket.sendMessage(response);
-                        } catch (IOException e) {
-                            e.printStackTrace(System.out);
-                        }
-                    }
+                    setdata(dealData(0x02, stream));
                 } else {
                     mConnection.sendBinaryMessage(stream);
                 }

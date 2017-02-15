@@ -111,7 +111,9 @@ public class AudioPlay {
      */
     public synchronized void playAudioData(byte[] data) {
         if (audioTrack != null && data != null && data.length > 0) {
-            audioTrack.write(data, 0, data.length);
+            if (data.length > 4 && data[3] == 7) {
+                audioTrack.write(data, 4, data.length - 4);
+            }
             Log.e("audioTrack", "音频有数据过来");
         }
     }
@@ -120,23 +122,26 @@ public class AudioPlay {
      * @param data
      */
     public synchronized void onPlaying(byte[] data) {
-        switch (currentBuffer) {
-            case 0:
-                bufferStream1.write(data, 0, data.length);
-                if (bufferStream1.size() > bufferSize) {
-                    if (bufferStream0.size() <= 0)
-                        currentBuffer = 1;
-                }
-                break;
-            case -1:
-            case 1:
-                bufferStream0.write(data, 0, data.length);
-                if (bufferStream0.size() > bufferSize) {
-                    if (bufferStream1.size() <= 0)
-                        currentBuffer = 0;
-                }
-                break;
-        }
+
+//        if (data.length > 4 && data[3] == 7) {
+            switch (currentBuffer) {
+                case 0:
+                    bufferStream1.write(data, 0, data.length);
+                    if (bufferStream1.size() > bufferSize) {
+                        if (bufferStream0.size() <= 0)
+                            currentBuffer = 1;
+                    }
+                    break;
+                case -1:
+                case 1:
+                    bufferStream0.write(data, 0, data.length);
+                    if (bufferStream0.size() > bufferSize) {
+                        if (bufferStream1.size() <= 0)
+                            currentBuffer = 0;
+                    }
+                    break;
+            }
+//        }
     }
 
     /**
@@ -191,27 +196,35 @@ public class AudioPlay {
                 if (result == AudioTrack.ERROR_INVALID_OPERATION || result == AudioTrack.ERROR_BAD_VALUE) {
                     continue;
                 }
-                audiodata = inbytes.clone();
-                if (sendTemp.size() >= 2) {
-                    if (webSocket != null) {
-                        byte[] senddata = sendTemp.removeFirst();
-                        int offset = senddata.length % bufferSize > 0 ? 1 : 0;
-                        //将一个buffer拆分成几份小数据包 MAX_DATA_LENGTH 为包的最大byte数
-                        for (int i = 0; i < senddata.length / bufferSize + offset; i++) {
-                            int length = bufferSize;
-                            if ((i + 1) * bufferSize > senddata.length) {
-                                length = senddata.length - i * bufferSize;
-                            }
-                            try {
-                                RequestBody response = RequestBody.create(WebSocket.BINARY, senddata, i * bufferSize, length);//文本格式发送消息
-                                webSocket.sendMessage(response);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+                try {
+                    byte[] dsd = seneDta(inbytes);
+                    RequestBody response = RequestBody.create(WebSocket.BINARY, dsd, 0, dsd.length);//文本格式发送消息
+                    webSocket.sendMessage(response);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                sendTemp.add(audiodata);
+//                audiodata = inbytes.clone();
+//                if (sendTemp.size() >= 2) {
+//                    if (webSocket != null) {
+//                        byte[] senddata = sendTemp.removeFirst();
+//                        int offset = senddata.length % bufferSize > 0 ? 1 : 0;
+//                        //将一个buffer拆分成几份小数据包 MAX_DATA_LENGTH 为包的最大byte数
+//                        for (int i = 0; i < senddata.length / bufferSize + offset; i++) {
+//                            int length = bufferSize;
+//                            if ((i + 1) * bufferSize > senddata.length) {
+//                                length = senddata.length - i * bufferSize;
+//                            }
+//                            try {
+//                                byte[] actionSend = seneDta(Arrays.copyOfRange(senddata, i * bufferSize, length));
+//                                RequestBody response = RequestBody.create(WebSocket.BINARY, actionSend, 0, actionSend.length);//文本格式发送消息
+//                                webSocket.sendMessage(response);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                }
+//                sendTemp.add(audiodata);
             }
 
             try {
@@ -222,6 +235,23 @@ public class AudioPlay {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 添加类型
+     *
+     * @param dsd
+     */
+    private byte[] seneDta(byte[] dsd) {
+        byte[] tdsk = new byte[4];
+        tdsk[3] = 7;
+
+        byte[] send = new byte[dsd.length + 4];
+
+        System.arraycopy(tdsk, 0, send, 0, 4);
+        System.arraycopy(dsd, 0, send, 4, dsd.length);
+
+        return send;
     }
 
 
