@@ -57,6 +57,34 @@
     <string name="failure_image">Failure Image</string>
     <string name="view_pager">ViewPager</string>
 
+    <string name="tip_drag">长按编辑,拖拽排序</string>
+    <string name="my_cahnnel">我的频道</string>
+    <string name="other_channel">其他频道</string>
+    <string name="edit">编辑</string>
+    <string name="finish">完成</string>
+
+    <array name="main_items">
+        <item>List - Basic Drag and Swipe</item>
+        <item>Grid - Basic Swipe</item>
+        <item>简单拖拽Demo</item>
+        <item>排序增删Demo</item>
+    </array>
+
+    <integer name="grid_columns">2</integer>
+
+    <array name="dummy_items">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+    </array>
+
 
     <string name="des_base">Swipelayout Curton .......</string>
     <string name="des_Test">自定义倾斜TextView</string>
@@ -229,4 +257,6 @@
     <string name="rc_voice_failure">录音失败！</string>
     <!--设置语音消息的码率 (单位 bps)-->
     <integer name="rc_audio_encoding_bit_rate">7950</integer>
+
+    <string name="str_itemViewHelper">没看\nRecyclerView ItemTouchHelper 一起使用很容易实现拖到 滑动功能</string>
 </resources>

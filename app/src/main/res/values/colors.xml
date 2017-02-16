@@ -10,6 +10,10 @@
     <drawable name="translucent_background">#e0000000</drawable>
     <drawable name="transparent_background">#00000000</drawable>
 
+    <color name="tip">#9c9c9c</color>
+    <color name="bg_focus">#DDDDDD</color>
+    <color name="red_500">#ef4836</color>
+
     <color name="system_theme_color">#efefef</color>
     <color name="color_orange">#ff8000</color>
 

@@ -346,6 +346,15 @@
             android:description="@string/str_websccket"
             android:icon="@drawable/ic_launcher"
             android:label="Websocket 学习" />
+
+        <activity
+            android:name=".DragGridView.itemTouchHelper.test.MainActivityItemTouchHelper"
+            android:description="@string/str_websccket"
+            android:icon="@drawable/ic_launcher"
+            android:label="ItemTouchHelper 很容易实现drag swipe 学习" />
+        <activity android:name=".DragGridView.itemTouchHelper.another.DragActivity" />
+        <activity android:name=".DragGridView.itemTouchHelper.another.ChannelActivity" />
+
     </application>
 
 </manifest>
