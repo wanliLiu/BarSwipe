@@ -27,9 +27,15 @@ import com.barswipe.DragGridView.itemTouchHelper.another.DragActivity;
 import com.barswipe.R;
 
 /**
+ *
+ * 参考  RecyclerView的拖动和滑动 第一部分 ：基本的ItemTouchHelper示例
+ * http://blog.csdn.net/hanhailong726188/article/details/47073843
  * @author Paul Burke (ipaulpro)
  */
 public class MainActivityItemTouchHelper extends AppCompatActivity implements MainFragment.OnListItemClickListener {
+
+    //简单
+//    ItemTouchHelper.SimpleCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -19,7 +19,6 @@ package com.barswipe.DragGridView.itemTouchHelper.test;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -44,7 +43,7 @@ public class RecyclerGridFragment extends Fragment implements OnStartDragListene
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return new RecyclerView(container.getContext());
+        return inflater.inflate(R.layout.protest, container, false);
     }
 
     @Override
@@ -53,12 +52,12 @@ public class RecyclerGridFragment extends Fragment implements OnStartDragListene
 
         final RecyclerListAdapter adapter = new RecyclerListAdapter(getActivity(), this);
 
-        RecyclerView recyclerView = (RecyclerView) view;
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gridReci);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
         final int spanCount = getResources().getInteger(R.integer.grid_columns);
-        final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spanCount);
+        final FullyGridLayoutManager layoutManager = new FullyGridLayoutManager(getActivity(), spanCount);
         recyclerView.setLayoutManager(layoutManager);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);

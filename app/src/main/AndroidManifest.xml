@@ -349,7 +349,7 @@
 
         <activity
             android:name=".DragGridView.itemTouchHelper.test.MainActivityItemTouchHelper"
-            android:description="@string/str_websccket"
+            android:description="@string/str_itemViewHelper"
             android:icon="@drawable/ic_launcher"
             android:label="ItemTouchHelper 很容易实现drag swipe 学习" />
         <activity android:name=".DragGridView.itemTouchHelper.another.DragActivity" />

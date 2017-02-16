@@ -83,6 +83,26 @@
         <item>Eight</item>
         <item>Nine</item>
         <item>Ten</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
     </array>
 
 
@@ -258,5 +278,5 @@
     <!--设置语音消息的码率 (单位 bps)-->
     <integer name="rc_audio_encoding_bit_rate">7950</integer>
 
-    <string name="str_itemViewHelper">没看\nRecyclerView ItemTouchHelper 一起使用很容易实现拖到 滑动功能</string>
+    <string name="str_itemViewHelper">没看------两个小球旋转的动画-空了可以看一下\nRecyclerView ItemTouchHelper 一起使用很容易实现拖到 滑动功能</string>
 </resources>

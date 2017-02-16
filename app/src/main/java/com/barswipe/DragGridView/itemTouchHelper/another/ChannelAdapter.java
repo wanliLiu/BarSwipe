@@ -23,6 +23,7 @@ import java.util.List;
 
 /**
  * 拖拽排序 + 增删
+ * 参考  http://www.jianshu.com/p/d30fd8da4eac
  * Created by YoKeyword on 15/12/28.
  */
 public class ChannelAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnItemMoveListener {

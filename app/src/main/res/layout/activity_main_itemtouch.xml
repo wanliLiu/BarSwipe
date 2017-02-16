@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2015 Paul Burke
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,8 +31,20 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <FrameLayout
-        android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.barswipe.DragGridView.itemTouchHelper.TwoBallRotationProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
 
 </LinearLayout>
