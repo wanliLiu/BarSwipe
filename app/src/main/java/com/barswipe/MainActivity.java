@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.barswipe.DragGridView.gridview.MainActivityDragGridView;
@@ -79,6 +80,22 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, MainActivityAnimation.class));
+            }
+        });
+
+        final TextView view = (TextView) findViewById(R.id.bottomLine);
+        view.setTag(1);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String str = getResources().getString(R.string.str_rank_desc_renqi);
+                if ((Integer) v.getTag() == 1) {
+                    view.setText(str);
+                    v.setTag(2);
+                } else {
+                    v.setTag(1);
+                    view.setText(R.string.str_rank_desc_renqi);
+                }
             }
         });
 

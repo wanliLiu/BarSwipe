@@ -281,4 +281,6 @@
     <integer name="rc_audio_encoding_bit_rate">7950</integer>
 
     <string name="str_itemViewHelper">没看------两个小球旋转的动画-空了可以看一下\nRecyclerView ItemTouchHelper 一起使用很容易实现拖到 滑动功能</string>
+
+    <string name="str_rank_desc_renqi"><b>setText(String)和setText(id)的区别</b>\n<i>入榜单</i>\n&lt;u&gt;如何获得人气&lt;/u&gt; \n<u>phone:15882098180</u>？</string>
 </resources>
