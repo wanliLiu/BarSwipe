@@ -43,9 +43,10 @@ public class MyGridFragment extends Fragment implements MyItemTouchCallback.OnDr
                 results.add(new Item(i * 8 + 6, "电影", R.drawable.takeout_ic_category_store));
                 results.add(new Item(i * 8 + 7, "游戏", R.drawable.takeout_ic_category_sweet));
             }
+            results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));
         }
 //        results.remove(results.size()-1);
-        results.add(new Item(results.size(), "更多", R.drawable.takeout_ic_more));
+
         ////////////////////////////////////////////////////////
     }
 
