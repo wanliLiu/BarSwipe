@@ -24,12 +24,14 @@ import android.support.v7.widget.Toolbar;
 
 import com.barswipe.DragGridView.itemTouchHelper.another.ChannelActivity;
 import com.barswipe.DragGridView.itemTouchHelper.another.DragActivity;
+import com.barswipe.DragGridView.itemTouchHelper.recycle.MyGridFragment;
+import com.barswipe.DragGridView.itemTouchHelper.recycle.MyListFragment;
 import com.barswipe.R;
 
 /**
- *
  * 参考  RecyclerView的拖动和滑动 第一部分 ：基本的ItemTouchHelper示例
  * http://blog.csdn.net/hanhailong726188/article/details/47073843
+ *
  * @author Paul Burke (ipaulpro)
  */
 public class MainActivityItemTouchHelper extends AppCompatActivity implements MainFragment.OnListItemClickListener {
@@ -67,6 +69,12 @@ public class MainActivityItemTouchHelper extends AppCompatActivity implements Ma
                 break;
             case 3:
                 startActivity(new Intent(this, ChannelActivity.class));
+                break;
+            case 4:
+                fragment = new MyListFragment();
+                break;
+            case 5:
+                fragment = new MyGridFragment();
                 break;
         }
 

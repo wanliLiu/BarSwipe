@@ -68,6 +68,8 @@
         <item>Grid - Basic Swipe</item>
         <item>简单拖拽Demo</item>
         <item>排序增删Demo</item>
+        <item>list---another</item>
+        <item>Grid---another</item>
     </array>
 
     <integer name="grid_columns">2</integer>
