@@ -53,4 +53,7 @@
         app:layout_anchorGravity="bottom|right"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+    <android.support.design.widget.FloatingActionButton
+        style="@style/FabStyle"
+        android:layout_gravity="bottom|end" />
 </android.support.design.widget.CoordinatorLayout>
