@@ -38,7 +38,7 @@ public class NestedScrollingChildView extends View implements GestureDetector.On
 
     @Override
     public void setNestedScrollingEnabled(boolean enabled) {
-        childHelper.setNestedScrollingEnabled(true);
+        childHelper.setNestedScrollingEnabled(enabled);
     }
 
     @Override
