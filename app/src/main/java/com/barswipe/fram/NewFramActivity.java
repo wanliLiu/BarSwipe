@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ToggleButton;
 
@@ -80,6 +81,15 @@ public class NewFramActivity extends BaseActivity {
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(NewFramActivity.this, GridLayoutStudy.class));
+                    }
+                });
+
+        RxView.clicks(findViewById(R.id.snackbarTest))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Snackbar.make(findViewById(R.id.snackbarTest), "Snackbar 和 FloatingActionButton的联系", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                     }
                 });
     }

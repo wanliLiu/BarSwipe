@@ -25,6 +25,7 @@ public class DependentBehavior extends CoordinatorLayout.Behavior<TextView> {
     }
 
 
+
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, TextView child, View directTargetChild, View target, int nestedScrollAxes) {
 //        if (target instanceof NestedScrollingChildView)
