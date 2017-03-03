@@ -10,8 +10,8 @@
 
     <Button
         android:id="@+id/depentent"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="top|left"
         android:background="#FFFF0000"
         android:gravity="center"
@@ -19,8 +19,9 @@
         android:textColor="@android:color/white" />
 
     <TextView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/follow"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="top|right"
         android:background="#FF00FF00"
         android:gravity="center"
@@ -30,25 +31,38 @@
 
     <include
         layout="@layout/item_scroll"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_gravity="top|left"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="80dp" />
 
     <include
         layout="@layout/item_scroll"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_gravity="top|right"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         app:layout_behavior="com.barswipe.fram.behavior.ScrollBehavior" />
 
     <com.barswipe.fram.behavior.NestedScrollingChildView
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="110dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="80dp"
         android:background="#FF00FF00" />
+
+    <include
+        layout="@layout/item_scroll_scroll"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="80dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        style="@style/FabStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 
 </android.support.design.widget.CoordinatorLayout>
