@@ -3,7 +3,6 @@ package com.barswipe.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 /**
  * Created by Soli on 2016/7/15.
@@ -115,50 +114,52 @@ public class FileSizeUtil {
      * @return
      */
     private static String FormetFileSize(long fileS) {
-        DecimalFormat df = new DecimalFormat("#.00");
         String fileSizeString = "";
         String wrongSize = "0B";
         if (fileS == 0) {
             return wrongSize;
         }
         if (fileS < 1024) {
-            fileSizeString = df.format((double) fileS) + "B";
+            fileSizeString = new BigDecimal((double) fileS).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "B";
         } else if (fileS < 1048576) {
-            fileSizeString = df.format((double) fileS / 1024) + "KB";
+            fileSizeString = new BigDecimal((double) fileS / 1024).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "KB";
         } else if (fileS < 1073741824) {
-            fileSizeString = df.format((double) fileS / 1048576) + "MB";
+            fileSizeString = new BigDecimal((double) fileS / 1048576).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "MB";
         } else {
-            fileSizeString = df.format((double) fileS / 1073741824) + "GB";
+            fileSizeString = new BigDecimal((double) fileS / 1073741824).setScale(2, BigDecimal.ROUND_HALF_UP).toString() + "GB";
         }
         return fileSizeString;
     }
 
     /**
      * 转换文件大小,指定转换的类型
+     * <p>
+     * 不用这个格式化，这个和国家有关，有些国家直接是，
+     * DecimalFormat df = new DecimalFormat("#.00");
      *
      * @param fileS
      * @param sizeType
      * @return
      */
     private static double FormetFileSize(long fileS, int sizeType) {
-        DecimalFormat df = new DecimalFormat("#.00");
-        double fileSizeLong = 0;
+        double size = 0d;
         switch (sizeType) {
             case SIZETYPE_B:
-                fileSizeLong = Double.valueOf(df.format((double) fileS));
+                size = (double) fileS;
                 break;
             case SIZETYPE_KB:
-                fileSizeLong = Double.valueOf(df.format((double) fileS / 1024));
+                size = (double) fileS / 1024;
                 break;
             case SIZETYPE_MB:
-                fileSizeLong = Double.valueOf(df.format((double) fileS / 1048576));
+                size = (double) fileS / 1048576;
                 break;
             case SIZETYPE_GB:
-                fileSizeLong = Double.valueOf(df.format((double) fileS / 1073741824));
+                size = (double) fileS / 1073741824;
                 break;
             default:
                 break;
         }
-        return fileSizeLong;
+
+        return new BigDecimal(size).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }

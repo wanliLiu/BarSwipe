@@ -99,6 +99,7 @@ dependencies {
     compile project(':RxPermissions')
     compile project(':ArcLayoutLibrary')
     compile project(':autobahn')
+    compile project(':waveview')
 
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"

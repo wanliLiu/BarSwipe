@@ -37,7 +37,7 @@ project.ext {
     VERSION_CODE = "22"
 
     // Google Stuffs
-    supportPackageVersion = "25.0.0"
+    supportPackageVersion = "25.1.0"
 
     REBOUND_VERSION = "0.3.8"
     FRESCO_VERSION = "1.0.1"
@@ -53,4 +53,6 @@ project.ext {
 
     GPUIMAGE_VERSION="1.3.0"
     dbflow_version = "4.0.0-beta5"
+
+    videocache = '2.6.4'
 }

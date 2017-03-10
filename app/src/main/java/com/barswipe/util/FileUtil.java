@@ -456,4 +456,19 @@ public class FileUtil {
 
         return file;
     }
+
+    public static void deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.isFile()) {
+                file.delete();
+            } else {
+                String[] filePaths = file.list();
+                for (String path : filePaths) {
+                    deleteFile(filePath + File.separator + path);
+                }
+                file.delete();
+            }
+        }
+    }
 }

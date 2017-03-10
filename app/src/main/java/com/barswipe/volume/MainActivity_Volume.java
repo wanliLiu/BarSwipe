@@ -1,6 +1,7 @@
 package com.barswipe.volume;
 
 import android.Manifest;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 import com.barswipe.R;
 import com.barswipe.util.FileSizeUtil;
 import com.barswipe.util.FileUtil;
+import com.barswipe.volume.wave.MainActivity_wave;
+import com.jakewharton.rxbinding.view.RxView;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
@@ -76,6 +79,15 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         audiorecorder.setOnClickListener(this);
         mediarecorder.setOnClickListener(this);
         play.setOnClickListener(this);
+
+
+        RxView.clicks(findViewById(R.id.audioWave))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(MainActivity_Volume.this, MainActivity_wave.class));
+                    }
+                });
 
         timeInput = (EditText) findViewById(R.id.timeInput);
         countDownTimer = new CountDownTimer() {
