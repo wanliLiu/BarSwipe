@@ -360,6 +360,7 @@
         <activity
             android:name=".volume.wave.AudioMaker"
             android:screenOrientation="landscape" />
+        <activity android:name=".volume.wave.AudioFxActivity" />
 
     </application>
 

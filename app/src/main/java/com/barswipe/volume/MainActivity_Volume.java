@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.barswipe.R;
 import com.barswipe.util.FileSizeUtil;
 import com.barswipe.util.FileUtil;
+import com.barswipe.volume.wave.AudioFxActivity;
 import com.barswipe.volume.wave.AudioMaker;
 import com.barswipe.volume.wave.MainActivity_wave;
 import com.jakewharton.rxbinding.view.RxView;
@@ -94,6 +95,14 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                     @Override
                     public void call(Void aVoid) {
                         startActivity(new Intent(MainActivity_Volume.this, AudioMaker.class));
+                    }
+                });
+
+        RxView.clicks(findViewById(R.id.AudioFxActivity))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(MainActivity_Volume.this, AudioFxActivity.class));
                     }
                 });
 
