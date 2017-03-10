@@ -355,8 +355,11 @@
         <activity android:name=".DragGridView.itemTouchHelper.another.DragActivity" />
         <activity android:name=".DragGridView.itemTouchHelper.another.ChannelActivity" />
 
-        <activity android:name=".volume.wave.MainActivity_wave"/>
-        <activity android:name=".volume.wave.WavePlayActivity"/>
+        <activity android:name=".volume.wave.MainActivity_wave" />
+        <activity android:name=".volume.wave.WavePlayActivity" />
+        <activity
+            android:name=".volume.wave.AudioMaker"
+            android:screenOrientation="landscape" />
 
     </application>
 

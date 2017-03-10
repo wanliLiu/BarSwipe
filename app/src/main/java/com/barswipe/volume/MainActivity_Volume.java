@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.barswipe.R;
 import com.barswipe.util.FileSizeUtil;
 import com.barswipe.util.FileUtil;
+import com.barswipe.volume.wave.AudioMaker;
 import com.barswipe.volume.wave.MainActivity_wave;
 import com.jakewharton.rxbinding.view.RxView;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -88,6 +89,14 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                         startActivity(new Intent(MainActivity_Volume.this, MainActivity_wave.class));
                     }
                 });
+        RxView.clicks(findViewById(R.id.audioMaker))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(MainActivity_Volume.this, AudioMaker.class));
+                    }
+                });
+
 
         timeInput = (EditText) findViewById(R.id.timeInput);
         countDownTimer = new CountDownTimer() {

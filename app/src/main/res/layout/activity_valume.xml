@@ -21,21 +21,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:inputType="number"
             android:hint="点击输入录制的时间,以秒为单位"
+            android:inputType="number"
             android:textColorHint="@color/red"
             android:textSize="15sp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/audioWave"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="#bebebe"
-        android:padding="10dp"
-        android:text="AudioWave"
-        android:textSize="18sp" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/audioWave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#bebebe"
+            android:padding="10dp"
+            android:text="AudioWave"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/audioMaker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#bebebe"
+            android:padding="10dp"
+            android:text="audioMaker"
+            android:textSize="18sp" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
