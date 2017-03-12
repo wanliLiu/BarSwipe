@@ -362,6 +362,7 @@
             android:screenOrientation="landscape" />
         <activity android:name=".volume.wave.AudioFxActivity" />
 
+        <activity android:name=".volume.wave.MainActivity_good_view"/>
     </application>
 
 </manifest>
