@@ -40,7 +40,7 @@ public class WaveCanvas {
     public int baseLine = 0;// Y轴基线
     private AudioRecord audioRecord;
     int recBufSize;
-    private int marginRight=30;//波形图绘制距离右边的距离
+    private int marginRight=100;//波形图绘制距离右边的距离
     private int draw_time = 1000 / 200;//两次绘图间隔的时间
     private float divider = 0.1f;//为了节约绘画时间，每0.2个像素画一个数据
     long c_time;
@@ -69,6 +69,7 @@ public class WaveCanvas {
         this.recBufSize = recBufSize;
 		savePcmPath = path + audioName +".pcm";
 		saveWavPath = path + audioName +".wav";
+		marginRight = sfv.getWidth() / 2;
 		init();
         new Thread(new WriteRunnable()).start();//开线程写文件
         new RecordTask(audioRecord, recBufSize, sfv, mPaint,callback).execute();
@@ -218,7 +219,7 @@ public class WaveCanvas {
         void SimpleDraw(ArrayList<Short> buf, int baseLine) {
 			if (!isRecording)
 				return;
-			rateY = (65535 /2/ (sfv.getHeight()-line_off));
+			rateY = (65535 / 2 / (sfv.getHeight()-line_off));
 
         	for (int i = 0; i < buf.size(); i++) {
         		byte bus[] = getBytes(buf.get(i));
@@ -232,7 +233,6 @@ public class WaveCanvas {
             canvas.drawARGB(255, 239, 239, 239);
 
             int start =(int) ((buf.size())* divider);
-            float py = baseLine;
             float y;
 
             if(sfv.getWidth() - start <= marginRight){//如果超过预留的右边距距离
