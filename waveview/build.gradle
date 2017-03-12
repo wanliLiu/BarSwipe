@@ -30,7 +30,7 @@ android {
     //这个加入可放在ndk编译
     sourceSets.main {
         jni.srcDirs = [] // This prevents the auto generation of Android.mk
-        jniLibs.srcDir 'src/main/jniLibs' // This is not necessary unless you have precompiled libraries in your project.
+//        jniLibs.srcDir 'src/main/jniLibs' // This is not necessary unless you have precompiled libraries in your project.
     }
 }
 

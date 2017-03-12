@@ -67,7 +67,7 @@ public class MainActivity_good_view extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_good);
         ButterKnife.bind(this);
         U.createDirectory();
         if(waveSfv != null) {
