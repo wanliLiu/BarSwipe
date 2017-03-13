@@ -16,7 +16,6 @@
 
 package com.barswipe.volume.edit;
 
-import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -26,12 +25,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,9 +44,10 @@ import com.barswipe.R;
  * and assign the ringtone to that contact.
  */
 public class ChooseContactActivity
-    extends ListActivity
+    extends AppCompatActivity
     implements TextWatcher, LoaderManager.LoaderCallbacks<Cursor>
 {
+    private ListView listview;
     private TextView mFilter;
     private SimpleCursorAdapter mAdapter;
     private Uri mRingtoneUri;
@@ -67,6 +69,8 @@ public class ChooseContactActivity
 
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.choose_contact);
+
+        listview = (ListView) findViewById(R.id.list);
 
         try {
             mAdapter = new SimpleCursorAdapter(
@@ -114,10 +118,10 @@ public class ChooseContactActivity
                     }
                 });
 
-            setListAdapter(mAdapter);
+            listview.setAdapter(mAdapter);
 
             // On click, assign ringtone to contact
-            getListView().setOnItemClickListener(
+            listview.setOnItemClickListener(
                 new OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent,
                                             View view,

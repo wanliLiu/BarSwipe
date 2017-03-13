@@ -17,7 +17,6 @@
 package com.barswipe.volume.edit;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -30,6 +29,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -41,7 +42,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.SearchView;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -58,8 +59,10 @@ import java.util.Arrays;
  * launches RingdroidEditActivity from here.
  */
 public class RingdroidSelectActivity
-        extends ListActivity
+        extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private ListView listview;
     private SearchView mFilter;
     private SimpleCursorAdapter mAdapter;
     private boolean mWasGetContentIntent;
@@ -111,6 +114,8 @@ public class RingdroidSelectActivity
         // Inflate our UI from its XML layout description.
         setContentView(R.layout.media_select);
 
+        listview = (ListView) findViewById(R.id.list);
+
         try {
             mAdapter = new SimpleCursorAdapter(
                     this,
@@ -133,12 +138,12 @@ public class RingdroidSelectActivity
                             R.id.row_options_button},
                     0);
 
-            setListAdapter(mAdapter);
+            listview.setAdapter(mAdapter);
 
-            getListView().setItemsCanFocus(true);
+            listview.setItemsCanFocus(true);
 
             // Normal click - open the editor
-            getListView().setOnItemClickListener(new OnItemClickListener() {
+            listview.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent,
                                         View view,
                                         int position,
@@ -185,7 +190,7 @@ public class RingdroidSelectActivity
         });
 
         // Long-press opens a context menu
-        registerForContextMenu(getListView());
+        registerForContextMenu(listview);
     }
 
     private void setSoundIconFromCursor(ImageView view, Cursor cursor) {
@@ -396,7 +401,7 @@ public class RingdroidSelectActivity
         try {
             //Go to the choose contact activity
             Intent intent = new Intent(Intent.ACTION_EDIT, getUri());
-            intent.setClassName(getPackageName(),"com.barswipe.volume.edit.ChooseContactActivity");
+            intent.setClassName(getPackageName(), "com.barswipe.volume.edit.ChooseContactActivity");
             startActivityForResult(intent, REQUEST_CODE_CHOOSE_CONTACT);
         } catch (Exception e) {
             Log.e("Ringdroid", "Couldn't open Choose Contact window");
