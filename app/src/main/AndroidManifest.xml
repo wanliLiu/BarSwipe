@@ -362,7 +362,38 @@
             android:screenOrientation="landscape" />
         <activity android:name=".volume.wave.AudioFxActivity" />
 
-        <activity android:name=".volume.wave.MainActivity_good_view"/>
+        <activity android:name=".volume.wave.MainActivity_good_view" />
+
+        <activity
+            android:name=".volume.edit.RingdroidSelectActivity"
+            android:description="@string/str_edit"
+            android:icon="@drawable/ic_launcher"
+            android:label="音频编辑">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:mimeType="audio/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".volume.edit.RingdroidEditActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter android:label="@string/edit_intent">
+                <action android:name="android.intent.action.EDIT" />
+                <data android:mimeType="audio/*" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".volume.edit.ChooseContactActivity" />
     </application>
 
 </manifest>
