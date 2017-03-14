@@ -734,8 +734,7 @@ public class RingdroidEditActivity extends AppCompatActivity
         mAlertDialog = adBuilder.show();
         mTimerTextView = (TextView)mAlertDialog.findViewById(R.id.record_audio_timer);
 
-        final SoundFile.ProgressListener listener =
-            new SoundFile.ProgressListener() {
+        final SoundFile.ProgressListener listener =new SoundFile.ProgressListener() {
                 public boolean reportProgress(double elapsedTime) {
                     long now = getCurrentTime();
                     if (now - mRecordingLastUpdateTime > 5) {

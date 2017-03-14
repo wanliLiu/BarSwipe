@@ -194,33 +194,23 @@ public class RingdroidSelectActivity
     }
 
     private void setSoundIconFromCursor(ImageView view, Cursor cursor) {
-        if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_RINGTONE))) {
+        if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_RINGTONE))) {
             view.setImageResource(R.drawable.type_ringtone);
-            ((View) view.getParent()).setBackgroundColor(
-                    getResources().getColor(R.color.type_bkgnd_ringtone));
-        } else if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_ALARM))) {
+            ((View) view.getParent()).setBackgroundColor(getResources().getColor(R.color.type_bkgnd_ringtone));
+        } else if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_ALARM))) {
             view.setImageResource(R.drawable.type_alarm);
-            ((View) view.getParent()).setBackgroundColor(
-                    getResources().getColor(R.color.type_bkgnd_alarm));
-        } else if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_NOTIFICATION))) {
+            ((View) view.getParent()).setBackgroundColor(getResources().getColor(R.color.type_bkgnd_alarm));
+        } else if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_NOTIFICATION))) {
             view.setImageResource(R.drawable.type_notification);
-            ((View) view.getParent()).setBackgroundColor(
-                    getResources().getColor(R.color.type_bkgnd_notification));
-        } else if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_MUSIC))) {
+            ((View) view.getParent()).setBackgroundColor(getResources().getColor(R.color.type_bkgnd_notification));
+        } else if (0 != cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_MUSIC))) {
             view.setImageResource(R.drawable.type_music);
-            ((View) view.getParent()).setBackgroundColor(
-                    getResources().getColor(R.color.type_bkgnd_music));
+            ((View) view.getParent()).setBackgroundColor(getResources().getColor(R.color.type_bkgnd_music));
         }
 
-        String filename = cursor.getString(cursor.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.DATA));
+        String filename = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
         if (!SoundFile.isFilenameSupported(filename)) {
-            ((View) view.getParent()).setBackgroundColor(
-                    getResources().getColor(R.color.type_bkgnd_unsupported));
+            ((View) view.getParent()).setBackgroundColor(getResources().getColor(R.color.type_bkgnd_unsupported));
         }
     }
 
@@ -413,10 +403,8 @@ public class RingdroidSelectActivity
         // See if the selected list item was created by Ringdroid to
         // determine which alert message to show
         Cursor c = mAdapter.getCursor();
-        String artist = c.getString(c.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.ARTIST));
-        CharSequence ringdroidArtist =
-                getResources().getText(R.string.artist_name);
+        String artist = c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+        CharSequence ringdroidArtist =getResources().getText(R.string.artist_name);
 
         CharSequence message;
         if (artist.equals(ringdroidArtist)) {
@@ -428,17 +416,13 @@ public class RingdroidSelectActivity
         }
 
         CharSequence title;
-        if (0 != c.getInt(c.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_RINGTONE))) {
+        if (0 != c.getInt(c.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_RINGTONE))) {
             title = getResources().getText(R.string.delete_ringtone);
-        } else if (0 != c.getInt(c.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_ALARM))) {
+        } else if (0 != c.getInt(c.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_ALARM))) {
             title = getResources().getText(R.string.delete_alarm);
-        } else if (0 != c.getInt(c.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_NOTIFICATION))) {
+        } else if (0 != c.getInt(c.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_NOTIFICATION))) {
             title = getResources().getText(R.string.delete_notification);
-        } else if (0 != c.getInt(c.getColumnIndexOrThrow(
-                MediaStore.Audio.Media.IS_MUSIC))) {
+        } else if (0 != c.getInt(c.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_MUSIC))) {
             title = getResources().getText(R.string.delete_music);
         } else {
             title = getResources().getText(R.string.delete_audio);
@@ -481,8 +465,7 @@ public class RingdroidSelectActivity
             showFinalAlert(getResources().getText(R.string.delete_failed));
         }
 
-        String itemUri = c.getString(uriIndex) + "/" +
-                c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+        String itemUri = c.getString(uriIndex) + "/" +c.getString(c.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
         getContentResolver().delete(Uri.parse(itemUri), null, null);
     }
 
@@ -610,8 +593,6 @@ public class RingdroidSelectActivity
             selection =
                     "(" + selection + " AND " +
                             "((TITLE LIKE ?) OR (ARTIST LIKE ?) OR (ALBUM LIKE ?)))";
-            selectionArgsList.add(filter);
-            selectionArgsList.add(filter);
             selectionArgsList.add(filter);
         }
 

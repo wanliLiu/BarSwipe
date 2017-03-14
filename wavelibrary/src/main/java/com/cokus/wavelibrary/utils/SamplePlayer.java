@@ -173,8 +173,7 @@ public class SamplePlayer {
     public int getCurrentPosition() {
     	int curPos = 0;
     	try{
-    	curPos = (int)((mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) *
-                (1000.0 / mSampleRate));
+    	curPos = (int)((mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) *(1000.0 / mSampleRate));
     	}catch(Exception e){
 //    	mAudioTrack.setNotificationMarkerPosition(mNumSamples - 1); 
     	}
