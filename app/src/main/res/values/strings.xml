@@ -448,4 +448,10 @@
     <string name="about_text"><![CDATA[Use Ringdroid to edit MP3, OGG, WAV, AAC, and AMR audio files and create ringtones, alarms, and notifications from them.\n\nTip: copy audio files to your SD card using a USB cable.\n\nTip: tap anywhere on the waveform to start playing at that position.\n\nTip: while playing, tap the word Start or End to quickly set the start and end markers to the current playback time.\n\nVersion %s\n\nDeveloper: Dominic Mazzoni, Nicolas Faralli\nGraphics: Joseph Wain\nSupport and evangelizing: Eugene Koh\nEnhancements: Dan Klufas\n\nRingdroid is free software, distributed under the Apache 2.0 license.  Source code is on github.com/google/ringdroid\n]]></string>
 
     <string name="str_edit">RingAndroid 开源项目  学习音频编辑方式</string>
+
+    <string name="btn_start1">开始转换</string>
+    <string name="transfer_wait_title">请稍候</string>
+    <string name="transfer_wait_message">文件正在转换中,请稍候&#8230;</string>
+    <string name="success_hint">转码成功!</string>
+    <string name="transfer_result">AMR文件在SD卡根目录下,名为:test.amr</string>
 </resources>

@@ -368,17 +368,17 @@ public class WaveformView extends View {
         double fractionalSecs = mOffset * onePixelInSecs;
         int integerSecs = (int) fractionalSecs;
         int i = 0;
-//        while (i < width) {
-//            i++;
-//            fractionalSecs += onePixelInSecs;
-//            int integerSecsNew = (int) fractionalSecs;
-//            if (integerSecsNew != integerSecs) {
-//                integerSecs = integerSecsNew;
-//                if (!onlyEveryFiveSecs || 0 == (integerSecs % 5)) {
-//                    canvas.drawLine(i, 0, i, measuredHeight, mGridPaint);
-//                }
-//            }
-//        }
+        while (i < width) {
+            i++;
+            fractionalSecs += onePixelInSecs;
+            int integerSecsNew = (int) fractionalSecs;
+            if (integerSecsNew != integerSecs) {
+                integerSecs = integerSecsNew;
+                if (!onlyEveryFiveSecs || 0 == (integerSecs % 5)) {
+                    canvas.drawLine(i, 0, i, measuredHeight, mGridPaint);
+                }
+            }
+        }
 
         // Draw waveform
         for (i = 0; i < width; i++) {

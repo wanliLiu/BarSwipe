@@ -1303,38 +1303,38 @@ public class RingdroidEditActivity extends AppCompatActivity
                         return;
                     }
                 }
-
-                // Try to load the new file to make sure it worked
-                try {
-                    final SoundFile.ProgressListener listener =
-                        new SoundFile.ProgressListener() {
-                            public boolean reportProgress(double frac) {
-                                // Do nothing - we're not going to try to
-                                // estimate when reloading a saved sound
-                                // since it's usually fast, but hard to
-                                // estimate anyway.
-                                return true;  // Keep going
-                            }
-                        };
-                    SoundFile.create(outPath, listener);
-                } catch (final Exception e) {
-                    mProgressDialog.dismiss();
-                    e.printStackTrace();
-                    mInfoContent = e.toString();
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            mInfo.setText(mInfoContent);
-                        }
-                    });
-
-                    Runnable runnable = new Runnable() {
-                        public void run() {
-                            showFinalAlert(e, getResources().getText(R.string.write_error));
-                        }
-                    };
-                    mHandler.post(runnable);
-                    return;
-                }
+                //测试不需要
+//                // Try to load the new file to make sure it worked
+//                try {
+//                    final SoundFile.ProgressListener listener =
+//                        new SoundFile.ProgressListener() {
+//                            public boolean reportProgress(double frac) {
+//                                // Do nothing - we're not going to try to
+//                                // estimate when reloading a saved sound
+//                                // since it's usually fast, but hard to
+//                                // estimate anyway.
+//                                return true;  // Keep going
+//                            }
+//                        };
+//                    SoundFile.create(outPath, listener);
+//                } catch (final Exception e) {
+//                    mProgressDialog.dismiss();
+//                    e.printStackTrace();
+//                    mInfoContent = e.toString();
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            mInfo.setText(mInfoContent);
+//                        }
+//                    });
+//
+//                    Runnable runnable = new Runnable() {
+//                        public void run() {
+//                            showFinalAlert(e, getResources().getText(R.string.write_error));
+//                        }
+//                    };
+//                    mHandler.post(runnable);
+//                    return;
+//                }
 
                 mProgressDialog.dismiss();
 

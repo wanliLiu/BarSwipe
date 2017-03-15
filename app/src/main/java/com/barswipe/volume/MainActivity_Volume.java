@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.barswipe.R;
 import com.barswipe.util.FileSizeUtil;
 import com.barswipe.util.FileUtil;
+import com.barswipe.volume.pcm.pcm2amr.MainActivity_pcm_amr;
 import com.barswipe.volume.wave.AudioFxActivity;
 import com.barswipe.volume.wave.AudioMaker;
 import com.barswipe.volume.wave.MainActivity_good_view;
@@ -83,6 +84,14 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         mediarecorder.setOnClickListener(this);
         play.setOnClickListener(this);
 
+
+        RxView.clicks(findViewById(R.id.pcm2amr))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(MainActivity_Volume.this, MainActivity_pcm_amr.class));
+                    }
+                });
 
         RxView.clicks(findViewById(R.id.audioWave))
                 .subscribe(new Action1<Void>() {
@@ -294,10 +303,13 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
 
 
     private void startPlaying() {
-//        if (!TextUtils.isEmpty(filePath) && new File(filePath).exists())
-//            MediaPlayerUtil.startPlaying(filePath.contains(".pcm") ? filePath.replace(".pcm", ".wav") : filePath);
-        if (uri != null)
+        if (uri != null) {
             AudioPlayManager.getInstance().startPlay(this, uri, null);
+            return;
+        }
+        //MediaPlayer 什么格式的文件都能播放样
+        if (!TextUtils.isEmpty(filePath) && new File(filePath).exists())
+            MediaPlayerUtil.startPlaying(filePath.contains(".pcm") ? filePath.replace(".pcm", ".wav") : filePath);
     }
 
     public void toast(String content) {
