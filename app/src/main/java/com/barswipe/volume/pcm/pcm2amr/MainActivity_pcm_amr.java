@@ -66,6 +66,7 @@ public class MainActivity_pcm_amr extends AppCompatActivity implements OnClickLi
     }
 
     private void transferSuccess() {
+
         runOnUiThread(new Runnable() {
 
             @Override

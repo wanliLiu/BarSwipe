@@ -10,7 +10,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class AmrEncoder {
-    
+
+    /**
+     *
+     * @param pcmPath
+     * @param amrPath
+     */
     public static void pcm2Amr(String pcmPath , String amrPath) {
     	FileInputStream fis;
 		try {
@@ -23,7 +28,12 @@ public class AmrEncoder {
 			e.printStackTrace();
 		}
     }
-    
+
+    /**
+     *
+     * @param pcmStream
+     * @param amrPath
+     */
     public static void pcm2Amr(InputStream pcmStream, String amrPath) {
         try {
             AmrInputStream ais = new AmrInputStream(pcmStream);

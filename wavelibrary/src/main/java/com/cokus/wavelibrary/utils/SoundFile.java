@@ -54,7 +54,7 @@ public class SoundFile {
     private int mAvgBitRate;  // Average bit rate in kbps.
     private int mSampleRate;
     private int mChannels;
-    private int mNumSamples;  // total number of samples per channel in audio file
+    private int mNumSamples;  // 采样了多少次--total number of samples per channel in audio file
     private ByteBuffer mDecodedBytes;  // Raw audio data
     private ShortBuffer mDecodedSamples;  // shared buffer with mDecodedBytes.
     // mDecodedSamples has the following format:
@@ -383,8 +383,7 @@ public class SoundFile {
         mFrameOffsets = new int[mNumFrames];
         int j;
         int gain, value;
-        int frameLens = (int) ((1000 * mAvgBitRate / 8) *
-                ((float) getSamplesPerFrame() / mSampleRate));
+        int frameLens = (int) ((1000 * mAvgBitRate / 8) * ((float) getSamplesPerFrame() / mSampleRate));
         for (i = 0; i < mNumFrames; i++) {
             gain = -1;
             for (j = 0; j < getSamplesPerFrame(); j++) {
@@ -401,8 +400,8 @@ public class SoundFile {
             }
             mFrameGains[i] = (int) Math.sqrt(gain);  // here gain = sqrt(max value of 1st channel)...
             mFrameLens[i] = frameLens;  // totally not accurate...
-            mFrameOffsets[i] = (int) (i * (1000 * mAvgBitRate / 8) *  //  = i * frameLens
-                    ((float) getSamplesPerFrame() / mSampleRate));
+            mFrameOffsets[i] = (int) (i * (1000 * mAvgBitRate / 8) * ((float) getSamplesPerFrame() / mSampleRate)); //  = i * frameLens
+
         }
         mDecodedSamples.rewind();
         // DumpSamples();  // Uncomment this line to dump the samples in a TSV file.
@@ -460,8 +459,9 @@ public class SoundFile {
                 mDecodedSamples.position(position);
             }
             // TODO(nfaralli): maybe use the read method that takes a direct ByteBuffer argument.
-            audioRecord.read(buffer, 0, buffer.length);
-            mDecodedSamples.put(buffer);
+            int readSize = audioRecord.read(buffer, 0, buffer.length);
+            if (readSize > 0)
+                mDecodedSamples.put(buffer, 0, readSize);
             // Let the progress listener know how many seconds have been recorded.
             // The returned value tells us if we should keep recording or stop.
             if (!mProgressListener.reportProgress(

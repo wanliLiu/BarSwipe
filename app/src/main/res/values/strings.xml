@@ -453,5 +453,5 @@
     <string name="transfer_wait_title">请稍候</string>
     <string name="transfer_wait_message">文件正在转换中,请稍候&#8230;</string>
     <string name="success_hint">转码成功!</string>
-    <string name="transfer_result">AMR文件在SD卡根目录下,名为:test.amr</string>
+    <string name="transfer_result">AMR文件在SD卡根目录下,名为:test_pcm_to_mar.amr</string>
 </resources>
