@@ -1,51 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <com.cokus.wavelibrary.view.WaveSurfaceView
-        android:id="@+id/wavesfv"
-        android:layout_width="fill_parent"
-        android:layout_height="120dp"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <com.cokus.wavelibrary.view.WaveformView
-        android:id="@+id/waveview"
-        android:visibility="invisible"
-        android:layout_width="fill_parent"
-        android:layout_height="120dp" />
+        <com.cokus.wavelibrary.view.WaveSurfaceView
+            android:id="@+id/wavesfv"
+            android:layout_width="fill_parent"
+            android:layout_height="120dp" />
+
+        <com.cokus.wavelibrary.view.WaveformView
+            android:id="@+id/waveview"
+            android:layout_width="fill_parent"
+            android:layout_height="120dp"
+            android:visibility="invisible" />
+    </FrameLayout>
 
     <TextView
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/wavesfv"
         android:id="@+id/status"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="未开始录音"/>
+        android:layout_below="@+id/wavesfv"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="未开始录音" />
 
     <Button
-        android:layout_marginTop="10dp"
         android:id="@+id/switchbtn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/status"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="开始录音"/>
+        android:layout_marginTop="10dp"
+        android:text="开始录音" />
 
     <Button
-        android:layout_marginTop="10dp"
         android:id="@+id/play"
-        android:layout_below="@+id/switchbtn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="播放录音"/>
+        android:layout_below="@+id/switchbtn"
+        android:layout_marginTop="10dp"
+        android:text="播放录音" />
 
     <Button
-        android:layout_marginTop="10dp"
         android:id="@+id/socreaudio"
-        android:layout_below="@+id/play"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="比较两音频文件相识度"/>
+        android:layout_below="@+id/play"
+        android:layout_marginTop="10dp"
+        android:text="比较两音频文件相识度" />
 
-</RelativeLayout>
+    <com.barswipe.volume.wave.MnScaleBar
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/socreaudio"
+        android:layout_marginTop="10dp" />
+
+
+</LinearLayout>
