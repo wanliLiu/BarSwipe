@@ -362,7 +362,13 @@
             android:screenOrientation="landscape" />
         <activity android:name=".volume.wave.AudioFxActivity" />
 
-        <activity android:name=".volume.wave.MainActivity_good_view" />
+        <activity android:name=".volume.wave.MainActivity_good_view">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".volume.edit.RingdroidSelectActivity"

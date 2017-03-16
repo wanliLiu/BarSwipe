@@ -16,7 +16,8 @@ import android.view.SurfaceView;
 public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callback{
 	private SurfaceHolder holder;
 	private int line_off;//上下边距距离
-	
+
+
 
     public int getLine_off() {
 		return line_off;
