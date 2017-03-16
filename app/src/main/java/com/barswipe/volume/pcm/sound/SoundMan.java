@@ -12,6 +12,8 @@ public class SoundMan implements Supporter.OnOffSwitcher {
     private static final String TAG = "Filer";
     private static final boolean DEBUG = true;
 
+    private boolean isUseSystEncode = false;
+
     private static final class SingletonHolder {
         public static final SoundMan INSTANCE = new SoundMan();
     }
@@ -24,7 +26,7 @@ public class SoundMan implements Supporter.OnOffSwitcher {
     private boolean initialized;
     private Handler handler;
 
-    private SoundMan() {
+    public SoundMan() {
         handler = new Handler();
     }
 
@@ -47,6 +49,8 @@ public class SoundMan implements Supporter.OnOffSwitcher {
         }
         isRunning = true;
 
+        codec.setUseSystEncode(isUseSystEncode);
+
         recorder.start();
         codec.start();
         filer.start();
@@ -61,8 +65,10 @@ public class SoundMan implements Supporter.OnOffSwitcher {
     Runnable sliceRunnable = new Runnable() {
         @Override
         public void run() {
-            filer.nextSlice();
-            handler.postDelayed(sliceRunnable,Supporter.SLICE_SECOND * 1000);
+            stop();
+            Log.e(TAG,"录制结束---" + Supporter.SLICE_SECOND );
+//            filer.nextSlice();
+//            handler.postDelayed(sliceRunnable, Supporter.SLICE_SECOND * 1000);
         }
     };
 
@@ -84,6 +90,7 @@ public class SoundMan implements Supporter.OnOffSwitcher {
 
         recorder = new Recorder();
         codec = new Codec();
+
         filer = new Filer();
         uploader = new Uploader();
 
@@ -92,6 +99,13 @@ public class SoundMan implements Supporter.OnOffSwitcher {
         filer.setFileConsumer(uploader);
     }
 
+    /**
+     * @param useSystEncode
+     */
+    public SoundMan setUseSystEncode(boolean useSystEncode) {
+        isUseSystEncode = useSystEncode;
+        return this;
+    }
 
     private Recorder recorder;//产生pcm数据
     private Codec codec;//编码pcm数据

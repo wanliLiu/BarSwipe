@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public class Filer implements Runnable, Supporter.AmrConsumer, Supporter.OnOffSwitcher {
     private static final String TAG = "Filer";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     final private static byte[] header = new byte[]{0x23, 0x21, 0x41, 0x4D, 0x52, 0x0A};
 
     private List<byte[]> amrFrames;

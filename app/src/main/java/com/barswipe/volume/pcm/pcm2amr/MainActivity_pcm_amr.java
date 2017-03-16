@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,11 +53,16 @@ public class MainActivity_pcm_amr extends AppCompatActivity implements OnClickLi
 
     private AmrFileDecoder mAmrFileDecoder;
 
+    private CheckBox armEncode;
+
+    private SoundMan soundMan;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_pcm_amr);
         KCacheUtils.init(this);
+        armEncode = (CheckBox) findViewById(R.id.armEncode);
 
         recordButton = (Button) findViewById(R.id.recordButton);
         recordButton.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +73,17 @@ public class MainActivity_pcm_amr extends AppCompatActivity implements OnClickLi
         });
 
         initView();
+
+        armEncode.setText("用amr-codec编码");
+        armEncode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    armEncode.setText("用系统AmrInputStream编码");
+                else
+                    armEncode.setText("用amr-codec编码");
+            }
+        });
     }
 
     private TextView hintView;
@@ -127,13 +145,16 @@ public class MainActivity_pcm_amr extends AppCompatActivity implements OnClickLi
 
 
     private void triggerButton() {
+
+        if (soundMan == null)
+            soundMan = new SoundMan();
+
         if (isRecording) {
-            SoundMan.getInstance().stop();
+            soundMan.setUseSystEncode(armEncode.isChecked()).stop();
             recordButton.setText(R.string.record_start);
         } else {
-            SoundMan.getInstance().start();
+            soundMan.setUseSystEncode(armEncode.isChecked()).start();
             recordButton.setText(R.string.record_stop);
-
             Toast.makeText(this, String.format("Check your file at: %s", KCacheUtils.getCacheDirectory() + "/record"), Toast.LENGTH_LONG).show();
         }
 

@@ -6,7 +6,7 @@ import java.io.File;
  * Created by changbinhe on 14/11/22.
  */
 public class Supporter {
-    public static final int SLICE_SECOND = 90;
+    public static final int SLICE_SECOND = 10;
 
     /**
      * pcm数据产生
