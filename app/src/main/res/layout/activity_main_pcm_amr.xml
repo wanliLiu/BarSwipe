@@ -1,21 +1,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-    <Button 
+    android:layout_height="match_parent">
+
+    <Button
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/btn_start1"/>
+        android:text="@string/btn_start1" />
 
     <TextView
         android:id="@+id/hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="#000000"
         android:layout_centerInParent="true"
-        android:text="@string/hello_world"/>
+        android:text="@string/hello_world"
+        android:textColor="#000000"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/recordButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btn_start"
+        android:layout_centerHorizontal="true"
+        android:text="@string/record_start" />
+
+    <Button
+        android:id="@+id/decodeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/recordButton"
+        android:onClick="onDecode"
+        android:text="@string/decode_start" />
 
 </RelativeLayout>

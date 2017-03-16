@@ -13,6 +13,11 @@ android {
         versionCode 1
         versionName "1.0"
 
+        ndk {
+            moduleName "mp3lame"
+            ldLibs "log", "z", "m", "jnigraphics"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
 
     }
     buildTypes {
@@ -29,6 +34,7 @@ android {
 
     //这个加入可放在ndk编译
     sourceSets.main {
+        //这个加入可放在ndk编译  表示jni文件为空，这样就不会编译jni文件里面的内容
         jni.srcDirs = [] // This prevents the auto generation of Android.mk
 //        jniLibs.srcDir 'src/main/jniLibs' // This is not necessary unless you have precompiled libraries in your project.
     }
@@ -40,5 +46,3 @@ dependencies {
     compile "com.android.support:appcompat-v7:${supportPackageVersion}"
     compile "com.danikula:videocache:${videocache}"
 }
-
-//apply from: '../bintray.gradle'

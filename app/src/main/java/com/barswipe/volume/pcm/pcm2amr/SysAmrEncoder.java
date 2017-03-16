@@ -9,7 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class AmrEncoder {
+/**
+ * AMR NB的语音带宽范围：300－3400Hz，8KHz采样
+ AMR WB的语音带宽范围： 50－7000Hz，16KHz采样
+ AMR-WB+的采样速率是在16～48 kHz之间。这使得它的语音带宽更宽(24 kHz)
+ */
+public class SysAmrEncoder {
 
     /**
      *

@@ -1,1 +1,1 @@
-include ':app', ':EaseInterpolatorLib', ':SwipeLayoutLibrary', ':PhotoPicker', ':ScaleImagelibrary', ':emojiLibrary', ':emojiAllLibrary', ':RxPermissions', ':PureZhiHu', ':ArcLayoutLibrary', ':autobahn', ':waveview', ':wavelibrary'
+include ':app', ':EaseInterpolatorLib', ':SwipeLayoutLibrary', ':PhotoPicker', ':ScaleImagelibrary', ':emojiLibrary', ':emojiAllLibrary', ':RxPermissions', ':PureZhiHu', ':ArcLayoutLibrary', ':autobahn', ':waveview', ':wavelibrary', ':amr'

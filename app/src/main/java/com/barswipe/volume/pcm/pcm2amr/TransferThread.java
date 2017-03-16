@@ -25,7 +25,7 @@ public class TransferThread extends Thread{
         String amrPath = rootPath + "/test_pcm_to_mar.amr";
         try {
             InputStream pcmStream = context.getAssets().open("test.pcm");
-            AmrEncoder.pcm2Amr(pcmStream, amrPath);
+            SysAmrEncoder.pcm2Amr(pcmStream, amrPath);
             callback.onSuccess();
         } catch (IOException e) {
         	callback.onFailed();

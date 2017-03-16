@@ -436,6 +436,11 @@
     <!--
      Choose Contact Activity
      -->
+    <string name="record_start">Start Recorder</string>
+    <string name="record_stop">Stop Recorder</string>
+
+    <string name="decode_start">Start Decode</string>
+    <string name="decode_stop">Stop Decode</string>
 
     <string name="choose_contact_title">Assign ringtone to which contact?</string>
     <string name="success_contact_ringtone">Successfully assigned ringtone to:</string>
