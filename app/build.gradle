@@ -101,7 +101,6 @@ dependencies {
     compile project(':autobahn')
     compile project(':waveview')
     compile project(':wavelibrary')
-    compile project(':amr')
 
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"

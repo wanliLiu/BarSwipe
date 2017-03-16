@@ -44,8 +44,7 @@ public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public  void initSurfaceView( final SurfaceView sfv){
     	new Thread(){
     		public void run() {
-    			 Canvas canvas = sfv.getHolder().lockCanvas(  
-    	                 new Rect(0, 0, sfv.getWidth(), sfv.getHeight()));// 关键:获取画布  
+    			 Canvas canvas = sfv.getHolder().lockCanvas(new Rect(0, 0, sfv.getWidth(), sfv.getHeight()));// 关键:获取画布
     	         if(canvas==null){
     	        	 return;
     	         }
@@ -94,6 +93,6 @@ public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 		
 	}
 
-	
+
 
 }

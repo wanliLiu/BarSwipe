@@ -395,6 +395,29 @@ public class WaveformView extends View {
         if (timecodeIntervalSecs / onePixelInSecs < 50) {
             timecodeIntervalSecs = 15.0;
         }
+
+//        // Draw grid
+//        fractionalSecs = mOffset * onePixelInSecs;
+//        int integerTimecode = (int) (fractionalSecs / timecodeIntervalSecs);
+//        i = 0;
+//        while (i < width) {
+//            i++;
+//            fractionalSecs += onePixelInSecs;
+//            integerSecs = (int) fractionalSecs;
+//            int integerTimecodeNew = (int) (fractionalSecs /timecodeIntervalSecs);
+//            if (integerTimecodeNew != integerTimecode) {
+//                integerTimecode = integerTimecodeNew;
+//                // Turn, e.g. 67 seconds into "1:07"
+//                String timecodeMinutes = "" + (integerSecs / 60);
+//                String timecodeSeconds = "" + (integerSecs % 60);
+//                if ((integerSecs % 60) < 10) {
+//                    timecodeSeconds = "0" + timecodeSeconds;
+//                }
+//                String timecodeStr = timecodeMinutes + ":" + timecodeSeconds;
+//                float offset = (float) ( 0.5 * mTimecodePaint.measureText(timecodeStr));
+//                canvas.drawText(timecodeStr,i - offset,(int) (12 * mDensity),mTimecodePaint);
+//            }
+//        }
     }
 
 

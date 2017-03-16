@@ -146,8 +146,7 @@ public class WaveCanvas {
                 audioRecord.startRecording();// 开始录制
                 while (isRecording) {
                     // 从MIC保存数据到缓冲区  
-                    readsize = audioRecord.read(buffer, 0,
-                            recBufSize);
+                    readsize = audioRecord.read(buffer, 0,recBufSize);
                     synchronized (inBuf) {
 	                    for (int i = 0; i < readsize; i += rateX) {
 	                    	inBuf.add(buffer[i]);
