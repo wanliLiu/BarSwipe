@@ -1,13 +1,11 @@
 package com.cokus.wavelibrary.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,8 +19,31 @@ public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private SurfaceHolder holder;
     private int line_off;//上下边距距离
 
-    private int timeMargin, timeViewHeight, dotRadius;
-    private int totalTime = 90 * 1000;
+    /**
+     * 时间间隔宽度，dp单位，默认是10dp
+     */
+    private int timeMargin;
+    /**
+     * timeMargin 代表的时间 单位ms
+     */
+    private int timeSpace = 250;
+    /**
+     * 一大隔的时间  1000ms
+     */
+    private int timeBigSpace = 1000;
+    /**
+     * 时间区域的高度，默认是20dp
+     */
+    private int timeViewHeight;
+    /**
+     * 进度刻度线的圆点半径 默认3dp
+     */
+    private int dotRadius;
+
+    /**
+     * 像素偏移位置，对应时间和整体波形的移动距离
+     */
+    private int offset = 0;
 
 
     public int getLine_off() {
@@ -37,13 +58,23 @@ public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     public WaveSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        // TODO Auto-generated constructor stub
         this.holder = getHolder();
         holder.addCallback(this);
 
-        timeViewHeight = dip2px(20);
         timeMargin = dip2px(10);
+        timeViewHeight = dip2px(20);
         dotRadius = dip2px(3);
+    }
+
+    /**
+     * 像素对应的时间
+     *
+     * @param pixels
+     * @return 返回时间ms
+     */
+    public double pixelsToSeconds(int pixels) {
+        double onePixelTime = timeSpace * 1.0d / timeMargin * 1.0d;
+        return onePixelTime * pixels;
     }
 
     /**
@@ -53,6 +84,11 @@ public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private int dip2px(int dp) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());
         return (int) px;
+    }
+
+    public void test(int offset) {
+        this.offset = offset;
+        initSurfaceView(this);
     }
 
 
@@ -72,24 +108,24 @@ public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
                 onDrawTime(canvas);//时间
 
-                int waveheight = timeViewHeight + (sfv.getHeight() - timeViewHeight) / 2 - dotRadius;
-
-                Paint paintLine = new Paint();
-                Paint centerLine = new Paint();
-                Paint circlePaint = new Paint();
-                circlePaint.setColor(Color.rgb(246, 131, 126));
-                circlePaint.setAntiAlias(true);
-
-                paintLine.setColor(Color.rgb(169, 169, 169));
-                centerLine.setColor(Color.rgb(39, 199, 175));
-
-                canvas.drawLine(0, timeViewHeight, sfv.getWidth(), timeViewHeight, paintLine);//最上面的那根线
-
-                canvas.drawCircle(dotRadius, timeViewHeight - dotRadius, dotRadius, circlePaint);// 上面小圆
-                canvas.drawLine(dotRadius, timeViewHeight, dotRadius, sfv.getHeight(), circlePaint);//垂直的线
-                canvas.drawCircle(dotRadius, sfv.getHeight() - dotRadius, dotRadius, circlePaint);// 下面小圆
-                canvas.drawLine(0, waveheight, sfv.getWidth(), waveheight, centerLine);//中心线
-                canvas.drawLine(0, sfv.getHeight() - dotRadius * 2, sfv.getWidth(), sfv.getHeight() - dotRadius * 2, paintLine);//最下面的那根线
+//                int waveheight = timeViewHeight + (sfv.getHeight() - timeViewHeight) / 2 - dotRadius;
+//
+//                Paint paintLine = new Paint();
+//                Paint centerLine = new Paint();
+//                Paint circlePaint = new Paint();
+//                circlePaint.setColor(Color.rgb(246, 131, 126));
+//                circlePaint.setAntiAlias(true);
+//
+//                paintLine.setColor(Color.rgb(169, 169, 169));
+//                centerLine.setColor(Color.rgb(39, 199, 175));
+//
+//                canvas.drawLine(0, timeViewHeight, sfv.getWidth(), timeViewHeight, paintLine);//最上面的那根线
+//
+//                canvas.drawCircle(dotRadius, timeViewHeight - dotRadius, dotRadius, circlePaint);// 上面小圆
+//                canvas.drawLine(dotRadius, timeViewHeight, dotRadius, sfv.getHeight(), circlePaint);//垂直的线
+//                canvas.drawCircle(dotRadius, sfv.getHeight() - dotRadius, dotRadius, circlePaint);// 下面小圆
+//                canvas.drawLine(0, waveheight, sfv.getWidth(), waveheight, centerLine);//中心线
+//                canvas.drawLine(0, sfv.getHeight() - dotRadius * 2, sfv.getWidth(), sfv.getHeight() - dotRadius * 2, paintLine);//最下面的那根线
 
 
                 sfv.getHolder().unlockCanvasAndPost(canvas);// 解锁画布，提交画好的图像
@@ -100,59 +136,62 @@ public class WaveSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     }
 
+
     /**
      * 画刻度
      */
     private void onDrawTime(Canvas canvas) {
         if (canvas == null) return;
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
         Paint mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.RED);
         mPaint.setTextSize(25);
-        for (int i = 0, j = 0; i < totalTime; i += 250, j++) {
-            if (j % 4 == 0) {
-                canvas.drawLine(j * timeMargin, 0, j * timeMargin, timeMargin * 2, mPaint);
+
+        int startOffset = offset > 0 ? timeMargin - offset % timeMargin : 0;
+        for (int pixel = startOffset; pixel < getWidth(); pixel += timeMargin) {
+            int time = 0;
+            if (offset > 0) {
+                int temp = offset + timeMargin - offset % timeMargin;
+                if (pixel != startOffset)
+                    temp += pixel - startOffset;
+                time = (int) pixelsToSeconds(temp);
+            } else {
+                time = (int) pixelsToSeconds(pixel);
+            }
+            if (time % timeBigSpace == 0) {
+                //整数 一大隔
+                canvas.drawLine(pixel, 0, pixel, timeMargin * 2, mPaint);
                 // Turn, e.g. 67 seconds into "1:07"
-                int seconds = i / 1000;
-                String minutes = "" + (seconds / 60);
-                String second = "" + (seconds % 60);
-                if (seconds / 60 < 10) {
+                time /= timeBigSpace;
+                String minutes = "" + (time / 60);
+                String second = "" + (time % 60);
+                if (time / 60 < 10) {
                     minutes = "0" + minutes;
                 }
-                if ((seconds % 60) < 10) {
+                if ((time % 60) < 10) {
                     second = "0" + second;
                 }
                 String timecodeStr = minutes + ":" + second;
-                canvas.drawText(timecodeStr, j * timeMargin + dip2px(2), 20, mPaint);
+                canvas.drawText(timecodeStr, pixel + dip2px(2), 20, mPaint);
 
-            } else {
-                canvas.drawLine(j * timeMargin, timeMargin, j * timeMargin, timeMargin * 2, mPaint);
+            } else if (time > 0 && time % timeSpace == 0) {
+                //timeSpace 小隔
+                canvas.drawLine(pixel, timeMargin, pixel, timeMargin * 2, mPaint);
             }
         }
     }
 
-
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
         initSurfaceView(this);
-
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
     }
-
-
 }

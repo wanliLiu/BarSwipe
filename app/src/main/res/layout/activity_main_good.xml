@@ -56,7 +56,7 @@
 
     <com.barswipe.volume.wave.MnScaleBar
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_below="@id/socreaudio"
         android:layout_marginTop="10dp" />
 

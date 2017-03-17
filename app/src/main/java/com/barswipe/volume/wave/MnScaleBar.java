@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
@@ -64,10 +65,26 @@ public class MnScaleBar extends View {
         mContext = context;
         screenWidth = getPhoneW(mContext);
 
+        mRectHeight = dip2px(80);
+        mScaleMargin = dip2px(10);
+        mScaleHeight = dip2px(20);
+        mScaleMaxHeight = mScaleHeight * 2;
+
+        mRectWidth = max * mScaleMargin;
+
         mTempScale = screenWidth / mScaleMargin / 2; //判断滑动方向
         mScreenMidCountScale = screenWidth / mScaleMargin / 2; //中间刻度
 
         mScroller = new Scroller(mContext);
+    }
+
+    /**
+     * @param dp
+     * @return
+     */
+    private int dip2px(int dp) {
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());
+        return (int) px;
     }
 
     @Override
@@ -75,6 +92,7 @@ public class MnScaleBar extends View {
         //设置LayoutParams
 //        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(mRectWidth, mRectHeight);
 //        this.setLayoutParams(lp);
+
         //相对位置坐标
         mRect = new Rect(0, 0, mRectWidth, mRectHeight);
         //画笔
@@ -101,7 +119,7 @@ public class MnScaleBar extends View {
         Paint mPaint = new Paint();
         mPaint.setColor(Color.GRAY);
         mPaint.setTextAlign(Paint.Align.CENTER); //文字居中
-        mPaint.setTextSize(20);
+        mPaint.setTextSize(25);
         for (int i = 0; i < max; i++) {
             if (i != 0 && i != max) {
                 if (i % 10 == 0) { //整值

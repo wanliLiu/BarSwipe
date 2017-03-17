@@ -41,18 +41,24 @@ import permissions.dispatcher.RuntimePermissions;
 
 
 /**
- *@author:cokus
- *@email:czcoku@gmail.com
+ * @author:cokus
+ * @email:czcoku@gmail.com
  */
 @RuntimePermissions
 public class MainActivity_good_view extends AppCompatActivity {
 
-    @Bind(R.id.wavesfv) WaveSurfaceView waveSfv;
-    @Bind(R.id.switchbtn) Button switchBtn;
-    @Bind(R.id.status)TextView status;
-    @Bind(R.id.waveview)WaveformView waveView;
-    @Bind(R.id.play)Button playBtn;
-    @Bind(R.id.socreaudio)Button scoreBtn;
+    @Bind(R.id.wavesfv)
+    WaveSurfaceView waveSfv;
+    @Bind(R.id.switchbtn)
+    Button switchBtn;
+    @Bind(R.id.status)
+    TextView status;
+    @Bind(R.id.waveview)
+    WaveformView waveView;
+    @Bind(R.id.play)
+    Button playBtn;
+    @Bind(R.id.socreaudio)
+    Button scoreBtn;
 
     private static final int FREQUENCY = 16000;// 设置音频采样率，44100是目前的标准，但是某些设备仍然支持22050，16000，11025
     private static final int CHANNELCONGIFIGURATION = AudioFormat.CHANNEL_IN_MONO;// 设置单声道声道
@@ -62,6 +68,7 @@ public class MainActivity_good_view extends AppCompatActivity {
     private AudioRecord audioRecord;
     private WaveCanvas waveCanvas;
     private String mFileName = "test";//文件名
+    private int offset = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +77,7 @@ public class MainActivity_good_view extends AppCompatActivity {
         setContentView(R.layout.activity_main_good);
         ButterKnife.bind(this);
         U.createDirectory();
-        if(waveSfv != null) {
+        if (waveSfv != null) {
             waveSfv.setLine_off(42);
             //解决surfaceView黑色闪动效果
             waveSfv.setZOrderOnTop(true);
@@ -79,26 +86,29 @@ public class MainActivity_good_view extends AppCompatActivity {
         waveView.setLine_offset(42);
     }
 
-    @OnClick({R.id.switchbtn,R.id.play,R.id.socreaudio})
-    void click(View view){
+    @OnClick({R.id.switchbtn, R.id.play, R.id.socreaudio})
+    void click(View view) {
         switch (view.getId()) {
             case R.id.switchbtn:
-            if (waveCanvas == null || !waveCanvas.isRecording) {
-                status.setText("录音中...");
-                switchBtn.setText("停止录音");
-                waveSfv.setVisibility(View.VISIBLE);
-                waveView.setVisibility(View.INVISIBLE);
-                initAudio();
-            } else {
-                status.setText("停止录音");
-                switchBtn.setText("开始录音");
-                waveCanvas.Stop();
-                waveCanvas = null;
-                initWaveView();
-            }
+                waveSfv.test(offset);
+                offset += 5;
+
+//            if (waveCanvas == null || !waveCanvas.isRecording) {
+//                status.setText("录音中...");
+//                switchBtn.setText("停止录音");
+//                waveSfv.setVisibility(View.VISIBLE);
+//                waveView.setVisibility(View.INVISIBLE);
+//                initAudio();
+//            } else {
+//                status.setText("停止录音");
+//                switchBtn.setText("开始录音");
+//                waveCanvas.Stop();
+//                waveCanvas = null;
+//                initWaveView();
+//            }
                 break;
             case R.id.play:
-                   onPlay(0);
+                onPlay(0);
                 break;
             case R.id.socreaudio:
                 float sim = 0;
@@ -108,13 +118,13 @@ public class MainActivity_good_view extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(MainActivity_good_view.this,sim+"",Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity_good_view.this, sim + "", Toast.LENGTH_LONG).show();
                 break;
         }
     }
 
-    private void  initWaveView(){
-     loadFromFile();
+    private void initWaveView() {
+        loadFromFile();
     }
 
     File mFile;
@@ -122,7 +132,10 @@ public class MainActivity_good_view extends AppCompatActivity {
     SoundFile mSoundFile;
     boolean mLoadingKeepGoing;
     SamplePlayer mPlayer;
-    /** 载入wav文件显示波形 */
+
+    /**
+     * 载入wav文件显示波形
+     */
     private void loadFromFile() {
         try {
             Thread.sleep(300);//让文件写入完成后再载入波形 适当的休眠下
@@ -135,7 +148,7 @@ public class MainActivity_good_view extends AppCompatActivity {
         mLoadSoundFileThread = new Thread() {
             public void run() {
                 try {
-                    mSoundFile = SoundFile.create(mFile.getAbsolutePath(),null);
+                    mSoundFile = SoundFile.create(mFile.getAbsolutePath(), null);
                     if (mSoundFile == null) {
                         return;
                     }
@@ -160,9 +173,11 @@ public class MainActivity_good_view extends AppCompatActivity {
     }
 
 
-
     float mDensity;
-    /**waveview载入波形完成*/
+
+    /**
+     * waveview载入波形完成
+     */
     private void finishOpeningSoundFile() {
         waveView.setSoundFile(mSoundFile);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -172,7 +187,7 @@ public class MainActivity_good_view extends AppCompatActivity {
     }
 
     @NeedsPermission(Manifest.permission.RECORD_AUDIO)
-    public void initAudio(){
+    public void initAudio() {
         recBufSize = AudioRecord.getMinBufferSize(FREQUENCY,
                 CHANNELCONGIFIGURATION, AUDIOENCODING);// 录音组件
         audioRecord = new AudioRecord(AUDIO_SOURCE,// 指定音频来源，这里为麦克风
@@ -192,7 +207,7 @@ public class MainActivity_good_view extends AppCompatActivity {
 
 
     @OnShowRationale(Manifest.permission.RECORD_AUDIO)
-    void showRationaleForRecord(final PermissionRequest request){
+    void showRationaleForRecord(final PermissionRequest request) {
         new AlertDialog.Builder(this)
                 .setPositiveButton("好的", new DialogInterface.OnClickListener() {
                     @Override
@@ -212,8 +227,8 @@ public class MainActivity_good_view extends AppCompatActivity {
     }
 
     @OnPermissionDenied(Manifest.permission.RECORD_AUDIO)
-    void showRecordDenied(){
-        Toast.makeText(MainActivity_good_view.this,"拒绝录音权限将无法进行挑战",Toast.LENGTH_LONG).show();
+    void showRecordDenied() {
+        Toast.makeText(MainActivity_good_view.this, "拒绝录音权限将无法进行挑战", Toast.LENGTH_LONG).show();
     }
 
     @OnNeverAskAgain(Manifest.permission.RECORD_AUDIO)
@@ -240,7 +255,10 @@ public class MainActivity_good_view extends AppCompatActivity {
     private int mPlayStartMsec;
     private int mPlayEndMsec;
     private final int UPDATE_WAV = 100;
-    /**播放音频，@param startPosition 开始播放的时间*/
+
+    /**
+     * 播放音频，@param startPosition 开始播放的时间
+     */
     private synchronized void onPlay(int startPosition) {
         if (mPlayer == null)
             return;
@@ -248,47 +266,51 @@ public class MainActivity_good_view extends AppCompatActivity {
             mPlayer.pause();
             updateTime.removeMessages(UPDATE_WAV);
         }
-            mPlayStartMsec = waveView.pixelsToMillisecs(startPosition);
-            mPlayEndMsec = waveView.pixelsToMillisecsTotal();
-            mPlayer.setOnCompletionListener(new SamplePlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion() {
-                    waveView.setPlayback(-1);
-                    updateDisplay();
-                    updateTime.removeMessages(UPDATE_WAV);
-                    Toast.makeText(getApplicationContext(),"播放完成",Toast.LENGTH_LONG).show();
-                }
-            });
-            mPlayer.seekTo(mPlayStartMsec);
-            mPlayer.start();
-            Message msg = new Message();
-            msg.what = UPDATE_WAV;
-            updateTime.sendMessage(msg);
+        mPlayStartMsec = waveView.pixelsToMillisecs(startPosition);
+        mPlayEndMsec = waveView.pixelsToMillisecsTotal();
+        mPlayer.setOnCompletionListener(new SamplePlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion() {
+                waveView.setPlayback(-1);
+                updateDisplay();
+                updateTime.removeMessages(UPDATE_WAV);
+                Toast.makeText(getApplicationContext(), "播放完成", Toast.LENGTH_LONG).show();
+            }
+        });
+        mPlayer.seekTo(mPlayStartMsec);
+        mPlayer.start();
+        Message msg = new Message();
+        msg.what = UPDATE_WAV;
+        updateTime.sendMessage(msg);
     }
 
     Handler updateTime = new Handler() {
         public void handleMessage(Message msg) {
             updateDisplay();
             updateTime.sendMessageDelayed(new Message(), 10);
-        };
+        }
+
+        ;
     };
 
-    /**更新upd
-     * ateview 中的播放进度*/
+    /**
+     * 更新upd
+     * ateview 中的播放进度
+     */
     private void updateDisplay() {
-            int now = mPlayer.getCurrentPosition();// nullpointer
-            int frames = waveView.millisecsToPixels(now);
-            waveView.setPlayback(frames);//通过这个更新当前播放的位置
-            if (now >= mPlayEndMsec ) {
-                waveView.setPlayFinish(1);
-                if (mPlayer != null && mPlayer.isPlaying()) {
-                    mPlayer.pause();
-                    updateTime.removeMessages(UPDATE_WAV);
-                }
-            }else{
-                waveView.setPlayFinish(0);
+        int now = mPlayer.getCurrentPosition();// nullpointer
+        int frames = waveView.millisecsToPixels(now);
+        waveView.setPlayback(frames);//通过这个更新当前播放的位置
+        if (now >= mPlayEndMsec) {
+            waveView.setPlayFinish(1);
+            if (mPlayer != null && mPlayer.isPlaying()) {
+                mPlayer.pause();
+                updateTime.removeMessages(UPDATE_WAV);
             }
-            waveView.invalidate();//刷新真个视图
+        } else {
+            waveView.setPlayFinish(0);
+        }
+        waveView.invalidate();//刷新真个视图
     }
 
 

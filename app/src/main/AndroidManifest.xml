@@ -362,20 +362,21 @@
             android:screenOrientation="landscape" />
         <activity android:name=".volume.wave.AudioFxActivity" />
 
-        <activity android:name=".volume.wave.MainActivity_good_view">
+        <activity android:name=".volume.wave.AcitivtyWaveTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".volume.wave.MainActivity_good_view" />
 
         <activity
             android:name=".volume.edit.RingdroidSelectActivity"
             android:description="@string/str_edit"
-            android:theme="@style/AppThemeArcLayout"
             android:icon="@drawable/ic_launcher"
-            android:label="音频编辑">
+            android:label="音频编辑"
+            android:theme="@style/AppThemeArcLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -401,9 +402,10 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".volume.edit.ChooseContactActivity"
-            android:theme="@style/AppThemeArcLayout"/>
-        <activity android:name=".volume.pcm.pcm2amr.MainActivity_pcm_amr"/>
+        <activity
+            android:name=".volume.edit.ChooseContactActivity"
+            android:theme="@style/AppThemeArcLayout" />
+        <activity android:name=".volume.pcm.pcm2amr.MainActivity_pcm_amr" />
     </application>
 
 </manifest>
