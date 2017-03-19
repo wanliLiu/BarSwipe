@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -21,7 +23,7 @@ public class BaseWaveView extends View {
     private boolean isDebug = true;
 
     protected Context ctx;
-    protected int viewWidth, viewHeight;
+    protected int viewWidth, viewHeight, screenWidth, halfScreenWidth, startOffset,waveHeight;
     /**
      * 时间间隔宽度，dp单位，默认是10dp
      */
@@ -50,7 +52,6 @@ public class BaseWaveView extends View {
      * 录制的最大时间
      */
     protected int totalTimeSec = 90;
-    protected int totalTimeMs = totalTimeSec * 1000;
 
     protected int waveCenterPos = 0;
 
@@ -74,6 +75,23 @@ public class BaseWaveView extends View {
     }
 
     /**
+     *
+     */
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            BaseWaveView.this.invalidate();
+        }
+    };
+
+    /**
+     *
+     */
+    protected void updateDisplay() {
+        handler.sendEmptyMessage(0);
+    }
+
+    /**
      * @param dp
      * @return
      */
@@ -92,13 +110,19 @@ public class BaseWaveView extends View {
         timeViewHeight = dip2px(25);
         dotRadius = dip2px(4);
 
+        viewWidth = screenWidth = getScreenW(ctx);
+        halfScreenWidth = screenWidth / 2;
+        viewHeight = screenWidth * 3 / 4;
+        startOffset = halfScreenWidth - timeMargin;
+
+        waveHeight = viewHeight - timeViewHeight - dotRadius * 2;
+
         initPaint();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        viewHeight = viewWidth = getPhoneW(ctx);
         setMeasuredDimension(viewWidth, viewHeight);
     }
 
@@ -151,7 +175,7 @@ public class BaseWaveView extends View {
     /**
      * 获取手机分辨率--W
      */
-    public static int getPhoneW(Context context) {
+    private int getScreenW(Context context) {
         DisplayMetrics dm = new DisplayMetrics();
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
         return dm.widthPixels;
@@ -164,5 +188,54 @@ public class BaseWaveView extends View {
     public void logOut(String str) {
         if (isDebug)
             Log.e(TAG, str);
+    }
+
+    public int getViewWidth() {
+        return viewWidth;
+    }
+
+    public void setViewWidth(int viewWidth) {
+        this.viewWidth = viewWidth;
+    }
+
+    public int getViewHeight() {
+        return viewHeight;
+    }
+
+    public void setViewHeight(int viewHeight) {
+        this.viewHeight = viewHeight;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public void setScreenWidth(int screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    public int getHalfScreenWidth() {
+        return halfScreenWidth;
+    }
+
+    public void setHalfScreenWidth(int halfScreenWidth) {
+        this.halfScreenWidth = halfScreenWidth;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+
+    public int getStartOffset() {
+        return startOffset;
+    }
+
+    public void setStartOffset(int startOffset) {
+        this.startOffset = startOffset;
     }
 }

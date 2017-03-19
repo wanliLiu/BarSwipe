@@ -81,14 +81,31 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/pcm2amr"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#bebebe"
-            android:padding="10dp"
-            android:text="pcm2amr"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/pcm2amr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#bebebe"
+                android:padding="10dp"
+                android:text="pcm2amr"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/job"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#bebebe"
+                android:padding="10dp"
+                android:text="jobTest"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/mediarecorder"

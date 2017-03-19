@@ -13,29 +13,22 @@ import com.barswipe.R;
 
 public class AcitivtyWaveTest extends AppCompatActivity {
 
-    private PcmWaveView waveView;
-    private PlayWaveView playView;
+    private AudioRecordView recordView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wave_test);
-        waveView = (PcmWaveView) findViewById(R.id.waveView);
-        playView = (PlayWaveView) findViewById(R.id.playView);
+        recordView = (AudioRecordView) findViewById(R.id.recordView);
     }
-
-    /**
-     * @param view
-     */
-    private int index = 10;
 
     public void onView(View view) {
         switch (view.getId()) {
             case R.id.huadong:
-                playView.updatePosition(index);
-                waveView.updateData(index);
-                index += 10;
-//                waveView.smoothScrollBy(10);
+                recordView.testPostionUpdate();
+                break;
+            case R.id.pause:
+                recordView.stopRecord();
                 break;
         }
     }

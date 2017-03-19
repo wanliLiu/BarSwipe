@@ -5,26 +5,11 @@
     android:background="@color/black_overlay"
     android:orientation="vertical">
 
-    <FrameLayout
+    <com.barswipe.volume.wave.AudioRecordView
+        android:id="@+id/recordView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"/>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
-
-            <com.barswipe.volume.wave.PcmWaveView
-                android:id="@+id/waveView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </HorizontalScrollView>
-
-        <com.barswipe.volume.wave.PlayWaveView
-            android:id="@+id/playView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,5 +22,12 @@
             android:layout_height="wrap_content"
             android:onClick="onView"
             android:text="滑动测试" />
+
+        <Button
+            android:id="@+id/pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onView"
+            android:text="action" />
     </LinearLayout>
 </LinearLayout>
