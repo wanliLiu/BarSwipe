@@ -143,6 +143,10 @@ public class AudioRecordView extends FrameLayout {
     public void testPostionUpdate() {
 
         isRecording = true;
+
+
+        waveView.setRecording(true);
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

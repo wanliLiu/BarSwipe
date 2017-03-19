@@ -65,7 +65,7 @@ public class PcmWaveView extends BaseWaveView {
             @Override
             public void onGlobalLayout() {
                 PcmWaveView.this.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                scroolX = getStartOffset();
+                currentX = scroolX = getStartOffset();
                 PcmWaveView.this.scrollTo(scroolX, 0);
             }
         });
