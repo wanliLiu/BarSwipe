@@ -90,22 +90,22 @@ public class MainActivity_good_view extends AppCompatActivity {
     void click(View view) {
         switch (view.getId()) {
             case R.id.switchbtn:
-                waveSfv.test(offset);
-                offset += 5;
+//                waveSfv.test(offset);
+//                offset += 5;
 
-//            if (waveCanvas == null || !waveCanvas.isRecording) {
-//                status.setText("录音中...");
-//                switchBtn.setText("停止录音");
-//                waveSfv.setVisibility(View.VISIBLE);
-//                waveView.setVisibility(View.INVISIBLE);
-//                initAudio();
-//            } else {
-//                status.setText("停止录音");
-//                switchBtn.setText("开始录音");
-//                waveCanvas.Stop();
-//                waveCanvas = null;
-//                initWaveView();
-//            }
+            if (waveCanvas == null || !waveCanvas.isRecording) {
+                status.setText("录音中...");
+                switchBtn.setText("停止录音");
+                waveSfv.setVisibility(View.VISIBLE);
+                waveView.setVisibility(View.INVISIBLE);
+                initAudio();
+            } else {
+                status.setText("停止录音");
+                switchBtn.setText("开始录音");
+                waveCanvas.Stop();
+                waveCanvas = null;
+                initWaveView();
+            }
                 break;
             case R.id.play:
                 onPlay(0);

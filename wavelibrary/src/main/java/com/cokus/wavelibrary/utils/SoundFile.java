@@ -416,7 +416,7 @@ public class SoundFile {
         mFileType = "wav";
         mFileSize = 0;
         //采样率 就是1s采集多少个点，这里就16000个点就是16000个数据
-        mSampleRate = 16000;
+        mSampleRate = 8000;
         mChannels = 1;  // record mono audio.
         short[] buffer = new short[1024];  // buffer contains 1 mono frame of 1024 16 bits samples
         int minBufferSize = AudioRecord.getMinBufferSize(

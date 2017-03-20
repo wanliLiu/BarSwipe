@@ -39,15 +39,16 @@ public class Recorder implements Runnable, Supporter.OnOffSwitcher {
             return;
         }
         int bufferSizeInByte = AudioRecord.getMinBufferSize(SAMPLE_RATE,
-                AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 SAMPLE_RATE,
-                AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSizeInByte);
 
-        audioBuffer = new short[bufferSizeInByte / 2];
+        audioBuffer = new short[FRAME_SIZE];
+//        audioBuffer = new short[bufferSizeInByte / 2];
 
         audioRecord.startRecording();
 

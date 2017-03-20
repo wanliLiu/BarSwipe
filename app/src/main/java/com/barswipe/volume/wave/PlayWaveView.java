@@ -30,18 +30,17 @@ public class PlayWaveView extends BaseWaveView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(Color.TRANSPARENT);//清楚画布
-        canvas.drawCircle(timeMargin + offset, timeViewHeight - dotRadius, dotRadius, playIndexPaint);// 上面小圆
-        canvas.drawLine(timeMargin + offset, timeViewHeight - dotRadius, timeMargin + offset, viewHeight - dotRadius, playIndexPaint);//垂直的线
+        canvas.drawCircle(timeMargin + offset, timeViewHeight, dotRadius, playIndexPaint);// 上面小圆
+        canvas.drawLine(timeMargin + offset, timeViewHeight, timeMargin + offset, viewHeight, playIndexPaint);//垂直的线
         canvas.drawCircle(timeMargin + offset, viewHeight - dotRadius, dotRadius, playIndexPaint);// 下面小圆
     }
 
     /**
-     * @param moffset
+     *
      */
-    public void updatePosition(int moffset) {
-
-        offset += moffset;
-        if (offset >= halfScreenWidth - timeMargin)
+    public void updatePosition() {
+        offset += waveWidth;
+        if (offset > halfScreenWidth - timeMargin)
             return;
 
         updateDisplay();

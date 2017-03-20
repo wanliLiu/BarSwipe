@@ -52,6 +52,9 @@ public class BaseWaveView extends View {
      * 录制的最大时间
      */
     protected int totalTimeSec = 90;
+    //250ms一小隔绘制
+    protected int waveCount = 3;
+    protected int waveWidth = 0;
 
     protected int waveCenterPos = 0;
 
@@ -110,12 +113,14 @@ public class BaseWaveView extends View {
         timeViewHeight = dip2px(25);
         dotRadius = dip2px(4);
 
+        waveWidth = timeMargin / waveCount;
+
         viewWidth = screenWidth = getScreenW(ctx);
         halfScreenWidth = screenWidth / 2;
         viewHeight = screenWidth * 3 / 4;
         startOffset = halfScreenWidth - timeMargin;
 
-        waveHeight = viewHeight - timeViewHeight - dotRadius * 2;
+        waveHeight = viewHeight - timeViewHeight - dotRadius;
 
         initPaint();
     }

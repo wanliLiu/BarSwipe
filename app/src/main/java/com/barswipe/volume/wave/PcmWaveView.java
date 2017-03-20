@@ -13,8 +13,6 @@ import android.widget.Scroller;
 
 import com.barswipe.volume.BaseWaveView;
 
-import java.util.Random;
-
 /**
  * Created by Soli on 2017/3/17.
  */
@@ -56,7 +54,7 @@ public class PcmWaveView extends BaseWaveView {
 
         wavePaint = new Paint();
         wavePaint.setAntiAlias(true);
-        wavePaint.setStrokeWidth(4);
+        wavePaint.setStrokeWidth(waveWidth - 2);
         wavePaint.setColor(Color.parseColor("#e0e0e0"));
 
         mScroller = new Scroller(mctx);
@@ -114,9 +112,14 @@ public class PcmWaveView extends BaseWaveView {
     /**
      * @param canvas
      */
-    private void onDrawWare(Canvas canvas) {
-        int ran = new Random().nextInt(150);
-        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - ran, halfScreenWidth + offset, waveCenterPos + ran, wavePaint);
+    private void onDrawWare(Canvas canvas, int volume) {
+        double abs = volume * 1.0f / (15000 / 2) * 1.0f;
+        int _2_3 = waveHeight * 2 / 3;
+        double dis = (abs * _2_3) / 2.0f;
+        int data = (int) dis;
+        if (data > _2_3 / 2)
+            data = _2_3 / 2;
+        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - data, halfScreenWidth + offset, waveCenterPos + data, wavePaint);
     }
 
     /**
@@ -169,7 +172,7 @@ public class PcmWaveView extends BaseWaveView {
 
                 canvas.drawLine(0, timeViewHeight, viewWidth, timeViewHeight, timeLinePain);//时间下面这根线
                 canvas.drawLine(0, waveCenterPos, viewWidth, waveCenterPos, timeLinePain);//中心线
-                canvas.drawLine(0, viewHeight - dotRadius * 2, viewWidth, viewHeight - dotRadius * 2, timeLinePain);//最下面的那根线
+                canvas.drawLine(0, viewHeight - dotRadius, viewWidth, viewHeight - dotRadius, timeLinePain);//最下面的那根线
 
                 updateDisplay();
             }
@@ -216,22 +219,24 @@ public class PcmWaveView extends BaseWaveView {
     }
 
     /**
-     * @param mOffset
+     *
      */
-    public void updateData(int mOffset) {
-        offset += mOffset;
-        onDrawWare(mCanvas);
+    public void updateData(int volume) {
+        offset += waveWidth;
+        onDrawWare(mCanvas, volume);
         updateDisplay();
 
         if (offset > halfScreenWidth - timeMargin)
-            scrollBy(mOffset, 0);
+            scrollBy(waveWidth, 0);
     }
-
 
     public boolean isRecording() {
         return isRecording;
     }
 
+    /**
+     * @param recording
+     */
     public void setRecording(boolean recording) {
         isRecording = recording;
         if (!isRecording)

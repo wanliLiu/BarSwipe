@@ -8,8 +8,18 @@
     <com.barswipe.volume.wave.AudioRecordView
         android:id="@+id/recordView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/recordTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="00:00.00"
+        android:textColor="#6CA5FF"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,10 +34,27 @@
             android:text="滑动测试" />
 
         <Button
-            android:id="@+id/pause"
+            android:id="@+id/btnRecord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onView"
-            android:text="action" />
+            android:text="开始录音" />
+
+        <Button
+            android:id="@+id/btnPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onView"
+            android:text="暂停" />
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onView"
+            android:text="结束录音" />
+
     </LinearLayout>
+
+
 </LinearLayout>

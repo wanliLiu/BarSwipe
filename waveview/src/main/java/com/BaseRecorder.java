@@ -1,5 +1,7 @@
 package com;
 
+import android.util.Log;
+
 /**
  * Created by shuyu on 2016/11/16.
  */
@@ -8,7 +10,7 @@ public abstract class BaseRecorder {
 
     protected int mVolume;
 
-    public  abstract int getRealVolume();
+    public abstract int getRealVolume();
 
     /**
      * 此计算方法来自samsung开发范例
@@ -25,6 +27,7 @@ public abstract class BaseRecorder {
         if (readSize > 0) {
             double amplitude = sum / readSize;
             mVolume = (int) Math.sqrt(amplitude);
+            Log.e("音量最大值：", mVolume + "");
         }
     }
 

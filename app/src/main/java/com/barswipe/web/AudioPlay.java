@@ -28,7 +28,7 @@ public class AudioPlay {
     // 设置音频采样率，44100是目前的标准
     private int sampleRateInHz = 8000;//44100
     // 设置音频的录制的声道CHANNEL_IN_STEREO为双声道，CHANNEL_CONFIGURATION_MONO为单声道
-    private int channelConfig = AudioFormat.CHANNEL_CONFIGURATION_MONO;
+    private int channelConfig = AudioFormat.CHANNEL_IN_MONO;
     // 音频数据格式:PCM 16位每个样本。保证设备支持。PCM 8位每个样本。不一定能得到设备支持。
     private int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
     // 缓冲区字节大小
