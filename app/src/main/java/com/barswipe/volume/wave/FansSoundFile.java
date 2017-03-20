@@ -36,7 +36,7 @@ public class FansSoundFile {
     private onRecordStatusListener listener = null;
 
     //采样率 就是1s采集多少个点，这里就16000个点就是16000个数据
-    private int mSampleRate = 44100;//44100 8000
+    private int mSampleRate = 8000;//44100 8000
     // 设置音频的录制的声道CHANNEL_IN_STEREO为双声道，CHANNEL_CONFIGURATION_MONO为单声道
     private int channelConfig = AudioFormat.CHANNEL_IN_MONO;
     // 音频数据格式:PCM 16位每个样本。保证设备支持。PCM 8位每个样本。不一定能得到设备支持。
@@ -55,12 +55,8 @@ public class FansSoundFile {
 
     public FansSoundFile() {
         int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);
-        int _83_ms = (int) (mSampleRate * (0.25f / 3.0f));
-        if (_83_ms >= minBufferSize) {
-            minBufferSize = _83_ms * 2;
-        }
-        buffer = new short[minBufferSize / 2];
-        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRate, channelConfig, audioFormat, minBufferSize);
+        buffer = new short[667];//3675  667
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRate, channelConfig, audioFormat, minBufferSize * 2);
 
         // Allocate memory for 20 seconds first. Reallocate later if more is needed.
         mPCMBytes = ByteBuffer.allocate(20 * mSampleRate * 2);
@@ -196,16 +192,16 @@ public class FansSoundFile {
 
         int mVolume = 0;
         double sum = 0;
+        int max = 0;
         for (int i = 0; i < readSize; i++) {
-            // 这里没有做运算的优化，为了更加清晰的展示代码
-            sum += buffer[i] * buffer[i];
+            if (Math.abs(buffer[i]) > max) {
+                max = Math.abs(buffer[i]);
+            }
         }
         if (readSize > 0) {
-            double amplitude = sum / readSize;
-            mVolume = (int) Math.sqrt(amplitude);
-            Log.e("音量大小", String.valueOf(mVolume));
+            Log.e("音量大小", String.valueOf(max));
             if (listener != null)
-                listener.onRealVolume(mVolume);
+                listener.onRealVolume(max);
         }
     }
 

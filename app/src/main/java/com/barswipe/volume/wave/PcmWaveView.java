@@ -113,12 +113,11 @@ public class PcmWaveView extends BaseWaveView {
      * @param canvas
      */
     private void onDrawWare(Canvas canvas, int volume) {
-        double abs = volume * 1.0f / (15000 / 2) * 1.0f;
+        double abs = volume * 1.0f / Short.MAX_VALUE  * 1.0f;
         int _2_3 = waveHeight * 2 / 3;
         double dis = (abs * _2_3) / 2.0f;
-        int data = (int) dis;
-        if (data > _2_3 / 2)
-            data = _2_3 / 2;
+        long data = Math.round(dis);
+
         canvas.drawLine(halfScreenWidth + offset, waveCenterPos - data, halfScreenWidth + offset, waveCenterPos + data, wavePaint);
     }
 
