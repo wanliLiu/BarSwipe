@@ -19,6 +19,7 @@ public class AudioRecordView extends FrameLayout {
 
     private FansSoundFile soundFile;
 
+
     private FansSoundFile.onRecordStatusListener listener;
 
     public AudioRecordView(@NonNull Context context) {
@@ -56,11 +57,17 @@ public class AudioRecordView extends FrameLayout {
             }
 
             @Override
-            public void onRealVolume(int volume) {
+            public void onRealVolume(double volume) {
                 if (waveView.isRecording()) {
                     playBackView.updatePosition();
                     waveView.updateData(volume);
                 }
+            }
+
+            @Override
+            public void onRecordStop(FansSoundFile soundFile) {
+                if (listener != null)
+                    listener.onRecordStop(soundFile);
             }
         });
     }
@@ -124,14 +131,6 @@ public class AudioRecordView extends FrameLayout {
     }
 
     /**
-     * @param isPause
-     */
-    public void pause(boolean isPause) {
-        soundFile.pause(isPause);
-        waveView.setRecording(!isPause);
-    }
-
-    /**
      *
      */
     public void stopRecord() {
@@ -139,4 +138,21 @@ public class AudioRecordView extends FrameLayout {
         waveView.setRecording(false);
     }
 
+    /**
+     *
+     */
+    public void startPlay()
+    {
+        waveView.startPlay();
+    }
+
+    public void stopPlay()
+    {
+        waveView.stopPlay();
+    }
+
+    public void updateData()
+    {
+        waveView.updateData();
+    }
 }

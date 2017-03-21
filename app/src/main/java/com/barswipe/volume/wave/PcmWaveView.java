@@ -23,7 +23,7 @@ public class PcmWaveView extends BaseWaveView {
 
     private Paint wavePaint;
 
-    private boolean isRecording = false;
+    private boolean isCanScroll = false;
 
     private boolean mIsDraw = true, isInit = false;
 
@@ -112,13 +112,10 @@ public class PcmWaveView extends BaseWaveView {
     /**
      * @param canvas
      */
-    private void onDrawWare(Canvas canvas, int volume) {
-        double abs = volume * 1.0f / Short.MAX_VALUE  * 1.0f;
-        int _2_3 = waveHeight * 2 / 3;
-        double dis = (abs * _2_3) / 2.0f;
-        long data = Math.round(dis);
-
-        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - data, halfScreenWidth + offset, waveCenterPos + data, wavePaint);
+    private void onDrawWare(Canvas canvas, double volume) {
+        int _2_3 = waveHeight * 1 / 5;
+        double dis = (volume * _2_3) / 2.0f;
+        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float)dis, halfScreenWidth + offset, waveCenterPos + (float)dis, wavePaint);
     }
 
     /**
@@ -182,7 +179,7 @@ public class PcmWaveView extends BaseWaveView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if (isRecording || offset <= 0)
+        if (isCanScroll || offset <= 0)
             return super.onTouchEvent(event);
 
         int x = (int) event.getX();
@@ -220,7 +217,7 @@ public class PcmWaveView extends BaseWaveView {
     /**
      *
      */
-    public void updateData(int volume) {
+    public void updateData(double volume) {
         offset += waveWidth;
         onDrawWare(mCanvas, volume);
         updateDisplay();
@@ -229,18 +226,44 @@ public class PcmWaveView extends BaseWaveView {
             scrollBy(waveWidth, 0);
     }
 
+    /**
+     *
+     */
+    public void updateData() {
+        scrollBy(waveWidth, 0);
+    }
+
+
     public boolean isRecording() {
-        return isRecording;
+        return isCanScroll;
     }
 
     /**
      * @param recording
      */
     public void setRecording(boolean recording) {
-        isRecording = recording;
-        if (!isRecording)
+        isCanScroll = recording;
+        if (!isCanScroll)
             currentX = scroolX = getScrollX();
         else
             scrollTo(currentX, 0);
+    }
+
+    /**
+     *
+     */
+    public void startPlay() {
+        isCanScroll = true;
+        if (offset >= halfScreenWidth) {
+            scroolX = 0;
+            scrollTo(0, 0);
+        } else {
+            scroolX -= offset;
+            scrollTo(currentX - offset, 0);
+        }
+    }
+
+    public void stopPlay() {
+        isCanScroll = false;
     }
 }

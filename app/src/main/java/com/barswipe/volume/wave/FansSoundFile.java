@@ -51,7 +51,7 @@ public class FansSoundFile {
     private AudioRecord audioRecord;
     private short[] buffer;
     private audioRecordThread recordThread;
-    private boolean isRecording = false, isPause = false;
+    private boolean isRecording = false;
 
     public FansSoundFile() {
         int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);
@@ -62,10 +62,7 @@ public class FansSoundFile {
         mPCMBytes = ByteBuffer.allocate(20 * mSampleRate * 2);
         mPCMBytes.order(ByteOrder.LITTLE_ENDIAN);
         mPCMSamples = mPCMBytes.asShortBuffer();
-
-        recordThread = new audioRecordThread();
     }
-
 
     public int getSampleRate() {
         return mSampleRate;
@@ -100,14 +97,8 @@ public class FansSoundFile {
     public void startRecord() {
         isRecording = true;
         audioRecord.startRecording();
+        recordThread = new audioRecordThread();
         recordThread.start();
-    }
-
-    /**
-     * @param isPause
-     */
-    public void pause(boolean isPause) {
-        this.isPause = isPause;
     }
 
     /**
@@ -115,6 +106,8 @@ public class FansSoundFile {
      */
     public void stopRecord() {
         isRecording = false;
+        audioRecord.stop();
+        recordThread = null;
     }
 
     /**
@@ -126,14 +119,6 @@ public class FansSoundFile {
             super.run();
 
             while (isRecording) {
-                if (isPause) {
-                    try {
-                        Thread.sleep(50);
-                        continue;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
                 // check if mPCMSamples can contain 1024 additional samples.
                 if (mPCMSamples.remaining() < 1024) {
                     // Try to allocate memory for 10 additional seconds.
@@ -163,11 +148,12 @@ public class FansSoundFile {
                 calculateTime((float) (mPCMSamples.position()) / mSampleRate);
                 calculateRealVolume(buffer, readSize);
             }
-            audioRecord.stop();
-            audioRecord.release();
             mNumSamples = mPCMSamples.position();
-            mPCMSamples.rewind();
-            mPCMBytes.rewind();
+//            mPCMSamples.rewind();
+//            mPCMBytes.rewind();
+
+            if (listener != null)
+                listener.onRecordStop(FansSoundFile.this);
         }
     }
 
@@ -189,20 +175,20 @@ public class FansSoundFile {
      * @param readSize readSize
      */
     private void calculateRealVolume(short[] buffer, int readSize) {
-
-        int mVolume = 0;
+        double mVolume;
         double sum = 0;
-        int max = 0;
         for (int i = 0; i < readSize; i++) {
-            if (Math.abs(buffer[i]) > max) {
-                max = Math.abs(buffer[i]);
-            }
+            // 这里没有做运算的优化，为了更加清晰的展示代码
+            sum += buffer[i] * buffer[i];
         }
         if (readSize > 0) {
-            Log.e("音量大小", String.valueOf(max));
+            double amplitude = sum / readSize;
+            mVolume = 0.1 * Math.log10(amplitude);
+            Log.e("音量最大值：", mVolume + "");
             if (listener != null)
-                listener.onRealVolume(max);
+                listener.onRealVolume(mVolume);
         }
+
     }
 
 
@@ -214,7 +200,9 @@ public class FansSoundFile {
          */
         public void onRecordTime(double fractionComplete, String time);
 
-        public void onRealVolume(int volume);
+        public void onRealVolume(double volume);
+
+        public void onRecordStop(FansSoundFile soundFile);
     }
 
 }

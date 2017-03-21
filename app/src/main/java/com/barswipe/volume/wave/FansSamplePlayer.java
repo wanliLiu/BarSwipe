@@ -19,15 +19,18 @@ package com.barswipe.volume.wave;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-
-import com.cokus.wavelibrary.utils.SoundFile;
+import android.util.Log;
 
 import java.nio.ShortBuffer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FansSamplePlayer {
     public interface OnCompletionListener {
         public void onCompletion();
-    };
+
+        public void onPlayProgress();
+    }
 
     private ShortBuffer mSamples;
     private int mSampleRate;
@@ -39,6 +42,7 @@ public class FansSamplePlayer {
     private Thread mPlayThread;
     private boolean mKeepPlaying;
     private OnCompletionListener mListener;
+    private Timer timer;
 
     public FansSamplePlayer(ShortBuffer samples, int sampleRate, int channels, int numSamples) {
         mSamples = samples;
@@ -46,7 +50,6 @@ public class FansSamplePlayer {
         mChannels = channels;
         mNumSamples = numSamples;
         mPlaybackStart = 0;
-
         int bufferSize = AudioTrack.getMinBufferSize(
                 mSampleRate,
                 mChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO,
@@ -55,35 +58,18 @@ public class FansSamplePlayer {
         if (bufferSize < mChannels * mSampleRate * 2) {
             bufferSize = mChannels * mSampleRate * 2;
         }
-        mBuffer = new short[bufferSize/2]; // bufferSize is in Bytes.
+        mBuffer = new short[667]; // bufferSize is in Bytes.
         mAudioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 mSampleRate,
                 mChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT,
-                mBuffer.length * 2,
+                bufferSize,
                 AudioTrack.MODE_STREAM);
-        // Check when player played all the given data and notify user if mListener is set.
-        mAudioTrack.setNotificationMarkerPosition(mNumSamples - 1);  // Set the marker to the end.
-        mAudioTrack.setPlaybackPositionUpdateListener(
-                new AudioTrack.OnPlaybackPositionUpdateListener() {
-            @Override
-            public void onPeriodicNotification(AudioTrack track) {}
-
-            @Override
-            public void onMarkerReached(AudioTrack track) {
-                stop();
-                if (mListener != null) {
-                    mListener.onCompletion();
-                }
-            }
-        });
-        mPlayThread = null;
         mKeepPlaying = true;
-        mListener = null;
     }
 
-    public FansSamplePlayer(SoundFile mSoundFile) {
+    public FansSamplePlayer(FansSoundFile mSoundFile) {
         this(mSoundFile.getSamples(), mSoundFile.getSampleRate(), mSoundFile.getChannels(), mSoundFile.getNumSamples());
     }
 
@@ -99,36 +85,55 @@ public class FansSamplePlayer {
         return mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PAUSED;
     }
 
+
     public void start() {
         if (isPlaying()) {
             return;
         }
+
         mKeepPlaying = true;
         mAudioTrack.flush();
         mAudioTrack.play();
         // Setting thread feeding the audio samples to the audio hardware.
         // (Assumes mChannels = 1 or 2).
-        mPlayThread = new Thread () {
+        mPlayThread = new Thread() {
             public void run() {
                 int position = mPlaybackStart * mChannels;
                 mSamples.position(position);
                 int limit = mNumSamples * mChannels;
                 while (mSamples.position() < limit && mKeepPlaying) {
                     int numSamplesLeft = limit - mSamples.position();
-                    if(numSamplesLeft >= mBuffer.length) {
+                    if (numSamplesLeft >= mBuffer.length) {
                         mSamples.get(mBuffer);
                     } else {
-                        for(int i=numSamplesLeft; i<mBuffer.length; i++) {
+                        for (int i = numSamplesLeft; i < mBuffer.length; i++) {
                             mBuffer[i] = 0;
                         }
                         mSamples.get(mBuffer, 0, numSamplesLeft);
                     }
-                    // TODO(nfaralli): use the write method that takes a ByteBuffer as argument.
                     mAudioTrack.write(mBuffer, 0, mBuffer.length);
                 }
+
+                if (mListener != null) {
+                    mListener.onCompletion();
+                }
+                if (timer != null)
+                    timer.cancel();
             }
         };
+
         mPlayThread.start();
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                int playbackPo = getCurrentPosition();
+                if (mListener != null) {
+                    mListener.onPlayProgress();
+                }
+            }
+        }, 10, 85);
+
     }
 
     public void pause() {
@@ -162,7 +167,7 @@ public class FansSamplePlayer {
     public void seekTo(int msec) {
         boolean wasPlaying = isPlaying();
         stop();
-        mPlaybackStart = (int)(msec * (mSampleRate / 1000.0));
+        mPlaybackStart = (int) (msec * (mSampleRate / 1000.0));
         if (mPlaybackStart > mNumSamples) {
             mPlaybackStart = mNumSamples;  // Nothing to play...
         }
@@ -173,12 +178,14 @@ public class FansSamplePlayer {
     }
 
     public int getCurrentPosition() {
-    	int curPos = 0;
-    	try{
-    	curPos = (int)((mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) *(1000.0 / mSampleRate));
-    	}catch(Exception e){
+        int curPos = 0;
+        try {
+            Log.e("playBack----1", mAudioTrack.getPlaybackHeadPosition() + "");
+            curPos = (int) ((mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) * (1000.0 / mSampleRate));
+        } catch (Exception e) {
 //    	mAudioTrack.setNotificationMarkerPosition(mNumSamples - 1); 
-    	}
+        }
+        Log.e("playBack", curPos + "");
         return curPos;
     }
 }
