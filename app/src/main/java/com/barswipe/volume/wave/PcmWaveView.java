@@ -13,6 +13,8 @@ import android.widget.Scroller;
 
 import com.barswipe.volume.BaseWaveView;
 
+import java.util.Random;
+
 /**
  * Created by Soli on 2017/3/17.
  */
@@ -115,7 +117,14 @@ public class PcmWaveView extends BaseWaveView {
     private void onDrawWare(Canvas canvas, double volume) {
         int _2_3 = waveHeight * 1 / 5;
         double dis = (volume * _2_3) / 2.0f;
-        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float)dis, halfScreenWidth + offset, waveCenterPos + (float)dis, wavePaint);
+//        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float)dis, halfScreenWidth + offset, waveCenterPos + (float)dis, wavePaint);
+        wavePaint.setColor(Color.parseColor("#e0e0e0"));
+        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float) dis, halfScreenWidth + offset, waveCenterPos - dip2px(1), wavePaint);
+        dis -= dip2px(2);
+        wavePaint.setColor(Color.parseColor("#90e0e0e0"));
+        if (dis <= 0)
+            dis = new Random().nextInt(5);
+        canvas.drawLine(halfScreenWidth + offset, waveCenterPos + dip2px(1), halfScreenWidth + offset, waveCenterPos + (float) dis, wavePaint);
     }
 
     /**
@@ -229,8 +238,12 @@ public class PcmWaveView extends BaseWaveView {
     /**
      *
      */
-    public void updateData() {
-        scrollBy(waveWidth, 0);
+    public void updatePlayPosition(int timeUs) {
+
+        int piex = millisecsToPixels(timeUs);
+
+        scrollTo(piex, 0);
+//        scroolX += piex;
     }
 
 

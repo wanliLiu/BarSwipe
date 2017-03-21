@@ -151,8 +151,8 @@ public class AudioRecordView extends FrameLayout {
         waveView.stopPlay();
     }
 
-    public void updateData()
+    public void updateData(int timeMs)
     {
-        waveView.updateData();
+        waveView.updatePlayPosition(timeMs);
     }
 }

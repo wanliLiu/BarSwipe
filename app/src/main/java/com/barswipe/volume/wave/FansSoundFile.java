@@ -36,7 +36,7 @@ public class FansSoundFile {
     private onRecordStatusListener listener = null;
 
     //采样率 就是1s采集多少个点，这里就16000个点就是16000个数据
-    private int mSampleRate = 8000;//44100 8000
+    private int mSampleRate = 44100;//44100 8000
     // 设置音频的录制的声道CHANNEL_IN_STEREO为双声道，CHANNEL_CONFIGURATION_MONO为单声道
     private int channelConfig = AudioFormat.CHANNEL_IN_MONO;
     // 音频数据格式:PCM 16位每个样本。保证设备支持。PCM 8位每个样本。不一定能得到设备支持。
@@ -55,7 +55,7 @@ public class FansSoundFile {
 
     public FansSoundFile() {
         int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);
-        buffer = new short[667];//3675  667
+        buffer = new short[3675];//3675  667
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRate, channelConfig, audioFormat, minBufferSize * 2);
 
         // Allocate memory for 20 seconds first. Reallocate later if more is needed.
@@ -176,18 +176,37 @@ public class FansSoundFile {
      */
     private void calculateRealVolume(short[] buffer, int readSize) {
         double mVolume;
-        double sum = 0;
+//        double sum = 0;
+//        for (int i = 0; i < readSize; i++) {
+//            // 这里没有做运算的优化，为了更加清晰的展示代码
+//            sum += buffer[i] * buffer[i];
+//        }
+//        if (readSize > 0) {
+//            double amplitude = sum / readSize;
+//            mVolume = 0.1 * Math.log10(amplitude);
+//            Log.e("音量最大值：", mVolume + "");
+//            if (listener != null)
+//                listener.onRealVolume(mVolume);
+//        }
+
+        short max = 0;
         for (int i = 0; i < readSize; i++) {
-            // 这里没有做运算的优化，为了更加清晰的展示代码
-            sum += buffer[i] * buffer[i];
+            if (Math.abs(buffer[i]) > max)
+                max = (short) Math.abs(buffer[i]);
         }
-        if (readSize > 0) {
-            double amplitude = sum / readSize;
-            mVolume = 0.1 * Math.log10(amplitude);
-            Log.e("音量最大值：", mVolume + "");
-            if (listener != null)
-                listener.onRealVolume(mVolume);
-        }
+        mVolume = max * 1.0f / Short.MAX_VALUE * 1.0f;
+        Log.e("音量最大值-----：", mVolume + "");
+        if (listener != null)
+            listener.onRealVolume(mVolume);
+//        double sumVolume = 0.0;
+//        double avgVolume = 0.0;
+//        double volume = 0.0;
+//        for(short b : buffer){
+//            sumVolume += Math.abs(b);
+//        }
+//        avgVolume = sumVolume / buffer.length;
+//        volume = Math.log10(1 + avgVolume) * 10;
+//        Log.e("音量最大值-----：", volume + "");
 
     }
 

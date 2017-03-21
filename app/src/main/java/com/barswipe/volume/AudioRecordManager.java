@@ -561,7 +561,7 @@ public class AudioRecordManager implements Handler.Callback {
             switch (msg.what) {
                 case 2:
                     audioDBChanged();
-                    mHandler.sendEmptyMessageDelayed(2, 150L);
+                    mHandler.sendEmptyMessageDelayed(2, 80L);
                     break;
                 case 3:
                     setCancelView();

@@ -23,7 +23,7 @@ public class BaseWaveView extends View {
     private boolean isDebug = true;
 
     protected Context ctx;
-    protected int viewWidth, viewHeight, screenWidth, halfScreenWidth, startOffset,waveHeight;
+    protected int viewWidth, viewHeight, screenWidth, halfScreenWidth, startOffset, waveHeight;
     /**
      * 时间间隔宽度，dp单位，默认是10dp
      */
@@ -175,6 +175,16 @@ public class BaseWaveView extends View {
     public double pixelsToSeconds(int pixels) {
         double onePixelTime = timeSpace * 1.0d / timeMargin * 1.0d;
         return onePixelTime * pixels;
+    }
+
+    /**
+     * 时间对于像素
+     *
+     * @param ms
+     * @return
+     */
+    public int millisecsToPixels(int ms) {
+        return (int) (timeMargin * ms * 1.0f / timeSpace * 1.0f + 0.5);
     }
 
     /**

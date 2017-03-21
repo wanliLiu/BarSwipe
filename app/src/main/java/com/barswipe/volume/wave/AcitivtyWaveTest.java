@@ -258,8 +258,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             }
 
             @Override
-            public void onPlayProgress() {
-                recordView.updateData();
+            public void onPlayProgress(int timeMs) {
+                recordView.updateData(timeMs);
             }
         });
     }

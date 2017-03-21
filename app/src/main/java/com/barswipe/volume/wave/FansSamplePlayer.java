@@ -29,7 +29,7 @@ public class FansSamplePlayer {
     public interface OnCompletionListener {
         public void onCompletion();
 
-        public void onPlayProgress();
+        public void onPlayProgress(int timeMs);
     }
 
     private ShortBuffer mSamples;
@@ -58,7 +58,7 @@ public class FansSamplePlayer {
         if (bufferSize < mChannels * mSampleRate * 2) {
             bufferSize = mChannels * mSampleRate * 2;
         }
-        mBuffer = new short[667]; // bufferSize is in Bytes.
+        mBuffer = new short[3675]; // bufferSize is in Bytes. 3675 667
         mAudioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 mSampleRate,
@@ -127,12 +127,11 @@ public class FansSamplePlayer {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                int playbackPo = getCurrentPosition();
                 if (mListener != null) {
-                    mListener.onPlayProgress();
+                    mListener.onPlayProgress(getCurrentPosition());
                 }
             }
-        }, 10, 85);
+        }, 10, 8);
 
     }
 
@@ -180,10 +179,8 @@ public class FansSamplePlayer {
     public int getCurrentPosition() {
         int curPos = 0;
         try {
-            Log.e("playBack----1", mAudioTrack.getPlaybackHeadPosition() + "");
             curPos = (int) ((mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) * (1000.0 / mSampleRate));
         } catch (Exception e) {
-//    	mAudioTrack.setNotificationMarkerPosition(mNumSamples - 1); 
         }
         Log.e("playBack", curPos + "");
         return curPos;
