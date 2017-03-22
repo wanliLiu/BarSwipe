@@ -105,6 +105,7 @@ public class PcmWaveView extends BaseWaveView {
         super.onDetachedFromWindow();
         mIsDraw = false;
         if (mBitmap != null && !mBitmap.isRecycled()) {
+            mCanvas = null;
             mBitmap.recycle();
             mBitmap = null;
         }
