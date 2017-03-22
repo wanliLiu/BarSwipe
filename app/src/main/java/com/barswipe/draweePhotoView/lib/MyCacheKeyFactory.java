@@ -2,6 +2,7 @@ package com.barswipe.draweePhotoView.lib;
 
 import android.net.Uri;
 
+import com.barswipe.util.FileUtil;
 import com.facebook.imagepipeline.cache.DefaultCacheKeyFactory;
 
 /**

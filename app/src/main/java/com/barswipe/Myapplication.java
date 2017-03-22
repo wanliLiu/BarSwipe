@@ -5,8 +5,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.barswipe.draweePhotoView.lib.ImagePipelineConfigUtils;
-import com.facebook.drawee.backends.pipeline.Fresco;
+import com.barswipe.draweePhotoView.lib.FrescoUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.ArrayList;
@@ -17,14 +16,18 @@ import java.util.List;
  */
 public class Myapplication extends Application {
 
+    private static Myapplication app;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        app = this;
 //        Fresco.initialize(this);
 //        FrescoUtil.Init(this);
-        Fresco.initialize(this, ImagePipelineConfigUtils.getDefaultImagePipelineConfig(this));
+
+        FrescoUtil.Init(this);
+//        Fresco.initialize(this, ImagePipelineConfigUtils.getDefaultImagePipelineConfig(this));
 
         JSONObject object = new JSONObject();
         object.put("UserToken", "sssssdsdwqeewewe");
@@ -72,5 +75,12 @@ public class Myapplication extends Application {
             length--;
         }
         return temp;
+    }
+
+    /**
+     * @return
+     */
+    public static Myapplication getApp() {
+        return app;
     }
 }

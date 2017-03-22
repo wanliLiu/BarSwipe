@@ -141,15 +141,16 @@ public class AudioRecordView extends FrameLayout {
     }
 
     /**
-     *
      * @param file
      * @param listener
      */
-    public void saveAudioFile(File file,FansAudioMp3EncodeThread.onEncodeCompleteListener listener){
-        if (!waveView.isRecording()){
-            soundFile.saveAudioFile(file,listener);
+    public void saveAudioFile(File file, onEncodeCompleteListener listener) {
+        // TODO: 22/03/2017 保存文件的条件
+        if (!waveView.isRecording()) {
+            soundFile.saveAudioFile(file, listener);
         }
     }
+
     /**
      *
      */

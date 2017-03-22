@@ -23,7 +23,6 @@ import android.media.MediaRecorder;
 import android.util.Log;
 
 import com.barswipe.volume.BaseWaveView;
-import com.czt.mp3recorder.DataEncodeThread;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -39,7 +38,7 @@ import java.nio.ShortBuffer;
 public class FansSoundFile {
     private onRecordStatusListener listener = null;
     //保存的格式，mp3 或amr
-    private boolean recordFormatIsMp3 = true;
+    public static boolean recordFormatIsMp3 = false;
 
     //采样率 就是1s采集多少个点，这里就16000个点就是16000个数据
     private int mSampleRate = recordFormatIsMp3 ? 44100 : 8000;//44100 8000
@@ -61,8 +60,6 @@ public class FansSoundFile {
     private boolean isRecording = false;
     //1s采集多少个字节
     private int bytesOnSecond = (mSampleRate * bit * mChannels) / 8;
-
-    private DataEncodeThread mEncodeThread;
 
     public FansSoundFile() {
         int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);//44100----3584--81.26ms 8000---640
@@ -103,6 +100,7 @@ public class FansSoundFile {
             return null;
         }
     }
+
 
     /**
      * @param mlistener
@@ -235,13 +233,25 @@ public class FansSoundFile {
     /**
      * @param file
      */
-    public void saveAudioFile(File file, FansAudioMp3EncodeThread.onEncodeCompleteListener listener) {
+    public void saveAudioFile(File file, onEncodeCompleteListener listener) {
+
+        // TODO: 22/03/2017 保存文件的时候要显示加载对话框，文件很大的时候，可能很慢
         if (!isRecording) {//没有录制
-            try {
-                FansAudioMp3EncodeThread thread = new FansAudioMp3EncodeThread(getSamples(), getNumSamples(), file, buffer.length, getChannels(), 0, 0, listener);
-                thread.start();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (recordFormatIsMp3) {
+                try {
+                    FansMp3EncodeThread thread = new FansMp3EncodeThread(getSamples(), getNumSamples(), file, buffer.length, getChannels(), 0, 0, listener);
+                    thread.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //amr编码
+                try {
+                    FansAmrEncodeThread thread = new FansAmrEncodeThread(getSamples(), getNumSamples(), file, getChannels(), 0, 0, listener);
+                    thread.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

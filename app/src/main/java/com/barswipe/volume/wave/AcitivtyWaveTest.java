@@ -1,5 +1,6 @@
 package com.barswipe.volume.wave;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -120,7 +121,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         btnPlay.setImageResource(R.mipmap.icon_play_disable);
         btnPlay.setEnabled(false);
 
-        recordTime.setText("00:00.00");
+//        recordTime.setText("00:00.00");
         btnRecord.setImageResource(R.mipmap.icon_record_stop);
         btnRecord.setEnabled(true);
 
@@ -186,7 +187,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlay:
-                if (currentStatus == ActionStatus.stopRecording) {
+                if (currentStatus == ActionStatus.stopRecording ||
+                        currentStatus == ActionStatus.stopPlayAudio) {
                     currentStatus = ActionStatus.playAudio;
                     player.seekTo(recordView.startPlay());
                     player.start();
@@ -194,23 +196,18 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                     currentStatus = ActionStatus.stopPlayAudio;
                     recordView.stopPlay(false);
                     player.stop();
-                } else if (currentStatus == ActionStatus.stopPlayAudio) {
-                    currentStatus = ActionStatus.playAudio;
-                    player.seekTo(recordView.startPlay());
-                    player.start();
                 }
                 updateUi();
                 break;
             case R.id.btnRecord:
-                if (currentStatus == ActionStatus.parareStart) {
+                if (currentStatus == ActionStatus.parareStart ||
+                        currentStatus == ActionStatus.stopRecording ||
+                        currentStatus == ActionStatus.stopPlayAudio) {
                     currentStatus = ActionStatus.startRecording;
                     recordView.startRecord();
                 } else if (currentStatus == ActionStatus.startRecording) {
                     currentStatus = ActionStatus.stopRecording;
                     recordView.stopRecord();
-                } else if (currentStatus == ActionStatus.stopRecording) {
-                    currentStatus = ActionStatus.startRecording;
-                    recordView.startRecord();
                 }
                 updateUi();
                 break;
@@ -221,15 +218,20 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 break;
             case R.id.btnActionDone:
-                final File filePath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + ".mp3");
-                recordView.saveAudioFile(filePath, new FansAudioMp3EncodeThread.onEncodeCompleteListener() {
+                final File filePath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
+                final ProgressDialog waitDialog = new ProgressDialog(this);
+                waitDialog.setTitle(getResources().getString(R.string.transfer_wait_title));
+                waitDialog.setMessage(getResources().getString(R.string.transfer_wait_message));
+                waitDialog.show();
+                recordView.saveAudioFile(filePath, new onEncodeCompleteListener() {
                     @Override
-                    public void onEncodeComplete() {
+                    public void onEncodeComplete(final String filepath) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (filePath.exists()){
-                                    Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + filePath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                waitDialog.dismiss();
+                                if (filePath.exists()) {
+                                    Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + filepath, Toast.LENGTH_SHORT).show();
                                     AcitivtyWaveTest.this.finish();
                                 }
                             }

@@ -24,7 +24,7 @@ public class TransferThread extends Thread{
 		String rootPath = Environment.getExternalStorageDirectory().getPath();
         String amrPath = rootPath + "/test_pcm_to_mar.amr";
         try {
-            InputStream pcmStream = context.getAssets().open("test.pcm");
+            InputStream pcmStream = context.getAssets().open("temp.pcm");//test.pcm
             SysAmrEncoder.pcm2Amr(pcmStream, amrPath);
             callback.onSuccess();
         } catch (IOException e) {

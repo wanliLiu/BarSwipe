@@ -199,6 +199,23 @@ public class BytesTransUtil {
         return buf;
     }
 
+    /**
+     * @param data
+     * @param len
+     * @return
+     */
+    public byte[] Shorts2Bytes(short[] data, int len) {
+        byte bLength = 2;
+        byte[] buf = new byte[len * bLength];
+        for (int iLoop = 0; iLoop < len; iLoop++) {
+            byte[] temp = getBytes(data[iLoop]);
+            for (int jLoop = 0; jLoop < bLength; jLoop++) {
+                buf[iLoop * bLength + jLoop] = temp[jLoop];
+            }
+        }
+        return buf;
+    }
+
     /****************************************/
     public int[] Bytes2Ints(byte[] buf) {
         byte bLength = 4;

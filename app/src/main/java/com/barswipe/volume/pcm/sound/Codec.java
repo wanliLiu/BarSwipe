@@ -48,8 +48,9 @@ public class Codec implements Runnable, Supporter.PcmConsumer, Supporter.OnOffSw
         //would crash if not 160
         if (length != 160)
             return;
-        short[] tempArray = new short[length];
-        System.arraycopy(buffer, 0, tempArray, 0, length);
+        short[] tempArray = buffer.clone();
+//        short[] tempArray = new short[length];
+//        System.arraycopy(buffer, 0, tempArray, 0, length);
 
         if (DEBUG)
             Log.i(TAG, "onPcmFeed :" + length);
@@ -160,7 +161,7 @@ public class Codec implements Runnable, Supporter.PcmConsumer, Supporter.OnOffSw
 
         if (isUseSystEncode) {
             try {
-                InputStream stream = new ByteArrayInputStream(BytesTransUtil.getInstance().Shorts2Bytes(pcmData));
+                InputStream stream = new ByteArrayInputStream(BytesTransUtil.getInstance().Shorts2Bytes(pcmData,160));
                 AmrInputStream ais = new AmrInputStream(stream);
                 int length = ais.read(armData);
                 ais.close();

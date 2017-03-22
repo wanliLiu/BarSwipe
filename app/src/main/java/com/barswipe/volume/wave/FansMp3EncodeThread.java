@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ShortBuffer;
 
-public class FansAudioMp3EncodeThread extends Thread {
+public class FansMp3EncodeThread extends Thread {
 
     private onEncodeCompleteListener listener;
 
@@ -27,7 +27,7 @@ public class FansAudioMp3EncodeThread extends Thread {
     private byte[] mMp3Buffer;
     private int mNumSamples;  // Number of samples per channel.
     private FileOutputStream mFileOutputStream;
-    private String path;
+    private String filePath;
     private int mChannels, playStart, playEnd, bufferSize;
     private ShortBuffer mSamples;
 
@@ -41,7 +41,7 @@ public class FansAudioMp3EncodeThread extends Thread {
      * @param mPlayEnd
      * @throws FileNotFoundException
      */
-    public FansAudioMp3EncodeThread(ShortBuffer buffer, int numSamples, File file, int mbufferSize, int channels, int mPlayStart, int mPlayEnd, onEncodeCompleteListener mlistener) throws FileNotFoundException {
+    public FansMp3EncodeThread(ShortBuffer buffer, int numSamples, File file, int mbufferSize, int channels, int mPlayStart, int mPlayEnd, onEncodeCompleteListener mlistener) throws FileNotFoundException {
         super("DataEncodeThread");
         mSamples = buffer;
         mNumSamples = numSamples;
@@ -50,7 +50,7 @@ public class FansAudioMp3EncodeThread extends Thread {
         playEnd = mPlayEnd;
         bufferSize = mbufferSize;
         this.mFileOutputStream = new FileOutputStream(file);
-        path = file.getAbsolutePath();
+        filePath = file.getAbsolutePath();
         mMp3Buffer = new byte[(int) (7200 + (mbufferSize * 2 * 1.25))];
 
         /*
@@ -78,9 +78,9 @@ public class FansAudioMp3EncodeThread extends Thread {
                 mSamples.get(mBuffer);
                 encodeLen = mBuffer.length;
             } else {
-                for (int i = numSamplesLeft; i < mBuffer.length; i++) {
-                    mBuffer[i] = 0;
-                }
+//                for (int i = numSamplesLeft; i < mBuffer.length; i++) {
+//                    mBuffer[i] = 0;
+//                }
                 mSamples.get(mBuffer, 0, numSamplesLeft);
                 encodeLen = numSamplesLeft;
             }
@@ -98,7 +98,7 @@ public class FansAudioMp3EncodeThread extends Thread {
         flushAndRelease();
 
         if (listener != null) {
-            listener.onEncodeComplete();
+            listener.onEncodeComplete(filePath);
         }
     }
 
@@ -125,10 +125,5 @@ public class FansAudioMp3EncodeThread extends Thread {
                 LameUtil.close();
             }
         }
-    }
-
-    public interface onEncodeCompleteListener {
-
-        public void onEncodeComplete();
     }
 }
