@@ -10,6 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.barswipe.R;
+import com.barswipe.util.FileUtil;
+
+import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,7 +26,6 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     @Bind(R.id.recordView)
     AudioRecordView recordView;
 
-
     @Bind(R.id.recordTime)
     TextView recordTime;
     @Bind(R.id.btnRecord)
@@ -36,6 +38,11 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     ImageView btnClipIcon;
     @Bind(R.id.btnClipText)
     TextView btnClipText;
+
+    @Bind(R.id.txt_cancle)
+    TextView txt_cancle;
+    @Bind(R.id.btnActionDone)
+    TextView btnActionDone;
 
     enum ActionStatus {
         parareStart,//准备开始，初始状态
@@ -54,12 +61,14 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wave_test);
+        setContentView(R.layout.activity_audio_record_view);
         ButterKnife.bind(this);
 
         btnPlay.setOnClickListener(this);
         btnRecord.setOnClickListener(this);
         btnClip.setOnClickListener(this);
+        txt_cancle.setOnClickListener(this);
+        btnActionDone.setOnClickListener(this);
 
         updateUi();
 
@@ -179,15 +188,15 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             case R.id.btnPlay:
                 if (currentStatus == ActionStatus.stopRecording) {
                     currentStatus = ActionStatus.playAudio;
-                    recordView.startPlay();
+                    player.seekTo(recordView.startPlay());
                     player.start();
                 } else if (currentStatus == ActionStatus.playAudio) {
                     currentStatus = ActionStatus.stopPlayAudio;
-                    recordView.stopPlay();
+                    recordView.stopPlay(false);
                     player.stop();
                 } else if (currentStatus == ActionStatus.stopPlayAudio) {
                     currentStatus = ActionStatus.playAudio;
-                    recordView.startPlay();
+                    player.seekTo(recordView.startPlay());
                     player.start();
                 }
                 updateUi();
@@ -206,8 +215,36 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 updateUi();
                 break;
             case R.id.btnClip:
+                Toast.makeText(this, "还没做", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.txt_cancle:
+                onBackPressed();
+                break;
+            case R.id.btnActionDone:
+                final File filePath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + ".mp3");
+                recordView.saveAudioFile(filePath, new FansAudioMp3EncodeThread.onEncodeCompleteListener() {
+                    @Override
+                    public void onEncodeComplete() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (filePath.exists()){
+                                    Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + filePath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                    AcitivtyWaveTest.this.finish();
+                                }
+                            }
+                        });
+                    }
+                });
+                break;
+
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Toast.makeText(this, "这里需要弹出确认框", Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -250,7 +287,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                         if (currentStatus == ActionStatus.playAudio) {
                             currentStatus = ActionStatus.stopRecording;
                             player.stop();
-                            recordView.stopPlay();
+                            recordView.stopPlay(true);
                         }
                         updateUi();
                     }

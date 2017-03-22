@@ -406,6 +406,7 @@ public class AudioRecordManager implements Handler.Callback {
      */
     private void audioDBChanged() {
         if (mMediaRecorder != null) {
+            Log.d(TAG, "getMaxAmplitude：" + mMediaRecorder.getMaxAmplitude() * 1.0f / Short.MAX_VALUE * 1.0f);
             int db = mMediaRecorder.getMaxAmplitude() / 600;
             switch (db / 5) {
                 case 0:
@@ -561,7 +562,7 @@ public class AudioRecordManager implements Handler.Callback {
             switch (msg.what) {
                 case 2:
                     audioDBChanged();
-                    mHandler.sendEmptyMessageDelayed(2, 80L);
+                    mHandler.sendEmptyMessageDelayed(2, 150L);
                     break;
                 case 3:
                     setCancelView();

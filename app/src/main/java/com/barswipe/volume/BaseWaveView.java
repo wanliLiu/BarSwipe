@@ -31,15 +31,11 @@ public class BaseWaveView extends View {
     /**
      * timeMargin 代表的时间 单位ms
      */
-    protected int timeSpace = 250;
+    public static int timeSpace = 250;
     /**
      * 一个大隔有多少个小隔
      */
     protected int dividerCount = 4;
-    /**
-     * 一大隔的时间  1000ms
-     */
-    protected int timeBigSpace = dividerCount * timeSpace;
     /**
      * 时间区域的高度，默认是20dp
      */
@@ -53,7 +49,7 @@ public class BaseWaveView extends View {
      */
     protected int totalTimeSec = 90;
     //250ms一小隔绘制
-    protected int waveCount = 3;
+    public static int waveCount = 3;
     protected int waveWidth = 0;
 
     protected int waveCenterPos = 0;
@@ -152,7 +148,7 @@ public class BaseWaveView extends View {
         timeTextPaint = new Paint();
         timeTextPaint.setAntiAlias(true);
         timeTextPaint.setColor(Color.parseColor("#6CA5FF"));
-        timeTextPaint.setTextSize(getPainTextSize(8));
+        timeTextPaint.setTextSize(getPainTextSize(9));
 
         timeLinePain = new Paint();
         timeLinePain.setAntiAlias(true);
@@ -172,7 +168,7 @@ public class BaseWaveView extends View {
      * @param pixels
      * @return 返回时间ms
      */
-    public double pixelsToSeconds(int pixels) {
+    public double pixelsToMillisecs(int pixels) {
         double onePixelTime = timeSpace * 1.0d / timeMargin * 1.0d;
         return onePixelTime * pixels;
     }

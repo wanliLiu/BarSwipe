@@ -11,9 +11,16 @@
     <drawable name="transparent_background">#00000000</drawable>
 
     <color name="tip">#9c9c9c</color>
+    <color name="color_view_enable_default">#FFFFFF</color>
+    <color name="color_view_enable_press">#f8f8f8</color>
+    <color name="color_view_disable_default">#ACB0B5</color>
     <color name="bg_focus">#DDDDDD</color>
     <color name="red_500">#ef4836</color>
-
+    <!--title的高-->
+    <dimen name="title_height">48dp</dimen>
+    <color name="actionbar_color">#6CA5FF</color>
+    <color name="title_color">#666666</color>
+    <color name="color_line">#ebebeb</color>
     <color name="system_theme_color">#efefef</color>
     <color name="color_orange">#ff8000</color>
 

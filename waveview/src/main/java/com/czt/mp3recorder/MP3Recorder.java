@@ -42,7 +42,7 @@ public class MP3Recorder extends BaseRecorder {
     /**
      * 自定义 每160帧作为一个周期，通知一下需要进行编码
      */
-    private static final int FRAME_COUNT = 160;
+    private static int FRAME_COUNT = 160;
     public static final int ERROR_TYPE = 22;
 
 
@@ -96,8 +96,6 @@ public class MP3Recorder extends BaseRecorder {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
                 while (mIsRecording) {
                     int readSize = mAudioRecord.read(mPCMBuffer, 0, mBufferSize);
-
-
                     if (readSize == AudioRecord.ERROR_INVALID_OPERATION ||
                             readSize == AudioRecord.ERROR_BAD_VALUE) {
                         if (errorHandler != null && !mSendError) {
@@ -230,8 +228,9 @@ public class MP3Recorder extends BaseRecorder {
         if (dataList != null) {
             int length = readSize / 300;
             short resultMax = 0, resultMin = 0;
-            for (short i = 0, k = 0; i < length; i++, k += 300) {
-                for (short j = k, max = 0, min = 1000; j < k + 300; j++) {
+            short max = 0, min = 1000;
+            for (int i = 0, k = 0; i < length; i++, k += 300) {
+                for (int j = k; j < k + 300; j++) {
                     if (shorts[j] > max) {
                         max = shorts[j];
                         resultMax = max;

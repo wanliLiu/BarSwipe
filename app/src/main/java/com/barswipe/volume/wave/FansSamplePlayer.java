@@ -19,7 +19,8 @@ package com.barswipe.volume.wave;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.util.Log;
+
+import com.barswipe.volume.BaseWaveView;
 
 import java.nio.ShortBuffer;
 import java.util.Timer;
@@ -50,21 +51,25 @@ public class FansSamplePlayer {
         mChannels = channels;
         mNumSamples = numSamples;
         mPlaybackStart = 0;
+
+        //44100----7088  8000----1312
         int bufferSize = AudioTrack.getMinBufferSize(
                 mSampleRate,
                 mChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT);
-        // make sure minBufferSize can contain at least 1 second of audio (16 bits sample).
-        if (bufferSize < mChannels * mSampleRate * 2) {
-            bufferSize = mChannels * mSampleRate * 2;
+
+        int bytesOnSecond = (mSampleRate * 16 * mChannels) / 8;
+        int bytesOnewave = (int) ((BaseWaveView.timeSpace * 1.0f / BaseWaveView.waveCount * 1.0f) * bytesOnSecond / 1000);
+        if (bytesOnewave > bufferSize) {
+            bufferSize = bytesOnewave;
         }
-        mBuffer = new short[3675]; // bufferSize is in Bytes. 3675 667
+        mBuffer = new short[bufferSize / 2]; //
         mAudioTrack = new AudioTrack(
                 AudioManager.STREAM_MUSIC,
                 mSampleRate,
                 mChannels == 1 ? AudioFormat.CHANNEL_OUT_MONO : AudioFormat.CHANNEL_OUT_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT,
-                bufferSize,
+                bufferSize * 2,
                 AudioTrack.MODE_STREAM);
         mKeepPlaying = true;
     }
@@ -101,13 +106,14 @@ public class FansSamplePlayer {
                 int position = mPlaybackStart * mChannels;
                 mSamples.position(position);
                 int limit = mNumSamples * mChannels;
-                while (mSamples.position() < limit && mKeepPlaying) {
+                while (mKeepPlaying && mSamples.position() < limit) {
                     int numSamplesLeft = limit - mSamples.position();
                     if (numSamplesLeft >= mBuffer.length) {
                         mSamples.get(mBuffer);
                     } else {
                         for (int i = numSamplesLeft; i < mBuffer.length; i++) {
                             mBuffer[i] = 0;
+
                         }
                         mSamples.get(mBuffer, 0, numSamplesLeft);
                     }
@@ -117,6 +123,7 @@ public class FansSamplePlayer {
                 if (mListener != null) {
                     mListener.onCompletion();
                 }
+
                 if (timer != null)
                     timer.cancel();
             }
@@ -131,7 +138,7 @@ public class FansSamplePlayer {
                     mListener.onPlayProgress(getCurrentPosition());
                 }
             }
-        }, 10, 8);
+        }, 10, 30);
 
     }
 
@@ -143,6 +150,7 @@ public class FansSamplePlayer {
     }
 
     public void stop() {
+
         if (isPlaying() || isPaused()) {
             mKeepPlaying = false;
             mAudioTrack.pause();  // pause() stops the playback immediately.
@@ -163,14 +171,13 @@ public class FansSamplePlayer {
         mAudioTrack.release();
     }
 
-    public void seekTo(int msec) {
+    public void seekTo(double msec) {
         boolean wasPlaying = isPlaying();
         stop();
-        mPlaybackStart = (int) (msec * (mSampleRate / 1000.0));
+        mPlaybackStart = (int) (msec * (mSampleRate * 1.0d / 1000.0d));
         if (mPlaybackStart > mNumSamples) {
             mPlaybackStart = mNumSamples;  // Nothing to play...
         }
-        mAudioTrack.setNotificationMarkerPosition(mNumSamples - 1 - mPlaybackStart);
         if (wasPlaying) {
             start();
         }
@@ -182,7 +189,6 @@ public class FansSamplePlayer {
             curPos = (int) ((mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) * (1000.0 / mSampleRate));
         } catch (Exception e) {
         }
-        Log.e("playBack", curPos + "");
         return curPos;
     }
 }

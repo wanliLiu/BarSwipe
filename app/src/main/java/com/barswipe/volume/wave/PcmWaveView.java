@@ -13,8 +13,6 @@ import android.widget.Scroller;
 
 import com.barswipe.volume.BaseWaveView;
 
-import java.util.Random;
-
 /**
  * Created by Soli on 2017/3/17.
  */
@@ -36,6 +34,8 @@ public class PcmWaveView extends BaseWaveView {
     private int mScrollLastX;
 
     private int scroolX, currentX;
+    //单位ms
+    private int playbackPosition;
 
 
     public PcmWaveView(Context context) {
@@ -115,15 +115,15 @@ public class PcmWaveView extends BaseWaveView {
      * @param canvas
      */
     private void onDrawWare(Canvas canvas, double volume) {
-        int _2_3 = waveHeight * 1 / 5;
-        double dis = (volume * _2_3) / 2.0f;
+        int _2_3 = waveHeight * 3 / 4;
+        double dis = (volume * _2_3) / 2.0f + 0.5;
 //        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float)dis, halfScreenWidth + offset, waveCenterPos + (float)dis, wavePaint);
         wavePaint.setColor(Color.parseColor("#e0e0e0"));
         canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float) dis, halfScreenWidth + offset, waveCenterPos - dip2px(1), wavePaint);
-        dis -= dip2px(2);
-        wavePaint.setColor(Color.parseColor("#90e0e0e0"));
-        if (dis <= 0)
-            dis = new Random().nextInt(5);
+//        dis -= dip2px(2);
+        wavePaint.setColor(Color.parseColor("#33e0e0e0"));
+//        if (dis <= 0)
+//            dis = dip2px(1);
         canvas.drawLine(halfScreenWidth + offset, waveCenterPos + dip2px(1), halfScreenWidth + offset, waveCenterPos + (float) dis, wavePaint);
     }
 
@@ -208,19 +208,28 @@ public class PcmWaveView extends BaseWaveView {
                     if (scroolX >= currentX)
                         scroolX = currentX;
                 } else {
-
                     if (scroolX <= getStartOffset() - offset)
                         scroolX = getStartOffset() - offset;
                     if (scroolX <= 0)
                         scroolX = 0;
                 }
-
+                updatePlayBackPosition();
                 scrollTo(scroolX, 0);
                 mScrollLastX = x;
                 postInvalidate();
                 return true;
         }
         return super.onTouchEvent(event);
+    }
+
+    /**
+     *
+     */
+    private void updatePlayBackPosition() {
+        playbackPosition = scroolX;
+        if (offset < halfScreenWidth)
+            playbackPosition = offset - (currentX - scroolX);
+        logOut("playBack_" + playbackPosition + "录制的时间_" + pixelsToMillisecs(playbackPosition));
     }
 
     /**
@@ -239,11 +248,12 @@ public class PcmWaveView extends BaseWaveView {
      *
      */
     public void updatePlayPosition(int timeUs) {
-
         int piex = millisecsToPixels(timeUs);
-
+        if (offset < halfScreenWidth) {
+            piex += getStartOffset() - offset;
+        }
+        playbackPosition = piex;
         scrollTo(piex, 0);
-//        scroolX += piex;
     }
 
 
@@ -256,27 +266,47 @@ public class PcmWaveView extends BaseWaveView {
      */
     public void setRecording(boolean recording) {
         isCanScroll = recording;
-        if (!isCanScroll)
+        if (!isCanScroll) {
             currentX = scroolX = getScrollX();
-        else
+            updatePlayBackPosition();
+        } else
             scrollTo(currentX, 0);
     }
 
     /**
+     * 开始播放，
      *
+     * @return 播放的位置，为0从头开始播放，不为0，从相应的位置播放
+     * 单位时间ms
      */
-    public void startPlay() {
+    public double startPlay() {
         isCanScroll = true;
+        if (playbackPosition > 0 && playbackPosition < offset) {
+            return pixelsToMillisecs(playbackPosition);
+        }
+
         if (offset >= halfScreenWidth) {
             scroolX = 0;
             scrollTo(0, 0);
         } else {
             scroolX -= offset;
-            scrollTo(currentX - offset, 0);
+            scrollTo(getStartOffset() - offset, 0);
         }
+
+        return 0.0d;
     }
 
-    public void stopPlay() {
+    /**
+     * 停止播放，是重那里停止，
+     *
+     * @param stopFrom true 自然播放完成
+     *                 false 认为停止
+     */
+    public void stopPlay(boolean stopFrom) {
         isCanScroll = false;
+        if (stopFrom)
+            scrollTo(currentX, 0);
+        scroolX = getScrollX();
+        updatePlayBackPosition();
     }
 }

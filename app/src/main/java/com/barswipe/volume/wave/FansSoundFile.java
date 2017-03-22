@@ -22,6 +22,10 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
+import com.barswipe.volume.BaseWaveView;
+import com.czt.mp3recorder.DataEncodeThread;
+
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
@@ -34,16 +38,19 @@ import java.nio.ShortBuffer;
 @SuppressLint("NewApi")
 public class FansSoundFile {
     private onRecordStatusListener listener = null;
+    //保存的格式，mp3 或amr
+    private boolean recordFormatIsMp3 = true;
 
     //采样率 就是1s采集多少个点，这里就16000个点就是16000个数据
-    private int mSampleRate = 44100;//44100 8000
+    private int mSampleRate = recordFormatIsMp3 ? 44100 : 8000;//44100 8000
     // 设置音频的录制的声道CHANNEL_IN_STEREO为双声道，CHANNEL_CONFIGURATION_MONO为单声道
     private int channelConfig = AudioFormat.CHANNEL_IN_MONO;
     // 音频数据格式:PCM 16位每个样本。保证设备支持。PCM 8位每个样本。不一定能得到设备支持。
     private int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
 
     private int mChannels = channelConfig == AudioFormat.CHANNEL_IN_MONO ? 1 : 2;
-    private int mNumSamples;  // 采样了多少次--total number of samples per channel in audio file
+    private int bit = audioFormat == AudioFormat.ENCODING_PCM_16BIT ? 16 : 8;
+    private int mNumSamples;
     private ByteBuffer mPCMBytes;  // Raw audio data
     private ShortBuffer mPCMSamples;  // shared buffer with mPCMBytes.
     private ByteBuffer waveBytes;//波形数据
@@ -52,14 +59,27 @@ public class FansSoundFile {
     private short[] buffer;
     private audioRecordThread recordThread;
     private boolean isRecording = false;
+    //1s采集多少个字节
+    private int bytesOnSecond = (mSampleRate * bit * mChannels) / 8;
+
+    private DataEncodeThread mEncodeThread;
 
     public FansSoundFile() {
-        int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);
-        buffer = new short[3675];//3675  667
-        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRate, channelConfig, audioFormat, minBufferSize * 2);
+        int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);//44100----3584--81.26ms 8000---640
+
+        //多少字节代表一个波
+        int bytesOnewave = (int) ((BaseWaveView.timeSpace * 1.0f / BaseWaveView.waveCount * 1.0f) * bytesOnSecond / 1000);
+        int bytesCache = bytesOnSecond / 2;
+        if (bytesCache < minBufferSize)
+            minBufferSize *= 2;
+        else
+            minBufferSize = bytesCache;
+
+        buffer = new short[bytesOnewave / 2];
+        audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRate, channelConfig, audioFormat, minBufferSize);
 
         // Allocate memory for 20 seconds first. Reallocate later if more is needed.
-        mPCMBytes = ByteBuffer.allocate(20 * mSampleRate * 2);
+        mPCMBytes = ByteBuffer.allocate(20 * bytesOnSecond);
         mPCMBytes.order(ByteOrder.LITTLE_ENDIAN);
         mPCMSamples = mPCMBytes.asShortBuffer();
     }
@@ -119,10 +139,9 @@ public class FansSoundFile {
             super.run();
 
             while (isRecording) {
-                // check if mPCMSamples can contain 1024 additional samples.
-                if (mPCMSamples.remaining() < 1024) {
+                if (mPCMSamples.remaining() <= buffer.length * 2) {
                     // Try to allocate memory for 10 additional seconds.
-                    int newCapacity = mPCMBytes.capacity() + 10 * mSampleRate * 2;
+                    int newCapacity = mPCMBytes.capacity() + 10 * bytesOnSecond;
                     ByteBuffer newDecodedBytes = null;
                     try {
                         newDecodedBytes = ByteBuffer.allocate(newCapacity);
@@ -163,9 +182,11 @@ public class FansSoundFile {
     private void calculateTime(double elapsedTime) {
         int min = (int) (elapsedTime / 60);
         float sec = (float) (elapsedTime - 60 * min);
-        Log.e("录制的时间", elapsedTime + "___" + String.format("%d:%05.2f", min, sec));
+        String strMin = (min < 10 ? "0" + min : String.valueOf(min)) + ":";
+        String recordTimeStr = strMin + String.format("%05.2f", sec);
+        Log.e("录制的时间", elapsedTime + "___" + recordTimeStr);
         if (listener != null)
-            listener.onRecordTime(elapsedTime, String.format("%2d:%05.2f", min, sec));
+            listener.onRecordTime(elapsedTime, recordTimeStr);
     }
 
     /**
@@ -198,18 +219,32 @@ public class FansSoundFile {
         Log.e("音量最大值-----：", mVolume + "");
         if (listener != null)
             listener.onRealVolume(mVolume);
+
+
 //        double sumVolume = 0.0;
 //        double avgVolume = 0.0;
-//        double volume = 0.0;
-//        for(short b : buffer){
-//            sumVolume += Math.abs(b);
+//        for (int i = 0; i < readSize; i++) {
+//            sumVolume += Math.abs(buffer[i]);
 //        }
-//        avgVolume = sumVolume / buffer.length;
-//        volume = Math.log10(1 + avgVolume) * 10;
-//        Log.e("音量最大值-----：", volume + "");
-
+//        avgVolume = (sumVolume / readSize) * 1.0f / Short.MAX_VALUE * 1.0f;
+//        Log.e("音量最大值-----：", avgVolume + "");
+//        if (listener != null)
+//            listener.onRealVolume(avgVolume);
     }
 
+    /**
+     * @param file
+     */
+    public void saveAudioFile(File file, FansAudioMp3EncodeThread.onEncodeCompleteListener listener) {
+        if (!isRecording) {//没有录制
+            try {
+                FansAudioMp3EncodeThread thread = new FansAudioMp3EncodeThread(getSamples(), getNumSamples(), file, buffer.length, getChannels(), 0, 0, listener);
+                thread.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public interface onRecordStatusListener {
         /**

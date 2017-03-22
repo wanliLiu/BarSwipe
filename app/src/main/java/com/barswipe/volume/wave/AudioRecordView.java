@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
+import java.io.File;
+
 /**
  * Created by soli on 19/03/2017.
  */
@@ -140,19 +142,26 @@ public class AudioRecordView extends FrameLayout {
 
     /**
      *
+     * @param file
+     * @param listener
      */
-    public void startPlay()
-    {
-        waveView.startPlay();
+    public void saveAudioFile(File file,FansAudioMp3EncodeThread.onEncodeCompleteListener listener){
+        if (!waveView.isRecording()){
+            soundFile.saveAudioFile(file,listener);
+        }
+    }
+    /**
+     *
+     */
+    public double startPlay() {
+        return waveView.startPlay();
     }
 
-    public void stopPlay()
-    {
-        waveView.stopPlay();
+    public void stopPlay(boolean stopfrom) {
+        waveView.stopPlay(stopfrom);
     }
 
-    public void updateData(int timeMs)
-    {
+    public void updateData(int timeMs) {
         waveView.updatePlayPosition(timeMs);
     }
 }
