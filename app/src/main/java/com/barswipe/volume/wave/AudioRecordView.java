@@ -17,7 +17,7 @@ public class AudioRecordView extends FrameLayout {
 
     private Context ctx;
     private PcmWaveView waveView;
-    private PlayWaveView playBackView;
+    private WaveEditView playBackView;
 
     private FansSoundFile soundFile;
 
@@ -47,8 +47,13 @@ public class AudioRecordView extends FrameLayout {
         addView(waveView = getWaveView());
         addView(playBackView = getPlayBackView());
 
+
+        // TODO: 2017/3/23 测试
+        waveView.setVisibility(GONE);
+
         if (listener != null) {
             waveView.setTimeChangeListener(listener);
+            playBackView.setTimeChangeListener(listener);
         }
 
         soundFile = new FansSoundFile();
@@ -77,13 +82,14 @@ public class AudioRecordView extends FrameLayout {
     }
 
     /**
-     *
      * @param mlistner
      */
     public void setOnRecordListener(FansSoundFile.onRecordStatusListener mlistner) {
         listener = mlistner;
         if (waveView != null)
             waveView.setTimeChangeListener(listener);
+        if (playBackView != null)
+            playBackView.setTimeChangeListener(listener);
     }
 
     @Override
@@ -95,11 +101,11 @@ public class AudioRecordView extends FrameLayout {
     /**
      * @return
      */
-    private PlayWaveView getPlayBackView() {
-        PlayWaveView playWaveView = new PlayWaveView(ctx);
-        playWaveView.setLayoutParams(getDefaultLayoutParams());
+    private WaveEditView getPlayBackView() {
+        WaveEditView waveEditView = new WaveEditView(ctx);
+        waveEditView.setLayoutParams(getDefaultLayoutParams());
 
-        return playWaveView;
+        return waveEditView;
     }
 
     /**

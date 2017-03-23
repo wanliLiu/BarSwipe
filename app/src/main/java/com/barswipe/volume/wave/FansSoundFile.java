@@ -22,7 +22,6 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
-import com.barswipe.volume.BaseWaveView;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 import java.io.File;
@@ -53,7 +52,7 @@ public class FansSoundFile {
     private int mNumSamples;
     private ByteBuffer mPCMBytes;  // Raw audio data
     private ShortBuffer mPCMSamples;  // shared buffer with mPCMBytes.
-    private ByteBuffer waveBytes;//波形数据
+//    private ByteBuffer waveBytes;//波形数据
 
     private AudioRecord audioRecord;
     private short[] buffer;
@@ -62,11 +61,18 @@ public class FansSoundFile {
     //1s采集多少个字节
     private int bytesOnSecond = (mSampleRate * bit * mChannels) / 8;
 
+    /**
+     * 一大格中一小格代表的时间
+     */
+    private int timSpace = 250;
+    //250ms一小隔绘制  250ms/3= 83ms左右采集一个音频点绘制波形
+    private int waveCount = 3;
+
     public FansSoundFile() {
         int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);//44100----3584--81.26ms 8000---640
 
         //多少字节代表一个波
-        int bytesOnewave = (int) ((BaseWaveView.timeSpace * 1.0f / BaseWaveView.waveCount * 1.0f) * bytesOnSecond / 1000);
+        int bytesOnewave = (int) ((timSpace * 1.0f / waveCount * 1.0f) * bytesOnSecond / 1000);
         int bytesCache = bytesOnSecond / 2;
         if (bytesCache < minBufferSize)
             minBufferSize *= 2;

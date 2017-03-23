@@ -20,8 +20,6 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
-import com.barswipe.volume.BaseWaveView;
-
 import java.nio.ShortBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,6 +42,12 @@ public class FansSamplePlayer {
     private boolean mKeepPlaying;
     private OnCompletionListener mListener;
     private Timer timer;
+    /**
+     * 一大格中一小格代表的时间
+     */
+    private int timSpace = 250;
+    //250ms一小隔绘制  250ms/3= 83ms左右采集一个音频点绘制波形
+    private int waveCount = 3;
 
     public FansSamplePlayer(ShortBuffer samples, int sampleRate, int channels, int numSamples) {
         mSamples = samples;
@@ -59,7 +63,7 @@ public class FansSamplePlayer {
                 AudioFormat.ENCODING_PCM_16BIT);
 
         int bytesOnSecond = (mSampleRate * 16 * mChannels) / 8;
-        int bytesOnewave = (int) ((BaseWaveView.timeSpace * 1.0f / BaseWaveView.waveCount * 1.0f) * bytesOnSecond / 1000);
+        int bytesOnewave = (int) ((timSpace * 1.0f / waveCount * 1.0f) * bytesOnSecond / 1000);
         if (bytesOnewave > bufferSize) {
             bufferSize = bytesOnewave;
         }

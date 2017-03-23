@@ -22,8 +22,6 @@ public class PcmWaveView extends BaseWaveView {
 
     final protected Object mLock = new Object();
 
-    private Paint wavePaint;
-
     private boolean isCanScroll = false;
 
     private boolean mIsDraw = true, isInit = false;
@@ -52,13 +50,8 @@ public class PcmWaveView extends BaseWaveView {
     }
 
     @Override
-    protected void init(Context mctx) {
+    public void init(Context mctx) {
         super.init(mctx);
-
-        wavePaint = new Paint();
-        wavePaint.setAntiAlias(true);
-        wavePaint.setStrokeWidth(waveWidth - 2);
-        wavePaint.setColor(Color.parseColor("#e0e0e0"));
 
         mScroller = new Scroller(mctx);
 
@@ -75,8 +68,6 @@ public class PcmWaveView extends BaseWaveView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        viewWidth = totalTimeSec * (dividerCount * timeMargin) + screenWidth;
-        waveCenterPos = timeViewHeight + (viewHeight - timeViewHeight) / 2 - dotRadius;
         setMeasuredDimension(viewWidth, viewHeight);
 
         if (!isInit) {
@@ -110,10 +101,13 @@ public class PcmWaveView extends BaseWaveView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mIsDraw = false;
+        //// TODO: 2017/3/23  这里图片还不释放，反复进入增大内存开销,这里是个优化的点
         if (mBitmap != null && !mBitmap.isRecycled()) {
+            mCanvas.setBitmap(null);
             mCanvas = null;
             mBitmap.recycle();
             mBitmap = null;
+            System.gc();
         }
     }
 
@@ -149,17 +143,14 @@ public class PcmWaveView extends BaseWaveView {
                 int _1s = halfScreenWidth % (dividerCount * timeMargin);
                 int _250ms = _1s / timeMargin;
                 int _250ms_left = _1s % timeMargin;
-                int startHeight;
-
                 for (int i = _250ms_left, seconds = 0; i <= viewWidth; i += timeMargin) {
-
+                    int startHeight;
                     if (i == _250ms_left && _1s > 0) {
                         startHeight = timeViewHeight - timeMargin;
                         for (int k = 0; k < _250ms; k++)
                             canvas.drawLine(_250ms_left + k * timeMargin, startHeight, _250ms_left + k * timeMargin, timeViewHeight, timeLinePain);
                         i += _250ms_left * _250ms;
                     }
-
                     if ((i - _1s) % (dividerCount * timeMargin) == 0) {
                         startHeight = 0;
                         if (i >= halfScreenWidth) {

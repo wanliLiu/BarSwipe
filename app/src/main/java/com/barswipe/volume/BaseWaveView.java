@@ -22,7 +22,7 @@ import com.barswipe.volume.wave.onScrollTimeChangeListener;
 public class BaseWaveView extends View {
 
     private String TAG = "WaveView";
-    private boolean isDebug = true;
+    protected boolean isDebug = true;
 
     protected Context ctx;
     protected int viewWidth, viewHeight, screenWidth, halfScreenWidth, startOffset, waveHeight;
@@ -33,7 +33,7 @@ public class BaseWaveView extends View {
     /**
      * timeMargin 代表的时间 单位ms
      */
-    public static int timeSpace = 250;
+    protected double timeSpace = 250.0d;
     /**
      * 一个大隔有多少个小隔
      */
@@ -51,14 +51,14 @@ public class BaseWaveView extends View {
      */
     protected int totalTimeSec = 90;
     //250ms一小隔绘制
-    public static int waveCount = 3;
+    protected int waveCount = 3;
     protected int waveWidth = 0;
 
     protected int waveCenterPos = 0;
 
     protected int offset = 0;
 
-    protected Paint timeTextPaint, timeLinePain, playIndexPaint;
+    protected Paint timeTextPaint, timeLinePain, playIndexPaint,wavePaint;
 
     protected onScrollTimeChangeListener timeChangeListener;
 
@@ -103,10 +103,16 @@ public class BaseWaveView extends View {
         return (int) px;
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(screenWidth, viewHeight);
+    }
+
     /**
      *
      */
-    protected void init(Context mctx) {
+    public void init(Context mctx) {
         ctx = mctx;
 
         timeMargin = dip2px(10);
@@ -115,20 +121,17 @@ public class BaseWaveView extends View {
 
         waveWidth = timeMargin / waveCount;
 
-        viewWidth = screenWidth = getScreenW(ctx);
+        screenWidth = getScreenW(ctx);
         halfScreenWidth = screenWidth / 2;
         viewHeight = screenWidth * 3 / 4;
         startOffset = halfScreenWidth - timeMargin;
 
         waveHeight = viewHeight - timeViewHeight - dotRadius;
 
-        initPaint();
-    }
+        viewWidth = totalTimeSec * (dividerCount * timeMargin) + screenWidth;
+        waveCenterPos = timeViewHeight + (viewHeight - timeViewHeight) / 2 - dotRadius;
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(screenWidth, viewHeight);
+        initPaint();
     }
 
     /**
@@ -163,6 +166,11 @@ public class BaseWaveView extends View {
         playIndexPaint.setAntiAlias(true);
         playIndexPaint.setStrokeWidth(5);
         playIndexPaint.setColor(Color.parseColor("#6CA5FF"));
+
+        wavePaint = new Paint();
+        wavePaint.setAntiAlias(true);
+        wavePaint.setStrokeWidth(waveWidth - 2);
+        wavePaint.setColor(Color.parseColor("#e0e0e0"));
     }
 
 
