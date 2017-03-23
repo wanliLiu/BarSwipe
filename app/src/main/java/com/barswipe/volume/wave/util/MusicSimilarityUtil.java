@@ -1,5 +1,7 @@
 package com.barswipe.volume.wave.util;
 
+import android.util.Log;
+
 import com.musicg.fingerprint.FingerprintSimilarity;
 import com.musicg.wave.Wave;
 
@@ -12,11 +14,12 @@ public class MusicSimilarityUtil {
 
     /**
      * 比较两文件的获取相似度
+     *
      * @param oriFilePath 原始文件路径
      * @param comFilePath 比较的文件路径
      * @return 相识度
      */
-    public static float getSimByCompareFile(String oriFilePath,String comFilePath){
+    public static float getSimByCompareFile(String oriFilePath, String comFilePath) {
         Wave oriWave = new Wave(oriFilePath);
         Wave comWave = new Wave(comFilePath);
         FingerprintSimilarity fps = oriWave.getFingerprintSimilarity(comWave);
@@ -26,11 +29,12 @@ public class MusicSimilarityUtil {
 
     /**
      * 比较两文件的获取相似度
+     *
      * @param oriInputStream 原始文件路径
      * @param oriInputStream 比较的文件路径
      * @return 相识度
      */
-    public static float getSimByCompareFile(InputStream oriInputStream ,InputStream comInputStream){
+    public static float getSimByCompareFile(InputStream oriInputStream, InputStream comInputStream) {
         Wave oriWave = new Wave(oriInputStream);
         Wave comWave = new Wave(comInputStream);
         FingerprintSimilarity fps = oriWave.getFingerprintSimilarity(comWave);
@@ -39,14 +43,14 @@ public class MusicSimilarityUtil {
     }
 
 
-
     /**
      * 获取音频和标准文件的得分
+     *
      * @param oriFilePath 原始文件路径
      * @param comFilePath 比较的文件路径
      * @return 得分
      */
-    public static float getScoreByCompareFile(String oriFilePath,String comFilePath){
+    public static float getScoreByCompareFile(String oriFilePath, String comFilePath) {
         Wave oriWave = new Wave(oriFilePath);
         Wave comWave = new Wave(comFilePath);
         FingerprintSimilarity fps = oriWave.getFingerprintSimilarity(comWave);
@@ -56,11 +60,12 @@ public class MusicSimilarityUtil {
 
     /**
      * 获取音频和标准文件的得分
+     *
      * @param oriInputStream 原始文件路径
      * @param comInputStream 比较的文件路径
      * @return 得分
      */
-    public static float getScoreByCompareFile(InputStream oriInputStream ,InputStream comInputStream){
+    public static float getScoreByCompareFile(InputStream oriInputStream, InputStream comInputStream) {
         Wave oriWave = new Wave(oriInputStream);
         Wave comWave = new Wave(comInputStream);
         FingerprintSimilarity fps = oriWave.getFingerprintSimilarity(comWave);
@@ -68,5 +73,17 @@ public class MusicSimilarityUtil {
         return score;
     }
 
+    /**
+     * @param elapsedTime ms
+     * @return
+     */
+    public static String getRecordTimeString(double elapsedTime) {
+        int min = (int) (elapsedTime / 60);
+        float sec = (float) (elapsedTime - 60 * min);
+        String strMin = (min < 10 ? "0" + min : String.valueOf(min)) + ":";
+        String recordTimeStr = strMin + String.format("%05.2f", sec);
+        Log.e("录制的时间", elapsedTime + "___" + recordTimeStr);
+        return recordTimeStr;
+    }
 
 }

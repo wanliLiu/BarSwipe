@@ -21,7 +21,6 @@ public class AudioRecordView extends FrameLayout {
 
     private FansSoundFile soundFile;
 
-
     private FansSoundFile.onRecordStatusListener listener;
 
     public AudioRecordView(@NonNull Context context) {
@@ -48,14 +47,17 @@ public class AudioRecordView extends FrameLayout {
         addView(waveView = getWaveView());
         addView(playBackView = getPlayBackView());
 
+        if (listener != null) {
+            waveView.setTimeChangeListener(listener);
+        }
 
         soundFile = new FansSoundFile();
         soundFile.setRecordListener(new FansSoundFile.onRecordStatusListener() {
 
             @Override
-            public void onRecordTime(double fractionComplete, String time) {
+            public void onScrollTimeChange(double fractionComplete, String time) {
                 if (listener != null)
-                    listener.onRecordTime(fractionComplete, time);
+                    listener.onScrollTimeChange(fractionComplete, time);
             }
 
             @Override
@@ -74,8 +76,20 @@ public class AudioRecordView extends FrameLayout {
         });
     }
 
+    /**
+     *
+     * @param mlistner
+     */
     public void setOnRecordListener(FansSoundFile.onRecordStatusListener mlistner) {
         listener = mlistner;
+        if (waveView != null)
+            waveView.setTimeChangeListener(listener);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(waveView.getScreenWidth(), waveView.getViewHeight());
     }
 
     /**
@@ -162,7 +176,7 @@ public class AudioRecordView extends FrameLayout {
         waveView.stopPlay(stopfrom);
     }
 
-    public void updateData(int timeMs) {
+    public void updateData(double timeMs) {
         waveView.updatePlayPosition(timeMs);
     }
 }

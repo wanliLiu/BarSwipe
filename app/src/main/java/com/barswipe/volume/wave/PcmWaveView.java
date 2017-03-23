@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Scroller;
 
 import com.barswipe.volume.BaseWaveView;
+import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 /**
  * Created by Soli on 2017/3/17.
@@ -93,6 +94,11 @@ public class PcmWaveView extends BaseWaveView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if (isInEditMode()) {
+            return;
+        }
+
         if (mIsDraw && mBitmap != null) {
             synchronized (mLock) {
                 canvas.drawBitmap(mBitmap, 0, 0, new Paint());
@@ -231,6 +237,10 @@ public class PcmWaveView extends BaseWaveView {
         if (offset < halfScreenWidth)
             playbackPosition = offset - (currentX - scroolX);
         logOut("playBack_" + playbackPosition + "录制的时间_" + pixelsToMillisecs(playbackPosition));
+        if (timeChangeListener != null) {
+            double time = pixelsToMillisecs(playbackPosition) * 1.0f / 1000.0f;
+            timeChangeListener.onScrollTimeChange(time, MusicSimilarityUtil.getRecordTimeString(time));
+        }
     }
 
     /**
@@ -248,13 +258,17 @@ public class PcmWaveView extends BaseWaveView {
     /**
      *
      */
-    public void updatePlayPosition(int timeUs) {
+    public void updatePlayPosition(double timeUs) {
         int piex = millisecsToPixels(timeUs);
         if (offset < halfScreenWidth) {
             piex += getStartOffset() - offset;
         }
-        playbackPosition = piex;
+//        playbackPosition = piex;
         scrollTo(piex, 0);
+        if (timeChangeListener != null) {
+            double time = timeUs * 1.0f / 1000.0f;
+            timeChangeListener.onScrollTimeChange(time, MusicSimilarityUtil.getRecordTimeString(time));
+        }
     }
 
 

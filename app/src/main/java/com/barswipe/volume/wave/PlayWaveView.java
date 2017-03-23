@@ -28,6 +28,9 @@ public class PlayWaveView extends BaseWaveView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (isInEditMode()) {
+            return;
+        }
         super.onDraw(canvas);
         canvas.drawColor(Color.TRANSPARENT);//清楚画布
         canvas.drawCircle(timeMargin + offset, timeViewHeight, dotRadius, playIndexPaint);// 上面小圆

@@ -75,7 +75,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
         recordView.setOnRecordListener(new FansSoundFile.onRecordStatusListener() {
             @Override
-            public void onRecordTime(double fractionComplete, final String time) {
+            public void onScrollTimeChange(double fractionComplete, final String time) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -297,7 +297,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             }
 
             @Override
-            public void onPlayProgress(int timeMs) {
+            public void onPlayProgress(double timeMs) {
                 recordView.updateData(timeMs);
             }
         });

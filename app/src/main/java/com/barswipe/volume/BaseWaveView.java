@@ -13,6 +13,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.barswipe.volume.wave.onScrollTimeChangeListener;
+
 /**
  * Created by Soli on 2017/3/17.
  */
@@ -57,6 +59,8 @@ public class BaseWaveView extends View {
     protected int offset = 0;
 
     protected Paint timeTextPaint, timeLinePain, playIndexPaint;
+
+    protected onScrollTimeChangeListener timeChangeListener;
 
     public BaseWaveView(Context context) {
         super(context);
@@ -124,7 +128,7 @@ public class BaseWaveView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension(viewWidth, viewHeight);
+        setMeasuredDimension(screenWidth, viewHeight);
     }
 
     /**
@@ -179,7 +183,7 @@ public class BaseWaveView extends View {
      * @param ms
      * @return
      */
-    public int millisecsToPixels(int ms) {
+    public int millisecsToPixels(double ms) {
         return (int) (timeMargin * ms * 1.0f / timeSpace * 1.0f + 0.5);
     }
 
@@ -199,6 +203,10 @@ public class BaseWaveView extends View {
     public void logOut(String str) {
         if (isDebug)
             Log.e(TAG, str);
+    }
+
+    public void setTimeChangeListener(onScrollTimeChangeListener timeChangeListener) {
+        this.timeChangeListener = timeChangeListener;
     }
 
     public int getViewWidth() {

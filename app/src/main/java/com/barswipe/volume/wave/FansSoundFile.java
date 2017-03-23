@@ -23,6 +23,7 @@ import android.media.MediaRecorder;
 import android.util.Log;
 
 import com.barswipe.volume.BaseWaveView;
+import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -178,13 +179,8 @@ public class FansSoundFile {
      * @param elapsedTime
      */
     private void calculateTime(double elapsedTime) {
-        int min = (int) (elapsedTime / 60);
-        float sec = (float) (elapsedTime - 60 * min);
-        String strMin = (min < 10 ? "0" + min : String.valueOf(min)) + ":";
-        String recordTimeStr = strMin + String.format("%05.2f", sec);
-        Log.e("录制的时间", elapsedTime + "___" + recordTimeStr);
         if (listener != null)
-            listener.onRecordTime(elapsedTime, recordTimeStr);
+            listener.onScrollTimeChange(elapsedTime, MusicSimilarityUtil.getRecordTimeString(elapsedTime));
     }
 
     /**
@@ -256,16 +252,16 @@ public class FansSoundFile {
         }
     }
 
-    public interface onRecordStatusListener {
-        /**
-         * Will be called by the SoundFile class periodically
-         * with values between 0.0 and 1.0.  Return true to continue
-         * loading the file or recording the audio, and false to cancel or stop recording.
-         */
-        public void onRecordTime(double fractionComplete, String time);
+    public interface onRecordStatusListener extends onScrollTimeChangeListener {
 
+        /**
+         * @param volume
+         */
         public void onRealVolume(double volume);
 
+        /**
+         * @param soundFile
+         */
         public void onRecordStop(FansSoundFile soundFile);
     }
 

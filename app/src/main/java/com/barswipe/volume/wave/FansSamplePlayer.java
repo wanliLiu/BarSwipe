@@ -30,7 +30,7 @@ public class FansSamplePlayer {
     public interface OnCompletionListener {
         public void onCompletion();
 
-        public void onPlayProgress(int timeMs);
+        public void onPlayProgress(double timeMs);
     }
 
     private ShortBuffer mSamples;
@@ -138,7 +138,7 @@ public class FansSamplePlayer {
                     mListener.onPlayProgress(getCurrentPosition());
                 }
             }
-        }, 10, 30);
+        }, 10, 50);
 
     }
 
@@ -183,10 +183,13 @@ public class FansSamplePlayer {
         }
     }
 
-    public int getCurrentPosition() {
-        int curPos = 0;
+    /**
+     * @return
+     */
+    public double getCurrentPosition() {
+        double curPos = 0;
         try {
-            curPos = (int) ((mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) * (1000.0 / mSampleRate));
+            curPos = (mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) * (1000.0f / mSampleRate * 1.0f);
         } catch (Exception e) {
         }
         return curPos;
