@@ -48,9 +48,6 @@ public class AudioRecordView extends FrameLayout {
         addView(playBackView = getPlayBackView());
 
 
-        // TODO: 2017/3/23 测试
-        waveView.setVisibility(GONE);
-
         if (listener != null) {
             waveView.setTimeChangeListener(listener);
             playBackView.setTimeChangeListener(listener);
@@ -169,6 +166,15 @@ public class AudioRecordView extends FrameLayout {
         if (!waveView.isRecording()) {
             soundFile.saveAudioFile(file, listener);
         }
+    }
+
+    /**
+     * 是否进入编辑模式
+     *
+     * @param isEnter
+     */
+    public void enterClipMode(boolean isEnter) {
+        playBackView.enterEditMode(isEnter);
     }
 
     /**

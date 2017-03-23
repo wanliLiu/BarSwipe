@@ -28,7 +28,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:background="@drawable/default_view_press_selector"
             android:gravity="center"
             android:text="录制语音"
             android:textColor="@color/title_color"
@@ -61,17 +60,53 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp" />
 
-    <TextView
-        android:id="@+id/recordTime"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="00:00.00"
-        android:textColor="#6CA5FF"
-        android:textSize="20sp" />
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/editDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/default_view_press_selector"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="删除"
+            android:textColor="#6CA5FF"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/recordTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/white"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="00:00.00"
+            android:textColor="#6CA5FF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/editClip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/default_view_press_selector"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="剪切"
+            android:textColor="#6CA5FF"
+            android:textSize="20sp"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

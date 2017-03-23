@@ -44,7 +44,7 @@ public class WaveEditView extends BaseWaveView {
      */
     private int editStart = timeMargin, editEnd;
     //是否处于裁剪状态
-    private boolean isInEditMode = true;
+    private boolean isInEditMode = false;
 
     //一屏，除去开始的timeMargin，剩下的有多少个timeMargin
     private int smallDivCount = 0;
@@ -353,6 +353,16 @@ public class WaveEditView extends BaseWaveView {
         if (offset > halfScreenWidth - timeMargin)
             return;
 
+        updateDisplay();
+    }
+
+    /**
+     * 是否进入编辑模式
+     *
+     * @param isEnter
+     */
+    public void enterEditMode(boolean isEnter) {
+        isInEditMode = isEnter;
         updateDisplay();
     }
 

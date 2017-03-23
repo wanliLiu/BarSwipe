@@ -4,7 +4,10 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +48,11 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     @Bind(R.id.btnActionDone)
     TextView btnActionDone;
 
+    @Bind(R.id.editDelete)
+    TextView editDelete;
+    @Bind(R.id.editClip)
+    TextView editClip;
+
     enum ActionStatus {
         parareStart,//准备开始，初始状态
         startRecording,//开始录音，录音状态
@@ -68,8 +76,13 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         btnPlay.setOnClickListener(this);
         btnRecord.setOnClickListener(this);
         btnClip.setOnClickListener(this);
+
+        // TODO: 23/03/2017 这个地方到时候还是换成 titlebar
         txt_cancle.setOnClickListener(this);
         btnActionDone.setOnClickListener(this);
+
+        editDelete.setOnClickListener(this);
+        editClip.setOnClickListener(this);
 
         updateUi();
 
@@ -166,7 +179,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
 
     /**
-     * 播放录音
+     * 停止播放录音
      */
     private void stopplayAudioStatus() {
 
@@ -182,6 +195,48 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         btnClipText.setTextColor(Color.parseColor("#6CA5FF"));
     }
 
+    /**
+     * @param view
+     * @param isShow
+     */
+    private void alphaView(final View view, final boolean isShow) {
+
+        if (isShow)
+            view.setVisibility(View.VISIBLE);
+        ViewCompat.animate(view).alpha(isShow ? 1.0f : 0.0f).setDuration(500).setListener(new ViewPropertyAnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(View view) {
+                super.onAnimationEnd(view);
+                if (!isShow)
+                    view.setVisibility(View.INVISIBLE);
+            }
+        });
+    }
+
+    /**
+     * 是否进入音频编辑模式
+     *
+     * @param isEnter true 进入编辑模式
+     *                false 退出编辑模式
+     */
+    private void enterAudioEditUI(boolean isEnter) {
+
+        btnPlay.setImageResource(R.mipmap.icon_play);
+        btnPlay.setEnabled(true);
+
+        btnRecord.setImageResource(R.mipmap.icon_record_disable);
+        btnRecord.setEnabled(false);
+
+        alphaView(btnClip, !isEnter);
+
+        // TODO: 23/03/2017  改变titlbar 相关显示，这里demo就简单处理一下
+        alphaView(btnActionDone, !isEnter);
+
+        alphaView(editDelete, isEnter);
+        alphaView(editClip, isEnter);
+
+        recordView.enterClipMode(isEnter);
+    }
 
     @Override
     public void onClick(View v) {
@@ -196,6 +251,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                     currentStatus = ActionStatus.stopPlayAudio;
                     recordView.stopPlay(false);
                     player.stop();
+                } else if (currentStatus == ActionStatus.clipAudio) {
+
                 }
                 updateUi();
                 break;
@@ -212,7 +269,16 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 updateUi();
                 break;
             case R.id.btnClip:
-                Toast.makeText(this, "还没做", Toast.LENGTH_SHORT).show();
+                if (currentStatus == ActionStatus.stopPlayAudio ||
+                        currentStatus == ActionStatus.playAudio ||
+                        currentStatus == ActionStatus.stopRecording) {
+                    if (currentStatus == ActionStatus.playAudio) {
+                        recordView.stopPlay(false);
+                        player.stop();
+                    }
+                    currentStatus = ActionStatus.clipAudio;
+                    updateUi();
+                }
                 break;
             case R.id.txt_cancle:
                 onBackPressed();
@@ -239,6 +305,12 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                     }
                 });
                 break;
+            case R.id.editDelete:
+                Toast.makeText(this, "进行删除操作", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.editClip:
+                Toast.makeText(this, "进行剪切操作", Toast.LENGTH_SHORT).show();
+                break;
 
         }
     }
@@ -249,8 +321,20 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         Toast.makeText(this, "这里需要弹出确认框", Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (currentStatus == ActionStatus.clipAudio)
+                enterAudioEditUI(false);
+            else
+                onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     /**
-     *
+     * 根据状态显示
      */
     private void updateUi() {
         switch (currentStatus) {
@@ -270,7 +354,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 stopplayAudioStatus();
                 break;
             case clipAudio:
-                Toast.makeText(this, "还没做", Toast.LENGTH_SHORT).show();
+                enterAudioEditUI(true);
                 break;
         }
     }

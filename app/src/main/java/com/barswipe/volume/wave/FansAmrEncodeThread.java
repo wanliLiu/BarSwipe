@@ -96,7 +96,7 @@ public class FansAmrEncodeThread extends Thread {
                 }
 
                 try {
-                    outputStream.write(BytesTransUtil.getInstance().Shorts2Bytes(mBuffer,len), 0, len * 2);
+                    outputStream.write(BytesTransUtil.getInstance().Shorts2Bytes(mBuffer, len), 0, len * 2);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
