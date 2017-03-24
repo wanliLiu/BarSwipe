@@ -121,10 +121,9 @@ public class PcmWaveView extends BaseWaveView {
 //        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float)dis, halfScreenWidth + offset, waveCenterPos + (float)dis, wavePaint);
         wavePaint.setColor(Color.parseColor("#e0e0e0"));
         canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float) dis, halfScreenWidth + offset, waveCenterPos - dip2px(1), wavePaint);
-//        dis -= dip2px(2);
         wavePaint.setColor(Color.parseColor("#33e0e0e0"));
-//        if (dis <= 0)
-//            dis = dip2px(1);
+        if (dis > dip2px(10))
+            dis -= dip2px(10);
         canvas.drawLine(halfScreenWidth + offset, waveCenterPos + dip2px(1), halfScreenWidth + offset, waveCenterPos + (float) dis, wavePaint);
     }
 

@@ -15,7 +15,6 @@ import com.barswipe.volume.BaseWaveView;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 import java.util.LinkedList;
-import java.util.Random;
 
 /**
  * Created by Soli on 2017/3/17.
@@ -151,7 +150,6 @@ public class WaveEditView extends BaseWaveView {
             canvas.drawLine(tempStartX, startHeight, tempStartX, timeViewHeight, timeLinePain);
         }
         canvas.drawLine(0, timeViewHeight, screenWidth, timeViewHeight, timeLinePain);//时间下面这根线
-        canvas.drawLine(0, waveCenterPos, screenWidth, waveCenterPos, timeLinePain);//中心线
         canvas.drawLine(0, viewHeight - dotRadius, screenWidth, viewHeight - dotRadius, timeLinePain);//最下面的那根线
 
         //绘制选择的区域
@@ -160,6 +158,8 @@ public class WaveEditView extends BaseWaveView {
 
         //波形线  缩放比例
         drawWave(canvas);
+
+        canvas.drawLine(0, waveCenterPos, screenWidth, waveCenterPos, timeLinePain);//中心线
 
         //选择的边界
         drawPlayBack(canvas, startX, selectStart);
@@ -194,52 +194,49 @@ public class WaveEditView extends BaseWaveView {
         path.lineTo(editOffset, timeViewHeight);
         path.close();
 
+        //选中的原色
+        if (currentSelect == inSelectPlayBack) {
+            playIndexPaint.setColor(Color.RED);
+        }
+
         playIndexPaint.setPathEffect(new CornerPathEffect(10));
         canvas.drawPath(path, playIndexPaint);
         playIndexPaint.setPathEffect(null);
         canvas.drawLine(editOffset, timeViewHeight - playbackTopWidth, editOffset, viewHeight - dotRadius, playIndexPaint);
 
+        //back
+        playIndexPaint.setColor(Color.parseColor("#6CA5FF"));
+
         if (rect != null) {
-            rect.set(editOffset - playbackTopWidth * 2, timeViewHeight - playbackTopWidth * 2, editOffset + playbackTopWidth * 2, timeViewHeight + playbackTopWidth);
+            rect.set(editOffset - playbackTopWidth, timeViewHeight - playbackTopWidth, editOffset + playbackTopWidth, viewHeight - dotRadius);
         }
     }
 
     /**
+     * 注意选中和没选中的颜色
+     *
      * @param canvas
      */
     private void drawWave(Canvas canvas) {
-        wavePaint.setStrokeWidth(1);
-        for (int i = editStart; i < editEnd; i += 1) {
-            int volume = new Random().nextInt(80);
-            if (i < startX)
-                wavePaint.setColor(Color.parseColor("#e0e0e0"));
-            else
-                wavePaint.setColor(Color.parseColor("#EEEEEE"));
-            canvas.drawLine(i, waveCenterPos - (float) volume, i, waveCenterPos + (float) volume, wavePaint);
-        }
-//
-//        if (wavedata == null || wavedata.size() == 0)
-//            return;
-////        int tempWaveWidth = timeMargin / waveCount;
-////        if (tempWaveWidth != waveWidth) {
-////            if ((waveWidth * wavedata.size()) > (editEnd - editStart)) {
-////
-////            }
-////
-////        }
-//        for (int i = editStart; i < editEnd; i += 1) {
-//            Double volume = Double.valueOf(wavedata.get(i));
-//            int _2_3 = waveHeight * 3 / 4;
-//            double dis = (volume * _2_3) / 2.0f + 0.5;
+
+        if (wavedata == null || wavedata.size() == 0)
+            return;
+
+        for (int i = editStart, j = 0; i < editEnd; i += waveWidth, j++) {
+            int pos = (int) ((j * timeSpace * 1.0f / waveCount * 1.0f) / (defaultTimeSpace * 1.0f / waveCount * 1.0f));
+            if (pos >= wavedata.size())
+                pos = wavedata.size() - 1;
+            Double volume = Double.valueOf(wavedata.get(pos));
+            int _2_3 = waveHeight * 3 / 4;
+            double dis = (volume * _2_3) / 2.0f + 0.5;
 //            canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos + (float) dis, wavePaint);
-////            wavePaint.setColor(Color.parseColor(i < startX ? "#e0e0e0" : "#EEEEEE"));
-////            canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos - dip2px(1), wavePaint);
-////        dis -= dip2px(2);
-////            wavePaint.setColor(Color.parseColor("#33e0e0e0"));
-////        if (dis <= 0)
-////            dis = dip2px(1);
-////            canvas.drawLine(i, waveCenterPos + dip2px(1), i, waveCenterPos + (float) dis, wavePaint);
-//        }
+            wavePaint.setColor(Color.parseColor(i < startX || i > endx ? "#e0e0e0" : "#EEEEEE"));
+            canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos - dip2px(1), wavePaint);
+            wavePaint.setColor(Color.parseColor("#33e0e0e0"));
+            if (dis > dip2px(10))
+                dis -= dip2px(10);
+            canvas.drawLine(i, waveCenterPos + dip2px(1), i, waveCenterPos + (float) dis, wavePaint);
+        }
     }
 
     /**
@@ -250,9 +247,19 @@ public class WaveEditView extends BaseWaveView {
      */
     private void drawPlayBack(Canvas canvas, int position, Rect rect) {
 //        if (!isInEditMode)
+        //选中的原色
+        if ((position == startX && currentSelect == inSelectStart) ||
+                (position == endx && currentSelect == inSelectEnd)) {
+            playIndexPaint.setColor(Color.RED);
+        }
+
         canvas.drawCircle(position, timeViewHeight, dotRadius, playIndexPaint);// 上面小圆
         canvas.drawLine(position, timeViewHeight, position, viewHeight, playIndexPaint);//垂直的线
         canvas.drawCircle(position, viewHeight - dotRadius, dotRadius, playIndexPaint);// 下面小圆
+
+        //back
+        playIndexPaint.setColor(Color.parseColor("#6CA5FF"));
+
         if (rect != null) {
             rect.set(position - dotRadius * 2, timeViewHeight, position + dotRadius * 2, viewHeight);
         }
@@ -280,7 +287,13 @@ public class WaveEditView extends BaseWaveView {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 lastX = (int) event.getX();
-                return checkIfSelectSomething((int) event.getX(), (int) event.getY()) != SelectNone;
+                checkIfSelectSomething((int) event.getX(), (int) event.getY());
+
+                //跟新选中的原色
+                if (currentSelect != SelectNone)
+                    postInvalidate();
+
+                return currentSelect != SelectNone;
             case MotionEvent.ACTION_MOVE:
                 int dataX = x - lastX;
                 switch (currentSelect) {
@@ -343,7 +356,7 @@ public class WaveEditView extends BaseWaveView {
                 break;
             case MotionEvent.ACTION_UP:
                 currentSelect = SelectNone;
-//                postInvalidate();
+                postInvalidate();
                 break;
         }
 
@@ -405,30 +418,10 @@ public class WaveEditView extends BaseWaveView {
             if (recordTime > defaultMaxTime) {
                 timeSpace = recordTime * 1.0d / smallDivCount;
                 editEnd = endx = editStart + (smallDivCount) * timeMargin;
-
-//                int tempWaveWidth = timeMargin / waveCount;
-//                double wave = tempWaveWidth * 1.0f * timeSpace / defaultTimeSpace;
-//                if (wave <= 1) {
-//                    waveWidth = 1;
-//                    wavePaint.setStrokeWidth(waveWidth);
-//                } else {
-//                    waveWidth = (int) wave;
-//                    wavePaint.setStrokeWidth(waveWidth * 2 / 3);
-//                }
             } else {
-
-//                waveWidth = timeMargin / waveCount;
-//                wavePaint.setStrokeWidth(waveWidth - 2);
-
                 timeSpace = defaultTimeSpace;
                 editEnd = endx = editStart + millisecsToPixels(recordTime);
             }
-
-//            //计算怎样合适显示波形
-//            if (wavedata.size() < editEnd - editStart) {
-//                //单位1像素能显示完波形，计算波形宽度
-//                int pixelWave = (editEnd - editStart) / wavedata.size();
-//            }
 
             editOffset = startX + (endx - startX) * 1 / 4;
             updatePlayBackSelectTime();
