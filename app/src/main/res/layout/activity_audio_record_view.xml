@@ -25,6 +25,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/recordtitle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
@@ -54,11 +55,21 @@
         android:layout_height="1dp"
         android:background="@color/color_line" />
 
-    <com.barswipe.volume.wave.AudioRecordView
-        android:id="@+id/recordView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp">
+
+        <com.barswipe.volume.wave.PcmWaveView
+            android:id="@+id/pcmWaveView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.barswipe.volume.wave.WaveEditView
+            android:id="@+id/waveEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -70,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/default_view_press_selector"
             android:gravity="center"
             android:padding="10dp"
@@ -98,11 +109,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="25dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/default_view_press_selector"
             android:gravity="center"
             android:padding="10dp"
-            android:text="剪切"
+            android:text="裁剪"
             android:textColor="#6CA5FF"
             android:textSize="20sp"
             android:visibility="gone" />
@@ -161,6 +172,5 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </RelativeLayout>
-
 
 </LinearLayout>

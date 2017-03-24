@@ -19,17 +19,13 @@ package com.barswipe.volume.wave;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.util.Log;
 
 import java.nio.ShortBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class FansSamplePlayer {
-    public interface OnCompletionListener {
-        public void onCompletion();
-
-        public void onPlayProgress(double timeMs);
-    }
 
     private ShortBuffer mSamples;
     private int mSampleRate;
@@ -37,11 +33,12 @@ public class FansSamplePlayer {
     private int mNumSamples;  // Number of samples per channel.
     private AudioTrack mAudioTrack;
     private short[] mBuffer;
-    private int mPlaybackStart;  // Start offset, in samples.
+    private int mPlaybackStart, mPlaybackEnd;  // Start offset, in samples.
     private Thread mPlayThread;
     private boolean mKeepPlaying;
-    private OnCompletionListener mListener;
+    private onAudioPlayListener mListener;
     private Timer timer;
+
     /**
      * 一大格中一小格代表的时间
      */
@@ -54,7 +51,7 @@ public class FansSamplePlayer {
         mSampleRate = sampleRate;
         mChannels = channels;
         mNumSamples = numSamples;
-        mPlaybackStart = 0;
+        mPlaybackStart = mPlaybackEnd = 0;
 
         //44100----7088  8000----1312
         int bufferSize = AudioTrack.getMinBufferSize(
@@ -82,7 +79,10 @@ public class FansSamplePlayer {
         this(mSoundFile.getSamples(), mSoundFile.getSampleRate(), mSoundFile.getChannels(), mSoundFile.getNumSamples());
     }
 
-    public void setOnCompletionListener(OnCompletionListener listener) {
+    /**
+     * @param listener
+     */
+    public void setOnAudioPlayListener(onAudioPlayListener listener) {
         mListener = listener;
     }
 
@@ -94,7 +94,9 @@ public class FansSamplePlayer {
         return mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PAUSED;
     }
 
-
+    /**
+     *
+     */
     public void start() {
         if (isPlaying()) {
             return;
@@ -107,9 +109,10 @@ public class FansSamplePlayer {
         // (Assumes mChannels = 1 or 2).
         mPlayThread = new Thread() {
             public void run() {
-                int position = mPlaybackStart * mChannels;
-                mSamples.position(position);
-                int limit = mNumSamples * mChannels;
+                int startIndex = mPlaybackStart * mChannels;
+                int endIndex = mPlaybackEnd * mChannels;
+                mSamples.position(startIndex);
+                int limit = endIndex == 0 ? mNumSamples * mChannels : endIndex;
                 while (mKeepPlaying && mSamples.position() < limit) {
                     int numSamplesLeft = limit - mSamples.position();
                     if (numSamplesLeft >= mBuffer.length) {
@@ -125,7 +128,7 @@ public class FansSamplePlayer {
                 }
 
                 if (mListener != null) {
-                    mListener.onCompletion();
+                    mListener.onAudioPlayComplete();
                 }
 
                 if (timer != null)
@@ -139,13 +142,16 @@ public class FansSamplePlayer {
             @Override
             public void run() {
                 if (mListener != null) {
-                    mListener.onPlayProgress(getCurrentPosition());
+                    mListener.onAudioPlayProgress(getCurrentPosition());
                 }
             }
-        }, 10, 50);
+        }, 10, 70);
 
     }
 
+    /**
+     *
+     */
     public void pause() {
         if (isPlaying()) {
             mAudioTrack.pause();
@@ -153,8 +159,10 @@ public class FansSamplePlayer {
         }
     }
 
+    /**
+     * 停止播放
+     */
     public void stop() {
-
         if (isPlaying() || isPaused()) {
             mKeepPlaying = false;
             mAudioTrack.pause();  // pause() stops the playback immediately.
@@ -170,32 +178,69 @@ public class FansSamplePlayer {
         }
     }
 
+    /**
+     *
+     */
     public void release() {
         stop();
         mAudioTrack.release();
     }
 
-    public void seekTo(double msec) {
-        boolean wasPlaying = isPlaying();
-        stop();
-        mPlaybackStart = (int) (msec * (mSampleRate * 1.0d / 1000.0d));
-        if (mPlaybackStart > mNumSamples) {
-            mPlaybackStart = mNumSamples;  // Nothing to play...
-        }
-        if (wasPlaying) {
-            start();
-        }
+    /**
+     * 根据时间，算出在数据中的位置
+     *
+     * @param ms
+     * @return
+     */
+    private int getDataPlayIndex(double ms) {
+        return (int) (ms * (mSampleRate * 1.0d / 1000.0d));
     }
 
     /**
+     * @param msStart
+     */
+    public void seekTo(double msStart) {
+        seekTo(msStart, 0);
+    }
+
+    /**
+     * 跳转到哪里播放
+     *
+     * @param msStart 开始时间
+     * @param msEnd   结束时间
+     */
+    public void seekTo(double msStart, double msEnd) {
+        //结束时间不为0，并且结束时间必须大于开始时间
+        if (msEnd > 0.0d && msEnd < msStart)
+            return;
+//        boolean wasPlaying = isPlaying();
+//        stop();
+        mPlaybackStart = getDataPlayIndex(msStart);
+        if (mPlaybackStart > mNumSamples) {
+            mPlaybackStart = mNumSamples;
+        }
+
+        mPlaybackEnd = getDataPlayIndex(msEnd);
+        if (mPlaybackEnd > mNumSamples) {
+            mPlaybackEnd = mNumSamples;
+        }
+//        if (wasPlaying) {
+//            start();
+//        }
+    }
+
+    /**
+     * 获取当前播放进度时间
+     *
      * @return
      */
-    public double getCurrentPosition() {
+    private double getCurrentPosition() {
         double curPos = 0;
         try {
             curPos = (mPlaybackStart + mAudioTrack.getPlaybackHeadPosition()) * (1000.0f / mSampleRate * 1.0f);
         } catch (Exception e) {
         }
+        Log.e("播放时间：", String.valueOf(curPos));
         return curPos;
     }
 }

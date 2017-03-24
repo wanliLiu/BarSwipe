@@ -21,14 +21,19 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 /**
  * Created by Soli on 2017/3/17.
  */
 
-public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickListener {
+public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickListener, onAudioRecordListener, onAudioPlayListener, onWaveEditListener {
 
-    @Bind(R.id.recordView)
-    AudioRecordView recordView;
+    @Bind(R.id.pcmWaveView)
+    PcmWaveView pcmWaveView;
+    @Bind(R.id.waveEdit)
+    WaveEditView waveEdit;
 
     @Bind(R.id.recordTime)
     TextView recordTime;
@@ -43,6 +48,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     @Bind(R.id.btnClipText)
     TextView btnClipText;
 
+    // TODO: 2017/3/24 titlabar需要弄
     @Bind(R.id.txt_cancle)
     TextView txt_cancle;
     @Bind(R.id.btnActionDone)
@@ -53,17 +59,31 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     @Bind(R.id.editClip)
     TextView editClip;
 
+    // TODO: 2017/3/24 到时候改成titlebar
+    @Bind(R.id.recordtitle)
+    TextView recordtitle;
+
+    //音频数据录制
+    private FansSoundFile soundFile;
+    //音频数据播放
+    private FansSamplePlayer player;
+
+    //总共录制的时间
+    private double recordTotalTime = 0.0d;
+
+    //能录制的最小时间 2s
+    private double recordMinTime = 2;
+    //录制的实际大于最小录制时间 就可以编辑和保存当前录制的音频数据
+    private boolean isCanAction = false, isCanRecord = true;
+
     enum ActionStatus {
         parareStart,//准备开始，初始状态
         startRecording,//开始录音，录音状态
-        pasueRecording,//暂停录音
         stopRecording,//暂停录音
-        playAudio,//播放录音
-        stopPlayAudio,//停止播放录音
-        clipAudio//裁剪
+        playAudio,//播放录音,包括裁剪中
+        stopPlayAudio,//停止播放录音 包括裁剪中
+        clipAudio,//裁剪
     }
-
-    private FansSamplePlayer player;
 
     private ActionStatus currentStatus = ActionStatus.parareStart;
 
@@ -86,33 +106,252 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
         updateUi();
 
-        recordView.setOnRecordListener(new FansSoundFile.onRecordStatusListener() {
-            @Override
-            public void onScrollTimeChange(double fractionComplete, final String time) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        recordTime.setText(time);
-                    }
-                });
+        initAudioRecord();
+    }
+
+    /**
+     * 音频相关录制
+     */
+    private void initAudioRecord() {
+        pcmWaveView.setTimeChangeListener(this);
+        waveEdit.setTimeChangeListener(this);
+        waveEdit.setOnWaveEditListener(this);
+
+        soundFile = new FansSoundFile();
+        soundFile.setOnAudioRecordListener(this);
+    }
+
+    /**
+     * 大于最小录制的时间才可以编辑音频 和 发布
+     */
+    private void updateCanActionUI() {
+        if (!isCanAction) {
+            if (recordTotalTime > recordMinTime) {
+                isCanAction = true;
+                btnActionDone.setTextColor(Color.parseColor("#6CA5FF"));
+                btnActionDone.setEnabled(true);
             }
+        }
 
+        if (isCanRecord && recordTotalTime >= pcmWaveView.getTotalTimeSec()) {
+            isCanRecord = false;
+            recordTotalTime = pcmWaveView.getTotalTimeSec();
+            startRecord();
+        }
+    }
+
+    @Override
+    public void onActionCando(boolean isCan) {
+        if (isCan && editDelete.isEnabled())
+            return;
+        if (!isCan && !editDelete.isEnabled())
+            return;
+        editDelete.setEnabled(isCan);
+        editDelete.setTextColor(Color.parseColor(isCan ? "#6CA5FF" : "#e0e0e0"));
+
+        editClip.setEnabled(isCan);
+        editClip.setTextColor(Color.parseColor(isCan ? "#6CA5FF" : "#e0e0e0"));
+    }
+
+    @Override
+    public void onTimeChange(final boolean from, final double fractionComplete, final String time) {
+        // TODO: 2017/3/24 注意这里的线程  要判断是否是主线程
+        // TODO: 2017/3/24 这里需要对裁剪的最小时间做判断，从而对裁剪入口的显示状态
+        runOnUiThread(new Runnable() {
             @Override
-            public void onRealVolume(double volume) {
-
-            }
-
-            @Override
-            public void onRecordStop(FansSoundFile soundFile) {
-                initPlayer(soundFile);
+            public void run() {
+                recordTime.setText(time);
+                if (from) {
+                    recordTotalTime = fractionComplete;
+                    updateCanActionUI();
+                }
             }
         });
+    }
+
+    @Override
+    public void onAudioRecordVolume(double volume) {
+        if (pcmWaveView.isRecording()) {
+            pcmWaveView.updateData(volume);
+            waveEdit.updatePosition();
+        }
+    }
+
+    @Override
+    public void onAudioRecordStop() {
+        if (player != null)
+            player.release();
+        //初始化 播放器
+        player = new FansSamplePlayer(soundFile);
+        player.setOnAudioPlayListener(this);
+    }
+
+    @Override
+    public void onAudioPlayComplete() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (currentStatus == ActionStatus.playAudio) {
+                    if (isInAudioEdit()) {
+                        currentStatus = ActionStatus.stopPlayAudio;
+                    } else {
+                        currentStatus = ActionStatus.stopRecording;
+                    }
+                    stopPlay(true);
+                }
+                updateUi();
+            }
+        });
+    }
+
+    @Override
+    public void onAudioPlayProgress(double timeMs) {
+        updateData(timeMs);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // TODO: 2017/3/24 释放相关资源
+
+        if (player != null) {
+            player.release();
+        }
+    }
+
+    /**
+     * 开始录制
+     */
+    private void startRecord() {
+        if (isCanRecord) {
+            //界面准备开始录制
+            pcmWaveView.setRecording(true);
+            //数据这里准备开始
+            soundFile.startRecord();
+        } else {
+            currentStatus = ActionStatus.stopRecording;
+            stopRecord();
+            updateUi();
+            Toast.makeText(AcitivtyWaveTest.this, "最多只能录制90s", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    /**
+     * 结束录制
+     */
+    private void stopRecord() {
+        //先停止数据
+        soundFile.stopRecord();
+        //在同时页面停止
+        pcmWaveView.setRecording(false);
+    }
+
+    /**
+     * 开始播放
+     */
+    private void startPlay() {
+        if (isInAudioEdit()) {
+            waveEdit.setPlaying(true);
+            player.seekTo(waveEdit.getPlayBackStartTime(), waveEdit.getPlayBackEndTime());
+        } else {
+            player.seekTo(pcmWaveView.startPlay());
+        }
+        player.start();
+    }
+
+    /**
+     * 停止播放
+     *
+     * @param stopfrom ture
+     */
+    private void stopPlay(boolean stopfrom) {
+        if (isInAudioEdit()) {
+            waveEdit.stopPlay(stopfrom);
+        } else {
+            //界面处理停止播放相关事情
+            pcmWaveView.stopPlay(stopfrom);
+        }
+        player.stop();
+    }
+
+    /**
+     *
+     */
+    private void saveAudioFile() {
+        if (isCanAction) {
+            // TODO: 2017/3/24  保存的文件位置  和保存文件过程中的加载框需要处理
+            final File filePath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
+            final ProgressDialog waitDialog = new ProgressDialog(this);
+            waitDialog.setTitle(getResources().getString(R.string.transfer_wait_title));
+            waitDialog.setMessage(getResources().getString(R.string.transfer_wait_message));
+            waitDialog.show();
+            soundFile.saveAudioFile(filePath, new onEncodeCompleteListener() {
+                @Override
+                public void onEncodeComplete(final String filepath) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            waitDialog.dismiss();
+                            if (filePath.exists()) {
+                                Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + filepath, Toast.LENGTH_SHORT).show();
+                                AcitivtyWaveTest.this.finish();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+
+    /**
+     * 是否进入编辑模式
+     *
+     * @param isEnter
+     */
+    public void enterClipMode(boolean isEnter) {
+        pcmWaveView.setVisibility(isEnter ? GONE : VISIBLE);
+        waveEdit.enterEditMode(isEnter, recordTotalTime * 1000, soundFile.getWaveBytes());
+    }
+
+    /**
+     * 更新播放的位置
+     *
+     * @param timeMs
+     */
+    public void updateData(double timeMs) {
+        if (isInAudioEdit())
+            waveEdit.updatePlayBackPosition(timeMs);
+        else
+            pcmWaveView.updatePlayPosition(timeMs);
+    }
+
+    /**
+     * 编辑按钮的状态
+     *
+     * @param isEnable
+     */
+    private void clipViewEnable(boolean isEnable) {
+
+        if (isEnable && !isCanAction)
+            isEnable = false;
+
+        btnClip.setEnabled(isEnable);
+//        btnClipText.setText("裁剪");
+        btnClipIcon.setImageResource(isEnable ? R.mipmap.icon_clip : R.mipmap.icon_clip_disable);
+        btnClipText.setTextColor(Color.parseColor(isEnable ? "#6CA5FF" : "#e0e0e0"));
     }
 
     /**
      * 准备开始录音
      */
     private void parperRecordStatus() {
+
+        btnActionDone.setTextColor(Color.parseColor("#e0e0e0"));
+        btnActionDone.setEnabled(false);
+
         recordTime.setText("00:00.00");
 
         btnPlay.setImageResource(R.mipmap.icon_play_disable);
@@ -121,10 +360,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         btnRecord.setImageResource(R.mipmap.icon_start_recording);
         btnRecord.setEnabled(true);
 
-        btnClip.setEnabled(false);
-        btnClipText.setText("裁剪");
-        btnClipIcon.setImageResource(R.mipmap.icon_clip_disable);
-        btnClipText.setTextColor(Color.parseColor("#e0e0e0"));
+        clipViewEnable(false);
     }
 
     /**
@@ -138,10 +374,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         btnRecord.setImageResource(R.mipmap.icon_record_stop);
         btnRecord.setEnabled(true);
 
-        btnClip.setEnabled(false);
-        btnClipText.setText("裁剪");
-        btnClipIcon.setImageResource(R.mipmap.icon_clip_disable);
-        btnClipText.setTextColor(Color.parseColor("#e0e0e0"));
+        clipViewEnable(false);
     }
 
     /**
@@ -154,10 +387,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         btnRecord.setImageResource(R.mipmap.icon_start_recording);
         btnRecord.setEnabled(true);
 
-        btnClip.setEnabled(true);
-        btnClipText.setText("裁剪");
-        btnClipIcon.setImageResource(R.mipmap.icon_clip);
-        btnClipText.setTextColor(Color.parseColor("#6CA5FF"));
+        clipViewEnable(true);
     }
 
     /**
@@ -167,14 +397,11 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
         btnPlay.setImageResource(R.mipmap.icon_play_stop);
         btnPlay.setEnabled(true);
-
-        btnRecord.setImageResource(R.mipmap.icon_record_disable);
-        btnRecord.setEnabled(false);
-
-        btnClip.setEnabled(true);
-        btnClipText.setText("裁剪");
-        btnClipIcon.setImageResource(R.mipmap.icon_clip);
-        btnClipText.setTextColor(Color.parseColor("#6CA5FF"));
+        if (!isInAudioEdit()) {
+            btnRecord.setImageResource(R.mipmap.icon_record_disable);
+            btnRecord.setEnabled(false);
+            clipViewEnable(true);
+        }
     }
 
 
@@ -185,14 +412,20 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
         btnPlay.setImageResource(R.mipmap.icon_play);
         btnPlay.setEnabled(true);
+        if (!isInAudioEdit()) {
+            btnRecord.setImageResource(R.mipmap.icon_start_recording);
+            btnRecord.setEnabled(true);
+            clipViewEnable(true);
+        }
+    }
 
-        btnRecord.setImageResource(R.mipmap.icon_start_recording);
-        btnRecord.setEnabled(true);
-
-        btnClip.setEnabled(true);
-        btnClipText.setText("裁剪");
-        btnClipIcon.setImageResource(R.mipmap.icon_clip);
-        btnClipText.setTextColor(Color.parseColor("#6CA5FF"));
+    /**
+     * 是否处于编辑页面
+     *
+     * @return
+     */
+    private boolean isInAudioEdit() {
+        return editClip.getVisibility() == VISIBLE && editDelete.getVisibility() == VISIBLE;
     }
 
     /**
@@ -202,8 +435,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     private void alphaView(final View view, final boolean isShow) {
 
         if (isShow)
-            view.setVisibility(View.VISIBLE);
-        ViewCompat.animate(view).alpha(isShow ? 1.0f : 0.0f).setDuration(500).setListener(new ViewPropertyAnimatorListenerAdapter() {
+            view.setVisibility(VISIBLE);
+        ViewCompat.animate(view).alpha(isShow ? 1.0f : 0.0f).setDuration(250).setListener(new ViewPropertyAnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(View view) {
                 super.onAnimationEnd(view);
@@ -221,13 +454,17 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
      */
     private void enterAudioEditUI(boolean isEnter) {
 
+        recordtitle.setText(isEnter ? "语音编辑" : "录制语音");
+
         btnPlay.setImageResource(R.mipmap.icon_play);
         btnPlay.setEnabled(true);
 
-        btnRecord.setImageResource(R.mipmap.icon_record_disable);
-        btnRecord.setEnabled(false);
+        btnRecord.setImageResource(isEnter ? R.mipmap.icon_record_disable : R.mipmap.icon_start_recording);
+        btnRecord.setEnabled(!isEnter);
 
         alphaView(btnClip, !isEnter);
+
+        alphaView(pcmWaveView, !isEnter);
 
         // TODO: 23/03/2017  改变titlbar 相关显示，这里demo就简单处理一下
         alphaView(btnActionDone, !isEnter);
@@ -235,24 +472,26 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         alphaView(editDelete, isEnter);
         alphaView(editClip, isEnter);
 
-        recordView.enterClipMode(isEnter);
+        enterClipMode(isEnter);
     }
 
+    /**
+     * 分开处理编辑 和录音的情况
+     *
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnPlay:
-                if (currentStatus == ActionStatus.stopRecording ||
+                if (currentStatus == ActionStatus.clipAudio ||
+                        currentStatus == ActionStatus.stopRecording ||
                         currentStatus == ActionStatus.stopPlayAudio) {
                     currentStatus = ActionStatus.playAudio;
-                    player.seekTo(recordView.startPlay());
-                    player.start();
+                    startPlay();
                 } else if (currentStatus == ActionStatus.playAudio) {
                     currentStatus = ActionStatus.stopPlayAudio;
-                    recordView.stopPlay(false);
-                    player.stop();
-                } else if (currentStatus == ActionStatus.clipAudio) {
-
+                    stopPlay(false);
                 }
                 updateUi();
                 break;
@@ -261,10 +500,10 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                         currentStatus == ActionStatus.stopRecording ||
                         currentStatus == ActionStatus.stopPlayAudio) {
                     currentStatus = ActionStatus.startRecording;
-                    recordView.startRecord();
+                    startRecord();
                 } else if (currentStatus == ActionStatus.startRecording) {
                     currentStatus = ActionStatus.stopRecording;
-                    recordView.stopRecord();
+                    stopRecord();
                 }
                 updateUi();
                 break;
@@ -273,8 +512,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                         currentStatus == ActionStatus.playAudio ||
                         currentStatus == ActionStatus.stopRecording) {
                     if (currentStatus == ActionStatus.playAudio) {
-                        recordView.stopPlay(false);
-                        player.stop();
+                        stopPlay(false);
                     }
                     currentStatus = ActionStatus.clipAudio;
                     updateUi();
@@ -284,26 +522,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 onBackPressed();
                 break;
             case R.id.btnActionDone:
-                final File filePath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
-                final ProgressDialog waitDialog = new ProgressDialog(this);
-                waitDialog.setTitle(getResources().getString(R.string.transfer_wait_title));
-                waitDialog.setMessage(getResources().getString(R.string.transfer_wait_message));
-                waitDialog.show();
-                recordView.saveAudioFile(filePath, new onEncodeCompleteListener() {
-                    @Override
-                    public void onEncodeComplete(final String filepath) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                waitDialog.dismiss();
-                                if (filePath.exists()) {
-                                    Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + filepath, Toast.LENGTH_SHORT).show();
-                                    AcitivtyWaveTest.this.finish();
-                                }
-                            }
-                        });
-                    }
-                });
+                saveAudioFile();
                 break;
             case R.id.editDelete:
                 Toast.makeText(this, "进行删除操作", Toast.LENGTH_SHORT).show();
@@ -315,19 +534,60 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * 退出编辑模式
+     *
+     * @return ture 已经退出
+     * false 不需要退出
+     */
+    private boolean exitAudioEditMode() {
+        if (isInAudioEdit()) {
+            if (currentStatus == ActionStatus.playAudio) {
+                stopPlay(false);
+            }
+            currentStatus = ActionStatus.stopRecording;
+            enterAudioEditUI(false);
+            pcmWaveView.updatePlayBackPosition();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 退出给出相应提示，如果没有录制，就直接退出，如果正在播放，停止播放，给出是否要进一步退出的提示
+     *
+     * @return
+     */
+    private boolean exitAttention() {
+        if (recordTotalTime > 0) {
+            if (currentStatus == ActionStatus.playAudio) {
+                currentStatus = ActionStatus.stopRecording;
+                updateUi();
+                stopPlay(false);
+            } else if (currentStatus == ActionStatus.startRecording) {
+                currentStatus = ActionStatus.stopRecording;
+                updateUi();
+                stopRecord();
+            }
+            Toast.makeText(this, "有音频录制的数据这里需要弹出确认框", Toast.LENGTH_LONG).show();
+            // TODO: 2017/3/24 暂时改为true,方便调试
+            return true;
+        }
+        return true;
+    }
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        Toast.makeText(this, "这里需要弹出确认框", Toast.LENGTH_LONG).show();
+        if (!exitAudioEditMode()) {
+            if (exitAttention())
+                super.onBackPressed();
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (currentStatus == ActionStatus.clipAudio)
-                enterAudioEditUI(false);
-            else
-                onBackPressed();
+            onBackPressed();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -357,33 +617,5 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 enterAudioEditUI(true);
                 break;
         }
-    }
-
-    /**
-     *
-     */
-    private void initPlayer(FansSoundFile soundFile) {
-        player = new FansSamplePlayer(soundFile);
-        player.setOnCompletionListener(new FansSamplePlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (currentStatus == ActionStatus.playAudio) {
-                            currentStatus = ActionStatus.stopRecording;
-                            player.stop();
-                            recordView.stopPlay(true);
-                        }
-                        updateUi();
-                    }
-                });
-            }
-
-            @Override
-            public void onPlayProgress(double timeMs) {
-                recordView.updateData(timeMs);
-            }
-        });
     }
 }

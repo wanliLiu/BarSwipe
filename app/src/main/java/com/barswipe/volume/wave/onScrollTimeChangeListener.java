@@ -7,9 +7,12 @@ package com.barswipe.volume.wave;
 public interface onScrollTimeChangeListener {
 
     /**
-     * Will be called by the SoundFile class periodically
-     * with values between 0.0 and 1.0.  Return true to continue
-     * loading the file or recording the audio, and false to cancel or stop recording.
+     * 时间
+     *
+     * @param from             ture录制界面，其他地方过来就是fasle
+     * @param fractionComplete 时间
+     * @param time             格式好的时间
      */
-    public void onScrollTimeChange(double fractionComplete, String time);
+    public void onTimeChange(boolean from, double fractionComplete, String time);
+
 }

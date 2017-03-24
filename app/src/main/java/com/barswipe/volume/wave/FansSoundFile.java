@@ -28,6 +28,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
+import java.util.LinkedList;
 
 /**
  * 参考-------
@@ -36,7 +37,8 @@ import java.nio.ShortBuffer;
  */
 @SuppressLint("NewApi")
 public class FansSoundFile {
-    private onRecordStatusListener listener = null;
+
+    private onAudioRecordListener listener;
     //保存的格式，mp3 或amr
     public static boolean recordFormatIsMp3 = false;
 
@@ -52,7 +54,7 @@ public class FansSoundFile {
     private int mNumSamples;
     private ByteBuffer mPCMBytes;  // Raw audio data
     private ShortBuffer mPCMSamples;  // shared buffer with mPCMBytes.
-//    private ByteBuffer waveBytes;//波形数据
+    private LinkedList<String> waveBytes;//波形数据
 
     private AudioRecord audioRecord;
     private short[] buffer;
@@ -82,6 +84,7 @@ public class FansSoundFile {
         buffer = new short[bytesOnewave / 2];
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRate, channelConfig, audioFormat, minBufferSize);
 
+        waveBytes = new LinkedList<>();
         // Allocate memory for 20 seconds first. Reallocate later if more is needed.
         mPCMBytes = ByteBuffer.allocate(20 * bytesOnSecond);
         mPCMBytes.order(ByteOrder.LITTLE_ENDIAN);
@@ -108,11 +111,14 @@ public class FansSoundFile {
         }
     }
 
+    public LinkedList<String> getWaveBytes() {
+        return waveBytes;
+    }
 
     /**
      * @param mlistener
      */
-    public void setRecordListener(onRecordStatusListener mlistener) {
+    public void setOnAudioRecordListener(onAudioRecordListener mlistener) {
         listener = mlistener;
     }
 
@@ -177,7 +183,7 @@ public class FansSoundFile {
 //            mPCMBytes.rewind();
 
             if (listener != null)
-                listener.onRecordStop(FansSoundFile.this);
+                listener.onAudioRecordStop();
         }
     }
 
@@ -186,7 +192,7 @@ public class FansSoundFile {
      */
     private void calculateTime(double elapsedTime) {
         if (listener != null)
-            listener.onScrollTimeChange(elapsedTime, MusicSimilarityUtil.getRecordTimeString(elapsedTime));
+            listener.onTimeChange(true, elapsedTime, MusicSimilarityUtil.getRecordTimeString(elapsedTime));
     }
 
     /**
@@ -217,8 +223,10 @@ public class FansSoundFile {
         }
         mVolume = max * 1.0f / Short.MAX_VALUE * 1.0f;
         Log.e("音量最大值-----：", mVolume + "");
-        if (listener != null)
-            listener.onRealVolume(mVolume);
+        if (listener != null) {
+            waveBytes.add(String.valueOf(mVolume));
+            listener.onAudioRecordVolume(mVolume);
+        }
 
 
 //        double sumVolume = 0.0;
@@ -256,19 +264,6 @@ public class FansSoundFile {
                 }
             }
         }
-    }
-
-    public interface onRecordStatusListener extends onScrollTimeChangeListener {
-
-        /**
-         * @param volume
-         */
-        public void onRealVolume(double volume);
-
-        /**
-         * @param soundFile
-         */
-        public void onRecordStop(FansSoundFile soundFile);
     }
 
 }

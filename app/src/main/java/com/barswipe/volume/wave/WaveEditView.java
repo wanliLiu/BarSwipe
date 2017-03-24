@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import com.barswipe.volume.BaseWaveView;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -44,15 +45,14 @@ public class WaveEditView extends BaseWaveView {
      */
     private int editStart = timeMargin, editEnd;
     //是否处于裁剪状态
-    private boolean isInEditMode = false;
+    private boolean isInEditMode = false, isPlaying = false;
 
     //一屏，除去开始的timeMargin，剩下的有多少个timeMargin
     private int smallDivCount = 0;
-    private int startX = editStart, endx = 0;
 
     private Rect selectStart, selectEnd, selectPlayBack;
 
-    private int lastX = 0, editOffset = editStart;
+    private int lastX = 0, startX = editStart, endx = 0, editOffset = editStart;
 
     //playbak选择，通过它来选中，拖动
     private int playbackTopWidth = 0;
@@ -62,6 +62,15 @@ public class WaveEditView extends BaseWaveView {
     private int currentSelect = SelectNone;
 
     private Paint selectPaint = new Paint();
+    /**
+     * 在默认timeSpace情况下 能显示的最大时间区域值
+     */
+    private double defaultMaxTime = 0.0d, defaultTimeSpace = 250.0d;
+
+    //波形数据
+    public LinkedList<String> wavedata;
+
+    private onWaveEditListener editListener;
 
     public WaveEditView(Context context) {
         super(context);
@@ -85,6 +94,8 @@ public class WaveEditView extends BaseWaveView {
         smallDivCount = (screenWidth - editStart) / timeMargin - 1;
         editEnd = endx = editStart + (smallDivCount) * timeMargin;
 
+        defaultMaxTime = smallDivCount * defaultTimeSpace;
+
         playbackTopWidth = dip2px(8);
 
         selectPaint = new Paint();
@@ -94,9 +105,6 @@ public class WaveEditView extends BaseWaveView {
         selectStart = new Rect();
         selectEnd = new Rect();
         selectPlayBack = new Rect();
-
-        double recordTime = 12980;
-        timeSpace = recordTime * 1.0d / smallDivCount;
     }
 
     @Override
@@ -143,7 +151,7 @@ public class WaveEditView extends BaseWaveView {
             canvas.drawLine(tempStartX, startHeight, tempStartX, timeViewHeight, timeLinePain);
         }
         canvas.drawLine(0, timeViewHeight, screenWidth, timeViewHeight, timeLinePain);//时间下面这根线
-        canvas.drawLine(editStart, waveCenterPos, editEnd, waveCenterPos, timeLinePain);//中心线
+        canvas.drawLine(0, waveCenterPos, screenWidth, waveCenterPos, timeLinePain);//中心线
         canvas.drawLine(0, viewHeight - dotRadius, screenWidth, viewHeight - dotRadius, timeLinePain);//最下面的那根线
 
         //绘制选择的区域
@@ -161,14 +169,14 @@ public class WaveEditView extends BaseWaveView {
         drawPlayback(canvas, selectPlayBack);
 
         if (isDebug) {
-            Paint temp = new Paint();
-            temp.setAntiAlias(true);
-            temp.setColor(Color.RED);
-            temp.setStrokeWidth(1);
-            temp.setStyle(Paint.Style.STROKE);
-            canvas.drawRect(selectStart, temp);
-            canvas.drawRect(selectEnd, temp);
-            canvas.drawRect(selectPlayBack, temp);
+//            Paint temp = new Paint();
+//            temp.setAntiAlias(true);
+//            temp.setColor(Color.RED);
+//            temp.setStrokeWidth(1);
+//            temp.setStyle(Paint.Style.STROKE);
+//            canvas.drawRect(selectStart, temp);
+//            canvas.drawRect(selectEnd, temp);
+//            canvas.drawRect(selectPlayBack, temp);
         }
 
     }
@@ -200,7 +208,8 @@ public class WaveEditView extends BaseWaveView {
      * @param canvas
      */
     private void drawWave(Canvas canvas) {
-        for (int i = editStart; i < editEnd; i += waveWidth) {
+        wavePaint.setStrokeWidth(1);
+        for (int i = editStart; i < editEnd; i += 1) {
             int volume = new Random().nextInt(80);
             if (i < startX)
                 wavePaint.setColor(Color.parseColor("#e0e0e0"));
@@ -208,6 +217,29 @@ public class WaveEditView extends BaseWaveView {
                 wavePaint.setColor(Color.parseColor("#EEEEEE"));
             canvas.drawLine(i, waveCenterPos - (float) volume, i, waveCenterPos + (float) volume, wavePaint);
         }
+//
+//        if (wavedata == null || wavedata.size() == 0)
+//            return;
+////        int tempWaveWidth = timeMargin / waveCount;
+////        if (tempWaveWidth != waveWidth) {
+////            if ((waveWidth * wavedata.size()) > (editEnd - editStart)) {
+////
+////            }
+////
+////        }
+//        for (int i = editStart; i < editEnd; i += 1) {
+//            Double volume = Double.valueOf(wavedata.get(i));
+//            int _2_3 = waveHeight * 3 / 4;
+//            double dis = (volume * _2_3) / 2.0f + 0.5;
+//            canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos + (float) dis, wavePaint);
+////            wavePaint.setColor(Color.parseColor(i < startX ? "#e0e0e0" : "#EEEEEE"));
+////            canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos - dip2px(1), wavePaint);
+////        dis -= dip2px(2);
+////            wavePaint.setColor(Color.parseColor("#33e0e0e0"));
+////        if (dis <= 0)
+////            dis = dip2px(1);
+////            canvas.drawLine(i, waveCenterPos + dip2px(1), i, waveCenterPos + (float) dis, wavePaint);
+//        }
     }
 
     /**
@@ -240,7 +272,8 @@ public class WaveEditView extends BaseWaveView {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isInEditMode)//只有编辑模式的是才可以处理滑动事件
+        //只有编辑模式的是才可以处理滑动事件
+        if (!isInEditMode || isPlaying)//播放的时候也不处理滑动事件
             return super.onTouchEvent(event);
 
         int x = (int) event.getX();
@@ -270,6 +303,7 @@ public class WaveEditView extends BaseWaveView {
                             if (startX <= editStart)
                                 startX = editStart;
                         }
+                        updateCanEditStaut();
                         break;
                     case inSelectEnd:
                         endx += dataX;
@@ -290,6 +324,7 @@ public class WaveEditView extends BaseWaveView {
                                 updatePlayBackSelectTime();
                             }
                         }
+                        updateCanEditStaut();
                         break;
                     case inSelectPlayBack:
                         editOffset += dataX;
@@ -308,7 +343,7 @@ public class WaveEditView extends BaseWaveView {
                 break;
             case MotionEvent.ACTION_UP:
                 currentSelect = SelectNone;
-                postInvalidate();
+//                postInvalidate();
                 break;
         }
 
@@ -321,7 +356,7 @@ public class WaveEditView extends BaseWaveView {
     private void updatePlayBackSelectTime() {
         if (timeChangeListener != null) {
             double time = pixelsToMillisecs(editOffset - editStart) / 1000.0f;
-            timeChangeListener.onScrollTimeChange(time, MusicSimilarityUtil.getRecordTimeString(time));
+            timeChangeListener.onTimeChange(false, time, MusicSimilarityUtil.getRecordTimeString(time));
         }
     }
 
@@ -345,25 +380,135 @@ public class WaveEditView extends BaseWaveView {
     }
 
     /**
-     *
+     * 这里面这个offset参数，如果有重录的时候还需要在合适的时候清零
      */
     public void updatePosition() {
-        isInEditMode = false;
         offset += waveWidth;
-        if (offset > halfScreenWidth - timeMargin)
+        if (offset > halfScreenWidth - timeMargin) {
+            offset -= waveWidth;
             return;
-
+        }
+        isInEditMode = false;
         updateDisplay();
     }
 
     /**
-     * 是否进入编辑模式
-     *
      * @param isEnter
+     * @param recordTime 录制的时间
+     * @param list       波形数据
      */
-    public void enterEditMode(boolean isEnter) {
+    public void enterEditMode(boolean isEnter, double recordTime, LinkedList<String> list) {
         isInEditMode = isEnter;
+        if (isInEditMode) {
+            //记录的时间大于默认能显示的最大时间区域
+            wavedata = list;
+            if (recordTime > defaultMaxTime) {
+                timeSpace = recordTime * 1.0d / smallDivCount;
+                editEnd = endx = editStart + (smallDivCount) * timeMargin;
+
+//                int tempWaveWidth = timeMargin / waveCount;
+//                double wave = tempWaveWidth * 1.0f * timeSpace / defaultTimeSpace;
+//                if (wave <= 1) {
+//                    waveWidth = 1;
+//                    wavePaint.setStrokeWidth(waveWidth);
+//                } else {
+//                    waveWidth = (int) wave;
+//                    wavePaint.setStrokeWidth(waveWidth * 2 / 3);
+//                }
+            } else {
+
+//                waveWidth = timeMargin / waveCount;
+//                wavePaint.setStrokeWidth(waveWidth - 2);
+
+                timeSpace = defaultTimeSpace;
+                editEnd = endx = editStart + millisecsToPixels(recordTime);
+            }
+
+//            //计算怎样合适显示波形
+//            if (wavedata.size() < editEnd - editStart) {
+//                //单位1像素能显示完波形，计算波形宽度
+//                int pixelWave = (editEnd - editStart) / wavedata.size();
+//            }
+
+            editOffset = startX + (endx - startX) * 1 / 4;
+            updatePlayBackSelectTime();
+            updateCanEditStaut();
+        }
         updateDisplay();
     }
 
+    /**
+     * 获取播放的开始时间，这里以playback为准
+     *
+     * @return
+     */
+    public double getPlayBackStartTime() {
+        return pixelsToMillisecs((editOffset == endx ? startX : editOffset) - editStart);
+    }
+
+    /**
+     * 获取播放的结束时间
+     *
+     * @return
+     */
+    public double getPlayBackEndTime() {
+        return pixelsToMillisecs(endx - editStart);
+    }
+
+    /**
+     * 是否在播放
+     *
+     * @param playing
+     */
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+    }
+
+    /**
+     * @param isFrom ture自然播放结束
+     */
+    public void stopPlay(boolean isFrom) {
+        setPlaying(false);
+        if (isFrom) {
+            editOffset = endx;
+            updateDisplay();
+            if (timeChangeListener != null) {
+                double time = pixelsToMillisecs(editOffset) / 1000.0f;
+                timeChangeListener.onTimeChange(false, time, MusicSimilarityUtil.getRecordTimeString(time));
+            }
+        }
+    }
+
+    /**
+     * 改变播放位置
+     *
+     * @param timeUs
+     */
+    public void updatePlayBackPosition(double timeUs) {
+        editOffset = millisecsToPixels(timeUs) + editStart;
+        if (editOffset >= endx) {
+            editOffset = endx;
+        }
+        updateDisplay();
+        if (timeChangeListener != null) {
+            double time = timeUs * 1.0f / 1000.0f;
+            timeChangeListener.onTimeChange(false, time, MusicSimilarityUtil.getRecordTimeString(time));
+        }
+    }
+
+    /**
+     *
+     */
+    private void updateCanEditStaut() {
+        if (editListener != null) {
+            editListener.onActionCando(startX != editStart || endx != editEnd);
+        }
+    }
+
+    /**
+     * @param mlistener
+     */
+    public void setOnWaveEditListener(onWaveEditListener mlistener) {
+        editListener = mlistener;
+    }
 }

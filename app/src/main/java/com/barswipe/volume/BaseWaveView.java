@@ -49,7 +49,7 @@ public class BaseWaveView extends View {
     /**
      * 录制的最大时间
      */
-    protected int totalTimeSec = 90;
+    private int totalTimeSec = 90;
     //250ms一小隔绘制
     protected int waveCount = 3;
     protected int waveWidth = 0;
@@ -58,7 +58,7 @@ public class BaseWaveView extends View {
 
     protected int offset = 0;
 
-    protected Paint timeTextPaint, timeLinePain, playIndexPaint,wavePaint;
+    protected Paint timeTextPaint, timeLinePain, playIndexPaint, wavePaint;
 
     protected onScrollTimeChangeListener timeChangeListener;
 
@@ -264,5 +264,13 @@ public class BaseWaveView extends View {
 
     public void setStartOffset(int startOffset) {
         this.startOffset = startOffset;
+    }
+
+    public int getTotalTimeSec() {
+        return totalTimeSec;
+    }
+
+    public void setTotalTimeSec(int totalTimeSec) {
+        this.totalTimeSec = totalTimeSec;
     }
 }

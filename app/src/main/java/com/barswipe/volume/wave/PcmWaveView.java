@@ -221,16 +221,16 @@ public class PcmWaveView extends BaseWaveView {
     }
 
     /**
-     *
+     * 是否需要改变界面时间显示
      */
-    private void updatePlayBackPosition() {
+    public void updatePlayBackPosition() {
         playbackPosition = scroolX;
         if (offset < halfScreenWidth)
             playbackPosition = offset - (currentX - scroolX);
         logOut("playBack_" + playbackPosition + "录制的时间_" + pixelsToMillisecs(playbackPosition));
         if (timeChangeListener != null) {
             double time = pixelsToMillisecs(playbackPosition) * 1.0f / 1000.0f;
-            timeChangeListener.onScrollTimeChange(time, MusicSimilarityUtil.getRecordTimeString(time));
+            timeChangeListener.onTimeChange(false, time, MusicSimilarityUtil.getRecordTimeString(time));
         }
     }
 
@@ -247,7 +247,7 @@ public class PcmWaveView extends BaseWaveView {
     }
 
     /**
-     *
+     * 音频播放更新位置
      */
     public void updatePlayPosition(double timeUs) {
         int piex = millisecsToPixels(timeUs);
@@ -258,7 +258,7 @@ public class PcmWaveView extends BaseWaveView {
         scrollTo(piex, 0);
         if (timeChangeListener != null) {
             double time = timeUs * 1.0f / 1000.0f;
-            timeChangeListener.onScrollTimeChange(time, MusicSimilarityUtil.getRecordTimeString(time));
+            timeChangeListener.onTimeChange(false, time, MusicSimilarityUtil.getRecordTimeString(time));
         }
     }
 
