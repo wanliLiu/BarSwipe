@@ -362,7 +362,8 @@
             android:screenOrientation="landscape" />
         <activity android:name=".volume.wave.AudioFxActivity" />
 
-        <activity android:name=".volume.wave.AcitivtyWaveTest">
+        <activity android:name=".volume.wave.AcitivtyWaveTest"
+            android:hardwareAccelerated="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

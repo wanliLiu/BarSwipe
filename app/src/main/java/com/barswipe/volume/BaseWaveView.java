@@ -49,7 +49,7 @@ public class BaseWaveView extends View {
     /**
      * 录制的最大时间
      */
-    private int totalTimeSec = 90;
+    public static int totalTimeSec = 90;
     //250ms一小隔绘制
     protected int waveCount = 3;
     protected int waveWidth = 0;

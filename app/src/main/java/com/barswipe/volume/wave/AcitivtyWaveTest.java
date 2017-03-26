@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.barswipe.R;
 import com.barswipe.util.FileUtil;
+import com.barswipe.volume.BaseWaveView;
 
 import java.io.File;
 
@@ -29,6 +30,8 @@ import static android.view.View.VISIBLE;
  */
 
 public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickListener, onAudioRecordListener, onAudioPlayListener, onWaveEditListener {
+
+    // TODO: 26/03/2017 硬件加速关闭 android:hardwareAccelerated="false"
 
     @Bind(R.id.pcmWaveView)
     PcmWaveView pcmWaveView;
@@ -281,7 +284,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             currentStatus = ActionStatus.stopRecording;
             stopRecord();
             updateUi();
-            Toast.makeText(AcitivtyWaveTest.this, "最多只能录制90s", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AcitivtyWaveTest.this, "最多只能录制" + BaseWaveView.totalTimeSec + "s", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -654,7 +657,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 stopRecord();
             }
             Toast.makeText(this, "有音频录制的数据这里需要弹出确认框", Toast.LENGTH_LONG).show();
-            // TODO: 2017/3/24 暂时改为true,方便调试
+            // TODO: 2017/3/24 暂时改为true,方便调试,实际为false
             return true;
         }
         return true;
