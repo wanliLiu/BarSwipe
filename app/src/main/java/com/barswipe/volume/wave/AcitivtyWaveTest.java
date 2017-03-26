@@ -87,6 +87,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
     private ActionStatus currentStatus = ActionStatus.parareStart;
 
+    private ProgressDialog dialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +109,23 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         updateUi();
 
         initAudioRecord();
+    }
+
+    /**
+     *
+     */
+    private void showActionDoingDialog() {
+        if (dialog == null) {
+            dialog = new ProgressDialog(this);
+            dialog.setTitle(getResources().getString(R.string.transfer_wait_title));
+            dialog.setMessage(getResources().getString(R.string.transfer_wait_message));
+        }
+
+        if (!dialog.isShowing())
+            dialog.show();
+
+        else
+            dialog.dismiss();
     }
 
     /**
@@ -179,11 +198,37 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onAudioRecordStop() {
+        initAudioPlayer();
+    }
+
+    /**
+     *
+     */
+    private void initAudioPlayer() {
         if (player != null)
             player.release();
         //初始化 播放器
         player = new FansSamplePlayer(soundFile);
         player.setOnAudioPlayListener(this);
+    }
+
+    /**
+     * 录音编辑完成
+     */
+    @Override
+    public void onAudioEditComplete() {
+        pcmWaveView.refreshAfterEdit(soundFile.getWaveBytes());
+        waveEdit.refreshAfterEdit(soundFile.getWaveBytes().size());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showActionDoingDialog();
+                initAudioPlayer();
+
+                // TODO: 25/03/2017 编辑后录音这里的数据要重新绘制
+                enterClipMode(true);
+            }
+        });
     }
 
     @Override
@@ -215,9 +260,12 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         super.onDestroy();
         // TODO: 2017/3/24 释放相关资源
 
-        if (player != null) {
+        pcmWaveView.release();
+
+        if (soundFile != null)
+            soundFile.release();
+        if (player != null)
             player.release();
-        }
     }
 
     /**
@@ -254,7 +302,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     private void startPlay() {
         if (isInAudioEdit()) {
             waveEdit.setPlaying(true);
-            player.seekTo(waveEdit.getPlayBackStartTime(), waveEdit.getPlayBackEndTime());
+            player.seekTo(waveEdit.getPlayBackStartTime(), waveEdit.getSelectEndTime());
         } else {
             player.seekTo(pcmWaveView.startPlay());
         }
@@ -277,23 +325,45 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     }
 
     /**
+     * 是否可以保存文件
+     *
+     * @return
+     */
+    private boolean ifCanSaveFile() {
+
+        if (!isCanAction) {
+            Toast.makeText(this, "录制时间太短，请继续录制！", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        //如果正在录制也给出提示
+        if (currentStatus == ActionStatus.startRecording) {
+            Toast.makeText(this, "录音正在进行，请停止录音在操作！", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (currentStatus == ActionStatus.playAudio) {
+            stopPlay(false);
+        }
+
+        return true;
+    }
+
+    /**
      *
      */
     private void saveAudioFile() {
-        if (isCanAction) {
+        if (ifCanSaveFile()) {
             // TODO: 2017/3/24  保存的文件位置  和保存文件过程中的加载框需要处理
             final File filePath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
-            final ProgressDialog waitDialog = new ProgressDialog(this);
-            waitDialog.setTitle(getResources().getString(R.string.transfer_wait_title));
-            waitDialog.setMessage(getResources().getString(R.string.transfer_wait_message));
-            waitDialog.show();
+            showActionDoingDialog();
             soundFile.saveAudioFile(filePath, new onEncodeCompleteListener() {
                 @Override
                 public void onEncodeComplete(final String filepath) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            waitDialog.dismiss();
+                            showActionDoingDialog();
                             if (filePath.exists()) {
                                 Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + filepath, Toast.LENGTH_SHORT).show();
                                 AcitivtyWaveTest.this.finish();
@@ -525,13 +595,27 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 saveAudioFile();
                 break;
             case R.id.editDelete:
-                Toast.makeText(this, "进行删除操作", Toast.LENGTH_SHORT).show();
+                onAudioEdit(false);
                 break;
             case R.id.editClip:
-                Toast.makeText(this, "进行剪切操作", Toast.LENGTH_SHORT).show();
+                onAudioEdit(true);
                 break;
 
         }
+    }
+
+    /**
+     * 执行编辑操作
+     *
+     * @param isclip
+     */
+    private void onAudioEdit(boolean isclip) {
+
+        // TODO: 26/03/2017  编辑音频最好给出再次确认框
+        Toast.makeText(this, "你确定这样做？？？？？", Toast.LENGTH_SHORT).show();
+
+        showActionDoingDialog();
+        soundFile.dealAudioEidt(isclip, waveEdit.getSelectStartTime(), waveEdit.getSelectEndTime());
     }
 
     /**

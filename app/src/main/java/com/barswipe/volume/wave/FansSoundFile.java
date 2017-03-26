@@ -111,7 +111,12 @@ public class FansSoundFile {
         }
     }
 
+    /**
+     * @return
+     */
     public LinkedList<String> getWaveBytes() {
+        if (waveBytes == null)
+            return new LinkedList<>();
         return waveBytes;
     }
 
@@ -139,6 +144,16 @@ public class FansSoundFile {
         isRecording = false;
         audioRecord.stop();
         recordThread = null;
+    }
+
+    /**
+     * 释放资源
+     */
+    public void release() {
+        stopRecord();
+        if (audioRecord != null)
+            audioRecord.release();
+        audioRecord = null;
     }
 
     /**
@@ -263,6 +278,113 @@ public class FansSoundFile {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    /**
+     * @param misClip
+     * @param mstartTime
+     * @param mendTime
+     */
+    public void dealAudioEidt(boolean misClip, double mstartTime, double mendTime) {
+        new Thread(new dealAudioRunnable(misClip, mstartTime, mendTime)).start();
+    }
+
+    /**
+     * 处理音视频的剪辑
+     */
+    private class dealAudioRunnable implements Runnable {
+
+        private boolean isClip;
+        private int dataStartIndex, dataEndIndex, waveStartIndex, waveEndIndex;
+
+        /**
+         * @param misClip    true 裁剪
+         *                   false 删除
+         * @param mstartTime 开始时间
+         * @param mendTime   结束时间
+         */
+        public dealAudioRunnable(boolean misClip, double mstartTime, double mendTime) {
+            isClip = misClip;
+
+            dataStartIndex = getDataPlayIndex(mstartTime);
+            dataEndIndex = getDataPlayIndex(mendTime);
+
+            waveStartIndex = (int) (mstartTime / (timSpace * 1.0f / waveCount * 1.0f));
+            waveEndIndex = (int) (mendTime / (timSpace * 1.0f / waveCount * 1.0f));
+            Log.e("时间数据", "mstartTime:" + mstartTime + "__mendTime:" + mendTime);
+            Log.e("index数据", "dataStartIndex:" + dataStartIndex + "__dataEndIndex:" + dataEndIndex);
+            Log.e("位置数据", "waveStartIndex:" + waveStartIndex + "___waveEndIndex:" + waveEndIndex);
+        }
+
+        /**
+         * 根据时间，算出在数据中的位置
+         *
+         * @param ms
+         * @return
+         */
+        private int getDataPlayIndex(double ms) {
+            int index = (int) (ms * (mSampleRate * 1.0d / 1000.0d));
+            if (index > mNumSamples)
+                index = mNumSamples;
+            return index;
+        }
+
+        @Override
+        public void run() {
+
+            short[] datas = null;
+            LinkedList<String> wave = new LinkedList<>();
+            if (isClip)//剪切
+            {
+                //先处理音频数据
+                int len = dataEndIndex - dataStartIndex;
+                datas = new short[len];
+                mPCMSamples.position(dataStartIndex);
+                for (int i = 0; i < len; i++) {
+                    datas[i] = mPCMSamples.get();
+                }
+
+                //在处理波形数据
+                for (int i = waveStartIndex; i < waveEndIndex; i++) {
+                    wave.add(waveBytes.get(i));
+                }
+
+
+            } else {
+                //先处理音频数据
+                int len = mPCMSamples.position() - (dataEndIndex - dataStartIndex);
+                datas = new short[len];
+                mPCMSamples.position(0);
+                for (int i = 0; i < len; i++) {
+                    if (i == dataStartIndex) {
+                        mPCMSamples.position(dataEndIndex);
+                    }
+                    datas[i] = mPCMSamples.get();
+                }
+
+                //在处理波形数据
+                len = waveBytes.size() - (waveEndIndex - waveStartIndex);
+                for (int i = 0; i < len; i++) {
+                    if (i < waveStartIndex)
+                        wave.add(waveBytes.get(i));
+                    else
+                        wave.add(waveBytes.get(i + (waveEndIndex - waveStartIndex)));
+                }
+
+            }
+
+            mPCMSamples.clear();
+            mPCMSamples.put(datas);
+            mNumSamples = mPCMSamples.position();
+
+            waveBytes = wave;
+
+            calculateTime((float) (mPCMSamples.position()) / mSampleRate);
+            if (listener != null) {
+                listener.onAudioEditComplete();
+            }
+
         }
     }
 

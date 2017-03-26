@@ -17,4 +17,10 @@ public interface onAudioRecordListener extends onScrollTimeChangeListener {
      * 录音结束
      */
     public void onAudioRecordStop();
+
+    /**
+     * 音频编辑结束 需要更新界面
+     *
+     */
+    public void onAudioEditComplete();
 }

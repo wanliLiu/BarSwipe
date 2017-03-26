@@ -423,6 +423,7 @@ public class WaveEditView extends BaseWaveView {
                 editEnd = endx = editStart + millisecsToPixels(recordTime);
             }
 
+            startX = editStart;
             editOffset = startX + (endx - startX) * 1 / 4;
             updatePlayBackSelectTime();
             updateCanEditStaut();
@@ -440,11 +441,20 @@ public class WaveEditView extends BaseWaveView {
     }
 
     /**
-     * 获取播放的结束时间
+     * 获取选择区域的开始时间
      *
      * @return
      */
-    public double getPlayBackEndTime() {
+    public double getSelectStartTime() {
+        return pixelsToMillisecs(startX - editStart);
+    }
+
+    /**
+     * 获取选择区域的结束时间
+     *
+     * @return
+     */
+    public double getSelectEndTime() {
         return pixelsToMillisecs(endx - editStart);
     }
 
@@ -503,5 +513,18 @@ public class WaveEditView extends BaseWaveView {
      */
     public void setOnWaveEditListener(onWaveEditListener mlistener) {
         editListener = mlistener;
+    }
+
+    /**
+     * 在音频编辑后，重新刷新视图，这里主要是保存变量
+     *
+     * @param waveSize 目前波形的数量值
+     */
+    public void refreshAfterEdit(int waveSize) {
+        offset = 0;
+        offset = waveSize * waveWidth;
+        if (offset > halfScreenWidth - timeMargin) {
+            offset = halfScreenWidth - timeMargin;
+        }
     }
 }

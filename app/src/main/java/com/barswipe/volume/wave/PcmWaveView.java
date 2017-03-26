@@ -14,6 +14,8 @@ import android.widget.Scroller;
 import com.barswipe.volume.BaseWaveView;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
+import java.util.LinkedList;
+
 /**
  * Created by Soli on 2017/3/17.
  */
@@ -77,7 +79,7 @@ public class PcmWaveView extends BaseWaveView {
                 mCanvas.setBitmap(mBitmap);
             }
 
-            initDraw(mCanvas);
+            initDraw();
         }
 
     }
@@ -101,6 +103,13 @@ public class PcmWaveView extends BaseWaveView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mIsDraw = false;
+        release();
+    }
+
+    /**
+     *
+     */
+    public void release() {
         //// TODO: 2017/3/23  这里图片还不释放，反复进入增大内存开销,这里是个优化的点
         if (mBitmap != null && !mBitmap.isRecycled()) {
             mCanvas.setBitmap(null);
@@ -128,53 +137,61 @@ public class PcmWaveView extends BaseWaveView {
     }
 
     /**
+     * 初始化相关元素绘制
+     */
+    private void initElementDraw() {
+        mCanvas.drawColor(Color.parseColor("#ffffff"));//清楚画布
+
+        int _1s = halfScreenWidth % (dividerCount * timeMargin);
+        int _250ms = _1s / timeMargin;
+        int _250ms_left = _1s % timeMargin;
+        for (int i = _250ms_left, seconds = 0; i <= viewWidth; i += timeMargin) {
+            int startHeight;
+            if (i == _250ms_left && _1s > 0) {
+                startHeight = timeViewHeight - timeMargin;
+                for (int k = 0; k < _250ms; k++)
+                    mCanvas.drawLine(_250ms_left + k * timeMargin, startHeight, _250ms_left + k * timeMargin, timeViewHeight, timeLinePain);
+                i += _250ms_left * _250ms;
+            }
+            if ((i - _1s) % (dividerCount * timeMargin) == 0) {
+                startHeight = 0;
+                if (i >= halfScreenWidth) {
+                    String minutes = "" + (seconds / 60);
+                    String second = "" + (seconds % 60);
+                    if (seconds / 60 < 10) {
+                        minutes = "0" + minutes;
+                    }
+                    if ((seconds % 60) < 10) {
+                        second = "0" + second;
+                    }
+                    String timecodeStr = minutes + ":" + second;
+                    mCanvas.drawText(timecodeStr, i + dip2px(2), timeTextPaint.getTextSize(), timeTextPaint);
+                    seconds++;
+                }
+            } else
+                startHeight = timeViewHeight - timeMargin;
+
+            mCanvas.drawLine(i, startHeight, i, timeViewHeight, timeLinePain);
+        }
+
+
+        mCanvas.drawLine(0, timeViewHeight, viewWidth, timeViewHeight, timeLinePain);//时间下面这根线
+        mCanvas.drawLine(0, waveCenterPos, viewWidth, waveCenterPos, timeLinePain);//中心线
+        mCanvas.drawLine(0, viewHeight - dotRadius, viewWidth, viewHeight - dotRadius, timeLinePain);//最下面的那根线
+    }
+
+    /**
      * 画刻度
      */
-    private void initDraw(final Canvas canvas) {
+    private void initDraw() {
 
         if (mBitmap == null) return;
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                canvas.drawColor(Color.parseColor("#ffffff"));//清楚画布
 
-                int _1s = halfScreenWidth % (dividerCount * timeMargin);
-                int _250ms = _1s / timeMargin;
-                int _250ms_left = _1s % timeMargin;
-                for (int i = _250ms_left, seconds = 0; i <= viewWidth; i += timeMargin) {
-                    int startHeight;
-                    if (i == _250ms_left && _1s > 0) {
-                        startHeight = timeViewHeight - timeMargin;
-                        for (int k = 0; k < _250ms; k++)
-                            canvas.drawLine(_250ms_left + k * timeMargin, startHeight, _250ms_left + k * timeMargin, timeViewHeight, timeLinePain);
-                        i += _250ms_left * _250ms;
-                    }
-                    if ((i - _1s) % (dividerCount * timeMargin) == 0) {
-                        startHeight = 0;
-                        if (i >= halfScreenWidth) {
-                            String minutes = "" + (seconds / 60);
-                            String second = "" + (seconds % 60);
-                            if (seconds / 60 < 10) {
-                                minutes = "0" + minutes;
-                            }
-                            if ((seconds % 60) < 10) {
-                                second = "0" + second;
-                            }
-                            String timecodeStr = minutes + ":" + second;
-                            canvas.drawText(timecodeStr, i + dip2px(2), timeTextPaint.getTextSize(), timeTextPaint);
-                            seconds++;
-                        }
-                    } else
-                        startHeight = timeViewHeight - timeMargin;
-
-                    canvas.drawLine(i, startHeight, i, timeViewHeight, timeLinePain);
-                }
-
-
-                canvas.drawLine(0, timeViewHeight, viewWidth, timeViewHeight, timeLinePain);//时间下面这根线
-                canvas.drawLine(0, waveCenterPos, viewWidth, waveCenterPos, timeLinePain);//中心线
-                canvas.drawLine(0, viewHeight - dotRadius, viewWidth, viewHeight - dotRadius, timeLinePain);//最下面的那根线
+                initElementDraw();
 
                 updateDisplay();
             }
@@ -302,7 +319,7 @@ public class PcmWaveView extends BaseWaveView {
     }
 
     /**
-     * 停止播放，是重那里停止，
+     * 停止播放，是从那里停止，
      *
      * @param stopFrom true 自然播放完成
      *                 false 认为停止
@@ -313,5 +330,41 @@ public class PcmWaveView extends BaseWaveView {
             scrollTo(currentX, 0);
         scroolX = getScrollX();
         updatePlayBackPosition();
+    }
+
+    /**
+     * @param waveData
+     */
+    private void reDrawWave(LinkedList<String> waveData) {
+        currentX = scroolX = getStartOffset();
+        scrollTo(scroolX, 0);
+
+        offset = 0;
+        //先绘制波形，在决定移动的位置
+        for (int i = 0; i < waveData.size(); i++) {
+            offset += waveWidth;
+            onDrawWare(mCanvas, Double.valueOf(waveData.get(i)));
+            if (offset > halfScreenWidth - timeMargin)
+                scrollBy(waveWidth, 0);
+        }
+
+        currentX = scroolX = getScrollX();
+    }
+
+    /**
+     * 在音频编辑后，重新刷新视图
+     */
+    public void refreshAfterEdit(final LinkedList<String> waveData) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initElementDraw();
+                reDrawWave(waveData);
+                updateDisplay();
+            }
+        }).start();
+
+
     }
 }
