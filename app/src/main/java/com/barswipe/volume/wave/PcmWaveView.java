@@ -11,15 +11,14 @@ import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
 import android.widget.Scroller;
 
-import com.barswipe.volume.BaseWaveView;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 import java.util.LinkedList;
 
 /**
  * Created by Soli on 2017/3/17.
+ * 音频录制，显示波形视图
  */
-
 public class PcmWaveView extends BaseWaveView {
 
     final protected Object mLock = new Object();

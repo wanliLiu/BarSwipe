@@ -264,7 +264,7 @@ public class FansSoundFile {
         if (!isRecording) {//没有录制
             if (recordFormatIsMp3) {
                 try {
-                    FansMp3EncodeThread thread = new FansMp3EncodeThread(getSamples(), getNumSamples(), file, buffer.length, getChannels(), 0, 0, listener);
+                    FansMp3EncodeThread thread = new FansMp3EncodeThread(getSamples(), getNumSamples(), file, buffer.length, getChannels(), 0, 0, waveBytes, listener);
                     thread.start();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -272,7 +272,7 @@ public class FansSoundFile {
             } else {
                 //amr编码
                 try {
-                    FansAmrEncodeThread thread = new FansAmrEncodeThread(getSamples(), getNumSamples(), file, getChannels(), 0, 0, listener);
+                    FansAmrEncodeThread thread = new FansAmrEncodeThread(getSamples(), getNumSamples(), file, getChannels(), 0, 0, waveBytes, listener);
                     thread.start();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -384,8 +384,6 @@ public class FansSoundFile {
             if (listener != null) {
                 listener.onAudioEditComplete();
             }
-
         }
     }
-
 }

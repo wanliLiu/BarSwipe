@@ -11,15 +11,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.barswipe.volume.BaseWaveView;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 import java.util.LinkedList;
 
 /**
  * Created by Soli on 2017/3/17.
+ * 音频编辑视图
  */
-
 public class WaveEditView extends BaseWaveView {
 
     /**

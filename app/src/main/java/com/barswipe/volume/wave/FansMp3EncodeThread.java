@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ShortBuffer;
+import java.util.LinkedList;
 
 public class FansMp3EncodeThread extends Thread {
 
@@ -30,6 +31,10 @@ public class FansMp3EncodeThread extends Thread {
     private String filePath;
     private int mChannels, playStart, playEnd, bufferSize;
     private ShortBuffer mSamples;
+    /**
+     * 保存数据的时候干脆一起把波形数据也处理了
+     */
+    private LinkedList<String> waveData;
 
     /**
      * @param buffer      pcm音频流数据
@@ -37,11 +42,13 @@ public class FansMp3EncodeThread extends Thread {
      * @param file        保存的文件
      * @param mbufferSize 录音是的缓存
      * @param channels
-     * @param mPlayStart
-     * @param mPlayEnd
+     * @param mPlayStart  开始位置
+     * @param mPlayEnd    结束位置
+     * @param tempWateDat 波形数据
+     * @param mlistener   回调接口
      * @throws FileNotFoundException
      */
-    public FansMp3EncodeThread(ShortBuffer buffer, int numSamples, File file, int mbufferSize, int channels, int mPlayStart, int mPlayEnd, onEncodeCompleteListener mlistener) throws FileNotFoundException {
+    public FansMp3EncodeThread(ShortBuffer buffer, int numSamples, File file, int mbufferSize, int channels, int mPlayStart, int mPlayEnd, LinkedList<String> tempWateDat, onEncodeCompleteListener mlistener) throws FileNotFoundException {
         super("DataEncodeThread");
         mSamples = buffer;
         mNumSamples = numSamples;
@@ -60,6 +67,8 @@ public class FansMp3EncodeThread extends Thread {
 		 */
         LameUtil.init(DEFAULT_SAMPLING_RATE, DEFAULT_LAME_IN_CHANNEL, DEFAULT_SAMPLING_RATE, DEFAULT_LAME_MP3_BIT_RATE, DEFAULT_LAME_MP3_QUALITY);
 
+        waveData = tempWateDat;
+
         listener = mlistener;
     }
 
@@ -69,9 +78,10 @@ public class FansMp3EncodeThread extends Thread {
         super.run();
         short[] mBuffer = new short[bufferSize];
         int encodeLen = 0;
-        int position = playStart * mChannels;
-        mSamples.position(position);
-        int limit = mNumSamples * mChannels;
+        int startIndex = playStart * mChannels;
+        int endIndex = playEnd * mChannels;
+        mSamples.position(startIndex);
+        int limit = endIndex == 0 ? mNumSamples * mChannels : endIndex;
         while (mSamples.position() < limit) {
             int numSamplesLeft = limit - mSamples.position();
             if (numSamplesLeft >= mBuffer.length) {
@@ -98,8 +108,25 @@ public class FansMp3EncodeThread extends Thread {
         flushAndRelease();
 
         if (listener != null) {
-            listener.onEncodeComplete(filePath);
+            listener.onEncodeComplete(filePath, getWateDataStr());
         }
+    }
+
+    /**
+     * 获取波形数据，方便后面处理
+     *
+     * @return
+     */
+    private String getWateDataStr() {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < waveData.size(); i++) {
+            buffer.append(waveData.get(i));
+            buffer.append(",");
+        }
+        if (buffer.length() > 0)
+            buffer.deleteCharAt(buffer.length() - 1);
+
+        return buffer.toString();
     }
 
 

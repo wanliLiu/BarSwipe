@@ -1,4 +1,4 @@
-package com.barswipe.volume;
+package com.barswipe.volume.wave;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,8 +12,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-
-import com.barswipe.volume.wave.onScrollTimeChangeListener;
 
 /**
  * Created by Soli on 2017/3/17.
@@ -102,7 +100,7 @@ public class BaseWaveView extends View {
      * @param dp
      * @return
      */
-    protected int dip2px(int dp) {
+    protected int dip2px(float dp) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getContext().getResources().getDisplayMetrics());
         return (int) px;
     }
@@ -169,7 +167,7 @@ public class BaseWaveView extends View {
 
         playIndexPaint = new Paint();
         playIndexPaint.setAntiAlias(true);
-        playIndexPaint.setStrokeWidth(5);
+        playIndexPaint.setStrokeWidth(4);
         playIndexPaint.setColor(Color.parseColor("#6CA5FF"));
 
         wavePaint = new Paint();

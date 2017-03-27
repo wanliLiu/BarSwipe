@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ShortBuffer;
+import java.util.LinkedList;
 
 import io.kvh.media.amr.AmrEncoder;
 
@@ -30,16 +31,22 @@ public class FansAmrEncodeThread extends Thread {
     private boolean isUseSystemAmrEncode = true;
 
     /**
-     * @param pcmBytes
-     * @param numSamples
-     * @param file
+     * 保存数据的时候干脆一起把波形数据也处理了
+     */
+    private LinkedList<String> waveData;
+
+    /**
+     * @param pcmBytes    pcm音频流数据
+     * @param numSamples  需要编码的数据
+     * @param file        保存的文件
      * @param channels
-     * @param mPlayStart
-     * @param mPlayEnd
-     * @param mlistener
+     * @param mPlayStart  开始位置
+     * @param mPlayEnd    结束位置
+     * @param tempWateDat 波形数据
+     * @param mlistener   回调接口
      * @throws FileNotFoundException
      */
-    public FansAmrEncodeThread(ShortBuffer pcmBytes, int numSamples, File file, int channels, int mPlayStart, int mPlayEnd, onEncodeCompleteListener mlistener) throws FileNotFoundException {
+    public FansAmrEncodeThread(ShortBuffer pcmBytes, int numSamples, File file, int channels, int mPlayStart, int mPlayEnd, LinkedList<String> tempWateDat, onEncodeCompleteListener mlistener) throws FileNotFoundException {
         super("DataEncodeThread");
         mPcmBytes = pcmBytes;
         mNumSamples = numSamples;
@@ -48,6 +55,8 @@ public class FansAmrEncodeThread extends Thread {
         playEnd = mPlayEnd;
         this.mFileOutputStream = new FileOutputStream(file);
         filePath = file.getAbsolutePath();
+
+        waveData = tempWateDat;
 
         if (!isUseSystemAmrEncode)
             AmrEncoder.init(0);
@@ -78,10 +87,11 @@ public class FansAmrEncodeThread extends Thread {
             FileOutputStream outputStream = new FileOutputStream(tempfile);
 
             short[] mBuffer = new short[4096];
-            int position = playStart * mChannels;
             int len = 0;
-            mPcmBytes.position(position);
-            int limit = mNumSamples * mChannels;
+            int startIndex = playStart * mChannels;
+            int endIndex = playEnd * mChannels;
+            mPcmBytes.position(startIndex);
+            int limit = endIndex == 0 ? mNumSamples * mChannels : endIndex;
             while (mPcmBytes.position() < limit) {
                 int numSamplesLeft = limit - mPcmBytes.position();
                 if (numSamplesLeft >= mBuffer.length) {
@@ -122,7 +132,7 @@ public class FansAmrEncodeThread extends Thread {
                     tempfile.delete();
 
                 if (listener != null) {
-                    listener.onEncodeComplete(filePath);
+                    listener.onEncodeComplete(filePath, getWateDataStr());
                 }
 
             } else
@@ -143,9 +153,10 @@ public class FansAmrEncodeThread extends Thread {
         }
 
         short[] mBuffer = new short[bufferSize];
-        int position = playStart * mChannels;
-        mPcmBytes.position(position);
-        int limit = mNumSamples * mChannels;
+        int startIndex = playStart * mChannels;
+        int endIndex = playEnd * mChannels;
+        mPcmBytes.position(startIndex);
+        int limit = endIndex == 0 ? mNumSamples * mChannels : endIndex;
         while (mPcmBytes.position() < limit) {
             int numSamplesLeft = limit - mPcmBytes.position();
             if (numSamplesLeft >= mBuffer.length) {
@@ -177,7 +188,26 @@ public class FansAmrEncodeThread extends Thread {
         }
 
         if (listener != null) {
-            listener.onEncodeComplete(filePath);
+            listener.onEncodeComplete(filePath, getWateDataStr());
         }
     }
+
+
+    /**
+     * 获取波形数据，方便后面处理
+     *
+     * @return
+     */
+    private String getWateDataStr() {
+        StringBuffer buffer = new StringBuffer();
+        for (int i = 0; i < waveData.size(); i++) {
+            buffer.append(waveData.get(i));
+            buffer.append(",");
+        }
+        if (buffer.length() > 0)
+            buffer.deleteCharAt(buffer.length() - 1);
+
+        return buffer.toString();
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.barswipe.volume.wave;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -376,17 +377,19 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     private void saveAudioFile() {
         if (ifCanSaveFile()) {
             // TODO: 2017/3/24  保存的文件位置  和保存文件过程中的加载框需要处理
-            final File filePath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
+            File wolumPath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
             showActionDoingDialog();
-            soundFile.saveAudioFile(filePath, new onEncodeCompleteListener() {
+            soundFile.saveAudioFile(wolumPath, new onEncodeCompleteListener() {
                 @Override
-                public void onEncodeComplete(final String filepath) {
+                public void onEncodeComplete(final String path, final String waveData) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             showActionDoingDialog();
-                            if (filePath.exists()) {
-                                Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + filepath, Toast.LENGTH_SHORT).show();
+                            File file = new File(path);
+                            if (file.exists()) {
+                                testOpemVolumePlay(path, waveData);
+                                Toast.makeText(AcitivtyWaveTest.this, "文件保存成功--" + path, Toast.LENGTH_SHORT).show();
                                 AcitivtyWaveTest.this.finish();
                             }
                         }
@@ -394,6 +397,16 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 }
             });
         }
+    }
+
+    /**
+     * 测试打开播放界面显示
+     */
+    private void testOpemVolumePlay(String filePath, String waveData) {
+        Intent intent = new Intent(this, ActivityVolumPlay.class);
+        intent.putExtra("volumePath", filePath);
+        intent.putExtra("waveData", waveData);
+        startActivity(intent);
     }
 
 
