@@ -15,4 +15,8 @@ public interface onScrollTimeChangeListener {
      */
     public void onTimeChange(boolean from, double fractionComplete, String time);
 
+    /**
+     * 录制音频到达能录制的最大时间
+     */
+    public void onAudioRecordToMaxTime();
 }

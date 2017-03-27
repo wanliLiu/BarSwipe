@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.barswipe.R;
 import com.barswipe.util.FileUtil;
-import com.barswipe.volume.BaseWaveView;
 
 import java.io.File;
 
@@ -157,12 +156,6 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 btnActionDone.setEnabled(false);
             }
         }
-
-        if (isCanRecord && recordTotalTime >= pcmWaveView.getTotalTimeSec()) {
-            isCanRecord = false;
-            recordTotalTime = pcmWaveView.getTotalTimeSec();
-            startRecord();
-        }
     }
 
     @Override
@@ -200,6 +193,21 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             pcmWaveView.updateData(volume);
             waveEdit.updatePosition();
         }
+    }
+
+    /**
+     * 录音达到最大值
+     */
+    @Override
+    public void onAudioRecordToMaxTime() {
+        isCanRecord = false;
+        recordTotalTime = pcmWaveView.getTotalTimeSec();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startRecord();
+            }
+        });
     }
 
     @Override
@@ -285,7 +293,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
      * 开始录制
      */
     private void startRecord() {
-        if (isCanRecord) {
+        if (isCanRecord && recordTotalTime < pcmWaveView.getTotalTimeSec()) {
             //界面准备开始录制
             pcmWaveView.setRecording(true);
             //数据这里准备开始
@@ -294,7 +302,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             currentStatus = ActionStatus.stopRecording;
             stopRecord();
             updateUi();
-            Toast.makeText(AcitivtyWaveTest.this, "最多只能录制" + BaseWaveView.totalTimeSec + "s", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AcitivtyWaveTest.this, "最多只能录制" + pcmWaveView.getTotalTimeSec() + "s", Toast.LENGTH_SHORT).show();
         }
 
     }

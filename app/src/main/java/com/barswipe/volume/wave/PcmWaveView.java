@@ -251,15 +251,22 @@ public class PcmWaveView extends BaseWaveView {
     }
 
     /**
-     *
+     * 更新数据
      */
     public void updateData(double volume) {
         offset += waveWidth;
-        onDrawWare(mCanvas, volume);
-        updateDisplay();
+        if (offset > getCanRecordMaxOffset()) {
+            offset -= waveWidth;
+            if (timeChangeListener != null) {
+                timeChangeListener.onAudioRecordToMaxTime();
+            }
+        } else {
+            onDrawWare(mCanvas, volume);
+            updateDisplay();
 
-        if (offset > halfScreenWidth - timeMargin)
-            scrollBy(waveWidth, 0);
+            if (offset > halfScreenWidth - timeMargin)
+                scrollBy(waveWidth, 0);
+        }
     }
 
     /**

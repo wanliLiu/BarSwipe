@@ -49,7 +49,11 @@ public class BaseWaveView extends View {
     /**
      * 录制的最大时间
      */
-    public static int totalTimeSec = 90;
+    private int totalTimeSec = 90;
+    /**
+     * 能够录制的最大时间,通过距离来算
+     */
+    private int canRecordMaxOffset;
     //250ms一小隔绘制
     protected int waveCount = 3;
     protected int waveWidth = 0;
@@ -131,6 +135,7 @@ public class BaseWaveView extends View {
         viewWidth = totalTimeSec * (dividerCount * timeMargin) + screenWidth;
         waveCenterPos = timeViewHeight + (viewHeight - timeViewHeight) / 2 - dotRadius;
 
+        canRecordMaxOffset = totalTimeSec * (dividerCount * timeMargin);
         initPaint();
     }
 
@@ -272,5 +277,13 @@ public class BaseWaveView extends View {
 
     public void setTotalTimeSec(int totalTimeSec) {
         this.totalTimeSec = totalTimeSec;
+    }
+
+    public int getCanRecordMaxOffset() {
+        return canRecordMaxOffset;
+    }
+
+    public void setCanRecordMaxOffset(int canRecordMaxOffset) {
+        this.canRecordMaxOffset = canRecordMaxOffset;
     }
 }
