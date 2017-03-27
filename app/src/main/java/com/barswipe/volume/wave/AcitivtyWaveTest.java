@@ -152,6 +152,9 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 isCanAction = true;
                 btnActionDone.setTextColor(Color.parseColor("#6CA5FF"));
                 btnActionDone.setEnabled(true);
+            } else {
+                btnActionDone.setTextColor(Color.parseColor("#e0e0e0"));
+                btnActionDone.setEnabled(false);
             }
         }
 
@@ -220,12 +223,19 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
      */
     @Override
     public void onAudioEditComplete() {
+
         pcmWaveView.refreshAfterEdit(soundFile.getWaveBytes());
         waveEdit.refreshAfterEdit(soundFile.getWaveBytes().size());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 showActionDoingDialog();
+
+                //更新时间
+                isCanAction = false;
+                isCanRecord = true;
+                updateCanActionUI();
+
                 initAudioPlayer();
 
                 // TODO: 25/03/2017 编辑后录音这里的数据要重新绘制
