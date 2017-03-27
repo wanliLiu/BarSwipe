@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.barswipe.R;
 import com.barswipe.util.FileUtil;
+import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 import java.io.File;
 
@@ -406,6 +407,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         Intent intent = new Intent(this, ActivityVolumPlay.class);
         intent.putExtra("volumePath", filePath);
         intent.putExtra("waveData", waveData);
+        intent.putExtra("duration", MusicSimilarityUtil.getRecordTimeSeconds(recordTotalTime));
         startActivity(intent);
     }
 

@@ -108,7 +108,7 @@ public class WavePlayView extends BaseWaveView {
         if (waveData == null || waveData.length == 0)
             return;
 
-        for (int i = startX + waveWidth, j = 0; i < viewWidth && j < waveData.length; i += waveWidth, j++) {
+        for (int i = startX + waveWidth, j = offset; i < viewWidth && j < waveData.length; i += waveWidth, j++) {
 
             Double volume = Double.valueOf(waveData[j]);
             int _2_3 = waveHeight * 3 / 4;
@@ -129,10 +129,32 @@ public class WavePlayView extends BaseWaveView {
      * @param waveDataSt
      */
     public void setWaveData(String waveDataSt) {
+        offset = 0;
+        playBackOffset = startX;
         if (!TextUtils.isEmpty(waveDataSt)) {
             waveData = waveDataSt.split(",");
             invalidate();
         }
+    }
+
+    /**
+     *
+     */
+    public void updateData() {
+        offset++;
+        playBackOffset += waveWidth;
+        if (playBackOffset > viewWidth / 2)
+            playBackOffset = viewWidth / 2;
+        updateDisplay();
+    }
+
+    /**
+     *
+     */
+    public void onAudioPlayComplete() {
+        offset = 0;
+        playBackOffset = startX;
+        updateDisplay();
     }
 
 }

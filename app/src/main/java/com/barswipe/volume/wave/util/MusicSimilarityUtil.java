@@ -86,4 +86,14 @@ public class MusicSimilarityUtil {
         return recordTimeStr;
     }
 
+    /**
+     * @param elapsedTime ms
+     * @return
+     */
+    public static String getRecordTimeSeconds(double elapsedTime) {
+        int min = (int) (elapsedTime / 60);
+        String strMin = (min < 10 ? "0" + min : String.valueOf(min));
+        return strMin + "''";
+    }
+
 }
