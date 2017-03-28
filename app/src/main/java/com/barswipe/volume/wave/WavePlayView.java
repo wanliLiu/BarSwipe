@@ -67,7 +67,7 @@ public class WavePlayView extends BaseWaveView {
         viewHeight = MeasureSpec.getSize(heightMeasureSpec);
         waveHeight = viewHeight - dotRadius;
         timeViewHeight = 0;
-        waveCenterPos = waveHeight / 2;
+        waveCenterPos = waveHeight / 2 + dip2px(10);
         setMeasuredDimension(viewWidth, viewHeight);
     }
 
@@ -111,7 +111,7 @@ public class WavePlayView extends BaseWaveView {
         for (int i = startX + waveWidth, j = offset; i < viewWidth && j < waveData.length; i += waveWidth, j++) {
 
             Double volume = Double.valueOf(waveData[j]);
-            int _2_3 = waveHeight * 1 / 2;
+            int _2_3 = (int)(waveHeight * 0.8);
             double dis = (volume * _2_3) / 2.0f + 0.5;
 //        canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos + (float) dis, wavePaint);
             wavePaint.setColor(Color.parseColor(i < playBackOffset ? "#e0e0e0" : "#EEEEEE"));

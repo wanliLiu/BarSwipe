@@ -76,6 +76,7 @@ public class PcmWaveView extends BaseWaveView {
             if (mBitmap == null) {
                 mBitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.RGB_565);
                 mCanvas.setBitmap(mBitmap);
+                mCanvas.drawColor(Color.parseColor("#ffffff"));//清楚画布
             }
 
             initDraw();
