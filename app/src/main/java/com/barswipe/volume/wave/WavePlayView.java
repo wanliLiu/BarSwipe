@@ -29,7 +29,7 @@ public class WavePlayView extends BaseWaveView {
     /**
      * 是否显示playback
      */
-    private boolean isShowPlayBack = true;
+    private boolean isShowPlayBack = false;
 
     /**
      * 开始绘制
@@ -111,10 +111,10 @@ public class WavePlayView extends BaseWaveView {
         for (int i = startX + waveWidth, j = offset; i < viewWidth && j < waveData.length; i += waveWidth, j++) {
 
             Double volume = Double.valueOf(waveData[j]);
-            int _2_3 = waveHeight * 3 / 4;
+            int _2_3 = waveHeight * 1 / 2;
             double dis = (volume * _2_3) / 2.0f + 0.5;
 //        canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos + (float) dis, wavePaint);
-            wavePaint.setColor(Color.parseColor("#e0e0e0"));
+            wavePaint.setColor(Color.parseColor(i < playBackOffset ? "#e0e0e0" : "#EEEEEE"));
             canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos - dip2px(1), wavePaint);
             wavePaint.setColor(Color.parseColor("#33e0e0e0"));
             if (dis > dip2px(10))
@@ -141,17 +141,30 @@ public class WavePlayView extends BaseWaveView {
      *
      */
     public void updateData() {
-        offset++;
+
+        showPlayback(true);
+
         playBackOffset += waveWidth;
-        if (playBackOffset > viewWidth / 2)
+        if (playBackOffset > viewWidth / 2) {
             playBackOffset = viewWidth / 2;
+            offset++;
+        }
+
         updateDisplay();
+    }
+
+    /**
+     * 是否显示
+     */
+    public void showPlayback(boolean isShow) {
+        isShowPlayBack = isShow;
     }
 
     /**
      *
      */
     public void onAudioPlayComplete() {
+        showPlayback(false);
         offset = 0;
         playBackOffset = startX;
         updateDisplay();

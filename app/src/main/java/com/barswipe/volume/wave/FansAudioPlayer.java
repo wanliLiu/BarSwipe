@@ -79,8 +79,12 @@ public class FansAudioPlayer {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (mListener != null) {
-                    mListener.onAudioPlayProgress(player.getCurrentPosition());
+                try {
+                    if (mListener != null) {
+                        mListener.onAudioPlayProgress(player.getCurrentPosition());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }, 0, 83);
@@ -144,6 +148,12 @@ public class FansAudioPlayer {
      *
      */
     public void release() {
+        if (timer != null)
+            timer.cancel();
+
+        if (isPlaying()) {
+            player.stop();
+        }
         if (player != null) {
             player.release();
         }
