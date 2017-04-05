@@ -19,14 +19,14 @@ import com.barswipe.R;
 public class ActivityVolumPlay extends AppCompatActivity {
 
     private VolumePlayView volumePlay;
-    private RecyclerView waveRecy;
+    private WaveRecyclerView waveRecy;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_voume_play);
 
-        waveRecy = (RecyclerView) findViewById(R.id.testRecycle);
+        waveRecy = (WaveRecyclerView) findViewById(R.id.testRecycle);
 
         volumePlay = (VolumePlayView) findViewById(R.id.volumePlay);
         volumePlay.setVolumeDuration(getIntent().getStringExtra("duration"));
@@ -57,7 +57,7 @@ public class ActivityVolumPlay extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.recyTest:
 //                waveRecy.scrollToPosition(4);
-                waveRecy.scrollBy(10,0);
+                waveRecy.scrollBy(10, 0);
                 break;
         }
     }
@@ -75,7 +75,9 @@ public class ActivityVolumPlay extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder.itemView instanceof TestPcmWaveView) {
-                ((TestPcmWaveView) (holder.itemView)).setSeconds(position);
+                if (position > 4){
+                    ((TestPcmWaveView) (holder.itemView)).setSeconds(position - 4);
+                }
             }
         }
 

@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 
 public class TestPcmWaveView extends BaseWaveView {
 
-    private int seconds = 0;
+    private int seconds = -1;
 
     public TestPcmWaveView(Context context) {
         super(context);
@@ -48,16 +48,18 @@ public class TestPcmWaveView extends BaseWaveView {
         for (int i = 0; i < dividerCount; i++) {
             if (i == 0) {
                 canvas.drawLine(i, 0, i, timeViewHeight, timeLinePain);
-                String minutes = "" + (seconds / 60);
-                String second = "" + (seconds % 60);
-                if (seconds / 60 < 10) {
-                    minutes = "0" + minutes;
+                if(seconds >= 0){
+                    String minutes = "" + (seconds / 60);
+                    String second = "" + (seconds % 60);
+                    if (seconds / 60 < 10) {
+                        minutes = "0" + minutes;
+                    }
+                    if ((seconds % 60) < 10) {
+                        second = "0" + second;
+                    }
+                    String timecodeStr = minutes + ":" + second;
+                    canvas.drawText(timecodeStr, i + dip2px(2), timeTextPaint.getTextSize(), timeTextPaint);
                 }
-                if ((seconds % 60) < 10) {
-                    second = "0" + second;
-                }
-                String timecodeStr = minutes + ":" + second;
-                canvas.drawText(timecodeStr, i + dip2px(2), timeTextPaint.getTextSize(), timeTextPaint);
             } else
                 canvas.drawLine(i * timeMargin, timeViewHeight - timeMargin, i * timeMargin, timeViewHeight, timeLinePain);
         }
