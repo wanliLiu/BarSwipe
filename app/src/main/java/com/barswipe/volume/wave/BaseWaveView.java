@@ -47,7 +47,7 @@ public class BaseWaveView extends View {
     /**
      * 录制的最大时间
      */
-    private int totalTimeSec = 90;
+    protected int totalTimeSec = 90;
     /**
      * 能够录制的最大时间,通过距离来算
      */

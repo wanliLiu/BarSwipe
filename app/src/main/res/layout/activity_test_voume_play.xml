@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:orientation="vertical">
 
     <com.barswipe.volume.wave.VolumePlayView
         android:id="@+id/volumePlay"
+        android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -29,5 +29,26 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"
             android:text="MediaPlayer需求测试" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/testRecycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/recyTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onTest"
+            android:text="测试" />
     </LinearLayout>
 </LinearLayout>

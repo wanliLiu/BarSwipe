@@ -22,16 +22,6 @@ public class BytesTransUtil {
         return instance;
     }
 
-    public boolean testCPU() {
-        if (ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN) {
-            // System.out.println(is big ending);
-            return true;
-        } else {
-            // System.out.println(is little ending);
-            return false;
-        }
-    }
-
     public byte[] getBytes(short s, boolean bBigEnding) {
         byte[] buf = new byte[2];
         if (bBigEnding)
@@ -45,6 +35,16 @@ public class BytesTransUtil {
                 s >>= 8;
             }
         return buf;
+    }
+
+    public boolean testCPU() {
+        if (ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN) {
+            // System.out.println(is big ending);
+            return true;
+        } else {
+            // System.out.println(is little ending);
+            return false;
+        }
     }
 
     public byte[] getBytes(int s, boolean bBigEnding) {
