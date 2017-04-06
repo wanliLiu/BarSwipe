@@ -284,4 +284,8 @@ public class BaseWaveView extends View {
     public void setCanRecordMaxOffset(int canRecordMaxOffset) {
         this.canRecordMaxOffset = canRecordMaxOffset;
     }
+
+    public int getWaveWidth() {
+        return waveWidth;
+    }
 }
