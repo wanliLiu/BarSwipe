@@ -110,7 +110,7 @@ public class TestPcmWaveView extends BaseWaveView {
      * @param canvas
      */
     private void onDrawWare(Canvas canvas) {
-        if (waveData == null || waveData.size() == 0)
+        if (waveData == null || waveData.isEmpty())
             return;
 
         for (int i = 0, j = 0; i < viewWidth && j < waveData.size(); i += waveWidth, j++) {
@@ -132,15 +132,41 @@ public class TestPcmWaveView extends BaseWaveView {
      */
     public void setSeconds(int ms) {
         seconds = ms * dividerSeconds;
+        waveData.clear();
         updateDisplay();
     }
 
+    /**
+     * @param test
+     */
+    private void copyList(List<String> test) {
+        waveData = new ArrayList<>();
+
+        if (test == null || test.isEmpty())
+            return;
+
+        for (int i = 0; i < test.size(); i++) {
+            waveData.add(test.get(i));
+        }
+    }
 
     /**
      * @param data
      */
     public void setWaveData(List<String> data) {
-        waveData = data;
+        copyList(data);
+        updateDisplay();
+    }
+
+    /**
+     * @param ms
+     * @param data
+     */
+    public void setSecondsAndWaveData(int ms, List<String> data) {
+        seconds = ms * dividerSeconds;
+        copyList(data);
+//        waveData = new ArrayList<>(data.size());
+//        Collections.copy(waveData, data);
         updateDisplay();
     }
 }

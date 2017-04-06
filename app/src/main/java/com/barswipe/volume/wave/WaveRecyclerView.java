@@ -10,7 +10,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Soli on 2017/4/5.
@@ -24,6 +26,8 @@ public class WaveRecyclerView extends RecyclerView {
     private Context ctx;
 
     private MyLinearLayoutManager linear;
+
+    private List<String> wavedata = new ArrayList<>();
 
 
     public WaveRecyclerView(Context context) {
@@ -86,7 +90,7 @@ public class WaveRecyclerView extends RecyclerView {
             return 0;
         int itemHeight = firstVisiableChildView.getWidth();
         itemHeight = (position) * itemHeight - firstVisiableChildView.getLeft();
-        Log.e(TAG, "  getScollXDistance:" + itemHeight);
+        Log.e(TAG, "getScollXDistance:" + itemHeight);
         return itemHeight;
     }
 
@@ -100,6 +104,14 @@ public class WaveRecyclerView extends RecyclerView {
     public boolean onTouchEvent(MotionEvent e) {
 //        Log.e(TAG, "onTouchEvent");
         return super.onTouchEvent(e);
+    }
+
+    /**
+     *
+     */
+    public void test() {
+        wavedata.add(String.valueOf(new Random().nextInt(150) + 5));
+        test(wavedata);
     }
 
     public void test(List<String> data) {
@@ -163,10 +175,33 @@ public class WaveRecyclerView extends RecyclerView {
         }
 
         @Override
+        public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+
+        /**
+         * @param pos
+         * @return
+         */
+        private List<String> getWaveList(int pos) {
+            if (wavedata == null || wavedata.isEmpty())
+                return null;
+            int startindex = pos * 36, endindex = startindex + 36;
+            if (startindex > wavedata.size())
+                return null;
+            if (endindex > wavedata.size())
+                endindex = wavedata.size();
+            return wavedata.subList(startindex, endindex);
+        }
+
+        @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            Log.e(TAG, "位置" + position);
             if (holder.itemView instanceof TestPcmWaveView) {
                 TestPcmWaveView view = (((TestPcmWaveView) (holder.itemView)));
-                view.setSeconds(position);
+//                view.setSeconds(position);
+                view.setSecondsAndWaveData(position, getWaveList(position));
+
 //                int pos = position >= 4 ? position - 4 : -1;
 //                ((TestPcmWaveView) (holder.itemView)).setSeconds(pos);
             }

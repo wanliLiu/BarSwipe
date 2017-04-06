@@ -7,10 +7,6 @@ import android.view.View;
 
 import com.barswipe.R;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 /**
  * Created by Soli on 2017/4/6.
  */
@@ -18,8 +14,6 @@ import java.util.Random;
 public class ActivityWaveDisplayTest extends AppCompatActivity {
 
     private WaveRecyclerView waveRecy;
-
-    private List<String> wavedata = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,12 +33,11 @@ public class ActivityWaveDisplayTest extends AppCompatActivity {
 //                linear.setCanScroll(true);
 //                waveRecy.scrollBy(10, 0);
 //                linear.setCanScroll(false);
-                wavedata.clear();
+//                wavedata.clear();
                 break;
             case R.id.recyTes1t:
 //                linear.toggleScroll();
-                wavedata.add(String.valueOf(new Random().nextInt(150)));
-                waveRecy.test(wavedata);
+                waveRecy.test();
                 break;
         }
     }
