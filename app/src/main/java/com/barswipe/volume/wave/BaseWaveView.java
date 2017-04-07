@@ -13,8 +13,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
-import java.math.BigDecimal;
-
 /**
  * Created by Soli on 2017/3/17.
  */
@@ -54,8 +52,7 @@ public class BaseWaveView extends View {
      * 能够录制的最大时间,通过距离来算
      */
     private int canRecordMaxOffset;
-    //250ms一小隔绘制
-    protected int waveCount = 2;
+    protected int waveCount = 0;
     protected float waveWidth = 0;
 
     protected int waveCenterPos = 0;
@@ -135,10 +132,13 @@ public class BaseWaveView extends View {
 
         timeViewHeight = dip2px(25);
 
-        waveWidth = (new BigDecimal(timeMargin * 1.0f / waveCount * 1.0f).setScale(0, BigDecimal.ROUND_HALF_UP)).floatValue();
+//        waveWidth = (new BigDecimal(timeMargin * 1.0f / waveCount * 1.0f).setScale(0, BigDecimal.ROUND_HALF_UP)).floatValue();
 //        waveWidth = timeMargin * 1.0f / waveCount * 1.0f;
 
+        waveWidth = (float) (dividerCount * timeMargin / waveCount);
+
         logOut("waveWidth----" + waveWidth);
+        logOut("waveCount----" + waveCount);
 
         screenWidth = getScreenW(ctx);
         halfScreenWidth = screenWidth / 2;
@@ -190,6 +190,7 @@ public class BaseWaveView extends View {
         wavePaint = new Paint();
         wavePaint.setAntiAlias(true);
         wavePaint.setStrokeWidth(waveWidth - waveWidth * 1.0f / 3.0f);
+//        wavePaint.setStrokeWidth(waveWidth - 2);
         wavePaint.setColor(Color.parseColor("#e0e0e0"));
     }
 

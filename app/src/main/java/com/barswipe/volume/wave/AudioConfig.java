@@ -1,7 +1,5 @@
 package com.barswipe.volume.wave;
 
-import java.math.BigDecimal;
-
 /**
  * Created by Soli on 2017/4/7.
  */
@@ -29,14 +27,21 @@ public class AudioConfig {
     public static final int _dotRadius = 4;
 
     /**
+     * 1s分成 100ms的平均份数
+     */
+    public static final int _newWaveTime = 100;
+
+    /**
      * 一个小格画多少个波形柱子
      */
-    public static final int _waveCount = 3;
+    public static final int _waveCount = (int)((_dividerCount * _timeSpace) / _newWaveTime);
 
     /**
      * 一个波形柱子代表的时间
      */
-    public static final int _waveTime = (new BigDecimal(_timeSpace / _waveCount).setScale(0, BigDecimal.ROUND_HALF_UP)).intValue();
+//    public static final int _waveTime = (new BigDecimal(_timeSpace / _waveCount).setScale(0, BigDecimal.ROUND_HALF_UP)).intValue();
+
+    public static final int _waveTime = _newWaveTime;
 
     /**
      * 一个item绘制几s的时间
@@ -46,5 +51,6 @@ public class AudioConfig {
     /**
      * 一个大隔总共有好多波形柱子
      */
-    public static final int _itemWaveCount = _itemSecondes * _dividerCount * _waveCount;
+    public static final int _itemWaveCount = _itemSecondes * _waveCount;
+
 }

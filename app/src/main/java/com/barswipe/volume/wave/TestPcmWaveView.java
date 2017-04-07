@@ -68,9 +68,9 @@ public class TestPcmWaveView extends BaseWaveView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-//        if (isDebug) {
-//            canvas.drawColor(Color.parseColor(getRandColorCode()));//清楚画布
-//        } else
+        if (isDebug) {
+            canvas.drawColor(Color.parseColor(getRandColorCode()));//清楚画布
+        } else
             canvas.drawColor(Color.parseColor("#ffffff"));//清楚画布
 //        canvas.drawColor(Color.parseColor("#cc000000"));//清楚画布
 

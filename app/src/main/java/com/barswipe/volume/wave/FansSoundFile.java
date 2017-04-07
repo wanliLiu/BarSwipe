@@ -64,17 +64,15 @@ public class FansSoundFile {
     private int bytesOnSecond = (mSampleRate * bit * mChannels) / 8;
 
     /**
-     * 一大格中一小格代表的时间
+     * 一个波形柱子代表的时间
      */
-    private double timSpace = AudioConfig._timeSpace;
-    //250ms一小隔绘制  250ms/2= 125ms左右采集一个音频点绘制波形
-    private int waveCount = AudioConfig._waveCount;
+    private double timSpace = AudioConfig._waveTime;
 
     public FansSoundFile() {
         int minBufferSize = AudioRecord.getMinBufferSize(mSampleRate, channelConfig, audioFormat);//44100----3584--81.26ms 8000---640
 
-        //多少字节代表一个波
-        int bytesOnewave = (int) ((timSpace * 1.0f / waveCount * 1.0f) * bytesOnSecond / 1000);
+        //多少字节代表一个波形柱子
+        int bytesOnewave = (int) (timSpace * 1.0f * bytesOnSecond / 1000);
         int bytesCache = bytesOnSecond / 2;
         if (bytesCache < minBufferSize)
             minBufferSize *= 2;
@@ -310,8 +308,8 @@ public class FansSoundFile {
             dataStartIndex = getDataPlayIndex(mstartTime);
             dataEndIndex = getDataPlayIndex(mendTime);
 
-            waveStartIndex = (int) (mstartTime / (timSpace * 1.0f / waveCount * 1.0f));
-            waveEndIndex = (int) (mendTime / (timSpace * 1.0f / waveCount * 1.0f));
+            waveStartIndex = (int) (mstartTime / timSpace * 1.0f);
+            waveEndIndex = (int) (mendTime / timSpace * 1.0f);
             Log.e("时间数据", "mstartTime:" + mstartTime + "__mendTime:" + mendTime);
             Log.e("index数据", "dataStartIndex:" + dataStartIndex + "__dataEndIndex:" + dataEndIndex);
             Log.e("位置数据", "waveStartIndex:" + waveStartIndex + "___waveEndIndex:" + waveEndIndex);

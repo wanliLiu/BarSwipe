@@ -223,7 +223,7 @@ public class WaveEditView extends BaseWaveView {
             return;
 
         for (int i = editStart, j = 0; i < editEnd; i += waveWidth, j++) {
-            int pos = (int) ((j * timeSpace * 1.0f / waveCount * 1.0f) / (defaultTimeSpace * 1.0f / waveCount * 1.0f));
+            int pos = (int) (j * timeSpace * 1.0f / defaultTimeSpace * 1.0f);
             if (pos >= wavedata.size())
                 pos = wavedata.size() - 1;
             Double volume = Double.valueOf(wavedata.get(pos));

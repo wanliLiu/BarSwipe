@@ -124,7 +124,7 @@ public class WaveRecyclerView extends RecyclerView {
             super.handleMessage(msg);
             wavedata.add(String.valueOf(new Random().nextInt(150) + 5));
             test(wavedata);
-            testHan.sendEmptyMessageDelayed(1, 83);
+            testHan.sendEmptyMessageDelayed(1, AudioConfig._newWaveTime);
         }
     };
 
@@ -141,10 +141,10 @@ public class WaveRecyclerView extends RecyclerView {
         View view = linear.findViewByPosition((data.size() - 1) / AudioConfig._itemWaveCount);
         if (view != null && view instanceof TestPcmWaveView) {
             TestPcmWaveView waveView = (TestPcmWaveView) view;
-            int startindex = (data.size() - 1) /  AudioConfig._itemWaveCount;
+            int startindex = (data.size() - 1) / AudioConfig._itemWaveCount;
             int endindex = 0;
             if (startindex > 0)
-                startindex *=  AudioConfig._itemWaveCount;
+                startindex *= AudioConfig._itemWaveCount;
             endindex = data.size();
             waveView.setWaveData(data.subList(startindex, endindex));
 
@@ -157,7 +157,7 @@ public class WaveRecyclerView extends RecyclerView {
             }
 
             if (data.size() * waveView.getWaveWidth() >= waveView.getHalfScreenWidth()) {
-                scrollBy((int)waveView.getWaveWidth(), 0);
+                scrollBy((int) waveView.getWaveWidth(), 0);
             }
 
         }
@@ -218,7 +218,7 @@ public class WaveRecyclerView extends RecyclerView {
         private List<String> getWaveList(int pos) {
             if (wavedata == null || wavedata.isEmpty())
                 return null;
-            int startindex = pos *  AudioConfig._itemWaveCount, endindex = startindex +  AudioConfig._itemWaveCount;
+            int startindex = pos * AudioConfig._itemWaveCount, endindex = startindex + AudioConfig._itemWaveCount;
             if (startindex > wavedata.size())
                 return null;
             if (endindex > wavedata.size())
@@ -258,8 +258,7 @@ public class WaveRecyclerView extends RecyclerView {
     public void toggleScroll() {
         isCanScroll = !isCanScroll;
 
-        if (isCanScroll)
-        {
+        if (isCanScroll) {
             testHan.removeMessages(1);
         }
     }
