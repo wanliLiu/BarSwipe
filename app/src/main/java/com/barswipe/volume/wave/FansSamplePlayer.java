@@ -43,8 +43,8 @@ public class FansSamplePlayer {
      * 一大格中一小格代表的时间
      */
     private int timSpace = 250;
-    //250ms一小隔绘制  250ms/3= 83ms左右采集一个音频点绘制波形
-    private int waveCount = 3;
+    //250ms一小隔绘制  250ms/2= 125ms左右采集一个音频点绘制波形
+    private int waveCount = 2;
 
     public FansSamplePlayer(ShortBuffer samples, int sampleRate, int channels, int numSamples) {
         mSamples = samples;

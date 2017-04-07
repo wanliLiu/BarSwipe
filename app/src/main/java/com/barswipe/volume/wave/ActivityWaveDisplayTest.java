@@ -34,6 +34,7 @@ public class ActivityWaveDisplayTest extends AppCompatActivity {
 //                waveRecy.scrollBy(10, 0);
 //                linear.setCanScroll(false);
 //                wavedata.clear();
+                waveRecy.toggleScroll();
                 break;
             case R.id.recyTes1t:
 //                linear.toggleScroll();

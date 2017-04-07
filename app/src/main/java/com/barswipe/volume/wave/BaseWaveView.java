@@ -13,6 +13,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Soli on 2017/3/17.
  */
@@ -53,12 +55,12 @@ public class BaseWaveView extends View {
      */
     private int canRecordMaxOffset;
     //250ms一小隔绘制
-    protected int waveCount = 3;
-    protected int waveWidth = 0;
+    protected int waveCount = 2;
+    protected float waveWidth = 0;
 
     protected int waveCenterPos = 0;
 
-    protected int offset = 0;
+    protected float offset = 0;
 
     protected Paint timeTextPaint, timeLinePain, playIndexPaint, wavePaint;
 
@@ -112,16 +114,31 @@ public class BaseWaveView extends View {
     }
 
     /**
+     * 获取默认的配置参数
+     */
+    private void getDefaultConfig() {
+        timeMargin = dip2px(AudioConfig._timeMargin);
+        logOut("timeMargin----" + timeMargin);
+        timeSpace = AudioConfig._timeSpace;
+        dividerCount = AudioConfig._dividerCount;
+        dotRadius = dip2px(AudioConfig._dotRadius);
+        waveCount = AudioConfig._waveCount;
+    }
+
+    /**
      *
      */
     public void init(Context mctx) {
         ctx = mctx;
 
-        timeMargin = dip2px(10);
-        timeViewHeight = dip2px(25);
-        dotRadius = dip2px(4);
+        getDefaultConfig();
 
-        waveWidth = timeMargin / waveCount;
+        timeViewHeight = dip2px(25);
+
+        waveWidth = (new BigDecimal(timeMargin * 1.0f / waveCount * 1.0f).setScale(0, BigDecimal.ROUND_HALF_UP)).floatValue();
+//        waveWidth = timeMargin * 1.0f / waveCount * 1.0f;
+
+        logOut("waveWidth----" + waveWidth);
 
         screenWidth = getScreenW(ctx);
         halfScreenWidth = screenWidth / 2;
@@ -172,7 +189,7 @@ public class BaseWaveView extends View {
 
         wavePaint = new Paint();
         wavePaint.setAntiAlias(true);
-        wavePaint.setStrokeWidth(waveWidth - 2);
+        wavePaint.setStrokeWidth(waveWidth - waveWidth * 1.0f / 3.0f);
         wavePaint.setColor(Color.parseColor("#e0e0e0"));
     }
 
@@ -183,7 +200,7 @@ public class BaseWaveView extends View {
      * @param pixels
      * @return 返回时间ms
      */
-    public double pixelsToMillisecs(int pixels) {
+    public double pixelsToMillisecs(float pixels) {
         double onePixelTime = timeSpace * 1.0d / timeMargin * 1.0d;
         return onePixelTime * pixels;
     }
@@ -252,14 +269,6 @@ public class BaseWaveView extends View {
         this.halfScreenWidth = halfScreenWidth;
     }
 
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
 
     public int getStartOffset() {
         return startOffset;
@@ -285,7 +294,7 @@ public class BaseWaveView extends View {
         this.canRecordMaxOffset = canRecordMaxOffset;
     }
 
-    public int getWaveWidth() {
+    public double getWaveWidth() {
         return waveWidth;
     }
 }

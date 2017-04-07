@@ -7,6 +7,7 @@ import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -48,7 +49,7 @@ public class WaveEditView extends BaseWaveView {
     //一屏，除去开始的timeMargin，剩下的有多少个timeMargin
     private int smallDivCount = 0;
 
-    private Rect selectStart, selectEnd, selectPlayBack;
+    private RectF selectStart, selectEnd, selectPlayBack;
 
     private int lastX = 0, startX = editStart, endx = 0, editOffset = editStart;
 
@@ -63,7 +64,7 @@ public class WaveEditView extends BaseWaveView {
     /**
      * 在默认timeSpace情况下 能显示的最大时间区域值
      */
-    private double defaultMaxTime = 0.0d, defaultTimeSpace = 250.0d;
+    private double defaultMaxTime = 0.0d, defaultTimeSpace = AudioConfig._timeSpace;
 
     //波形数据
     public LinkedList<String> wavedata;
@@ -100,9 +101,9 @@ public class WaveEditView extends BaseWaveView {
         selectPaint.setAntiAlias(true);
         selectPaint.setColor(Color.parseColor("#feffea"));
 
-        selectStart = new Rect();
-        selectEnd = new Rect();
-        selectPlayBack = new Rect();
+        selectStart = new RectF();
+        selectEnd = new RectF();
+        selectPlayBack = new RectF();
     }
 
     @Override
@@ -184,7 +185,7 @@ public class WaveEditView extends BaseWaveView {
      * @param canvas
      * @param rect
      */
-    private void drawPlayback(Canvas canvas, Rect rect) {
+    private void drawPlayback(Canvas canvas, RectF rect) {
 
         Path path = new Path();
         path.moveTo(editOffset, timeViewHeight);
@@ -244,7 +245,7 @@ public class WaveEditView extends BaseWaveView {
      * @param canvas
      * @param position
      */
-    private void drawPlayBack(Canvas canvas, int position, Rect rect) {
+    private void drawPlayBack(Canvas canvas, float position, RectF rect) {
 //        if (!isInEditMode)
         //选中的原色
         if ((position == startX && currentSelect == inSelectStart) ||

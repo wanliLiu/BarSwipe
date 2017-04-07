@@ -1,6 +1,8 @@
 package com.barswipe.volume.wave;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,9 +28,13 @@ public class WaveRecyclerView extends RecyclerView {
     private Context ctx;
 
     private MyLinearLayoutManager linear;
+    private TestWaveAdapter adapter;
 
     private List<String> wavedata = new ArrayList<>();
 
+    private boolean isCanScroll = false;
+
+    private int displayTime = 3;//目前显示3s时间，然后后面根据录制的时间后移动
 
     public WaveRecyclerView(Context context) {
         super(context);
@@ -54,9 +60,10 @@ public class WaveRecyclerView extends RecyclerView {
 
 
         linear = new MyLinearLayoutManager(ctx);
-        linear.setCanScroll(true);
         setLayoutManager(linear);
-        setAdapter(new TestWaveAdapter());
+
+        adapter = new TestWaveAdapter();
+        setAdapter(adapter);
     }
 
     @Override
@@ -76,7 +83,7 @@ public class WaveRecyclerView extends RecyclerView {
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
 
-//            Log.e(TAG, "滑动距离" + "dx:" + dx + "   dy:" + dy + "  getScrollX:" + recyclerView.getScrollX() + "  getScollXDistance:" + getScollXDistance());
+            Log.e(TAG, "滑动距离" + "dx:" + dx + "   dy:" + dy + "  getScrollX:" + recyclerView.getScrollX() + "  getScollXDistance:" + getScollXDistance());
         }
     }
 
@@ -86,12 +93,15 @@ public class WaveRecyclerView extends RecyclerView {
     public int getScollXDistance() {
         int position = linear.findFirstVisibleItemPosition();
         View firstVisiableChildView = linear.findViewByPosition(position);
-        if (firstVisiableChildView != null)
+        if (firstVisiableChildView == null)
             return 0;
-        int itemHeight = firstVisiableChildView.getWidth();
-        itemHeight = (position) * itemHeight - firstVisiableChildView.getLeft();
-        Log.e(TAG, "getScollXDistance:" + itemHeight);
-        return itemHeight;
+        Log.e(TAG, "findFirstVisibleItemPosition---" + position);
+        int itemWidth = firstVisiableChildView.getWidth();
+        Log.e(TAG, "itemWidth---" + itemWidth);
+        Log.e(TAG, "getLeft--_" + firstVisiableChildView.getLeft());
+        itemWidth = (position) * itemWidth - firstVisiableChildView.getLeft();
+        Log.e(TAG, "getScollXDistance:" + itemWidth);
+        return itemWidth;
     }
 
     @Override
@@ -103,41 +113,76 @@ public class WaveRecyclerView extends RecyclerView {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 //        Log.e(TAG, "onTouchEvent");
+        if (!isCanScroll)
+            return true;
         return super.onTouchEvent(e);
     }
+
+    private Handler testHan = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            wavedata.add(String.valueOf(new Random().nextInt(150) + 5));
+            test(wavedata);
+            testHan.sendEmptyMessageDelayed(1, 83);
+        }
+    };
 
     /**
      *
      */
     public void test() {
-        wavedata.add(String.valueOf(new Random().nextInt(150) + 5));
-        test(wavedata);
+        testHan.sendEmptyMessage(1);
+//        wavedata.add(String.valueOf(new Random().nextInt(150) + 5));
+//        test(wavedata);
     }
 
     public void test(List<String> data) {
-//        View view = linear.findViewByPosition(data.size() > 36 ? linear.findFirstVisibleItemPosition() + 1 : linear.findFirstVisibleItemPosition());
-        View view = linear.findViewByPosition((data.size() - 1) / 36);
+        View view = linear.findViewByPosition((data.size() - 1) / AudioConfig._itemWaveCount);
         if (view != null && view instanceof TestPcmWaveView) {
             TestPcmWaveView waveView = (TestPcmWaveView) view;
-            int startindex = (data.size() - 1) / 36;
+            int startindex = (data.size() - 1) /  AudioConfig._itemWaveCount;
             int endindex = 0;
             if (startindex > 0)
-                startindex *= 36;
+                startindex *=  AudioConfig._itemWaveCount;
             endindex = data.size();
             waveView.setWaveData(data.subList(startindex, endindex));
 
-            if (getScollXDistance() > waveView.getHalfScreenWidth())
-                scrollBy(waveView.getWaveWidth(), 0);
+            double leftRone = getTotalViewWidth() - data.size() * waveView.getWaveWidth();
+            Log.e(TAG, "剩余空间：" + leftRone);
+            if (leftRone <= waveView.getHalfScreenWidth()) {
+                displayTime++;
+                Log.e(TAG, "数量添加:" + displayTime);
+                adapter.notifyItemInserted(displayTime - 1);
+            }
+
+            if (data.size() * waveView.getWaveWidth() >= waveView.getHalfScreenWidth()) {
+                scrollBy((int)waveView.getWaveWidth(), 0);
+            }
+
         }
+    }
+
+    /**
+     * 获取整个视图的宽度
+     *
+     * @return
+     */
+    private int getTotalViewWidth() {
+
+        View viewLast = linear.findViewByPosition(adapter.getItemCount() - 1);
+        if (viewLast != null) {
+            Log.e(TAG, "item总宽度:" + viewLast.getWidth() * adapter.getItemCount());
+            return viewLast.getWidth() * adapter.getItemCount();
+        }
+
+        return 0;
     }
 
     /**
      *
      */
     private class MyLinearLayoutManager extends LinearLayoutManager {
-
-        private boolean isCanScroll = false;
-
         public MyLinearLayoutManager(Context context) {
             this(context, HORIZONTAL, false);
         }
@@ -148,19 +193,6 @@ public class WaveRecyclerView extends RecyclerView {
 
         public MyLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
             super(context, attrs, defStyleAttr, defStyleRes);
-        }
-
-        public void setCanScroll(boolean canScroll) {
-            isCanScroll = canScroll;
-        }
-
-        public void toggleScroll() {
-            isCanScroll = !isCanScroll;
-        }
-
-        @Override
-        public boolean canScrollHorizontally() {
-            return isCanScroll && super.canScrollHorizontally();
         }
     }
 
@@ -186,7 +218,7 @@ public class WaveRecyclerView extends RecyclerView {
         private List<String> getWaveList(int pos) {
             if (wavedata == null || wavedata.isEmpty())
                 return null;
-            int startindex = pos * 36, endindex = startindex + 36;
+            int startindex = pos *  AudioConfig._itemWaveCount, endindex = startindex +  AudioConfig._itemWaveCount;
             if (startindex > wavedata.size())
                 return null;
             if (endindex > wavedata.size())
@@ -209,12 +241,26 @@ public class WaveRecyclerView extends RecyclerView {
 
         @Override
         public int getItemCount() {
-            return 30;
+            return displayTime;
         }
 
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
+        }
+    }
+
+
+    public void setCanScroll(boolean canScroll) {
+        isCanScroll = canScroll;
+    }
+
+    public void toggleScroll() {
+        isCanScroll = !isCanScroll;
+
+        if (isCanScroll)
+        {
+            testHan.removeMessages(1);
         }
     }
 }

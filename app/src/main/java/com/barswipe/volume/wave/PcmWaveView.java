@@ -33,9 +33,7 @@ public class PcmWaveView extends BaseWaveView {
     private Scroller mScroller;
     private int mScrollLastX;
 
-    private int scroolX, currentX;
-    //单位ms
-    private int playbackPosition;
+    private float scroolX, currentX, playbackPosition;
 
 
     public PcmWaveView(Context context) {
@@ -61,7 +59,7 @@ public class PcmWaveView extends BaseWaveView {
             public void onGlobalLayout() {
                 PcmWaveView.this.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 currentX = scroolX = getStartOffset();
-                PcmWaveView.this.scrollTo(scroolX, 0);
+                PcmWaveView.this.scrollTo((int)scroolX, 0);
             }
         });
     }
@@ -228,7 +226,7 @@ public class PcmWaveView extends BaseWaveView {
                         scroolX = 0;
                 }
                 updatePlayBackPosition();
-                scrollTo(scroolX, 0);
+                scrollTo((int)scroolX, 0);
                 mScrollLastX = x;
                 postInvalidate();
                 return true;
@@ -265,7 +263,7 @@ public class PcmWaveView extends BaseWaveView {
             updateDisplay();
 
             if (offset > halfScreenWidth - timeMargin)
-                scrollBy(waveWidth, 0);
+                scrollBy((int) waveWidth, 0);
         }
     }
 
@@ -299,7 +297,7 @@ public class PcmWaveView extends BaseWaveView {
             currentX = scroolX = getScrollX();
             updatePlayBackPosition();
         } else
-            scrollTo(currentX, 0);
+            scrollTo((int)currentX, 0);
     }
 
     /**
@@ -319,7 +317,7 @@ public class PcmWaveView extends BaseWaveView {
             scrollTo(0, 0);
         } else {
             scroolX -= offset;
-            scrollTo(getStartOffset() - offset, 0);
+            scrollTo((int) (getStartOffset() - offset), 0);
         }
 
         return 0.0d;
@@ -334,7 +332,7 @@ public class PcmWaveView extends BaseWaveView {
     public void stopPlay(boolean stopFrom) {
         isCanScroll = false;
         if (stopFrom)
-            scrollTo(currentX, 0);
+            scrollTo((int)currentX, 0);
         scroolX = getScrollX();
         updatePlayBackPosition();
     }
@@ -344,7 +342,7 @@ public class PcmWaveView extends BaseWaveView {
      */
     private void reDrawWave(LinkedList<String> waveData) {
         currentX = scroolX = getStartOffset();
-        scrollTo(scroolX, 0);
+        scrollTo((int)scroolX, 0);
 
         offset = 0;
         //先绘制波形，在决定移动的位置
@@ -352,7 +350,7 @@ public class PcmWaveView extends BaseWaveView {
             offset += waveWidth;
             onDrawWare(mCanvas, Double.valueOf(waveData.get(i)));
             if (offset > halfScreenWidth - timeMargin)
-                scrollBy(waveWidth, 0);
+                scrollBy((int) waveWidth, 0);
         }
 
         currentX = scroolX = getScrollX();

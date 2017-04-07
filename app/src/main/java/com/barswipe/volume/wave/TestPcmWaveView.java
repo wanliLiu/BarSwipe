@@ -18,7 +18,7 @@ public class TestPcmWaveView extends BaseWaveView {
 
     private int seconds = -1;
     //一个item显示3s
-    private int dividerSeconds = 3;
+    private int dividerSeconds = AudioConfig._itemSecondes;
 
     private List<String> waveData = new ArrayList<>();
 
@@ -68,9 +68,9 @@ public class TestPcmWaveView extends BaseWaveView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (isDebug) {
-            canvas.drawColor(Color.parseColor(getRandColorCode()));//清楚画布
-        } else
+//        if (isDebug) {
+//            canvas.drawColor(Color.parseColor(getRandColorCode()));//清楚画布
+//        } else
             canvas.drawColor(Color.parseColor("#ffffff"));//清楚画布
 //        canvas.drawColor(Color.parseColor("#cc000000"));//清楚画布
 

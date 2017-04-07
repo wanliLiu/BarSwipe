@@ -108,10 +108,10 @@ public class WavePlayView extends BaseWaveView {
         if (waveData == null || waveData.length == 0)
             return;
 
-        for (int i = startX + waveWidth, j = offset; i < viewWidth && j < waveData.length; i += waveWidth, j++) {
+        for (float i = startX + waveWidth, j = offset; i < viewWidth && j < waveData.length; i += waveWidth, j++) {
 
-            Double volume = Double.valueOf(waveData[j]);
-            int _2_3 = (int)(waveHeight * 0.8);
+            Double volume = Double.valueOf(waveData[(int)j]);
+            int _2_3 = (int) (waveHeight * 0.8);
             double dis = (volume * _2_3) / 2.0f + 0.5;
 //        canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos + (float) dis, wavePaint);
             wavePaint.setColor(Color.parseColor(i < playBackOffset ? "#e0e0e0" : "#EEEEEE"));

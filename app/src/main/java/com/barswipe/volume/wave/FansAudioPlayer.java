@@ -87,7 +87,7 @@ public class FansAudioPlayer {
                     e.printStackTrace();
                 }
             }
-        }, 0, 83);
+        }, 0, AudioConfig._waveTime);
     }
 
 
