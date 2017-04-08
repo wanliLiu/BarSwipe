@@ -124,7 +124,7 @@ public class PcmWaveView extends BaseWaveView {
      */
     private void onDrawWare(Canvas canvas, double volume) {
         int _2_3 = waveHeight * 3 / 4;
-        double dis = (volume * _2_3) / 2.0f + 0.5;
+        double dis = (volume * _2_3) / 2.0f + 0.5 + 5;
 //        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float)dis, halfScreenWidth + offset, waveCenterPos + (float)dis, wavePaint);
         wavePaint.setColor(Color.parseColor("#e0e0e0"));
         canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float) dis, halfScreenWidth + offset, waveCenterPos - dip2px(1), wavePaint);

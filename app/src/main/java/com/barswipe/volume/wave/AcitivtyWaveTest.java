@@ -149,7 +149,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
      */
     private void updateCanActionUI() {
         if (!isCanAction) {
-            if (recordTotalTime > recordMinTime) {
+            if (recordTotalTime >= recordMinTime) {
                 isCanAction = true;
                 btnActionDone.setTextColor(Color.parseColor("#6CA5FF"));
                 btnActionDone.setEnabled(true);

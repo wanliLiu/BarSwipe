@@ -22,11 +22,6 @@ public class WavePlayView extends BaseWaveView {
     private int playBackOffset = 0;
 
     /**
-     * 绘制偏移量,主要是和父视图相匹配
-     */
-    private int drawOffset;
-
-    /**
      * 是否显示playback
      */
     private boolean isShowPlayBack = false;
@@ -55,9 +50,8 @@ public class WavePlayView extends BaseWaveView {
      *
      */
     private void dataInit() {
-        drawOffset = dip2px(0.5f);
         playBackOffset = startX = dotRadius;
-        timeLinePain.setStrokeWidth(drawOffset);
+        timeLinePain.setStrokeWidth(dip2px(0.5f));
     }
 
     @Override
@@ -78,9 +72,9 @@ public class WavePlayView extends BaseWaveView {
         canvas.drawColor(Color.parseColor("#ffffff"));//清楚画布
 
         canvas.drawLine(startX, 0, startX, waveHeight, timeLinePain);//左边那根线
-        canvas.drawLine(0, drawOffset, viewWidth, drawOffset, timeLinePain);//上面那根线
+        canvas.drawLine(0, timeLinePain.getStrokeWidth() / 2, viewWidth, timeLinePain.getStrokeWidth() / 2, timeLinePain);//上面那根线
         canvas.drawLine(startX, waveCenterPos, viewWidth, waveCenterPos, timeLinePain); //中间那根线
-        canvas.drawLine(0, viewHeight - drawOffset - dotRadius, viewWidth, viewHeight - drawOffset - dotRadius, timeLinePain);//下面那根线
+        canvas.drawLine(0, viewHeight - timeLinePain.getStrokeWidth() / 2 - dotRadius, viewWidth, viewHeight - timeLinePain.getStrokeWidth() / 2 - dotRadius, timeLinePain);//下面那根线
 
         drawWave(canvas);
 
@@ -112,7 +106,7 @@ public class WavePlayView extends BaseWaveView {
 
             Double volume = Double.valueOf(waveData[(int)j]);
             int _2_3 = (int) (waveHeight * 0.8);
-            double dis = (volume * _2_3) / 2.0f + 0.5;
+            double dis = (volume * _2_3) / 2.0f + 0.5 + 5;
 //        canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos + (float) dis, wavePaint);
             wavePaint.setColor(Color.parseColor(i < playBackOffset ? "#e0e0e0" : "#EEEEEE"));
             canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos - dip2px(1), wavePaint);

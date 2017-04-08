@@ -151,6 +151,7 @@ public class BaseWaveView extends View {
         waveCenterPos = timeViewHeight + (viewHeight - timeViewHeight) / 2 - dotRadius;
 
         canRecordMaxOffset = totalTimeSec * (dividerCount * timeMargin);
+
         initPaint();
     }
 

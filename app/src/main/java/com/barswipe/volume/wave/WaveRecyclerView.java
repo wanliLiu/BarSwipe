@@ -34,7 +34,7 @@ public class WaveRecyclerView extends RecyclerView {
 
     private boolean isCanScroll = false;
 
-    private int displayTime = 3;//目前显示3s时间，然后后面根据录制的时间后移动
+    private int displayTime = 30;//目前显示3s时间，然后后面根据录制的时间后移动
 
     public WaveRecyclerView(Context context) {
         super(context);
@@ -106,15 +106,15 @@ public class WaveRecyclerView extends RecyclerView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
-//        Log.e(TAG, "onInterceptTouchEvent");
+        if (!isCanScroll)
+            return false;
         return super.onInterceptTouchEvent(e);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-//        Log.e(TAG, "onTouchEvent");
         if (!isCanScroll)
-            return true;
+            return false;
         return super.onTouchEvent(e);
     }
 
@@ -258,8 +258,8 @@ public class WaveRecyclerView extends RecyclerView {
     public void toggleScroll() {
         isCanScroll = !isCanScroll;
 
-        if (isCanScroll) {
+//        if (isCanScroll) {
             testHan.removeMessages(1);
-        }
+//        }
     }
 }

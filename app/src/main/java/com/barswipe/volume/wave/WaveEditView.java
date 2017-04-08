@@ -56,7 +56,7 @@ public class WaveEditView extends BaseWaveView {
     //playbak选择，通过它来选中，拖动
     private int playbackTopWidth = 0;
     //最少剪切的秒数
-    private int minClipTime = 1000;
+    private int minClipTime = 2000;
 
     private int currentSelect = SelectNone;
 
@@ -228,7 +228,7 @@ public class WaveEditView extends BaseWaveView {
                 pos = wavedata.size() - 1;
             Double volume = Double.valueOf(wavedata.get(pos));
             int _2_3 = waveHeight * 3 / 4;
-            double dis = (volume * _2_3) / 2.0f + 0.5;
+            double dis = (volume * _2_3) / 2.0f + 0.5 + 5;
 //            canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos + (float) dis, wavePaint);
             wavePaint.setColor(Color.parseColor(i < startX || i > endx ? "#e0e0e0" : "#EEEEEE"));
             canvas.drawLine(i, waveCenterPos - (float) dis, i, waveCenterPos - dip2px(1), wavePaint);
