@@ -60,42 +60,71 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp">
 
-        <com.barswipe.volume.wave.WaveRecyclerView
+        <com.barswipe.volume.wave.AudioRecordView
             android:id="@+id/testRecycle"
-            android:scrollbars="horizontal"
-            android:scrollbarStyle="insideOverlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="horizontal">
 
-        </com.barswipe.volume.wave.WaveRecyclerView>
-        <!--<com.barswipe.volume.wave.WaveEditView-->
-        <!--android:id="@+id/waveEdit"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
+        </com.barswipe.volume.wave.AudioRecordView>
+
+        <com.barswipe.volume.wave.WaveEditView
+            android:id="@+id/waveEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-        <Button
-            android:id="@+id/recyTest"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onTest"
-            android:text="测试" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/recyTes1t"
-            android:layout_width="wrap_content"
+
+            <com.barswipe.volume.wave.TestPcmWaveViewHead
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <com.barswipe.volume.wave.TestPcmWaveView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onTest"
-            android:text="测试1" />
-    </LinearLayout>
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
 
-    <com.barswipe.volume.wave.TestPcmWaveView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+            <Button
+                android:id="@+id/recyTest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onTest"
+                android:text="测试" />
+
+            <Button
+                android:id="@+id/recyTes1t"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onTest"
+                android:text="测试1" />
+
+            <Button
+                android:id="@+id/testScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onTest"
+                android:text="测试滑动" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
 </LinearLayout>

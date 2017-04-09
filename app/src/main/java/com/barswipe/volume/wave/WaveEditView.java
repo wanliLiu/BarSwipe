@@ -71,6 +71,11 @@ public class WaveEditView extends BaseWaveView {
 
     private onWaveEditListener editListener;
 
+    /**
+     * 是否滚动到中间了
+     */
+    private boolean isInMiddle = false;
+
     public WaveEditView(Context context) {
         super(context);
         dataInit();
@@ -396,14 +401,18 @@ public class WaveEditView extends BaseWaveView {
      * 这里面这个offset参数，如果有重录的时候还需要在合适的时候清零
      */
     public void updatePosition() {
-        offset += waveWidth;
-        if (offset > halfScreenWidth - timeMargin) {
-            offset -= waveWidth;
-            return;
+        if (!isInMiddle) {
+            offset += waveWidth;
+            if (offset >= halfScreenWidth - timeMargin) {
+                offset = halfScreenWidth - timeMargin;
+                isInMiddle = true;
+            }
+
+            isInEditMode = false;
+            updateDisplay();
         }
-        isInEditMode = false;
-        updateDisplay();
     }
+
 
     /**
      * @param isEnter
@@ -521,10 +530,19 @@ public class WaveEditView extends BaseWaveView {
      * @param waveSize 目前波形的数量值
      */
     public void refreshAfterEdit(int waveSize) {
+        isInMiddle = false;
         offset = 0;
         offset = waveSize * waveWidth;
         if (offset > halfScreenWidth - timeMargin) {
             offset = halfScreenWidth - timeMargin;
         }
+    }
+
+    /**
+     *
+     */
+    public void testScrooCenter() {
+        offset = halfScreenWidth - timeMargin;
+        updateDisplay();
     }
 }

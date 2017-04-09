@@ -16,10 +16,19 @@ import java.util.Random;
 
 public class TestPcmWaveView extends BaseWaveView {
 
-    private int seconds = -1;
-    //一个item显示3s
-    private int dividerSeconds = AudioConfig._itemSecondes;
+    /**
+     * 一个item显示 多长时间的波形
+     */
+    private int itemSecondes = AudioConfig._itemSecondes;
 
+    /**
+     * 时间块，能显示的时间范围有dividerSeconds决定
+     */
+    private int position = -1;
+
+    /**
+     * item的时间波形数据
+     */
     private List<String> waveData = new ArrayList<>();
 
     public TestPcmWaveView(Context context) {
@@ -41,7 +50,7 @@ public class TestPcmWaveView extends BaseWaveView {
      *
      */
     private void dataInit() {
-        viewWidth = (dividerCount * timeMargin) * dividerSeconds;
+        viewWidth = (dividerCount * timeMargin) * itemSecondes;
     }
 
     @Override
@@ -50,6 +59,9 @@ public class TestPcmWaveView extends BaseWaveView {
         setMeasuredDimension(viewWidth, viewHeight);
     }
 
+    /**
+     * @return
+     */
     private String getRandColorCode() {
         String r, g, b;
         Random random = new Random();
@@ -77,8 +89,8 @@ public class TestPcmWaveView extends BaseWaveView {
         for (int i = 0; i < viewWidth; i += timeMargin) {
             if (i % (dividerCount * timeMargin) == 0) {
                 canvas.drawLine((i + timeLinePain.getStrokeWidth() / 2), 0, (i + timeLinePain.getStrokeWidth() / 2), timeViewHeight, timeLinePain);
-                if (seconds >= 0) {
-                    int sec = seconds + i / (dividerCount * timeMargin);
+                if (position >= 0) {
+                    int sec = position + i / (dividerCount * timeMargin);
                     String minutes = "" + (sec / 60);
                     String second = "" + (sec % 60);
                     if (sec / 60 < 10) {
@@ -101,8 +113,8 @@ public class TestPcmWaveView extends BaseWaveView {
         onDrawWare(canvas);
 
         if (isDebug) {
-            if (seconds >= 0)
-                canvas.drawText("" + seconds / 3, dip2px(10), viewHeight - dip2px(10) - timeTextPaint.getTextSize(), timeTextPaint);
+            if (position >= 0)
+                canvas.drawText("" + position / 3, dip2px(10), viewHeight - dip2px(10) - timeTextPaint.getTextSize(), timeTextPaint);
         }
     }
 
@@ -128,15 +140,8 @@ public class TestPcmWaveView extends BaseWaveView {
     }
 
     /**
-     * @param ms
-     */
-    public void setSeconds(int ms) {
-        seconds = ms * dividerSeconds;
-        waveData.clear();
-        updateDisplay();
-    }
-
-    /**
+     * 数据深度拷贝
+     *
      * @param test
      */
     private void copyList(List<String> test) {
@@ -151,6 +156,8 @@ public class TestPcmWaveView extends BaseWaveView {
     }
 
     /**
+     * 录制的时候数据输入
+     *
      * @param data
      */
     public void setWaveData(List<String> data) {
@@ -159,14 +166,14 @@ public class TestPcmWaveView extends BaseWaveView {
     }
 
     /**
-     * @param ms
+     * 视图滑动的时候数据输入
+     *
+     * @param pos
      * @param data
      */
-    public void setSecondsAndWaveData(int ms, List<String> data) {
-        seconds = ms * dividerSeconds;
+    public void setSecondsAndWaveData(int pos, List<String> data) {
+        position = pos * itemSecondes;
         copyList(data);
-//        waveData = new ArrayList<>(data.size());
-//        Collections.copy(waveData, data);
         updateDisplay();
     }
 }

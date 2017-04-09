@@ -299,4 +299,9 @@ public class BaseWaveView extends View {
     public double getWaveWidth() {
         return waveWidth;
     }
+
+
+    public int getTimeMargin() {
+        return timeMargin;
+    }
 }

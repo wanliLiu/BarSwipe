@@ -1,6 +1,8 @@
 package com.barswipe.volume.wave;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,32 +15,45 @@ import com.barswipe.R;
 
 public class ActivityWaveDisplayTest extends AppCompatActivity {
 
-    private WaveRecyclerView waveRecy;
+    private AudioRecordView waveRecy;
+    private WaveEditView waveEdit;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record_view_another);
-        waveRecy = (WaveRecyclerView) findViewById(R.id.testRecycle);
+        waveRecy = (AudioRecordView) findViewById(R.id.testRecycle);
+
+        waveEdit = (WaveEditView)findViewById(R.id.waveEdit);
+//        waveEdit.testScrooCenter();
     }
 
+
+    private Handler testHan = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            waveRecy.test();
+            // TODO: 09/04/2017 这里注意改了， WaveEditView  记得在项目中也需要修改
+            waveEdit.updatePosition();
+            testHan.sendEmptyMessageDelayed(1, AudioConfig._newWaveTime);
+        }
+    };
 
     /**
      * @param view
      */
     public void onTest(View view) {
         switch (view.getId()) {
+            case R.id.testScroll:
+                break;
             case R.id.recyTest:
-//                waveRecy.scrollToPosition(4);
-//                linear.setCanScroll(true);
-//                waveRecy.scrollBy(10, 0);
-//                linear.setCanScroll(false);
-//                wavedata.clear();
-                waveRecy.toggleScroll();
+                waveRecy.stopRecording();
+                testHan.removeMessages(1);
                 break;
             case R.id.recyTes1t:
-//                linear.toggleScroll();
-                waveRecy.test();
+                waveRecy.startRecording();
+                testHan.sendEmptyMessage(1);
                 break;
         }
     }
