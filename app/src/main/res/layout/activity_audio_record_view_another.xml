@@ -86,11 +86,11 @@
             android:orientation="horizontal">
 
 
-            <com.barswipe.volume.wave.TestPcmWaveViewHead
+            <com.barswipe.volume.wave.ItemPcmWaveViewHead
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <com.barswipe.volume.wave.TestPcmWaveView
+            <com.barswipe.volume.wave.ItemPcmWaveView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -116,12 +116,6 @@
                 android:onClick="onTest"
                 android:text="测试1" />
 
-            <Button
-                android:id="@+id/testScroll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onTest"
-                android:text="测试滑动" />
         </LinearLayout>
 
     </FrameLayout>

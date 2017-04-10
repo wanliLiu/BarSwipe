@@ -52,6 +52,7 @@ public class BaseWaveView extends View {
      * 能够录制的最大时间,通过距离来算
      */
     private int canRecordMaxOffset;
+
     protected int waveCount = 0;
     protected float waveWidth = 0;
 
@@ -120,6 +121,8 @@ public class BaseWaveView extends View {
         dividerCount = AudioConfig._dividerCount;
         dotRadius = dip2px(AudioConfig._dotRadius);
         waveCount = AudioConfig._waveCount;
+
+        totalTimeSec = AudioConfig._totalTimeSec;
     }
 
     /**

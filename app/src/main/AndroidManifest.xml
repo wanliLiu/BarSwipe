@@ -364,7 +364,9 @@
 
         <activity
             android:name=".volume.wave.AcitivtyWaveTest"
-            android:hardwareAccelerated="false">
+            android:hardwareAccelerated="false" />
+        <activity android:name=".volume.wave.StudyAudioRecord" />
+        <activity android:name=".volume.wave.AcitivtyWaveTestRecycler">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

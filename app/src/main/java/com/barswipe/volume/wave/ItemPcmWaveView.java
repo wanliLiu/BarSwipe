@@ -14,7 +14,7 @@ import java.util.Random;
  * Created by Soli on 2017/4/5.
  */
 
-public class TestPcmWaveView extends BaseWaveView {
+public class ItemPcmWaveView extends BaseWaveView {
 
     /**
      * 一个item显示 多长时间的波形
@@ -31,17 +31,17 @@ public class TestPcmWaveView extends BaseWaveView {
      */
     private List<String> waveData = new ArrayList<>();
 
-    public TestPcmWaveView(Context context) {
+    public ItemPcmWaveView(Context context) {
         super(context);
         dataInit();
     }
 
-    public TestPcmWaveView(Context context, @Nullable AttributeSet attrs) {
+    public ItemPcmWaveView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         dataInit();
     }
 
-    public TestPcmWaveView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ItemPcmWaveView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         dataInit();
     }
@@ -114,7 +114,7 @@ public class TestPcmWaveView extends BaseWaveView {
 
         if (isDebug) {
             if (position >= 0)
-                canvas.drawText("" + position / 3, dip2px(10), viewHeight - dip2px(10) - timeTextPaint.getTextSize(), timeTextPaint);
+                canvas.drawText("" + position / itemSecondes, dip2px(10), viewHeight - dip2px(10) - timeTextPaint.getTextSize(), timeTextPaint);
         }
     }
 
@@ -126,9 +126,8 @@ public class TestPcmWaveView extends BaseWaveView {
             return;
 
         for (int i = 0, j = 0; i < viewWidth && j < waveData.size(); i += waveWidth, j++) {
-//            int _2_3 = waveHeight * 3 / 4;
-//            double dis = (volume * _2_3) / 2.0f + 0.5;
-            int dis = Integer.parseInt(waveData.get(j));
+            int _2_3 = waveHeight * 3 / 4;
+            double dis = (Double.valueOf(waveData.get(j)) * _2_3) / 2.0f + 0.5 + 5;
 //        canvas.drawLine(halfScreenWidth + offset, waveCenterPos - (float)dis, halfScreenWidth + offset, waveCenterPos + (float)dis, wavePaint);
             wavePaint.setColor(Color.parseColor("#e0e0e0"));
             canvas.drawLine(i + wavePaint.getStrokeWidth() / 2, waveCenterPos - (float) dis, i + wavePaint.getStrokeWidth() / 2, waveCenterPos - dip2px(1), wavePaint);

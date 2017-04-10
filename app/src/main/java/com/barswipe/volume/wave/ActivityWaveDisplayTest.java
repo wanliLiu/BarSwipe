@@ -24,8 +24,9 @@ public class ActivityWaveDisplayTest extends AppCompatActivity {
         setContentView(R.layout.activity_audio_record_view_another);
         waveRecy = (AudioRecordView) findViewById(R.id.testRecycle);
 
-        waveEdit = (WaveEditView)findViewById(R.id.waveEdit);
+        waveEdit = (WaveEditView) findViewById(R.id.waveEdit);
 //        waveEdit.testScrooCenter();
+
     }
 
 
@@ -45,11 +46,9 @@ public class ActivityWaveDisplayTest extends AppCompatActivity {
      */
     public void onTest(View view) {
         switch (view.getId()) {
-            case R.id.testScroll:
-                break;
             case R.id.recyTest:
-                waveRecy.stopRecording();
                 testHan.removeMessages(1);
+                waveRecy.stopRecording();
                 break;
             case R.id.recyTes1t:
                 waveRecy.startRecording();

@@ -403,8 +403,8 @@ public class WaveEditView extends BaseWaveView {
     public void updatePosition() {
         if (!isInMiddle) {
             offset += waveWidth;
-            if (offset >= halfScreenWidth - timeMargin) {
-                offset = halfScreenWidth - timeMargin;
+            if (offset >= getStartOffset()) {
+                offset = getStartOffset();
                 isInMiddle = true;
             }
 
@@ -533,16 +533,8 @@ public class WaveEditView extends BaseWaveView {
         isInMiddle = false;
         offset = 0;
         offset = waveSize * waveWidth;
-        if (offset > halfScreenWidth - timeMargin) {
-            offset = halfScreenWidth - timeMargin;
+        if (offset > getStartOffset()) {
+            offset = getStartOffset();
         }
-    }
-
-    /**
-     *
-     */
-    public void testScrooCenter() {
-        offset = halfScreenWidth - timeMargin;
-        updateDisplay();
     }
 }

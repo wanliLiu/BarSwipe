@@ -12,20 +12,20 @@ import java.util.Random;
  * Created by Soli on 2017/4/5.
  */
 
-public class TestPcmWaveViewHead extends BaseWaveView {
+public class ItemPcmWaveViewHead extends BaseWaveView {
 
 
-    public TestPcmWaveViewHead(Context context) {
+    public ItemPcmWaveViewHead(Context context) {
         super(context);
         dataInit();
     }
 
-    public TestPcmWaveViewHead(Context context, @Nullable AttributeSet attrs) {
+    public ItemPcmWaveViewHead(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         dataInit();
     }
 
-    public TestPcmWaveViewHead(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ItemPcmWaveViewHead(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         dataInit();
     }

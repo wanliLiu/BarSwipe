@@ -34,19 +34,22 @@ public class AudioConfig {
     /**
      * 一个小格画多少个波形柱子
      */
-    public static final int _waveCount = (int)((_dividerCount * _timeSpace) / _newWaveTime);
+    public static final int _waveCount = (int) ((_dividerCount * _timeSpace) / _newWaveTime);
+
+    /**
+     * 录制的最大时间 单位s
+     */
+    public static final int _totalTimeSec = 90;
 
     /**
      * 一个波形柱子代表的时间
      */
-//    public static final int _waveTime = (new BigDecimal(_timeSpace / _waveCount).setScale(0, BigDecimal.ROUND_HALF_UP)).intValue();
-
     public static final int _waveTime = _newWaveTime;
 
     /**
      * 一个item绘制几s的时间
      */
-    public static final int _itemSecondes = 3;
+    public static final int _itemSecondes = 4;
 
     /**
      * 一个大隔总共有好多波形柱子

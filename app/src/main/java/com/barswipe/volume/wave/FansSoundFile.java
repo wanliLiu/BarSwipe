@@ -181,15 +181,27 @@ public class FansSoundFile {
                     mPCMSamples = mPCMBytes.asShortBuffer();
                     mPCMSamples.position(position);
                 }
+                if (!isRecording)
+                    break;
+
                 int readSize = audioRecord.read(buffer, 0, buffer.length);
+
+                if (!isRecording)
+                    break;
+
                 if (readSize == AudioRecord.ERROR_INVALID_OPERATION ||
                         readSize == AudioRecord.ERROR_BAD_VALUE) {
                     break;
                 } else if (readSize > 0) {
                     mPCMSamples.put(buffer, 0, readSize);
                 }
-                calculateTime((float) (mPCMSamples.position()) / mSampleRate);
                 calculateRealVolume(buffer, readSize);
+                // TODO: 2017/4/10  这里还要弄
+//                if (isRecording)
+//                    calculateTime((float) (mPCMSamples.position()) / mSampleRate);
+
+                if (!isRecording)
+                    mPCMSamples.position(mPCMSamples.position() - readSize);
             }
             mNumSamples = mPCMSamples.position();
 //            mPCMSamples.rewind();
@@ -216,41 +228,21 @@ public class FansSoundFile {
      */
     private void calculateRealVolume(short[] buffer, int readSize) {
         double mVolume;
-//        double sum = 0;
-//        for (int i = 0; i < readSize; i++) {
-//            // 这里没有做运算的优化，为了更加清晰的展示代码
-//            sum += buffer[i] * buffer[i];
-//        }
-//        if (readSize > 0) {
-//            double amplitude = sum / readSize;
-//            mVolume = 0.1 * Math.log10(amplitude);
-//            Log.e("音量最大值：", mVolume + "");
-//            if (listener != null)
-//                listener.onRealVolume(mVolume);
-//        }
-
         short max = 0;
         for (int i = 0; i < readSize; i++) {
+            if (!isRecording)
+                break;
             if (Math.abs(buffer[i]) > max)
                 max = (short) Math.abs(buffer[i]);
         }
-        mVolume = max * 1.0f / Short.MAX_VALUE * 1.0f;
-        Log.e("音量最大值-----：", mVolume + "");
-        if (listener != null) {
-            waveBytes.add(String.valueOf(mVolume));
-            listener.onAudioRecordVolume(mVolume);
+        if (isRecording) {
+            mVolume = max * 1.0f / Short.MAX_VALUE * 1.0f;
+            Log.e("音量最大值-----：", mVolume + "");
+            if (listener != null) {
+                waveBytes.add(String.valueOf(mVolume));
+                listener.onAudioRecordVolume(mVolume);
+            }
         }
-
-
-//        double sumVolume = 0.0;
-//        double avgVolume = 0.0;
-//        for (int i = 0; i < readSize; i++) {
-//            sumVolume += Math.abs(buffer[i]);
-//        }
-//        avgVolume = (sumVolume / readSize) * 1.0f / Short.MAX_VALUE * 1.0f;
-//        Log.e("音量最大值-----：", avgVolume + "");
-//        if (listener != null)
-//            listener.onRealVolume(avgVolume);
     }
 
     /**

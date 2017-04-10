@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import com.barswipe.volume.wave.util.MusicSimilarityUtil;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -38,9 +41,20 @@ public class AudioRecordView extends RecyclerView {
     /**
      * 能显示的有效时间区域块
      */
-    private int displayTime = 30;
+    private int displayTime = 5;
+    /**
+     * 音频录制滑动的距离，从开始到停止
+     */
+    private int currentRecordMaxScrollX = 0;
 
-    private int limitIndex = 5;
+    private onScrollTimeChangeListener timeChangeListener;
+    private onParpareStartRecordingListener parpareListener;
+
+    /**
+     * 移动到某个位置还是动画好看
+     */
+    private boolean onParpareRecording = false, onParparePlaying = false, isAnimtion = false;
+
 
     public AudioRecordView(Context context) {
         super(context);
@@ -76,6 +90,7 @@ public class AudioRecordView extends RecyclerView {
                 //滑动到默认位置
                 if (linear != null)
                     linear.scrollToPositionWithOffset(1, getInitOffset_one());
+                currentRecordMaxScrollX = getStartOffset();
             }
         });
     }
@@ -105,7 +120,7 @@ public class AudioRecordView extends RecyclerView {
     /**
      * @return
      */
-    private int getScreenHalfWidth() {
+    private int getHalfScreenWidth() {
         BaseWaveView view = getBaseView();
         if (view != null)
             return view.getHalfScreenWidth();
@@ -193,7 +208,34 @@ public class AudioRecordView extends RecyclerView {
      */
     public void test() {
         wavedata.add(String.valueOf(new Random().nextInt(150) + 5));
-        dealWaveDataDisplay();
+        dealOneWaveDataDisplay();
+    }
+
+    /**
+     * 获取能录制的最大时间，即距离
+     *
+     * @return
+     */
+    private int getCanRecordMaxOffset() {
+        BaseWaveView view = getBaseView();
+        if (view != null) {
+            return view.getCanRecordMaxOffset();
+        }
+        return 0;
+    }
+
+    /**
+     * 更新数据
+     */
+    public void updateData(double volume) {
+        wavedata.add(String.valueOf(volume));
+        if (getRecordWaveDataWidth() >= getCanRecordMaxOffset()) {
+            wavedata.remove(wavedata.size() - 1);
+            if (timeChangeListener != null) {
+                timeChangeListener.onAudioRecordToMaxTime();
+            }
+        } else
+            dealOneWaveDataDisplay();
     }
 
     /**
@@ -210,62 +252,167 @@ public class AudioRecordView extends RecyclerView {
 
 
     /**
-     * 分配波形数据 并显示
+     * 每次更新一个波形柱子
      */
-    private void dealWaveDataDisplay() {
-        View view = linear.findViewByPosition(getTargetViewPosition());
-        if (view != null && view instanceof TestPcmWaveView) {
-            TestPcmWaveView waveView = (TestPcmWaveView) view;
-            int startindex = (wavedata.size() - 1) / AudioConfig._itemWaveCount;
-            int endindex = 0;
-            if (startindex > 0)
-                startindex *= AudioConfig._itemWaveCount;
-            endindex = wavedata.size();
-            waveView.setWaveData(wavedata.subList(startindex, endindex));
+    private void dealOneWaveDataDisplay() {
+        if (!isRecording)
+            return;
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                View view = linear.findViewByPosition(getTargetViewPosition());
+                if (view != null && view instanceof ItemPcmWaveView) {
+                    ItemPcmWaveView waveView = (ItemPcmWaveView) view;
+                    int startindex = (wavedata.size() - 1) / AudioConfig._itemWaveCount;
+                    int endindex = 0;
+                    if (startindex > 0)
+                        startindex *= AudioConfig._itemWaveCount;
+                    endindex = wavedata.size();
+                    waveView.setWaveData(wavedata.subList(startindex, endindex));
 
-            //// TODO: 09/04/2017  根据条件自动添加item
-            double leftRone = getTotalViewWidth() - wavedata.size() * waveView.getWaveWidth();
+                    dealIfAddItemCount();
+
+                    dealIfScroolByView();
+                }
+            }
+        });
+    }
+
+    /**
+     * 处理是否添加adapter 的count,这个是实现无限制显示波形的关键
+     */
+    private void dealIfAddItemCount() {
+        if (wavedata != null) {
+            int waveWidth = getWaveWidth();
+            double leftRone = getTotalViewWidth(false) - wavedata.size() * waveWidth;
             Log.e(TAG, "剩余空间：" + leftRone);
-            if (leftRone <= waveView.getHalfScreenWidth()) {
+            if (leftRone <= getHalfScreenWidth()) {
                 displayTime++;
                 Log.e(TAG, "数量添加:" + displayTime);
                 adapter.notifyItemInserted(displayTime - 1);
             }
-
-            if (wavedata.size() * waveView.getWaveWidth() >= waveView.getHalfScreenWidth() - waveView.getTimeMargin()) {
-                scrollBy((int) waveView.getWaveWidth(), 0);
-            }
-
         }
     }
 
     /**
-     * @param pos
+     * 处理是否移动视图波形宽度
      */
-    private int getPointDistance(int pos) {
-        View view = linear.findViewByPosition(linear.findFirstVisibleItemPosition());
-        if (view != null) {
-            Log.e(TAG, "getPointDistance:" + "__pos__" + pos + "_" + view.getWidth() * pos);
-            return view.getWidth() * pos;
+    private void dealIfScroolByView() {
+        if (wavedata != null) {
+            int waveWidth = getWaveWidth();
+            if (wavedata.size() * waveWidth > getStartOffset() + waveWidth)
+                scrollBy(waveWidth, 0);
+            else {
+                updateTimeSelection(isRecording, wavedata.size() * waveWidth);
+            }
         }
-        return 0;
     }
 
     /**
      * 获取整个视图的宽度
      *
+     * @param isNeedHeadWidth 是否需要头部的宽度
      * @return
      */
-    private int getTotalViewWidth() {
-
-        // TODO: 09/04/2017 这里看是否去掉head的宽度
-        View view = linear.findViewByPosition(linear.findFirstVisibleItemPosition());
-        if (view != null) {
-            Log.e(TAG, "item总宽度:" + view.getWidth() * adapter.getItemCount());
-            return view.getWidth() * adapter.getItemCount();
+    private int getTotalViewWidth(boolean isNeedHeadWidth) {
+        int position = linear.findFirstVisibleItemPosition();
+        if (position == 0)
+            position = linear.findLastVisibleItemPosition();
+        View view = linear.findViewByPosition(position);
+        if (view != null && view instanceof ItemPcmWaveView) {
+            int viewWidth = (isNeedHeadWidth ? getHalfScreenWidth() : 0) + (adapter.getItemCount() - 1) * view.getWidth();
+            Log.e(TAG, "item总宽度:" + viewWidth);
+            return viewWidth;
         }
-
         return 0;
+    }
+
+    /**
+     * 获取能滑动的最小距离
+     *
+     * @return
+     */
+    private int getMinScrollOffset() {
+        int min = getStartOffset() - getRecordWaveDataWidth();
+        if (min <= 0)
+            min = 0;
+        Log.e(TAG, "getMinScrollOffset:" + min);
+        return min;
+    }
+
+    /**
+     * 获取能滑动的最大距离
+     *
+     * @return
+     */
+    private int getMaxScrollOffset() {
+        Log.e(TAG, "getMaxScrollOffset:" + currentRecordMaxScrollX);
+        return currentRecordMaxScrollX;
+    }
+
+    @Override
+    public void onScrolled(int dx, int dy) {
+        super.onScrolled(dx, dy);
+        Log.e(TAG,"onScrolled");
+        getTimeSelectPos();
+    }
+
+    @Override
+    public void onScrollStateChanged(int state) {
+        super.onScrollStateChanged(state);
+        Log.e(TAG,"onScrollStateChanged:" + state);
+        getTimeSelectPos();
+        dealOnParpareAction(state);
+    }
+
+    /**
+     * @param state
+     */
+    private void dealOnParpareAction(int state) {
+        if (onParparePlaying || onParpareRecording) {
+            if (state == SCROLL_STATE_SETTLING)
+                isAnimtion = true;
+            if (isAnimtion && state == SCROLL_STATE_IDLE) {
+                callBackOnParapreAction(onParpareRecording ? true : false);
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private void callBackOnParapreAction(boolean isRecording) {
+        if (parpareListener != null) {
+            parpareListener.onParareStartAction(isRecording);
+            isAnimtion = false;
+            if (isRecording)
+                onParpareRecording = false;
+            else
+                onParparePlaying = false;
+        }
+    }
+
+    /**
+     * 滑动的时候更新时间显示
+     */
+    private void getTimeSelectPos() {
+        updateTimeSelection(isRecording, getScollDistance() - getMinScrollOffset());
+    }
+
+    /**
+     * 视图滑动的时候更新时间显示
+     *
+     * @param isRecord 为true表示录制的时间，反之是滑动显示的时间
+     * @param pos
+     */
+    private void updateTimeSelection(boolean isRecord, float pos) {
+        if (pos <= 0)
+            pos = 0;
+        Log.e(TAG, "滑动位置：" + pos);
+        if (timeChangeListener != null) {
+            double time = pixelsToMillisecs(pos) * 1.0f / 1000.0f;
+            timeChangeListener.onTimeChange(isRecord, time, MusicSimilarityUtil.getRecordTimeString(time));
+        }
     }
 
     /**
@@ -282,27 +429,29 @@ public class AudioRecordView extends RecyclerView {
 
         @Override
         public int scrollHorizontallyBy(int dx, Recycler recycler, State state) {
-            int willDis = getScollDistance() + dx;
-            if (dx > 0) {
-                //左滑动
-//                Log.e(TAG, "scrollHorizontallyBy--temp:" + temp);
-//                int limit = getPointDistance(limitIndex);
-//                Log.e(TAG, "scrollHorizontallyBy--limit:" + limit);
-//                if (temp >= limit) {
-//                    stopScroll();
-//                    dx = limit - getScollDistance();
-//                    Log.e(TAG, "scrollHorizontallyBy--处理:" + dx);
-//                }
-            } else {
-                //右滑动
-                int limit = getStartOffset() - getRecordWaveDataWidth();
-                if (willDis <= limit) {
-                    stopScroll();
-                    dx = 0;
+            if (!isRecording) {
+                Log.e(TAG, "变化前_变化差值：" + dx);
+                int scrollx = getScollDistance();
+                int willDis = scrollx + dx;
+                Log.e(TAG, "即将滑动到：" + willDis);
+                if (dx > 0) {
+                    //左滑动
+                    int maxLimit = getMaxScrollOffset();
+                    if (willDis >= maxLimit) {
+                        stopScroll();
+                        dx = maxLimit - scrollx;
+                    }
+                } else {
+                    //右滑动
+                    int miniLimit = getMinScrollOffset();
+                    if (willDis <= miniLimit) {
+                        stopScroll();
+                        dx = miniLimit - scrollx;
+                    }
                 }
 
+                Log.e(TAG, "变化后_变化差值：" + dx);
             }
-
             return super.scrollHorizontallyBy(dx, recycler, state);
         }
     }
@@ -323,7 +472,7 @@ public class AudioRecordView extends RecyclerView {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new RecyclerView.ViewHolder(viewType == ViewTypeHead ? new TestPcmWaveViewHead(ctx) : new TestPcmWaveView(ctx)) {
+            return new RecyclerView.ViewHolder(viewType == ViewTypeHead ? new ItemPcmWaveViewHead(ctx) : new ItemPcmWaveView(ctx)) {
 
             };
         }
@@ -347,9 +496,10 @@ public class AudioRecordView extends RecyclerView {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (holder.itemView instanceof TestPcmWaveView) {
-                TestPcmWaveView view = (((TestPcmWaveView) (holder.itemView)));
-                view.setSecondsAndWaveData(position - 1, getWaveList(position));
+            Log.e(TAG, "位置:" + position);
+            if (getItemViewType(position) != ViewTypeHead && holder.itemView instanceof ItemPcmWaveView) {
+                ItemPcmWaveView view = (((ItemPcmWaveView) (holder.itemView)));
+                view.setSecondsAndWaveData(position - 1, getWaveList(position - 1));
             }
         }
 
@@ -360,10 +510,33 @@ public class AudioRecordView extends RecyclerView {
     }
 
     /**
+     * 滑动到录制的指定位置
+     */
+    private void scroolToRecordPos() {
+        int scroolx = currentRecordMaxScrollX - getScollDistance();
+        if (scroolx == 0) {
+            if (parpareListener != null)
+                parpareListener.onParareStartAction(true);
+        } else {
+            onParpareRecording = true;
+//            scrollBy(scroolx, 0);
+            smoothScrollBy(scroolx,0);
+        }
+    }
+
+    /**
      * 开始录制
      */
     public void startRecording() {
         setRecording(true);
+        scroolToRecordPos();
+    }
+
+    /**
+     * @return
+     */
+    public boolean isRecording() {
+        return isRecording;
     }
 
     /**
@@ -371,6 +544,8 @@ public class AudioRecordView extends RecyclerView {
      */
     public void stopRecording() {
         setRecording(false);
+        currentRecordMaxScrollX = getScollDistance();
+        Log.e(TAG, "currentRecordMaxScrollX:" + currentRecordMaxScrollX);
     }
 
     /**
@@ -378,5 +553,104 @@ public class AudioRecordView extends RecyclerView {
      */
     public void setRecording(boolean recording) {
         isRecording = recording;
+    }
+
+    /**
+     * @param timeChangeListener
+     */
+    public void setTimeChangeListener(onScrollTimeChangeListener timeChangeListener) {
+        this.timeChangeListener = timeChangeListener;
+    }
+
+    /**
+     * 获取刻度宽度
+     *
+     * @return
+     */
+    private int getTimeMargin() {
+        BaseWaveView view = getBaseView();
+        if (view != null) {
+            return view.getTimeMargin();
+        }
+        return 0;
+    }
+
+    /**
+     * 像素对应的时间
+     *
+     * @param pixels
+     * @return 返回时间ms
+     */
+    public double pixelsToMillisecs(float pixels) {
+        double onePixelTime = AudioConfig._timeSpace * 1.0d / getTimeMargin() * 1.0d;
+        return onePixelTime * pixels;
+    }
+
+    /**
+     * 时间对于像素
+     *
+     * @param ms
+     * @return
+     */
+    public int millisecsToPixels(double ms) {
+        return (int) (getTimeMargin() * ms * 1.0f / AudioConfig._timeSpace * 1.0f + 0.5);
+    }
+
+
+    /**
+     * @param data
+     */
+    private void copyList(LinkedList<String> data) {
+        wavedata = new ArrayList<>();
+        for (int i = 0; i < data.size(); i++) {
+            wavedata.add(data.get(i));
+        }
+    }
+
+    /**
+     * 根据剩余的波形数据计算出时间
+     */
+    private void calurateTimeSeconds() {
+        int itemCount = wavedata.size() / AudioConfig._itemWaveCount;
+        int leftMore = wavedata.size() % AudioConfig._itemWaveCount;
+        if (leftMore > 0)
+            itemCount += 1;
+
+        displayTime = 1 + itemCount + 4;
+    }
+
+    /**
+     * 在音频编辑后，重新刷新视图
+     */
+    public void refreshAfterEdit(final LinkedList<String> data) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                copyList(data);
+                calurateTimeSeconds();
+                // TODO: 2017/4/10 这里还要优化  编辑音频后显示有问题
+                adapter.notifyDataSetChanged();
+            }
+        }).start();
+    }
+
+    /**
+     * @param mListener
+     */
+    public void setOnParpareStartRecordingListener(onParpareStartRecordingListener mListener) {
+        parpareListener = mListener;
+    }
+
+    /**
+     *
+     */
+    public interface onParpareStartRecordingListener {
+        /**
+         * 动画执行完准备开始某个动作
+         *
+         * @param isRecording true表示可以开始录音数据这块
+         *                    false表示可以开始播放语音
+         */
+        public void onParareStartAction(boolean isRecording);
     }
 }
