@@ -1,5 +1,6 @@
 package com.barswipe.volume.wave;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import com.barswipe.R;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class AudioRecordView extends RecyclerView {
      * 表示是否正在录制，如果正在录制，就禁止滑动，反之可以滑动有效距离
      */
     private boolean isRecording = false;
+    private boolean isPlaying = false;
 
     /**
      * 能显示的有效时间区域块
@@ -53,8 +56,15 @@ public class AudioRecordView extends RecyclerView {
     /**
      * 移动到某个位置还是动画好看
      */
-    private boolean onParpareRecording = false, onParparePlaying = false, isAnimtion = false;
+    private boolean onParpareRecording = false, onParparePlaying = false;
+    /**
+     * 用来在移动的时候拦截触摸事件
+     */
+    private View maskView;
 
+    private float playbackPosition = 0;
+
+    private double lastUpdateTime;
 
     public AudioRecordView(Context context) {
         super(context);
@@ -93,6 +103,20 @@ public class AudioRecordView extends RecyclerView {
                 currentRecordMaxScrollX = getStartOffset();
             }
         });
+    }
+
+    /**
+     *
+     */
+    private void getMaskView() {
+        if (ctx != null) {
+            if (maskView == null) {
+                maskView = ((Activity) (ctx)).getWindow().getDecorView().findViewById(R.id.id_mask_view);
+                if (maskView == null)
+                    throw new IllegalArgumentException("You must add a view with id id_mask_view in the right place");
+                maskView.setVisibility(GONE);
+            }
+        }
     }
 
     /**
@@ -198,8 +222,8 @@ public class AudioRecordView extends RecyclerView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (isRecording)
-            return false;
+        if (isRecording || isPlaying)
+            return true;
         return super.onTouchEvent(event);
     }
 
@@ -353,14 +377,14 @@ public class AudioRecordView extends RecyclerView {
     @Override
     public void onScrolled(int dx, int dy) {
         super.onScrolled(dx, dy);
-        Log.e(TAG,"onScrolled");
+        Log.e(TAG, "onScrolled");
         getTimeSelectPos();
     }
 
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        Log.e(TAG,"onScrollStateChanged:" + state);
+        Log.e(TAG, "onScrollStateChanged:" + state);
         getTimeSelectPos();
         dealOnParpareAction(state);
     }
@@ -370,10 +394,12 @@ public class AudioRecordView extends RecyclerView {
      */
     private void dealOnParpareAction(int state) {
         if (onParparePlaying || onParpareRecording) {
-            if (state == SCROLL_STATE_SETTLING)
-                isAnimtion = true;
-            if (isAnimtion && state == SCROLL_STATE_IDLE) {
-                callBackOnParapreAction(onParpareRecording ? true : false);
+            if (state == SCROLL_STATE_IDLE) {
+                try {
+                    callBackOnParapreAction(onParpareRecording ? true : false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -382,9 +408,9 @@ public class AudioRecordView extends RecyclerView {
      *
      */
     private void callBackOnParapreAction(boolean isRecording) {
+        showMaskView(false);
         if (parpareListener != null) {
             parpareListener.onParareStartAction(isRecording);
-            isAnimtion = false;
             if (isRecording)
                 onParpareRecording = false;
             else
@@ -396,7 +422,7 @@ public class AudioRecordView extends RecyclerView {
      * 滑动的时候更新时间显示
      */
     private void getTimeSelectPos() {
-        updateTimeSelection(isRecording, getScollDistance() - getMinScrollOffset());
+        updateTimeSelection(isRecording && !isPlaying, getScollDistance() - getMinScrollOffset());
     }
 
     /**
@@ -408,6 +434,9 @@ public class AudioRecordView extends RecyclerView {
     private void updateTimeSelection(boolean isRecord, float pos) {
         if (pos <= 0)
             pos = 0;
+
+        playbackPosition = pos;
+
         Log.e(TAG, "滑动位置：" + pos);
         if (timeChangeListener != null) {
             double time = pixelsToMillisecs(pos) * 1.0f / 1000.0f;
@@ -429,7 +458,7 @@ public class AudioRecordView extends RecyclerView {
 
         @Override
         public int scrollHorizontallyBy(int dx, Recycler recycler, State state) {
-            if (!isRecording) {
+            if (!isRecording || isPlaying) {
                 Log.e(TAG, "变化前_变化差值：" + dx);
                 int scrollx = getScollDistance();
                 int willDis = scrollx + dx;
@@ -511,17 +540,85 @@ public class AudioRecordView extends RecyclerView {
 
     /**
      * 滑动到录制的指定位置
+     *
+     * @param isSmooth
      */
-    private void scroolToRecordPos() {
+    private void scroolToRecordPos(boolean isSmooth) {
         int scroolx = currentRecordMaxScrollX - getScollDistance();
-        if (scroolx == 0) {
+        if (!isSmooth) {
+            scrollBy(scroolx, 0);
             if (parpareListener != null)
                 parpareListener.onParareStartAction(true);
         } else {
-            onParpareRecording = true;
-//            scrollBy(scroolx, 0);
-            smoothScrollBy(scroolx,0);
+            if (scroolx == 0) {
+                if (parpareListener != null)
+                    parpareListener.onParareStartAction(true);
+            } else {
+                showMaskView(true);
+                onParpareRecording = true;
+                smoothScrollBy(scroolx, 0);
+            }
         }
+    }
+
+    /**
+     * @param show
+     */
+    private void showMaskView(boolean show) {
+
+        getMaskView();
+
+        if (maskView != null)
+            maskView.setVisibility(show ? VISIBLE : GONE);
+    }
+
+    /**
+     * 音频播放更新位置
+     */
+    public void updatePlayPosition(final double timeUs) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (lastUpdateTime != timeUs) {
+                    int piex = millisecsToPixels(timeUs - lastUpdateTime);
+                    scrollBy(piex, 0);
+                    lastUpdateTime = timeUs;
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 开始播放，
+     *
+     * @return 播放的位置，为0从头开始播放，不为0，从相应的位置播放
+     * 单位时间ms
+     */
+    public double startPlay() {
+        isPlaying = true;
+        if (playbackPosition > 0 && playbackPosition < currentRecordMaxScrollX) {
+            return pixelsToMillisecs(playbackPosition);
+        }
+
+        if (playbackPosition == currentRecordMaxScrollX) {
+            scrollTo(-currentRecordMaxScrollX, 0);
+        }
+        return 0.0d;
+    }
+
+    /**
+     * 停止播放，是从那里停止，
+     *
+     * @param stopFrom true 自然播放完成
+     *                 false 认为停止
+     */
+    public void stopPlay(boolean stopFrom) {
+        isPlaying = false;
+//        if (stopFrom)
+//            scrollTo((int)currentX, 0);
+//        scroolX = getScrollX();
+//        updatePlayBackPosition();
     }
 
     /**
@@ -529,7 +626,15 @@ public class AudioRecordView extends RecyclerView {
      */
     public void startRecording() {
         setRecording(true);
-        scroolToRecordPos();
+        scroolToRecordPos(false);
+    }
+
+    /**
+     * 主要是再次录制并且有滑动的情况，这里是有动画的的，但是根据实际情况，录音还是用没有动画的
+     */
+    public void smoothStartRecording() {
+        setRecording(true);
+        scroolToRecordPos(true);
     }
 
     /**
@@ -544,6 +649,7 @@ public class AudioRecordView extends RecyclerView {
      */
     public void stopRecording() {
         setRecording(false);
+        showMaskView(false);
         currentRecordMaxScrollX = getScollDistance();
         Log.e(TAG, "currentRecordMaxScrollX:" + currentRecordMaxScrollX);
     }

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -339,8 +338,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
             waveEdit.setPlaying(true);
             player.seekTo(waveEdit.getPlayBackStartTime(), waveEdit.getSelectEndTime());
         } else {
-//            player.seekTo(pcmWaveView.startPlay());
-            Toast.makeText(this, "播放没做做", Toast.LENGTH_SHORT).show();
+            player.seekTo(recordView.startPlay());
         }
         player.start();
     }
@@ -355,8 +353,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
             waveEdit.stopPlay(stopfrom);
         } else {
             //界面处理停止播放相关事情
-//            pcmWaveView.stopPlay(stopfrom);
-            Toast.makeText(this, "停止播放没做做", Toast.LENGTH_SHORT).show();
+            recordView.stopPlay(stopfrom);
         }
         player.stop();
     }
@@ -445,8 +442,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
         if (isInAudioEdit())
             waveEdit.updatePlayBackPosition(timeMs);
         else {
-            Log.e("play", "播放位置" + timeMs);
-//            pcmWaveView.updatePlayPosition(timeMs);
+            recordView.updatePlayPosition(timeMs);
         }
     }
 
