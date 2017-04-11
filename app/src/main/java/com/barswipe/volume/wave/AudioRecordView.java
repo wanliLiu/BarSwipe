@@ -730,7 +730,7 @@ public class AudioRecordView extends RecyclerView {
     /**
      * @param recording
      */
-    public void setRecording(boolean recording) {
+    private void setRecording(boolean recording) {
         isRecording = recording;
     }
 
