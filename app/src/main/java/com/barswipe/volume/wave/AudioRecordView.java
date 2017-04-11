@@ -219,7 +219,7 @@ public class AudioRecordView extends RecyclerView {
         else {
 //       logOut( "itemWidth---" + itemWidth);
 //       logOut( "getLeft--_" + view.getLeft());
-            scroolX = ((BaseWaveView) view).getHalfScreenWidth() + (position - 1) * view.getWidth() - view.getLeft();
+            scroolX = ((BaseWaveView) view).getHalfScreenWidth() + (position - 1) * view.getWidth() - view.getLeft() + 6;//这里是偏差
         }
 
         logOut("getScollXDistance:" + scroolX);
@@ -459,9 +459,9 @@ public class AudioRecordView extends RecyclerView {
         if (pos <= 0)
             pos = 0;
         playbackPosition = pos;
-        logOut("滑动位置：" + pos);
         if (timeChangeListener != null && !disableTimeChange) {
             double time = pixelsToMillisecs(pos) * 1.0f / 1000.0f;
+            logOut("滑动位置：" + pos + "   对应的时间：" + time);
             timeChangeListener.onTimeChange(isRecord, time, MusicSimilarityUtil.getRecordTimeString(time));
         }
     }
