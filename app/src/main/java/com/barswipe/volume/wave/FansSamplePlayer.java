@@ -143,7 +143,7 @@ public class FansSamplePlayer {
                     mListener.onAudioPlayProgress(getCurrentPosition());
                 }
             }
-        }, 10, 70);
+        }, 10, AudioConfig._waveTime);
 
     }
 

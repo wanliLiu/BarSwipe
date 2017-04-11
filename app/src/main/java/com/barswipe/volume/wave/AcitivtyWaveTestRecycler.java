@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -93,6 +95,9 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
 
     private ProgressDialog dialog;
 
+    // TODO: 2017/4/11 这里要添加 
+    private boolean isScrolling = false, isFromPlayingStop = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +109,21 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
         btnClip.setOnClickListener(this);
 
         recordView.setOnParpareStartRecordingListener(this);
+        recordView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.e("WaveRecyclerView", "test_onScrollStateChanged:" + newState);
+                isScrolling = newState != RecyclerView.SCROLL_STATE_IDLE;
+                dealonPlayingSelection();
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                dealonPlaySelectionEnd();
+            }
+        });
 
         // TODO: 23/03/2017 这个地方到时候还是换成 titlebar
         txt_cancle.setOnClickListener(this);
@@ -115,6 +135,38 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
         updateUi();
 
         initAudioRecord();
+    }
+
+    /**
+     *
+     */
+    private void dealonPlaySelectionEnd() {
+        if (currentStatus == ActionStatus.playAudio &&
+                recordView.isPlaying() &&
+                player != null && player.isPlaying()
+                && recordView.isScroolToMaxPos()) {
+            Log.e("拖动", "有进来");
+            onAudioPlayComplete();
+            isFromPlayingStop = false;
+        }
+    }
+
+    /**
+     * 如果在播放的时候，在移动，播放就停止，移动完后在播放
+     */
+    private void dealonPlayingSelection() {
+        if (currentStatus == ActionStatus.playAudio || isFromPlayingStop) {
+            if (recordView.isPlaying() && isScrolling) {
+                isFromPlayingStop = true;
+                if (player != null)
+                    player.stop();
+            }
+            if (!isScrolling) {
+                currentStatus = ActionStatus.playAudio;
+                updateUi();
+                startPlay();
+            }
+        }
     }
 
     /**
@@ -268,7 +320,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
                     } else {
                         currentStatus = ActionStatus.stopRecording;
                     }
-                    stopPlay(true);
+                    stopPlay(!isFromPlayingStop);
                 }
                 updateUi();
             }
@@ -292,13 +344,17 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
     }
 
     @Override
-    public void onParareStartAction(boolean isRecording) {
-        if (isRecording)
+    public void onParareStartAction(boolean isRecording, double time) {
+        if (isRecording) {
             //数据这里准备开始
-            soundFile.startRecord();
-        else {
-            // TODO: 2017/4/10
-            Toast.makeText(this, "还没有实现", Toast.LENGTH_SHORT).show();
+            if (soundFile != null) {
+                soundFile.startRecord();
+            }
+        } else {
+            if (player != null) {
+                player.seekTo(time);
+                player.start();
+            }
         }
     }
 
@@ -306,9 +362,11 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
      * 开始录制
      */
     private void startRecord() {
+        isFromPlayingStop = false;
         if (isCanRecord && recordTotalTime < AudioConfig._totalTimeSec) {
             //界面准备开始录制
-            recordView.startRecording();
+//            recordView.startRecording();
+            recordView.smoothStartRecording();
 //            //数据这里准备开始
 //            soundFile.startRecord();
         } else {
@@ -334,13 +392,15 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
      * 开始播放
      */
     private void startPlay() {
+        isFromPlayingStop = false;
         if (isInAudioEdit()) {
             waveEdit.setPlaying(true);
             player.seekTo(waveEdit.getPlayBackStartTime(), waveEdit.getSelectEndTime());
+            player.start();
         } else {
-            player.seekTo(recordView.startPlay());
+//            recordView.startPlay();
+            recordView.smoothStartPlay(true);
         }
-        player.start();
     }
 
     /**
@@ -600,6 +660,10 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
      */
     @Override
     public void onClick(View v) {
+        //当在滑动的时候不进行点击操作
+        if (isScrolling)
+            return;
+
         switch (v.getId()) {
             case R.id.btnPlay:
                 if (currentStatus == ActionStatus.clipAudio ||
