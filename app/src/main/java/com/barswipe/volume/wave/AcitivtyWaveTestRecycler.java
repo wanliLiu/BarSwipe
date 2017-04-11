@@ -108,23 +108,6 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
         btnRecord.setOnClickListener(this);
         btnClip.setOnClickListener(this);
 
-        recordView.setOnParpareStartRecordingListener(this);
-        recordView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.e("WaveRecyclerView", "test_onScrollStateChanged:" + newState);
-                isScrolling = newState != RecyclerView.SCROLL_STATE_IDLE;
-                dealonPlayingSelection();
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                dealonPlaySelectionEnd();
-            }
-        });
-
         // TODO: 23/03/2017 这个地方到时候还是换成 titlebar
         txt_cancle.setOnClickListener(this);
         btnActionDone.setOnClickListener(this);
@@ -192,6 +175,22 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
     private void initAudioRecord() {
 
         recordView.setTimeChangeListener(this);
+        recordView.setOnParpareStartRecordingListener(this);
+        recordView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.e("WaveRecyclerView", "test_onScrollStateChanged:" + newState);
+                isScrolling = newState != RecyclerView.SCROLL_STATE_IDLE;
+                dealonPlayingSelection();
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                dealonPlaySelectionEnd();
+            }
+        });
 
         waveEdit.setTimeChangeListener(this);
         waveEdit.setOnWaveEditListener(this);
