@@ -39,11 +39,9 @@ import java.util.LinkedList;
 public class FansSoundFile {
 
     private onAudioRecordListener listener;
-    //保存的格式，mp3 或amr
-    public static boolean recordFormatIsMp3 = false;
 
     //采样率 就是1s采集多少个点，这里就16000个点就是16000个数据
-    private int mSampleRate = recordFormatIsMp3 ? 44100 : 8000;//44100 8000
+    private int mSampleRate = AudioConfig.recordFormatIsMp3 ? 44100 : 8000;//44100 8000
     // 设置音频的录制的声道CHANNEL_IN_STEREO为双声道，CHANNEL_CONFIGURATION_MONO为单声道
     private int channelConfig = AudioFormat.CHANNEL_IN_MONO;
     // 音频数据格式:PCM 16位每个样本。保证设备支持。PCM 8位每个样本。不一定能得到设备支持。
@@ -196,7 +194,7 @@ public class FansSoundFile {
                     mPCMSamples.put(buffer, 0, readSize);
                 }
                 calculateRealVolume(buffer, readSize);
-                // TODO: 2017/4/10  这里还要弄
+
 //                if (isRecording)
 //                    calculateTime((float) (mPCMSamples.position()) / mSampleRate);
 
@@ -252,7 +250,7 @@ public class FansSoundFile {
 
         // TODO: 22/03/2017 保存文件的时候要显示加载对话框，文件很大的时候，可能很慢
         if (!isRecording) {//没有录制
-            if (recordFormatIsMp3) {
+            if (AudioConfig.recordFormatIsMp3) {
                 try {
                     FansMp3EncodeThread thread = new FansMp3EncodeThread(getSamples(), getNumSamples(), file, buffer.length, getChannels(), 0, 0, waveBytes, listener);
                     thread.start();

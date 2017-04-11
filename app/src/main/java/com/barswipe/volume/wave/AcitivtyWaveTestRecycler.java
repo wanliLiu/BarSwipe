@@ -449,7 +449,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
     private void saveAudioFile() {
         if (ifCanSaveFile()) {
             // TODO: 2017/3/24  保存的文件位置  和保存文件过程中的加载框需要处理
-            File wolumPath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
+            File wolumPath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (AudioConfig.recordFormatIsMp3 ? ".mp3" : ".amr"));
             showActionDoingDialog();
             soundFile.saveAudioFile(wolumPath, new onEncodeCompleteListener() {
                 @Override
@@ -743,8 +743,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
             }
             currentStatus = ActionStatus.stopRecording;
             enterAudioEditUI(false);
-            // TODO: 2017/4/10 这里要助理哦 ，从编辑模式退出，注意时间显示
-//            pcmWaveView.updatePlayBackPosition();
+            recordView.updatePlayBackPosition();
             return true;
         }
         return false;

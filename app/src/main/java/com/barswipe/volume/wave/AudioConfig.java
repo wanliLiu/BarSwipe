@@ -56,4 +56,9 @@ public class AudioConfig {
      */
     public static final int _itemWaveCount = _itemSecondes * _waveCount;
 
+    /**
+     * 保存的格式，mp3 或amr
+     */
+    public static boolean recordFormatIsMp3 = false;
+
 }

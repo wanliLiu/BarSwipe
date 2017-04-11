@@ -66,6 +66,10 @@ public class AudioRecordView extends RecyclerView {
     private float playbackPosition = 0;
 
     private double startPlayTime;
+    /**
+     * 是否禁止时间显示更新
+     */
+    private boolean disableTimeChange = false;
 
     public AudioRecordView(Context context) {
         super(context);
@@ -448,10 +452,17 @@ public class AudioRecordView extends RecyclerView {
             pos = 0;
         playbackPosition = pos;
         logOut("滑动位置：" + pos);
-        if (timeChangeListener != null) {
+        if (timeChangeListener != null && !disableTimeChange) {
             double time = pixelsToMillisecs(pos) * 1.0f / 1000.0f;
             timeChangeListener.onTimeChange(isRecord, time, MusicSimilarityUtil.getRecordTimeString(time));
         }
+    }
+
+    /**
+     * 返回编辑模式的时候
+     */
+    public void updatePlayBackPosition() {
+        updateTimeSelection(false, playbackPosition);
     }
 
     /**
@@ -813,7 +824,15 @@ public class AudioRecordView extends RecyclerView {
             @Override
             public void run() {
                 adapter.notifyDataSetChanged();
+                disableTimeChange = true;
                 scrollBy(getMaxScrollOffset(), 0);
+
+                postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        disableTimeChange = false;
+                    }
+                }, 500);
             }
         });
     }

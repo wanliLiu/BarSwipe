@@ -378,7 +378,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     private void saveAudioFile() {
         if (ifCanSaveFile()) {
             // TODO: 2017/3/24  保存的文件位置  和保存文件过程中的加载框需要处理
-            File wolumPath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (FansSoundFile.recordFormatIsMp3 ? ".mp3" : ".amr"));
+            File wolumPath = FileUtil.getDownLoadFilePath(this, "fanAudioSave" + "_" + System.currentTimeMillis() + (AudioConfig.recordFormatIsMp3 ? ".mp3" : ".amr"));
             showActionDoingDialog();
             soundFile.saveAudioFile(wolumPath, new onEncodeCompleteListener() {
                 @Override
