@@ -262,7 +262,10 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                startRecord();
+                currentStatus = ActionStatus.stopRecording;
+                stopRecord();
+                updateUi();
+                Toast.makeText(AcitivtyWaveTestRecycler.this, "最多只能录制" + AudioConfig._totalTimeSec + "s", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -360,7 +363,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
     /**
      * 开始录制
      */
-    private void startRecord() {
+    private boolean startRecord() {
         isFromPlayingStop = false;
         if (isCanRecord && recordTotalTime < AudioConfig._totalTimeSec) {
             //界面准备开始录制
@@ -368,13 +371,12 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
             recordView.smoothStartRecording();
 //            //数据这里准备开始
 //            soundFile.startRecord();
+            return true;
         } else {
-            currentStatus = ActionStatus.stopRecording;
-            stopRecord();
-            updateUi();
             Toast.makeText(AcitivtyWaveTestRecycler.this, "最多只能录制" + AudioConfig._totalTimeSec + "s", Toast.LENGTH_SHORT).show();
         }
 
+        return false;
     }
 
     /**
@@ -680,8 +682,9 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
                 if (currentStatus == ActionStatus.parareStart ||
                         currentStatus == ActionStatus.stopRecording ||
                         currentStatus == ActionStatus.stopPlayAudio) {
+                    if (!startRecord())
+                        return;
                     currentStatus = ActionStatus.startRecording;
-                    startRecord();
                 } else if (currentStatus == ActionStatus.startRecording) {
                     currentStatus = ActionStatus.stopRecording;
                     stopRecord();

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.barswipe.R;
 
@@ -38,6 +39,16 @@ public class StudyAudioRecord extends AppCompatActivity {
 
             }
         });
+
+        final TextView textView = (TextView) findViewById(R.id.recordTime);
+        textView.setText(("能录制的最大时间：" + AudioConfig._totalTimeSec));
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textView.setText("能录制的最大时间：" + (AudioConfig._totalTimeSec += 10));
+            }
+        });
+
     }
 
 

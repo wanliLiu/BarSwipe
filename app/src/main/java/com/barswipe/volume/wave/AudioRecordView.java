@@ -255,12 +255,20 @@ public class AudioRecordView extends RecyclerView {
     }
 
     /**
+     * 获取录制的时间 单位s
+     *
+     * @return
+     */
+    private double getRecordTime() {
+        return pixelsToMillisecs(playbackPosition) / 1000.0f;
+    }
+
+    /**
      * 更新数据
      */
     public void updateData(double volume) {
         wavedata.add(String.valueOf(volume));
-        // TODO: 2017/4/11 位置有点不准确，到时候再看啥
-        if (getRecordWaveDataWidth() >= getCanRecordMaxOffset()) {
+        if (getRecordTime() > AudioConfig._totalTimeSec) {
             wavedata.remove(wavedata.size() - 1);
             if (timeChangeListener != null) {
                 timeChangeListener.onAudioRecordToMaxTime();
