@@ -24,7 +24,7 @@ public class WavePlayView extends BaseWaveView {
     /**
      * 是否显示playback
      */
-    private boolean isShowPlayBack = false;
+    private boolean isShowPlayBack = true;
 
     /**
      * 开始绘制
@@ -151,7 +151,7 @@ public class WavePlayView extends BaseWaveView {
      * 是否显示
      */
     public void showPlayback(boolean isShow) {
-        isShowPlayBack = isShow;
+//        isShowPlayBack = isShow;
     }
 
     /**

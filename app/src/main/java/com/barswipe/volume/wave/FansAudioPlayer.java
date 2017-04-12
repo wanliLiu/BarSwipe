@@ -2,6 +2,7 @@ package com.barswipe.volume.wave;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -81,7 +82,13 @@ public class FansAudioPlayer {
             public void run() {
                 try {
                     if (mListener != null) {
-                        mListener.onAudioPlayProgress(player.getCurrentPosition());
+                        int duration = player.getDuration();
+                        int leftTime = duration - player.getCurrentPosition() + 1000;
+                        if (leftTime >= duration)
+                            leftTime = duration;
+                        Log.e("播放剩余时间", leftTime + "");
+                        mListener.onAudioPlayProgress(leftTime);
+//                        mListener.onAudioPlayProgress(player.getCurrentPosition());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

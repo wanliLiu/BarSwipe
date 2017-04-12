@@ -91,9 +91,7 @@ public class MusicSimilarityUtil {
      * @return
      */
     public static String getRecordTimeSeconds(double elapsedTime) {
-        int sec = (int)(elapsedTime);
-        String strSec = (sec < 10 ? "0" + sec : String.valueOf(sec));
-        return strSec + "''";
+        return (int) (elapsedTime) + "''";
     }
 
 }

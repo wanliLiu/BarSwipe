@@ -219,7 +219,7 @@ public class AudioRecordView extends RecyclerView {
         else {
 //       logOut( "itemWidth---" + itemWidth);
 //       logOut( "getLeft--_" + view.getLeft());
-            scroolX = ((BaseWaveView) view).getHalfScreenWidth() + (position - 1) * view.getWidth() - view.getLeft() + 6;//这里是偏差
+            scroolX = ((BaseWaveView) view).getHalfScreenWidth() + (position - 1) * view.getWidth() - view.getLeft();//这里是偏差
         }
 
         logOut("getScollXDistance:" + scroolX);
@@ -239,19 +239,6 @@ public class AudioRecordView extends RecyclerView {
     public void test() {
         wavedata.add(String.valueOf(new Random().nextInt(150) + 5));
         dealOneWaveDataDisplay();
-    }
-
-    /**
-     * 获取能录制的最大时间，即距离
-     *
-     * @return
-     */
-    private int getCanRecordMaxOffset() {
-        BaseWaveView view = getBaseView();
-        if (view != null) {
-            return view.getCanRecordMaxOffset();
-        }
-        return 0;
     }
 
     /**

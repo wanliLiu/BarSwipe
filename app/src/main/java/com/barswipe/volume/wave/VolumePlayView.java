@@ -136,6 +136,7 @@ public class VolumePlayView extends FrameLayout implements View.OnClickListener,
      */
     public void setVolumeDuration(String durationStr) {
         audioDuration.setText(durationStr);
+        audioDuration.setTag(audioDuration.getText().toString());
     }
 
     /**
@@ -153,11 +154,24 @@ public class VolumePlayView extends FrameLayout implements View.OnClickListener,
     public void onAudioPlayComplete() {
         wavePlay.onAudioPlayComplete();
         audioPlay.setImageResource(R.mipmap.icon_play);
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                audioDuration.setText(audioDuration.getTag().toString());
+            }
+        });
     }
 
     @Override
-    public void onAudioPlayProgress(double timeMs) {
+    public void onAudioPlayProgress(final double timeMs) {
         wavePlay.updateData();
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                int timeSec = (int) (timeMs / 1000.f);
+                audioDuration.setText(timeSec + "''");
+            }
+        });
     }
 
     @Override
