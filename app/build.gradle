@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'org.quanqi.pgyer'
 
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
@@ -64,6 +65,18 @@ android {
 
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
+    }
+
+    pgyer {
+        _api_key = "690096af3bae82aa6b9cbd484914faa6"
+        uKey = "ba2f0666e1dd032935f1eb82e2c5021b"
+    }
+
+    apks {
+        release {
+            sourceFile = buildFile
+            distributionKey="测试"
+        }
     }
 }
 
