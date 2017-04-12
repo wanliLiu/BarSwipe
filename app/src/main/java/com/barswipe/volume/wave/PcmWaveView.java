@@ -149,7 +149,7 @@ public class PcmWaveView extends BaseWaveView {
                 startHeight = timeViewHeight - timeMargin;
                 for (int k = 0; k < _250ms; k++)
                     mCanvas.drawLine(_250ms_left + k * timeMargin, startHeight, _250ms_left + k * timeMargin, timeViewHeight, timeLinePain);
-                i += _250ms_left * _250ms;
+                i += _250ms * timeMargin;
             }
             if ((i - _1s) % (dividerCount * timeMargin) == 0) {
                 startHeight = 0;

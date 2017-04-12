@@ -73,6 +73,15 @@ public class ItemPcmWaveViewHead extends BaseWaveView {
         int _1s = viewWidth % (dividerCount * timeMargin);
         int _250ms = _1s / timeMargin;
         int _250ms_left = _1s % timeMargin;
+
+        if (isDebug) {
+            canvas.drawText("" + viewWidth, dip2px(10), timeViewHeight + dip2px(10), timeTextPaint);
+            canvas.drawText("" + timeMargin, dip2px(10), timeViewHeight + dip2px(20), timeTextPaint);
+            canvas.drawText("" + _1s, dip2px(10), timeViewHeight + dip2px(30), timeTextPaint);
+            canvas.drawText("" + _250ms, dip2px(10), timeViewHeight + dip2px(40), timeTextPaint);
+            canvas.drawText("" + _250ms_left, dip2px(10), timeViewHeight + dip2px(50), timeTextPaint);
+        }
+
         for (int i = _250ms_left; i <= viewWidth; i += timeMargin) {
             int startHeight;
             if (i == _250ms_left && _1s > 0) {
@@ -82,7 +91,7 @@ public class ItemPcmWaveViewHead extends BaseWaveView {
                     canvas.drawLine(x, startHeight, x, timeViewHeight, timeLinePain);
                 }
 
-                i += _250ms_left * _250ms;
+                i += _250ms * timeMargin;
             }
             if ((i - _1s) % (dividerCount * timeMargin) == 0) {
                 startHeight = 0;
