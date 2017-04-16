@@ -28,9 +28,11 @@ import android.widget.Toast;
 
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
+import com.barswipe.jni.Jnidemo;
 import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
+import com.soli.jnistudy.JniTest;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.Serializable;
@@ -142,13 +144,16 @@ public class LaunchActivity extends BaseActivity {
         MakeItRunOnUIThread();
 
         dbflowDest();
+
+        Log.e("Jni测试", "Jni测试--from-app---" + Jnidemo.getStringFromJni());
+        Log.e("Jni测试","Jni测试--from-jnistudy---" + JniTest.getStringFromJni());
+
     }
 
     /**
      * dbflow 测试
      */
-    private void dbflowDest()
-    {
+    private void dbflowDest() {
         DataBaseManager manager = new DataBaseManager();
         Student s1 = new Student();
         s1.name = "hello";
@@ -156,11 +161,9 @@ public class LaunchActivity extends BaseActivity {
         manager.insertData(s1.name, s1.age);
 
         List<Student> list = manager.getData();
-        if (list != null)
-        {
-            for(Student temp : list)
-            {
-                Log.e("dbflow 里的数据",temp.toString());
+        if (list != null) {
+            for (Student temp : list) {
+                Log.e("dbflow 里的数据", temp.toString());
             }
         }
     }

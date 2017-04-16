@@ -1,0 +1,70 @@
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * Gradle配置最佳实践
+ * http://blog.csdn.net/maxtung14/article/details/53288846?utm_source=itdadao&utm_medium=referral
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+if (project.jnistudyIsLibrary)
+    apply plugin: 'com.android.library'
+else
+    apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+
+        minSdkVersion project.ANDROID_MIN_SDK_VERSION
+        targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
+        versionCode 1
+        versionName "1.0"
+
+        ndk {
+            moduleName "JniTest"
+            ldLibs "log", "z", "m", "jnigraphics"
+            abiFilters "armeabi", "armeabi-v7a", "x86", "x86_64"
+        }
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            if (project.jnistudyIsLibrary) {
+                manifest.srcFile 'src/main/AndroidManifest_library.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
+}

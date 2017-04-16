@@ -24,6 +24,12 @@ android {
 //        // dex突破65535的限制
         multiDexEnabled true
 
+        ndk {
+            moduleName "jnidemo"
+            ldLibs "log", "z", "m", "jnigraphics"
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+        }
+
     }
 
     signingConfigs {
@@ -75,7 +81,7 @@ android {
     apks {
         release {
             sourceFile = buildFile
-            distributionKey="测试"
+            distributionKey = "测试"
         }
     }
 }
@@ -114,6 +120,8 @@ dependencies {
     compile project(':autobahn')
     compile project(':waveview')
     compile project(':wavelibrary')
+    if (project.jnistudyIsLibrary)
+        compile project(':jnistudy')
 
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"
