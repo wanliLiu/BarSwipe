@@ -69,4 +69,6 @@ project.ext {
 
     //jnistudy 在lirary 和application中切换
     jnistudyIsLibrary = true
+
+    lameIsLibrary = false
 }

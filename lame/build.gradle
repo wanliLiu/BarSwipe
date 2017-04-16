@@ -1,4 +1,8 @@
-apply plugin: 'com.android.library'
+
+if (project.lameIsLibrary)
+    apply plugin: 'com.android.library'
+else
+    apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
@@ -10,11 +14,28 @@ android {
         targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
+
+        ndk {
+            moduleName "mp3lame"
+            ldLibs "log", "z", "m", "jnigraphics"
+            abiFilters "armeabi", "armeabi-v7a", "x86", "x86-64", "arm64-v8a", "mips", "mips64"
+        }
+
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            if (project.lameIsLibrary) {
+                manifest.srcFile 'src/main/AndroidManifest_library.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
         }
     }
 }
