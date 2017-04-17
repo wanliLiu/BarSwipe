@@ -31,6 +31,9 @@ android {
 
     sourceSets {
         main {
+
+            jni.srcDirs = []//阻止gradlew自动编译
+
             if (project.lameIsLibrary) {
                 manifest.srcFile 'src/main/AndroidManifest_library.xml'
             } else {
