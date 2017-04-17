@@ -366,20 +366,8 @@
             android:name=".volume.wave.AcitivtyWaveTest"
             android:hardwareAccelerated="false" />
         <activity android:name=".volume.wave.StudyAudioRecord" />
-        <activity android:name=".volume.wave.AcitivtyWaveTestRecycler">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".volume.wave.ActivityWaveDisplayTest">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".volume.wave.AcitivtyWaveTestRecycler"/>
+        <activity android:name=".volume.wave.ActivityWaveDisplayTest"/>
 
         <activity
             android:name=".volume.wave.ActivityVolumPlay"
