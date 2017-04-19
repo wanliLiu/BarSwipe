@@ -36,6 +36,7 @@ import com.soli.jnistudy.JniTest;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.Serializable;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -148,6 +149,7 @@ public class LaunchActivity extends BaseActivity {
         Log.e("Jni测试", "Jni测试--from-app---" + Jnidemo.getStringFromJni());
         Log.e("Jni测试","Jni测试--from-jnistudy---" + JniTest.getStringFromJni());
 
+        Log.e("byte大端小段模式",ByteOrder.nativeOrder().toString());
     }
 
     /**

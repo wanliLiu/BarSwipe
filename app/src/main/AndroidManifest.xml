@@ -410,6 +410,7 @@
             android:name=".volume.edit.ChooseContactActivity"
             android:theme="@style/AppThemeArcLayout" />
         <activity android:name=".volume.pcm.pcm2amr.MainActivity_pcm_amr" />
+        <activity android:name=".volume.RecordPlayActivity"/>
     </application>
 
 </manifest>

@@ -104,6 +104,14 @@
                 android:text="jobTest"
                 android:textSize="18sp" />
 
+            <Button
+                android:id="@+id/recycle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#bebebe"
+                android:padding="10dp"
+                android:text="Re_Pl"
+                android:textSize="18sp" />
         </LinearLayout>
 
 

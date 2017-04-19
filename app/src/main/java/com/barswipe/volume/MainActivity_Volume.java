@@ -86,6 +86,13 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         play.setOnClickListener(this);
 
 
+        RxView.clicks(findViewById(R.id.recycle))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(MainActivity_Volume.this, RecordPlayActivity.class));
+                    }
+                });
         RxView.clicks(findViewById(R.id.job))
                 .subscribe(new Action1<Void>() {
                     @Override
