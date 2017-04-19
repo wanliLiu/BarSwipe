@@ -186,7 +186,8 @@ public class SoundFile {
 
     public ShortBuffer getSamples() {
         if (mDecodedSamples != null) {
-            return mDecodedSamples.asReadOnlyBuffer();
+//            return mDecodedSamples.asReadOnlyBuffer();
+            return mDecodedSamples;
         } else {
             return null;
         }

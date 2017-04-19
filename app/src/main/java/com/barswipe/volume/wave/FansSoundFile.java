@@ -101,7 +101,8 @@ public class FansSoundFile {
 
     public ShortBuffer getSamples() {
         if (mPCMSamples != null) {
-            return mPCMSamples.asReadOnlyBuffer();
+//            return mPCMSamples.asReadOnlyBuffer();
+            return mPCMSamples;
         } else {
             return null;
         }
@@ -127,19 +128,27 @@ public class FansSoundFile {
      *
      */
     public void startRecord() {
-        isRecording = true;
-        audioRecord.startRecording();
-        recordThread = new audioRecordThread();
-        recordThread.start();
+        try {
+            isRecording = true;
+            audioRecord.startRecording();
+            recordThread = new audioRecordThread();
+            recordThread.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      *
      */
     public void stopRecord() {
-        isRecording = false;
-        audioRecord.stop();
-        recordThread = null;
+        try {
+            isRecording = false;
+            audioRecord.stop();
+            recordThread = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

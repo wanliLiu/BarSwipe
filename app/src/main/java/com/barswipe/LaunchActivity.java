@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -147,9 +150,39 @@ public class LaunchActivity extends BaseActivity {
         dbflowDest();
 
         Log.e("Jni测试", "Jni测试--from-app---" + Jnidemo.getStringFromJni());
-        Log.e("Jni测试","Jni测试--from-jnistudy---" + JniTest.getStringFromJni());
+        Log.e("Jni测试", "Jni测试--from-jnistudy---" + JniTest.getStringFromJni());
 
-        Log.e("byte大端小段模式",ByteOrder.nativeOrder().toString());
+        Log.e("byte大端小段模式", ByteOrder.nativeOrder().toString());
+
+        findAudioRecord();
+    }
+
+    /**
+     * @return
+     */
+    public void findAudioRecord() {
+        int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
+        for (int rate : mSampleRates) {
+            for (short audioFormat : new short[]{AudioFormat.ENCODING_PCM_8BIT, AudioFormat.ENCODING_PCM_16BIT}) {
+                for (short channelConfig : new short[]{AudioFormat.CHANNEL_IN_MONO, AudioFormat.CHANNEL_IN_STEREO}) {
+                    try {
+                        int bufferSize = AudioRecord.getMinBufferSize(rate, channelConfig, audioFormat);
+
+                        if (bufferSize != AudioRecord.ERROR_BAD_VALUE) {
+                            // check if we can instantiate and have a success
+                            AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, rate, channelConfig, audioFormat, bufferSize);
+
+                            if (recorder.getState() == AudioRecord.STATE_INITIALIZED) {
+                                Log.e("合适的频率", "Attempting rate " + rate + "Hz, bits: " + audioFormat + ", channel: " + channelConfig);
+                            }
+
+                        }
+                    } catch (Exception e) {
+                        Log.e("合适的频率", rate + "Exception, keep trying.", e);
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.barswipe.R;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 /**
  * Created by Soli on 2017/4/10.
@@ -49,6 +54,7 @@ public class StudyAudioRecord extends AppCompatActivity {
             }
         });
 
+        byteBufferTest();
     }
 
 
@@ -63,6 +69,29 @@ public class StudyAudioRecord extends AppCompatActivity {
             case R.id.testTwoDemo:
                 startActivity(new Intent(this, AcitivtyWaveTestRecycler.class));
                 break;
+        }
+    }
+
+
+    /**
+     *
+     */
+    private void byteBufferTest() {
+        short[] tesk = new short[]{1,2,3,4,5,6,7,8,9};
+        ByteBuffer buffer = ByteBuffer.allocate(30);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        ShortBuffer shot = buffer.asShortBuffer();
+        shot.put(tesk);
+        for (int i = 0; i < shot.position();i++){
+            Log.e("Buffe数据：", "" + shot.get(i));
+        }
+
+        /**
+         * android 7.0上这个弄出来 大小端的方式没有了
+         */
+        ShortBuffer tes = shot.asReadOnlyBuffer();
+        for (int i = 0; i < tes.position();i++){
+            Log.e("Buffe数据tes：", "" + tes.get(i));
         }
     }
 }

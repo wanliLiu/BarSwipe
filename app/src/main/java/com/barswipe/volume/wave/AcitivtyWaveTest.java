@@ -1,5 +1,6 @@
 package com.barswipe.volume.wave;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,11 +18,13 @@ import android.widget.Toast;
 import com.barswipe.R;
 import com.barswipe.util.FileUtil;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
+import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.functions.Action1;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -112,7 +115,17 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
         updateUi();
 
-        initAudioRecord();
+        RxPermissions.getInstance(this)
+                .request(Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        if (aBoolean)
+                            initAudioRecord();
+                        else
+                            AcitivtyWaveTest.this.finish();
+                    }
+                });
     }
 
     /**
