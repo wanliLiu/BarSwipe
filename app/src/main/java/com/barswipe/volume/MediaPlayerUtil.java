@@ -2,11 +2,7 @@ package com.barswipe.volume;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.TimedText;
 import android.util.Log;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by chenjiahuan on 16/5/8.
@@ -34,15 +30,15 @@ public class MediaPlayerUtil {
 //                    mediaPlayer.seekTo(12746);
                     mediaPlayer.start();//开始或恢复播放
                     Log.e("MediaPlayerUtil", "onPrepared");
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            int temp = mediaPlayer.getCurrentPosition();
-                            Log.e("MediaPlayerUtil", "playback_position+" + (temp - last));
-                            last = temp;
-                        }
-                    }, 10, 83);
+//                    Timer timer = new Timer();
+//                    timer.schedule(new TimerTask() {
+//                        @Override
+//                        public void run() {
+//                            int temp = mediaPlayer.getCurrentPosition();
+//                            Log.e("MediaPlayerUtil", "playback_position+" + (temp - last));
+//                            last = temp;
+//                        }
+//                    }, 10, 83);
                 }
             });
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -58,12 +54,12 @@ public class MediaPlayerUtil {
 //                    mediaPlayer.start();//开始或恢复播放
                 }
             });
-            mediaPlayer.setOnTimedTextListener(new MediaPlayer.OnTimedTextListener() {
-                @Override
-                public void onTimedText(MediaPlayer mp, TimedText text) {
-                    Log.e("MediaPlayerUtil", "onTimedText+" + text.getText());
-                }
-            });
+//            mediaPlayer.setOnTimedTextListener(new MediaPlayer.OnTimedTextListener() {
+//                @Override
+//                public void onTimedText(MediaPlayer mp, TimedText text) {
+//                    Log.e("MediaPlayerUtil", "onTimedText+" + text.getText());
+//                }
+//            });
 
             mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override

@@ -292,11 +292,11 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
                                     Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-//                                audiorecorder();
-//                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
-//                                countDownTimer.start();
+                                audiorecorder();
+                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
+                                countDownTimer.start();
 
-                                startRecord();
+//                                startRecord();
                             }
                             break;
                             case R.id.play:
