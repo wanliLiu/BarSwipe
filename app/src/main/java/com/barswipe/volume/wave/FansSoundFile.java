@@ -100,9 +100,9 @@ public class FansSoundFile {
     }
 
     public ShortBuffer getSamples() {
-        if (mPCMSamples != null) {
+        if (mPCMBytes != null) {
 //            return mPCMSamples.asReadOnlyBuffer();
-            return mPCMSamples;
+            return mPCMBytes.asShortBuffer();
         } else {
             return null;
         }

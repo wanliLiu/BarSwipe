@@ -54,7 +54,7 @@ public class BaseWaveView extends View {
     private int canRecordMaxOffset;
 
     protected int waveCount = 0;
-    protected float waveWidth = 0;
+    protected int waveWidth = 0;
 
     protected int waveCenterPos = 0;
 
@@ -115,7 +115,8 @@ public class BaseWaveView extends View {
      * 获取默认的配置参数
      */
     private void getDefaultConfig() {
-        timeMargin = dip2px(AudioConfig._timeMargin);
+//        timeMargin = dip2px(AudioConfig._timeMargin);
+        timeMargin = AudioConfig._timeMargin;
         logOut("timeMargin----" + timeMargin);
         timeSpace = AudioConfig._timeSpace;
         dividerCount = AudioConfig._dividerCount;
@@ -138,7 +139,7 @@ public class BaseWaveView extends View {
 //        waveWidth = (new BigDecimal(timeMargin * 1.0f / waveCount * 1.0f).setScale(0, BigDecimal.ROUND_HALF_UP)).floatValue();
 //        waveWidth = timeMargin * 1.0f / waveCount * 1.0f;
 
-        waveWidth = (float) (dividerCount * timeMargin / waveCount);
+        waveWidth = (dividerCount * timeMargin / waveCount);
 
         logOut("waveWidth----" + waveWidth);
         logOut("waveCount----" + waveCount);
@@ -299,7 +300,7 @@ public class BaseWaveView extends View {
         this.canRecordMaxOffset = canRecordMaxOffset;
     }
 
-    public double getWaveWidth() {
+    public int getWaveWidth() {
         return waveWidth;
     }
 
