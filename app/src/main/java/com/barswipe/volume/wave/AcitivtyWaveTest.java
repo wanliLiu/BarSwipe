@@ -24,6 +24,7 @@ import java.io.File;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 import rx.functions.Action1;
 
 import static android.view.View.GONE;
@@ -101,6 +102,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record_view);
         ButterKnife.bind(this);
+
+        EventBus.getDefault().register(this);
 
         btnPlay.setOnClickListener(this);
         btnRecord.setOnClickListener(this);
@@ -302,6 +305,7 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             soundFile.release();
         if (player != null)
             player.release();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -687,21 +691,35 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     }
 
     /**
+     * 耳机插入广播
+     * @param event
+     */
+    public void onEventMainThread(HeadSetEvent event) {
+        quitCurrentAction();
+    }
+    /**
+     * 停止当前的操作
+     */
+    private void quitCurrentAction() {
+        if (currentStatus == ActionStatus.playAudio) {
+            currentStatus = ActionStatus.stopRecording;
+            updateUi();
+            stopPlay(false);
+        } else if (currentStatus == ActionStatus.startRecording) {
+            currentStatus = ActionStatus.stopRecording;
+            updateUi();
+            stopRecord();
+        }
+    }
+
+    /**
      * 退出给出相应提示，如果没有录制，就直接退出，如果正在播放，停止播放，给出是否要进一步退出的提示
      *
      * @return
      */
     private boolean exitAttention() {
         if (recordTotalTime > 0) {
-            if (currentStatus == ActionStatus.playAudio) {
-                currentStatus = ActionStatus.stopRecording;
-                updateUi();
-                stopPlay(false);
-            } else if (currentStatus == ActionStatus.startRecording) {
-                currentStatus = ActionStatus.stopRecording;
-                updateUi();
-                stopRecord();
-            }
+            quitCurrentAction();
             Toast.makeText(this, "有音频录制的数据这里需要弹出确认框", Toast.LENGTH_LONG).show();
             // TODO: 2017/3/24 暂时改为true,方便调试,实际为false
             return true;
