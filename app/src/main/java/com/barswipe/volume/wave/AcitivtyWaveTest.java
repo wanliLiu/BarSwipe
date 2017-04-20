@@ -2,13 +2,22 @@ package com.barswipe.volume.wave;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothProfile;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -97,6 +106,9 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
     private ProgressDialog dialog;
 
+
+    private  HeadPhonesRecivier recivier;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,8 +141,65 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                             AcitivtyWaveTest.this.finish();
                     }
                 });
+
+
+        registerReciver();
     }
 
+
+    /**
+     *
+     */
+    private void registerReciver() {
+        recivier = new HeadPhonesRecivier();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(recivier.HeadSetAction);
+        filter.addAction(recivier.BluetoothHeadSet);
+        filter.addAction(recivier.AnotherAction);
+
+        registerReceiver(recivier, filter);
+    }
+
+    private class HeadPhonesRecivier extends BroadcastReceiver {
+
+        //有线耳机
+        public String HeadSetAction = Intent.ACTION_HEADSET_PLUG;
+
+        //蓝牙耳机
+        public String BluetoothHeadSet = BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED;
+
+        public String AnotherAction = AudioManager.ACTION_AUDIO_BECOMING_NOISY;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+            if (!TextUtils.isEmpty(action)) {
+                boolean isHaveHeadSet = false;
+                if (action.equals(HeadSetAction)) {
+                    if (intent.hasExtra("state")) {
+                        // 插入设备
+                        if (intent.getIntExtra("state", 0) == 1) {
+                            isHaveHeadSet = true;
+                        }
+                        // 拔出设备
+                        else if (intent.getIntExtra("state", 0) == 0) {
+                            isHaveHeadSet = false;
+                        }
+                    }
+                } else if (action.equals(BluetoothHeadSet)) {
+                    BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+                    if (adapter != null)
+                        isHaveHeadSet = adapter.getProfileConnectionState(BluetoothProfile.HEADSET) == BluetoothProfile.STATE_DISCONNECTED ? false : true;
+                } else if (action.equals(AnotherAction)) {
+                    isHaveHeadSet = false;
+                }
+                Log.e("耳机状态",isHaveHeadSet ? "插入" : "拔出");
+                EventBus.getDefault().post(new HeadSetEvent(isHaveHeadSet));
+            }
+
+        }
+    }
     /**
      *
      */
@@ -306,6 +375,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         if (player != null)
             player.release();
         EventBus.getDefault().unregister(this);
+
+        unregisterReceiver(recivier);
     }
 
     /**
@@ -694,9 +765,16 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
      * 耳机插入广播
      * @param event
      */
-    public void onEventMainThread(HeadSetEvent event) {
+    public void onEvent(HeadSetEvent event) {
         quitCurrentAction();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        quitCurrentAction();
+    }
+
     /**
      * 停止当前的操作
      */

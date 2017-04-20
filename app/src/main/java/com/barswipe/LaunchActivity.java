@@ -34,6 +34,7 @@ import com.barswipe.FloatView.FloatWindowService;
 import com.barswipe.jni.Jnidemo;
 import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
+import com.barswipe.volume.wave.HeadPhonesRecivier;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.soli.jnistudy.JniTest;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -72,6 +73,9 @@ public class LaunchActivity extends BaseActivity {
 
     private Observable<Long> defer, just, interval;
     private Subscriber<Long> intervalSubscriber;
+
+
+    private HeadPhonesRecivier recivier;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,7 +159,24 @@ public class LaunchActivity extends BaseActivity {
         Log.e("byte大端小段模式", ByteOrder.nativeOrder().toString());
 
         findAudioRecord();
+
+        registerReciver();
     }
+
+
+    /**
+     *
+     */
+    private void registerReciver() {
+//        recivier = new HeadPhonesRecivier();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(recivier.HeadSetAction);
+//        filter.addAction(recivier.BluetoothHeadSet);
+//        filter.addAction(recivier.AnotherAction);
+//
+//        registerReceiver(recivier, filter);
+    }
+
 
     /**
      * @return
@@ -1129,6 +1150,8 @@ public class LaunchActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        if (recivier != null)
+            unregisterReceiver(recivier);
     }
 
     @Override

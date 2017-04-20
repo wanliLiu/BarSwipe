@@ -19,12 +19,12 @@ import de.greenrobot.event.EventBus;
 public class HeadPhonesRecivier extends BroadcastReceiver {
 
     //有线耳机
-    private String HeadSetAction = "android.intent.action.HEADSET_PLUG";
+    public String HeadSetAction = Intent.ACTION_HEADSET_PLUG;
 
     //蓝牙耳机
-    private String BluetoothHeadSet = BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED;
+    public String BluetoothHeadSet = BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED;
 
-    private String AnotherAction = AudioManager.ACTION_AUDIO_BECOMING_NOISY;
+    public String AnotherAction = AudioManager.ACTION_AUDIO_BECOMING_NOISY;
 
     @Override
     public void onReceive(Context context, Intent intent) {
