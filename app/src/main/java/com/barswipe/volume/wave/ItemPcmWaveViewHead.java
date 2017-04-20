@@ -80,6 +80,7 @@ public class ItemPcmWaveViewHead extends BaseWaveView {
             canvas.drawText("" + _1s, dip2px(10), timeViewHeight + dip2px(30), timeTextPaint);
             canvas.drawText("" + _250ms, dip2px(10), timeViewHeight + dip2px(40), timeTextPaint);
             canvas.drawText("" + _250ms_left, dip2px(10), timeViewHeight + dip2px(50), timeTextPaint);
+            canvas.drawText("" + getContext().getResources().getDisplayMetrics().density, dip2px(10), timeViewHeight + dip2px(60), timeTextPaint);
         }
 
         for (int i = _250ms_left; i <= viewWidth; i += timeMargin) {

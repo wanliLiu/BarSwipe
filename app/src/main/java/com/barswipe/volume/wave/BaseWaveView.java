@@ -115,8 +115,10 @@ public class BaseWaveView extends View {
      * 获取默认的配置参数
      */
     private void getDefaultConfig() {
-//        timeMargin = dip2px(AudioConfig._timeMargin);
-        timeMargin = AudioConfig._timeMargin;
+        timeMargin = dip2px(AudioConfig._timeMargin);
+        if (timeMargin % 5 != 0) {
+            timeMargin = (timeMargin / 5) * 5 + 5;
+        }
         logOut("timeMargin----" + timeMargin);
         timeSpace = AudioConfig._timeSpace;
         dividerCount = AudioConfig._dividerCount;

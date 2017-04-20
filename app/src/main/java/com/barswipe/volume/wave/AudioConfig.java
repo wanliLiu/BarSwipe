@@ -7,9 +7,9 @@ package com.barswipe.volume.wave;
 public class AudioConfig {
 
     /**
-     * 一小格时间宽度，单位像素
+     * 一小格时间宽度，单位dp
      */
-    public static final int _timeMargin = 30;
+    public static final int _timeMargin = 10;
 
     /**
      * 一小格时间 单位ms
@@ -39,7 +39,7 @@ public class AudioConfig {
     /**
      * 录制的最大时间 单位s
      */
-    public static  int _totalTimeSec = 10;//* 60
+    public static int _totalTimeSec = 10 * 60;//
 
     /**
      * 一个波形柱子代表的时间
@@ -49,7 +49,7 @@ public class AudioConfig {
     /**
      * 一个item绘制几s的时间
      */
-    public static final int _itemSecondes = 6;
+    public static final int _itemSecondes = 4;
 
     /**
      * 一个大隔总共有好多波形柱子
