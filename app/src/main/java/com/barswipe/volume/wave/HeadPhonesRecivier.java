@@ -18,12 +18,16 @@ import de.greenrobot.event.EventBus;
 
 public class HeadPhonesRecivier extends BroadcastReceiver {
 
-    //有线耳机
+    //有线耳机插入
     public String HeadSetAction = Intent.ACTION_HEADSET_PLUG;
 
     //蓝牙耳机
     public String BluetoothHeadSet = BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED;
 
+    //电话相关监听
+    public String PhoneAction = Intent.ACTION_NEW_OUTGOING_CALL;
+
+    //有线耳机拔掉
     public String AnotherAction = AudioManager.ACTION_AUDIO_BECOMING_NOISY;
 
     @Override
@@ -40,7 +44,8 @@ public class HeadPhonesRecivier extends BroadcastReceiver {
                     }
                     // 拔出设备
                     else if (intent.getIntExtra("state", 0) == 0) {
-                        isHaveHeadSet = false;
+//                        isHaveHeadSet = false;
+                        return;
                     }
                 }
             } else if (action.equals(BluetoothHeadSet)) {
@@ -49,10 +54,12 @@ public class HeadPhonesRecivier extends BroadcastReceiver {
                     isHaveHeadSet = adapter.getProfileConnectionState(BluetoothProfile.HEADSET) == BluetoothProfile.STATE_DISCONNECTED ? false : true;
             } else if (action.equals(AnotherAction)) {
                 isHaveHeadSet = false;
+            } else if (action.equals(PhoneAction)) {
+                //只要知道要操作就行了
             }
-            Log.e("耳机状态",isHaveHeadSet ? "插入" : "拔出");
-            EventBus.getDefault().post(new HeadSetEvent(isHaveHeadSet));
+            Log.e("中断状态", isHaveHeadSet ? "插入" : "拔出");
+            EventBus.getDefault().post(new HeadSetEvent());
         }
-
     }
+
 }

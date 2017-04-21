@@ -6,17 +6,4 @@ package com.barswipe.volume.wave;
 
 public class HeadSetEvent {
 
-    private boolean isSet = false;
-
-    public HeadSetEvent(boolean set) {
-        isSet = set;
-    }
-
-    public boolean isSet() {
-        return isSet;
-    }
-
-    public void setSet(boolean set) {
-        isSet = set;
-    }
 }

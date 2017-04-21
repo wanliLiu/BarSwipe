@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -168,13 +169,14 @@ public class LaunchActivity extends BaseActivity {
      *
      */
     private void registerReciver() {
-//        recivier = new HeadPhonesRecivier();
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction(recivier.HeadSetAction);
-//        filter.addAction(recivier.BluetoothHeadSet);
-//        filter.addAction(recivier.AnotherAction);
-//
-//        registerReceiver(recivier, filter);
+        recivier = new HeadPhonesRecivier();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(recivier.HeadSetAction);
+        filter.addAction(recivier.BluetoothHeadSet);
+        filter.addAction(recivier.PhoneAction);
+        filter.addAction(recivier.AnotherAction);
+
+        registerReceiver(recivier, filter);
     }
 
 
