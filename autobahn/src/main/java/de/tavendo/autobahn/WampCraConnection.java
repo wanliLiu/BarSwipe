@@ -18,6 +18,9 @@
 
 package de.tavendo.autobahn;
 
+import android.util.Base64;
+import android.util.Log;
+
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -25,9 +28,6 @@ import java.security.SignatureException;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
-import android.util.Base64;
-import android.util.Log;
 
 public class WampCraConnection extends WampConnection implements WampCra {
 

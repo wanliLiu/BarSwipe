@@ -18,19 +18,20 @@
 
 package de.tavendo.autobahn;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+
+import org.apache.http.message.BasicNameValuePair;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.channels.SocketChannel;
 import java.util.List;
-import org.apache.http.message.BasicNameValuePair;
-
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
 
 public class WebSocketConnection implements WebSocket {
 

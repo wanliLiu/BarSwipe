@@ -18,17 +18,18 @@
 
 package de.tavendo.autobahn;
 
-import java.io.IOException;
-import java.net.SocketException;
-import java.nio.channels.SocketChannel;
-import java.util.Random;
-
-import org.apache.http.NameValuePair;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
+
+import org.apache.http.NameValuePair;
+
+import java.io.IOException;
+import java.net.SocketException;
+import java.nio.channels.SocketChannel;
+import java.util.Random;
 
 /**
  * WebSocket writer, the sending leg of a WebSockets connection.

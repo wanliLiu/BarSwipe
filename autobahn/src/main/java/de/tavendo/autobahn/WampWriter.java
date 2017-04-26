@@ -18,8 +18,9 @@
 
 package de.tavendo.autobahn;
 
-import java.io.IOException;
-import java.nio.channels.SocketChannel;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerationException;
@@ -27,9 +28,8 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.MappingJsonFactory;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
+import java.io.IOException;
+import java.nio.channels.SocketChannel;
 
 /**
  * Autobahn WAMP writer, the transmitting leg of a WAMP connection.

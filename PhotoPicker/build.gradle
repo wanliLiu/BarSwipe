@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "0.8.5"
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {

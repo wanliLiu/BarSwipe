@@ -33,6 +33,9 @@ android {
         exclude 'META-INF/LGPL2.1'
         exclude 'META-INF/ASL2.0'
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {

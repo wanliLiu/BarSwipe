@@ -92,6 +92,10 @@ android {
             distributionKey = "gradle 自动上传到蒲公英测试"
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {

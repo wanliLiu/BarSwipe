@@ -18,17 +18,17 @@
 
 package de.tavendo.autobahn;
 
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.util.Pair;
+
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 import java.util.Map;
-
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.util.Pair;
 
 /**
  * WebSocket reader, the receiving leg of a WebSockets connection.
