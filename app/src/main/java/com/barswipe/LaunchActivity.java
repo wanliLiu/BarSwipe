@@ -173,7 +173,8 @@ public class LaunchActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(recivier.HeadSetAction);
         filter.addAction(recivier.BluetoothHeadSet);
-        filter.addAction(recivier.PhoneAction);
+        filter.addAction(recivier.CallPhoneAction);
+        filter.addAction(recivier.PhoneStateAction);
         filter.addAction(recivier.AnotherAction);
 
         registerReceiver(recivier, filter);
