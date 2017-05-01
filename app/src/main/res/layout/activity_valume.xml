@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:text="录制的时间"
             android:textSize="15sp" />
 
@@ -20,16 +23,20 @@
             android:id="@+id/timeInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/temp"
             android:hint="点击输入录制的时间,以秒为单位"
             android:inputType="number"
             android:textColorHint="@color/red"
-            android:textSize="15sp" />
-    </LinearLayout>
+            android:textSize="15sp"
+            app:layout_widthPercent="50%" />
+    </android.support.percent.PercentRelativeLayout>
 
-    <LinearLayout
+    <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_marginTopPercent="10%"
         android:orientation="horizontal">
 
         <Button
@@ -40,38 +47,45 @@
             android:background="#bebebe"
             android:padding="10dp"
             android:text="1"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:layout_widthPercent="20%" />
 
         <Button
             android:id="@+id/audioMaker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/audioWave"
             android:background="#bebebe"
             android:padding="10dp"
             android:text="2"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:layout_widthPercent="15%" />
 
         <Button
             android:id="@+id/AudioFxActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/audioMaker"
             android:background="#bebebe"
             android:padding="10dp"
             android:text="3"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:layout_widthPercent="15%" />
 
         <Button
             android:id="@+id/goodView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/AudioFxActivity"
             android:background="#bebebe"
             android:padding="10dp"
             android:text="Good"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:textSize="18sp"
+            app:layout_widthPercent="25%" />
+    </android.support.percent.PercentRelativeLayout>
 
 
     <LinearLayout

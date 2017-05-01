@@ -20,4 +20,5 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${supportPackageVersion}"
     compile "com.android.support:design:${supportPackageVersion}"
     compile "com.android.support:gridlayout-v7:${supportPackageVersion}"
+    compile "com.android.support:percent:${supportPackageVersion}"
 }
