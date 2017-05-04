@@ -1,16 +1,21 @@
 package com.barswipe.volume.wave;
 
 import android.content.Intent;
+import android.media.AudioFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.barswipe.R;
+import com.barswipe.volume.pcm.pcm2amr.ToastUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -21,6 +26,8 @@ import java.nio.ShortBuffer;
  */
 
 public class StudyAudioRecord extends AppCompatActivity {
+
+    private EditText quality,kbps;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +52,30 @@ public class StudyAudioRecord extends AppCompatActivity {
             }
         });
 
+        final CheckBox checkChannel = (CheckBox) findViewById(R.id.checkChannel);
+        checkChannel.setChecked(FansSoundFile.channelConfig == AudioFormat.CHANNEL_IN_MONO);
+        if (FansSoundFile.channelConfig == AudioFormat.CHANNEL_IN_MONO)
+            checkChannel.setText("单通道");
+        else
+            checkChannel.setText("双通道");
+        checkChannel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    checkChannel.setText("单通道");
+                    FansSoundFile.channelConfig= AudioFormat.CHANNEL_IN_MONO;
+                    FansMp3EncodeThread.DEFAULT_LAME_IN_CHANNEL = 1;
+                }
+                else{
+                    checkChannel.setText("双通道");
+                    FansSoundFile.channelConfig= AudioFormat.CHANNEL_IN_STEREO;
+                    FansMp3EncodeThread.DEFAULT_LAME_IN_CHANNEL = 2;
+                }
+
+
+            }
+        });
+
         final TextView textView = (TextView) findViewById(R.id.recordTime);
         textView.setText(("能录制的最大时间：" + AudioConfig._totalTimeSec));
         textView.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +85,53 @@ public class StudyAudioRecord extends AppCompatActivity {
             }
         });
 
+
+        quality = (EditText) findViewById(R.id.quality);
+        kbps = (EditText)findViewById(R.id.kbps);
+
+        quality.setText(FansMp3EncodeThread.DEFAULT_LAME_MP3_QUALITY + "");
+        quality.addTextChangedListener(new texchangelistener(0));
+        kbps.setText(FansMp3EncodeThread.DEFAULT_LAME_MP3_BIT_RATE + "");
+        kbps.addTextChangedListener(new texchangelistener(1));
+
         byteBufferTest();
+    }
+
+    /**
+     *
+     */
+    private class texchangelistener implements TextWatcher{
+
+        private int type;
+        public texchangelistener(int text){
+            type = text;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+            try {
+                if (type == 0){
+                    FansMp3EncodeThread.DEFAULT_LAME_MP3_QUALITY = Integer.valueOf(quality.getText().toString());
+                }else{
+                    FansMp3EncodeThread.DEFAULT_LAME_MP3_BIT_RATE = Integer.valueOf(kbps.getText().toString());
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                ToastUtil.showLong(StudyAudioRecord.this,"输入有问题");
+            }
+
+        }
     }
 
 

@@ -51,6 +51,11 @@
             android:text="组件进入" />
 
         <CheckBox
+            android:id="@+id/checkChannel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
             android:id="@+id/checkVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -64,6 +69,42 @@
             android:text="录制的时间：10s"
             android:textColor="#ffffff"
             android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="音频质量"
+                android:textColor="#ffffff"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/quality"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:inputType="number" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="kbps"
+                android:textColor="#ffffff"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/kbps"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:inputType="number" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/testTwoDemo"

@@ -34,6 +34,9 @@ public class ActivityVolumPlay extends AppCompatActivity {
             volumePlay.setData(volumPath, waveData);
 
             fileSize.setText(FileSizeUtil.getAutoFileOrFilesSize(volumPath));
+
+            fileSize.append("\nQUALITY：" + FansMp3EncodeThread.DEFAULT_LAME_MP3_QUALITY);
+            fileSize.append("\nEncode kbps:" + FansMp3EncodeThread.DEFAULT_LAME_MP3_BIT_RATE);
         }
 
         volumePlay.showViewInDelete();

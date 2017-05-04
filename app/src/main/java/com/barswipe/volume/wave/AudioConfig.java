@@ -39,7 +39,7 @@ public class AudioConfig {
     /**
      * 录制的最大时间 单位s
      */
-    public static int _totalTimeSec = 10 * 60;//
+    public static int _totalTimeSec = 6;//10 * 60
 
     /**
      * 一个波形柱子代表的时间
