@@ -6,6 +6,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.barswipe.draweePhotoView.lib.FrescoUtil;
+import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class Myapplication extends Application {
         Log.e("json2", JSON.toJSONString(object));
 
         FlowManager.init(this);
+
+        //Stetho是一个Android应用的调试工具 Chrome Developer Tools
+        Stetho.initializeWithDefaults(this);
     }
 
     /**

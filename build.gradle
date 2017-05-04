@@ -7,7 +7,10 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.1'
+        //注解工具
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        //回调全套简洁  Rxjava
+        classpath 'me.tatarka:gradle-retrolambda:3.3.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
 
@@ -58,12 +61,15 @@ project.ext {
     rxandroid_version = "1.2.1"
     RxBing_version = "0.4.0"
     RxLifeCycle_version = "0.8.0"
-    OKHTTP_VERSION = "3.6.0"//3.4.1
-    retrofit2_version = "2.1.0"
+    OKHTTP_VERSION = "3.7.0"//3.4.1
+    retrofit2_version = "2.2.0"
     glide_version = "3.7.0"
 
+    FAST_JSON_VERSION = "1.2.31"
     GPUIMAGE_VERSION = "1.3.0"
     dbflow_version = "4.0.0-beta5"
+
+    stethoVersion = "1.5.0"
 
     videocache = '2.6.4'
 

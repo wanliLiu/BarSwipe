@@ -1,5 +1,7 @@
 package io.github.laucherish.purezhihud.network.manager;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +44,7 @@ public class RetrofitManager {
     private static OkHttpClient mOkHttpClient;
     private final ZhihuService mZhihuService;
 
-    public static RetrofitManager builder(){
+    public static RetrofitManager builder() {
         return new RetrofitManager();
     }
 
@@ -74,6 +76,7 @@ public class RetrofitManager {
                             .cache(cache)
                             .addInterceptor(mRewriteCacheControlInterceptor)
                             .addNetworkInterceptor(mRewriteCacheControlInterceptor)
+                            .addNetworkInterceptor(new StethoInterceptor())
                             .addInterceptor(interceptor)
                             .retryOnConnectionFailure(true)
                             .connectTimeout(15, TimeUnit.SECONDS)
@@ -105,11 +108,11 @@ public class RetrofitManager {
         }
     };
 
-    public Observable<NewsList> getLatestNews(){
+    public Observable<NewsList> getLatestNews() {
         return mZhihuService.getLatestNews();
     }
 
-    public Observable<NewsList> getBeforeNews(String date){
+    public Observable<NewsList> getBeforeNews(String date) {
         return mZhihuService.getBeforeNews(date);
     }
 

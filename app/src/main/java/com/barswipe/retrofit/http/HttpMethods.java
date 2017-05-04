@@ -3,11 +3,13 @@ package com.barswipe.retrofit.http;
 
 import com.barswipe.retrofit.entity.HttpResult;
 import com.barswipe.retrofit.entity.Subject;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -34,6 +36,8 @@ public class HttpMethods {
         //手动创建一个OkHttpClient并设置超时时间
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        builder.addNetworkInterceptor(new StethoInterceptor());
+        builder.addInterceptor((new HttpLoggingInterceptor()).setLevel(HttpLoggingInterceptor.Level.BODY));
 
         retrofit = new Retrofit.Builder()
                 .client(builder.build())

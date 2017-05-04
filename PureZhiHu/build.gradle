@@ -60,6 +60,12 @@ dependencies {
 
 //    compile "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
     compile "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"
+
+    //Stetho是一个Android应用的调试工具 Chrome Developer Tools
+    compile "com.facebook.stetho:stetho:${stethoVersion}"
+    compile "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
+
+
 //    //RxBinding
 //    compile "io.reactivex:rxjava:${rxjava_version}"
 //    compile "io.reactivex:rxandroid:${rxandroid_version}"
