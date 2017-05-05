@@ -36,6 +36,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Behavior"
+        app:layout_constraintBaseline_toBaselineOf="@id/themeCheck"
         app:layout_constraintLeft_toRightOf="@+id/themeCheck"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,5 +83,16 @@
         android:text="SnackBar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/themeCheck" />
+
+    <Button
+        android:id="@+id/bottomNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="BottomNavigation"
+        app:layout_constraintBaseline_toBaselineOf="@id/snackbarTest"
+        app:layout_constraintLeft_toRightOf="@+id/snackbarTest"
+        app:layout_constraintTop_toBottomOf="@+id/btnBehavior" />
 
 </android.support.constraint.ConstraintLayout>

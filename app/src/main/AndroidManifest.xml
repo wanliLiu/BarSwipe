@@ -290,6 +290,7 @@
             android:description="@string/str_newFramge"
             android:icon="@drawable/ic_launcher"
             android:label="新框架搭建" />
+        <activity android:name=".fram.BottomNavigationActivity"/>
         <activity
             android:name=".fram.ScrollingActivity"
             android:theme="@style/AppThemeNoActionBar" />

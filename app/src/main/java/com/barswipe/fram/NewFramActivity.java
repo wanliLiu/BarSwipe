@@ -37,13 +37,21 @@ public class NewFramActivity extends BaseActivity {
         ButterKnife.bind(this);
 
 
-//        setTheme(R.style.lightTheme);
+        setTheme(R.style.lightTheme);
+
+        RxView.clicks(findViewById(R.id.bottomNavigation))
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startActivity(new Intent(NewFramActivity.this, BottomNavigationActivity.class));
+                    }
+                });
 
         RxCompoundButton.checkedChanges(btn)
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-//                        setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
+                        setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
                         if (aBoolean) {
                             startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
                         }
