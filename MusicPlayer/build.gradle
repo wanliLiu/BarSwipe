@@ -69,5 +69,9 @@ dependencies {
 //    }
     compile 'com.anjlab.android.iab.v3:library:1.0.+'
 
+    //Stetho是一个Android应用的调试工具 Chrome Developer Tools
+    compile "com.facebook.stetho:stetho:${stethoVersion}"
+    compile "com.facebook.stetho:stetho-okhttp:${stethoVersion}"
+
 
 }

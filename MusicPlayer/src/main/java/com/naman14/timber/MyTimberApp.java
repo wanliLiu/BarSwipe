@@ -17,6 +17,7 @@ package com.naman14.timber;
 import android.app.Application;
 
 import com.afollestad.appthemeengine.ATE;
+import com.facebook.stetho.Stetho;
 import com.naman14.timber.permissions.Nammu;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -40,6 +41,9 @@ public class MyTimberApp extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+        //Stetho是一个Android应用的调试工具 Chrome Developer Tools
+        Stetho.initializeWithDefaults(this);
 
 //        //disable crashlytics for debug builds
 //        Crashlytics crashlyticsKit = new Crashlytics.Builder()
