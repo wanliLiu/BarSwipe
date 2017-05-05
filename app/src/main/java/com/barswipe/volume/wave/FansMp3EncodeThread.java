@@ -15,15 +15,15 @@ public class FansMp3EncodeThread extends Thread {
 
     //======================Lame Default Settings=====================
     private final int DEFAULT_SAMPLING_RATE = 44100;
-    private final int DEFAULT_LAME_MP3_QUALITY = 7;
+    public static int DEFAULT_LAME_MP3_QUALITY = 2;
     /**
      * 与DEFAULT_CHANNEL_CONFIG相关，因为是mono单声，所以是1
      */
-    private final int DEFAULT_LAME_IN_CHANNEL = 1;
+    public static int DEFAULT_LAME_IN_CHANNEL = 1;
     /**
      * Encoded bit rate. MP3 file will be encoded with bit rate 32kbps
      */
-    private final int DEFAULT_LAME_MP3_BIT_RATE = 32;
+    public static int DEFAULT_LAME_MP3_BIT_RATE = 128;
 
     private byte[] mMp3Buffer;
     private int mNumSamples;  // Number of samples per channel.

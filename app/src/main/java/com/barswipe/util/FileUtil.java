@@ -170,6 +170,17 @@ public class FileUtil {
     }
 
     /**
+     *
+     * @param ctx
+     * @param stuff
+     * @param name
+     * @return
+     */
+    public static File getAudioSaveFilePath(Context ctx, String stuff, String name) {
+        return getFile(ctx, "download", stuff + "_" + MD5(name) + getsuffer(name), false);
+    }
+
+    /**
      * @param ctx
      * @return
      */

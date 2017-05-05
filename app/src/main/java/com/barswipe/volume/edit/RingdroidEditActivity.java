@@ -827,6 +827,7 @@ public class RingdroidEditActivity extends AppCompatActivity
             mSoundFile.getFiletype() + ", " +
             mSoundFile.getSampleRate() + " Hz, " +
             mSoundFile.getAvgBitrateKbps() + " kbps, " +
+                    mSoundFile.getChannels() + " channel, " +
             formatTime(mMaxPos) + " " +
             getResources().getString(R.string.time_seconds);
         mInfo.setText(mCaption);
