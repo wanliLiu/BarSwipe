@@ -57,7 +57,6 @@ import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
-import rx.functions.FuncN;
 import rx.observables.GroupedObservable;
 import rx.schedulers.Schedulers;
 
@@ -368,19 +367,16 @@ public class LaunchActivity extends BaseActivity {
      * @return
      */
     private Observable<Integer> createObserver(final int index) {
-        return Observable.create(new Observable.OnSubscribe<Integer>() {
-            @Override
-            public void call(Subscriber<? super Integer> subscriber) {
-                for (int i = 1; i < 6; i++) {
-                    subscriber.onNext(i * index);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        return Observable.create((Observable.OnSubscribe<Integer>) subscriber -> {
+            for (int i = 1; i < 6; i++) {
+                subscriber.onNext(i * index);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                subscriber.onCompleted();
             }
+            subscriber.onCompleted();
         }).subscribeOn(Schedulers.newThread());
     }
 
@@ -398,74 +394,38 @@ public class LaunchActivity extends BaseActivity {
                 Log.e(Tag, "combineLatest--call---left:" + num1 + " right:" + num2);
                 return num1 + num2;
             }
-        }).subscribe(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                Log.e(Tag, "combineLatest--result:" + integer);
-            }
-        });
+        }).subscribe(integer -> Log.e(Tag, "combineLatest--result:" + integer));
 
         List<Observable<Integer>> list = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
             list.add(createObserver(i));
         }
-        Observable.combineLatest(list, new FuncN<Integer>() {
-            @Override
-            public Integer call(Object... args) {
-                int temp = 0;
-                for (Object i : args) {
-                    Log.e(Tag, "combineLatest--list:" + i);
-                    temp += (Integer) i;
-                }
-                return temp;
+        Observable.combineLatest(list, args -> {
+            int temp = 0;
+            for (Object i : args) {
+                Log.e(Tag, "combineLatest--list:" + i);
+                temp += (Integer) i;
             }
-        }).subscribe(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                Log.e(Tag, "combineLatest--list--result:" + integer);
-            }
-        });
+            return temp;
+        }).subscribe(integer -> Log.e(Tag, "combineLatest--list--result:" + integer));
 
         //join
         Observable.just("Left-").join(
-                Observable.create(new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(Subscriber<? super String> subscriber) {
-                        for (int i = 1; i < 5; i++) {
-                            subscriber.onNext("Right-" + i);
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                Observable.create((Observable.OnSubscribe<String>) subscriber -> {
+                    for (int i = 1; i < 5; i++) {
+                        subscriber.onNext("Right-" + i);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                        subscriber.onCompleted();
                     }
+                    subscriber.onCompleted();
                 }).subscribeOn(Schedulers.newThread()),
-                new Func1<String, Observable<Long>>() {
-                    @Override
-                    public Observable<Long> call(String integer) {
-                        return Observable.timer(3000, TimeUnit.MILLISECONDS);
-                    }
-                },
-                new Func1<String, Observable<Long>>() {
-                    @Override
-                    public Observable<Long> call(String Long) {
-                        return Observable.timer(2000, TimeUnit.MILLISECONDS);
-                    }
-                },
-                new Func2<String, String, String>() {
-                    @Override
-                    public String call(String left, String Right) {
-                        return left + Right;
-                    }
-                })
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Log.e(Tag, "join:" + s);
-                    }
-                });
+                integer -> Observable.timer(3000, TimeUnit.MILLISECONDS),
+                Long -> Observable.timer(2000, TimeUnit.MILLISECONDS),
+                (left, Right) -> left + Right)
+                .subscribe(s -> Log.e(Tag, "join:" + s));
 
         //groupJoin
         Observable.just("Left-").groupJoin(

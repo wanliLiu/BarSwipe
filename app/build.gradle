@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.quanqi.pgyer'
+apply plugin: 'me.tatarka.retrolambda'
 
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
@@ -30,11 +31,22 @@ android {
             abiFilters "armeabi", "armeabi-v7a", "x86"
         }
 
+        //Lambda表达式 jack编译工具
+        //使用Google官方的方式有一定的兼容性，使用Jack时不能同时使用APT，如果使用butterknife、Dagger等使用了APT的注解框架就不行了
+//        jackOptions {
+//            enabled true
+//        }
+    }
+
+    //Lambda表达式 jack编译工具
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     signingConfigs {
 
-        newType.initWith(signingConfigs.debug)
+//        newType.initWith(signingConfigs.debug)
 
         release {
             storeFile file("study_keystore.jks")
@@ -72,9 +84,9 @@ android {
         }
 
         //创建自己的构建版本
-        newType {
-            buildConfigField "String", "API_URL", "\"http://staging.example.com/api\""
-        }
+//        newType {
+//            buildConfigField "String", "API_URL", "\"http://staging.example.com/api\""
+//        }
     }
 
     configurations.all {
@@ -159,8 +171,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-
 
     compile 'com.github.hotchemi:permissionsdispatcher:2.1.3'
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'

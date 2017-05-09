@@ -235,14 +235,11 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
     public void onTimeChange(final boolean from, final double fractionComplete, final String time) {
         // TODO: 2017/3/24 注意这里的线程  要判断是否是主线程
         // TODO: 2017/3/24 这里需要对裁剪的最小时间做判断，从而对裁剪入口的显示状态
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                recordTime.setText(time);
-                if (from) {
-                    recordTotalTime = fractionComplete;
-                    updateCanActionUI();
-                }
+        runOnUiThread(() -> {
+            recordTime.setText(time);
+            if (from) {
+                recordTotalTime = fractionComplete;
+                updateCanActionUI();
             }
         });
     }
@@ -262,14 +259,11 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
     public void onAudioRecordToMaxTime() {
         isCanRecord = false;
         recordTotalTime = AudioConfig._totalTimeSec;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                currentStatus = ActionStatus.stopRecording;
-                stopRecord();
-                updateUi();
-                Toast.makeText(AcitivtyWaveTestRecycler.this, "最多只能录制" + AudioConfig._totalTimeSec + "s", Toast.LENGTH_SHORT).show();
-            }
+        runOnUiThread(() -> {
+            currentStatus = ActionStatus.stopRecording;
+            stopRecord();
+            updateUi();
+            Toast.makeText(AcitivtyWaveTestRecycler.this, "最多只能录制" + AudioConfig._totalTimeSec + "s", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -456,23 +450,15 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
             // TODO: 2017/3/24  保存的文件位置  和保存文件过程中的加载框需要处理
             File wolumPath = FileUtil.getAudioSaveFilePath(this, FansMp3EncodeThread.DEFAULT_LAME_MP3_QUALITY + "_" + FansMp3EncodeThread.DEFAULT_LAME_MP3_BIT_RATE, "fanAudioSave" + "_" + System.currentTimeMillis() + (AudioConfig.recordFormatIsMp3 ? ".mp3" : ".amr"));
             showActionDoingDialog();
-            soundFile.saveAudioFile(wolumPath, new onEncodeCompleteListener() {
-                @Override
-                public void onEncodeComplete(final String path, final String waveData) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showActionDoingDialog();
-                            File file = new File(path);
-                            if (file.exists()) {
-                                testOpemVolumePlay(path, waveData);
-                                Toast.makeText(AcitivtyWaveTestRecycler.this, "文件保存成功--" + path, Toast.LENGTH_SHORT).show();
-                                AcitivtyWaveTestRecycler.this.finish();
-                            }
-                        }
-                    });
+            soundFile.saveAudioFile(wolumPath, (path, waveData) -> runOnUiThread(() -> {
+                showActionDoingDialog();
+                File file = new File(path);
+                if (file.exists()) {
+                    testOpemVolumePlay(path, waveData);
+                    Toast.makeText(AcitivtyWaveTestRecycler.this, "文件保存成功--" + path, Toast.LENGTH_SHORT).show();
+                    AcitivtyWaveTestRecycler.this.finish();
                 }
-            });
+            }));
         }
     }
 

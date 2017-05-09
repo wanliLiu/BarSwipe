@@ -9,8 +9,9 @@ buildscript {
         classpath 'com.android.tools.build:gradle:2.3.1'
         //注解工具
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        //回调全套简洁  Rxjava
-        classpath 'me.tatarka:gradle-retrolambda:3.3.1'
+        //可以不用这个，直接官方的支持jack Lambda --------------- 官方的兼容性有问题
+        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
 
@@ -19,6 +20,8 @@ buildscript {
         //蒲公英插件
         classpath 'org.quanqi:pgyer:0.1.2'
     }
+
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
 
 allprojects {

@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -40,16 +39,13 @@ public class StudyAudioRecord extends AppCompatActivity {
             checkBox.setText("录制amr");
         else
             checkBox.setText("录制mp3");
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked)
-                    checkBox.setText("录制amr");
-                else
-                    checkBox.setText("录制mp3");
-                AudioConfig.recordFormatIsMp3 = isChecked;
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isChecked)
+                checkBox.setText("录制amr");
+            else
+                checkBox.setText("录制mp3");
+            AudioConfig.recordFormatIsMp3 = isChecked;
 
-            }
         });
 
         final CheckBox checkChannel = (CheckBox) findViewById(R.id.checkChannel);
@@ -58,31 +54,25 @@ public class StudyAudioRecord extends AppCompatActivity {
             checkChannel.setText("单通道");
         else
             checkChannel.setText("双通道");
-        checkChannel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    checkChannel.setText("单通道");
-                    FansSoundFile.channelConfig= AudioFormat.CHANNEL_IN_MONO;
-                    FansMp3EncodeThread.DEFAULT_LAME_IN_CHANNEL = 1;
-                }
-                else{
-                    checkChannel.setText("双通道");
-                    FansSoundFile.channelConfig= AudioFormat.CHANNEL_IN_STEREO;
-                    FansMp3EncodeThread.DEFAULT_LAME_IN_CHANNEL = 2;
-                }
-
-
+        checkChannel.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                checkChannel.setText("单通道");
+                FansSoundFile.channelConfig= AudioFormat.CHANNEL_IN_MONO;
+                FansMp3EncodeThread.DEFAULT_LAME_IN_CHANNEL = 1;
             }
+            else{
+                checkChannel.setText("双通道");
+                FansSoundFile.channelConfig= AudioFormat.CHANNEL_IN_STEREO;
+                FansMp3EncodeThread.DEFAULT_LAME_IN_CHANNEL = 2;
+            }
+
+
         });
 
         final TextView textView = (TextView) findViewById(R.id.recordTime);
         textView.setText(("能录制的最大时间：" + AudioConfig._totalTimeSec));
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textView.setText("能录制的最大时间：" + (AudioConfig._totalTimeSec += 10));
-            }
+        textView.setOnClickListener(v -> {
+            textView.setText("能录制的最大时间：" + (AudioConfig._totalTimeSec += 10));
         });
 
 
