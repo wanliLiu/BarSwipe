@@ -37,7 +37,6 @@ import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
 import com.barswipe.volume.wave.HeadPhonesRecivier;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
-import com.soli.jnistudy.JniTest;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.Serializable;
@@ -59,6 +58,8 @@ import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.observables.GroupedObservable;
 import rx.schedulers.Schedulers;
+
+//import com.soli.jnistudy.JniTest;
 
 /**
  * Created by soli on 6/2/16.
@@ -154,7 +155,7 @@ public class LaunchActivity extends BaseActivity {
         dbflowDest();
 
         Log.e("Jni测试", "Jni测试--from-app---" + Jnidemo.getStringFromJni());
-        Log.e("Jni测试", "Jni测试--from-jnistudy---" + JniTest.getStringFromJni());
+//        Log.e("Jni测试", "Jni测试--from-jnistudy---" + JniTest.getStringFromJni());
 
         Log.e("byte大端小段模式", ByteOrder.nativeOrder().toString());
 

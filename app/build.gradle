@@ -120,8 +120,10 @@ dependencies {
     compile "com.github.bumptech.glide:glide:${glide_version}"
 
     compile "com.squareup.retrofit2:retrofit:${retrofit2_version}"
+//    compile 'com.squareup.retrofit2:adapter-rxjava2:latest.version'
     compile "com.squareup.retrofit2:adapter-rxjava:${retrofit2_version}"
     compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
+//    compile 'com.squareup.retrofit2:converter-gson:latest.version'
 
 //    compile "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
     compile "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"

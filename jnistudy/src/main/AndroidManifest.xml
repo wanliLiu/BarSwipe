@@ -4,6 +4,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".JniApplication"
         android:theme="@style/Theme.AppCompat.Light"
         android:label="@string/app_name"
         android:supportsRtl="true">
