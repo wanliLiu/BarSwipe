@@ -2,7 +2,6 @@ package com.barswipe.dragger2;
 
 /**
  * Created by Soli on 2017/5/10.
- * https://github.com/tianwenju/LearningTest/blob/master/readme.md
  */
 
 public class keyboard {

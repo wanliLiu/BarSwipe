@@ -4,6 +4,9 @@ import javax.inject.Inject;
 
 /**
  * Created by Soli on 2017/5/10.
+ *
+ * https://github.com/tianwenju/LearningTest/blob/master/readme.md
+ * http://blog.csdn.net/zjbpku/article/details/42109891
  */
 
 public class Computer {
