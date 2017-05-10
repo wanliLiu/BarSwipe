@@ -30,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
 import com.barswipe.jni.Jnidemo;
@@ -44,6 +46,7 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -117,34 +120,26 @@ public class LaunchActivity extends BaseActivity {
         RxAdapterView.itemClicks(listView)
                 .compose(this.<Integer>bindToLifecycle())
                 .throttleFirst(ViewConfiguration.getDoubleTapTimeout(), TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(final Integer position) {
-                        RxPermissions.getInstance(LaunchActivity.this)
-                                .request(
-                                        Manifest.permission.CAMERA,
-                                        Manifest.permission.SYSTEM_ALERT_WINDOW,
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                        Manifest.permission.BODY_SENSORS,
-                                        Manifest.permission.WRITE_CALENDAR,
-                                        Manifest.permission.READ_PHONE_STATE,
-                                        Manifest.permission.SEND_SMS,
-                                        Manifest.permission.ACCESS_FINE_LOCATION,
-                                        Manifest.permission.WRITE_CONTACTS,
-                                        Manifest.permission.RECORD_AUDIO,
-                                        Manifest.permission.WRITE_SETTINGS
-                                )
-                                .subscribe(new Action1<Boolean>() {
-                                    @Override
-                                    public void call(Boolean aBoolean) {
-                                        if (aBoolean) {
-                                            dealAciont(position);
-                                        } else
-                                            Toast.makeText(LaunchActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                });
+                .subscribe(position -> RxPermissions.getInstance(LaunchActivity.this)
+                        .request(
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.SYSTEM_ALERT_WINDOW,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.BODY_SENSORS,
+                                Manifest.permission.WRITE_CALENDAR,
+                                Manifest.permission.READ_PHONE_STATE,
+                                Manifest.permission.SEND_SMS,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.WRITE_CONTACTS,
+                                Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_SETTINGS
+                        )
+                        .subscribe(aBoolean -> {
+                            if (aBoolean) {
+                                dealAciont(position);
+                            } else
+                                Toast.makeText(LaunchActivity.this, "授权失败", Toast.LENGTH_SHORT).show();
+                        }));
 
         adapter.setList(getAllActivityLists());
         listView.setAdapter(adapter);
@@ -162,8 +157,33 @@ public class LaunchActivity extends BaseActivity {
         findAudioRecord();
 
         registerReciver();
+
+        testStream();
     }
 
+    /**
+     *
+     */
+    private void testStream() {
+        String[] names = new String[]{
+                "Amy", "Alex", "Bob", "Cindy", "Jeff", "Jack",
+                "Sunny", "Sara", "Steven"
+        };
+
+        //筛选S开头的人名
+        List<String> data = Stream.of(names)
+                .filter(name -> name.startsWith("s"))
+                .collect(Collectors.toList());
+
+        Log.e("Stream",data.toString());
+
+        //按首字母分组并排序
+        List<Map.Entry<String, List<String>>> group = Stream.of(names)
+                .groupBy(name -> String.valueOf(name.charAt(0)))
+                .sortBy(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        Log.e("Stream",group.toString());
+    }
 
     /**
      *

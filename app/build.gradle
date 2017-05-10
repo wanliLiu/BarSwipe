@@ -192,4 +192,7 @@ dependencies {
     compile 'com.google.dagger:dagger-android-support:2.+' // if you use the support libraries
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.+'
 
+    //一个比较有用的东西  用来筛选等一系列操作
+    compile 'com.annimon:stream:1.1.7'
+
 }
