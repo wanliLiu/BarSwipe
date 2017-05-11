@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.github.laucherish.purezhihud.utils.PrefUtil;
 import io.github.laucherish.purezhihud.utils.swipeback.SwipeBackActivity;
 import io.github.laucherish.purezhihud.utils.swipeback.SwipeBackLayout;
@@ -21,6 +22,7 @@ import io.github.laucherish.purezhihud.utils.swipeback.SwipeBackLayout;
 public abstract class BaseActivity extends SwipeBackActivity {
 
     protected SwipeBackLayout mSwipeBackLayout;
+    private Unbinder unbinder;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -58,7 +60,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
         setContentView(getLayoutId());
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         afterCreate(savedInstanceState);
     }
 
@@ -114,7 +116,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     protected abstract int getLayoutId();

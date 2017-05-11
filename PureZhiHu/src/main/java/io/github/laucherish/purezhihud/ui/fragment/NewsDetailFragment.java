@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import io.github.laucherish.purezhihud.R;
 import io.github.laucherish.purezhihud.base.BaseFragment;
 import io.github.laucherish.purezhihud.bean.News;
@@ -40,25 +40,25 @@ import rx.schedulers.Schedulers;
  */
 public class NewsDetailFragment extends BaseFragment {
 
-    @Bind(R.id.iv_header)
+    @BindView(R.id.iv_header)
     ImageView mIvHeader;
-    @Bind(R.id.tv_title)
+    @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @Bind(R.id.tv_source)
+    @BindView(R.id.tv_source)
     TextView mTvSource;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.collapsingToolbarLayout)
+    @BindView(R.id.collapsingToolbarLayout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
-    @Bind(R.id.wv_news)
+    @BindView(R.id.wv_news)
     WebView mWvNews;
-    @Bind(R.id.nested_view)
+    @BindView(R.id.nested_view)
     NestedScrollView mNestedView;
-    @Bind(R.id.tv_load_empty)
+    @BindView(R.id.tv_load_empty)
     TextView mTvLoadEmpty;
-    @Bind(R.id.tv_load_error)
+    @BindView(R.id.tv_load_error)
     TextView mTvLoadError;
-    @Bind(R.id.pb_loading)
+    @BindView(R.id.pb_loading)
     ContentLoadingProgressBar mPbLoading;
 
     private News mNews;

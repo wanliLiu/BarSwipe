@@ -14,7 +14,7 @@ import com.barswipe.R;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxCompoundButton;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.functions.Action1;
 
@@ -24,7 +24,7 @@ import rx.functions.Action1;
 
 public class NewFramActivity extends BaseActivity {
 
-    @Bind(R.id.themeCheck)
+    @BindView(R.id.themeCheck)
     ToggleButton btn;
 
     @Override

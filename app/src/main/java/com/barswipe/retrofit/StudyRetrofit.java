@@ -13,7 +13,7 @@ import com.barswipe.retrofit.subscribers.SubscriberOnNextListener;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -28,9 +28,9 @@ public class StudyRetrofit extends BaseActivity {
      * 学习研究 地址：http://gank.io/post/56e80c2c677659311bed9841
      * retrofit study---------http://square.github.io/retrofit/
      */
-    @Bind(R.id.click_me_BN)
+    @BindView(R.id.click_me_BN)
     Button clickMeBN;
-    @Bind(R.id.result_TV)
+    @BindView(R.id.result_TV)
     clickTextview resultTV;
 
     private SubscriberOnNextListener getTopMovieOnNext;

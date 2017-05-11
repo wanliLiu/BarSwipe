@@ -29,7 +29,7 @@ import com.cokus.wavelibrary.view.WaveformView;
 import java.io.File;
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import permissions.dispatcher.NeedsPermission;
@@ -47,17 +47,17 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class MainActivity_good_view extends AppCompatActivity {
 
-    @Bind(R.id.wavesfv)
+    @BindView(R.id.wavesfv)
     WaveSurfaceView waveSfv;
-    @Bind(R.id.switchbtn)
+    @BindView(R.id.switchbtn)
     Button switchBtn;
-    @Bind(R.id.status)
+    @BindView(R.id.status)
     TextView status;
-    @Bind(R.id.waveview)
+    @BindView(R.id.waveview)
     WaveformView waveView;
-    @Bind(R.id.play)
+    @BindView(R.id.play)
     Button playBtn;
-    @Bind(R.id.socreaudio)
+    @BindView(R.id.socreaudio)
     Button scoreBtn;
 
     private static final int FREQUENCY = 16000;// 设置音频采样率，44100是目前的标准，但是某些设备仍然支持22050，16000，11025

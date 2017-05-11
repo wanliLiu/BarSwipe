@@ -13,9 +13,10 @@ import com.barswipe.draweePhotoView.activity.BaseActivity;
 import com.barswipe.draweePhotoView.activity.MyPhotoViewActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * ========================================================== <br>
@@ -29,13 +30,13 @@ import butterknife.OnClick;
  */
 public class TwoFragment extends BaseFragment {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.fab)
+    @BindView(R.id.fab)
     FloatingActionButton fab;
-    @Bind(R.id.draweeView)
+    @BindView(R.id.draweeView)
     SimpleDraweeView draweeView;
-
+    private Unbinder unbinder;
     public static TwoFragment newInstance() {
         TwoFragment fragment = new TwoFragment();
         Bundle bundle = new Bundle();
@@ -51,7 +52,7 @@ public class TwoFragment extends BaseFragment {
     @Override
     public void layoutInit(LayoutInflater inflater, Bundle savedInstanceState) {
         super.layoutInit(inflater, savedInstanceState);
-        ButterKnife.bind(this, getRootView());
+        unbinder = ButterKnife.bind(this, getRootView());
         initToolbar();
 
         if (savedInstanceState == null) {
@@ -85,6 +86,6 @@ public class TwoFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(getRootView());
+        unbinder.unbind();
     }
 }

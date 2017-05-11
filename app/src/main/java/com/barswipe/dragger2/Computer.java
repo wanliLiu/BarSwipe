@@ -18,7 +18,9 @@ public class Computer {
     Master master;
     public Computer() {
         // DaggerComputerComponent.create().inject(this);
-        DaggerComputerComponent.builder().computerModule(new ComputerModule("中国","联想")).build().inject(this);
+        DaggerComputerComponent.builder()
+                .computerModule(new ComputerModule("中国","联想"))
+                .build().inject(this);
         makeComputer(keyboard, display, master);
     }
     private void makeComputer(keyboard keyboard, Display display, Master master) {

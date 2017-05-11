@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -37,23 +37,23 @@ import butterknife.OnClick;
  */
 
 public class MainFragment extends Fragment {
-    @Bind(R.id.audioWave)
+    @BindView(R.id.audioWave)
     AudioWaveView audioWave;
-    @Bind(R.id.record)
+    @BindView(R.id.record)
     Button record;
-    @Bind(R.id.stop)
+    @BindView(R.id.stop)
     Button stop;
-    @Bind(R.id.play)
+    @BindView(R.id.play)
     Button play;
-    @Bind(R.id.reset)
+    @BindView(R.id.reset)
     Button reset;
-    @Bind(R.id.wavePlay)
+    @BindView(R.id.wavePlay)
     Button wavePlay;
-    @Bind(R.id.playText)
+    @BindView(R.id.playText)
     TextView playText;
-    @Bind(R.id.colorImg)
+    @BindView(R.id.colorImg)
     ImageView colorImg;
-    @Bind(R.id.recordPause)
+    @BindView(R.id.recordPause)
     Button recordPause;
 
 

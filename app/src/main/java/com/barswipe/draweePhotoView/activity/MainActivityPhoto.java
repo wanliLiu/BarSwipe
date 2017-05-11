@@ -11,20 +11,20 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.barswipe.R;
-import com.barswipe.draweePhotoView.fragment.OneFragment;
-import com.barswipe.draweePhotoView.fragment.TwoFragment;
 import com.barswipe.draweePhotoView.lib.MySimpleDraweeView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class MainActivityPhoto extends BaseActivity {
 
-    @Bind(R.id.navigationView)
+    @BindView(R.id.navigationView)
     NavigationView navigationView;
-    @Bind(R.id.drawer)
+    @BindView(R.id.drawer)
     DrawerLayout drawer;
 
+    private Unbinder unbinder;
     MySimpleDraweeView ivMenuUserProfilePhoto;
     LinearLayout vGlobalMenuHeader;
 
@@ -33,7 +33,7 @@ public class MainActivityPhoto extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main_photoview);
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         final View headerView = navigationView.getHeaderView(0);
         ivMenuUserProfilePhoto = (MySimpleDraweeView) headerView.findViewById(R.id.ivMenuUserProfilePhoto);
         vGlobalMenuHeader = (LinearLayout) headerView.findViewById(R.id.vGlobalMenuHeader);
@@ -99,6 +99,6 @@ public class MainActivityPhoto extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 }

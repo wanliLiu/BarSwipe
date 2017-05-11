@@ -18,7 +18,7 @@ import com.yalantis.phoenix.PullToRefreshView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import io.github.laucherish.purezhihud.R;
 import io.github.laucherish.purezhihud.base.BaseFragment;
 import io.github.laucherish.purezhihud.bean.News;
@@ -45,17 +45,17 @@ public class NewsListFragment extends BaseFragment implements PullToRefreshView.
     public static final String EXTRA_SCROLL = "scroll";
     public static final String EXTRA_CURDATE = "curdate";
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @Bind(R.id.tv_load_empty)
+    @BindView(R.id.tv_load_empty)
     TextView mTvLoadEmpty;
-    @Bind(R.id.tv_load_error)
+    @BindView(R.id.tv_load_error)
     TextView mTvLoadError;
-    @Bind(R.id.pb_loading)
+    @BindView(R.id.pb_loading)
     ContentLoadingProgressBar mPbLoading;
-    @Bind(R.id.rcv_news_list)
+    @BindView(R.id.rcv_news_list)
     RecyclerView mRcvNewsList;
-    @Bind(R.id.ptr_news_list)
+    @BindView(R.id.ptr_news_list)
     PullToRefreshView mPtrNewsList;
 
     public NewsListAdapter mExtraAdapter;

@@ -11,7 +11,7 @@ import com.barswipe.draweePhotoView.MyPhotoView;
 import java.io.IOException;
 import java.io.InputStream;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -27,7 +27,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class MyPhotoViewActivity extends BaseActivity {
 
-    @Bind(R.id.myPhotoView)
+    @BindView(R.id.myPhotoView)
     MyPhotoView myPhotoView;
 
     @Override

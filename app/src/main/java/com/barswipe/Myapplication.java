@@ -5,6 +5,9 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.barswipe.dragger2.DaggerHouseComponent;
+import com.barswipe.dragger2.HouseComponent;
+import com.barswipe.dragger2.HouseModule;
 import com.barswipe.draweePhotoView.lib.FrescoUtil;
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -18,11 +21,17 @@ import java.util.List;
 public class Myapplication extends Application {
 
     private static Myapplication app;
+    private static HouseComponent houseComponent;
+
+    public static HouseComponent getHouseComponent() {
+        return houseComponent;
+    }
+
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        houseComponent = DaggerHouseComponent.builder().houseModule(new HouseModule()).build();
         app = this;
 //        Fresco.initialize(this);
 //        FrescoUtil.Init(this);

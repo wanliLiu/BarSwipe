@@ -14,19 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import io.github.laucherish.purezhihud.R;
 import io.github.laucherish.purezhihud.base.BaseActivity;
 import io.github.laucherish.purezhihud.base.Constant;
-import io.github.laucherish.purezhihud.ui.adapter.NewsListAdapter;
-import io.github.laucherish.purezhihud.ui.fragment.NewsListFragment;
 import io.github.laucherish.purezhihud.utils.PrefUtil;
 
 public class NewsListActivity extends BaseActivity {
 
-    @Bind(R.id.fl_main)
+    @BindView(R.id.fl_main)
     ViewGroup mViewGroup;
-    @Bind(R.id.iv_main)
+    @BindView(R.id.iv_main)
     ImageView mIvMain;
 
     private final long ANIMTION_TIME = 1000;

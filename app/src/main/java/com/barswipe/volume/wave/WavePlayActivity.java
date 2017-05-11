@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -28,13 +28,13 @@ public class WavePlayActivity extends AppCompatActivity implements MP3RadioStrea
 
     private final static String TAG = "WavePlayActivity";
 
-    @Bind(R.id.audioWave)
+    @BindView(R.id.audioWave)
     AudioWaveView audioWave;
-    @Bind(R.id.activity_wave_play)
+    @BindView(R.id.activity_wave_play)
     RelativeLayout activityWavePlay;
-    @Bind(R.id.playBtn)
+    @BindView(R.id.playBtn)
     Button playBtn;
-    @Bind(R.id.seekBar)
+    @BindView(R.id.seekBar)
     SeekBar seekBar;
 
 

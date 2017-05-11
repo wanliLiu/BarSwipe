@@ -23,7 +23,7 @@ import com.barswipe.R;
 
 import java.util.Arrays;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
@@ -34,7 +34,7 @@ import io.github.rockerhieu.emojicon.emoji.Emojicon;
 
 public class EmojiconsActivity extends AppCompatActivity {
 
-    @Bind(R.id.input)
+    @BindView(R.id.input)
     EmojiconEditText input;
 
     @Override

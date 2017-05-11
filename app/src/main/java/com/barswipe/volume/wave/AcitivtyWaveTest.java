@@ -22,7 +22,7 @@ import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.functions.Action1;
 
@@ -37,37 +37,37 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
 
     // TODO: 26/03/2017 硬件加速关闭 android:hardwareAccelerated="false"
 
-    @Bind(R.id.pcmWaveView)
+    @BindView(R.id.pcmWaveView)
     PcmWaveView pcmWaveView;
-    @Bind(R.id.waveEdit)
+    @BindView(R.id.waveEdit)
     WaveEditView waveEdit;
 
-    @Bind(R.id.recordTime)
+    @BindView(R.id.recordTime)
     TextView recordTime;
-    @Bind(R.id.btnRecord)
+    @BindView(R.id.btnRecord)
     ImageView btnRecord;
-    @Bind(R.id.btnPlay)
+    @BindView(R.id.btnPlay)
     ImageView btnPlay;
-    @Bind(R.id.btnClip)
+    @BindView(R.id.btnClip)
     View btnClip;
-    @Bind(R.id.btnClipIcon)
+    @BindView(R.id.btnClipIcon)
     ImageView btnClipIcon;
-    @Bind(R.id.btnClipText)
+    @BindView(R.id.btnClipText)
     TextView btnClipText;
 
     // TODO: 2017/3/24 titlabar需要弄
-    @Bind(R.id.txt_cancle)
+    @BindView(R.id.txt_cancle)
     TextView txt_cancle;
-    @Bind(R.id.btnActionDone)
+    @BindView(R.id.btnActionDone)
     TextView btnActionDone;
 
-    @Bind(R.id.editDelete)
+    @BindView(R.id.editDelete)
     TextView editDelete;
-    @Bind(R.id.editClip)
+    @BindView(R.id.editClip)
     TextView editClip;
 
     // TODO: 2017/3/24 到时候改成titlebar
-    @Bind(R.id.recordtitle)
+    @BindView(R.id.recordtitle)
     TextView recordtitle;
 
     //音频数据录制

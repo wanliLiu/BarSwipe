@@ -7,7 +7,7 @@ import android.widget.FrameLayout;
 
 import com.barswipe.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
  */
 public class MainActivity_wave extends AppCompatActivity {
 
-    @Bind(R.id.main_frameLayout)
+    @BindView(R.id.main_frameLayout)
     FrameLayout mainFrameLayout;
 
     @Override

@@ -12,8 +12,9 @@ import com.barswipe.draweePhotoView.activity.BaseActivity;
 import com.barswipe.draweePhotoView.lib.MySimpleDraweeView;
 import com.barswipe.draweePhotoView.lib.Utils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * ========================================================== <br>
@@ -27,23 +28,25 @@ import butterknife.ButterKnife;
  */
 public class OneFragment extends BaseFragment {
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.collapsing_toolbar_layout)
+    @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
-    @Bind(R.id.theme_photo)
+    @BindView(R.id.theme_photo)
     MySimpleDraweeView themePhoto;
 
-    @Bind(R.id.photo_1)
+    @BindView(R.id.photo_1)
     MySimpleDraweeView photo_1;
 
-    @Bind(R.id.photo_2)
+    @BindView(R.id.photo_2)
     MySimpleDraweeView photo_2;
 
-    @Bind(R.id.photo_3)
+    @BindView(R.id.photo_3)
     MySimpleDraweeView photo_3;
+
+    private Unbinder unbinder;
 
     public static OneFragment newInstance() {
         OneFragment fragment = new OneFragment();
@@ -60,7 +63,7 @@ public class OneFragment extends BaseFragment {
     @Override
     public void layoutInit(LayoutInflater inflater, Bundle savedInstanceState) {
         super.layoutInit(inflater, savedInstanceState);
-        ButterKnife.bind(this, getRootView());
+        unbinder = ButterKnife.bind(this, getRootView());
 
         initToolbar();
 
@@ -105,7 +108,7 @@ public class OneFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(getRootView());
+        unbinder.unbind();
     }
 
 }

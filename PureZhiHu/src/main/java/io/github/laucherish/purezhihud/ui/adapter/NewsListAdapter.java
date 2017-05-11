@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.laucherish.purezhihud.R;
 import io.github.laucherish.purezhihud.bean.News;
@@ -187,13 +187,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsVi
     }
 
     class NewsViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.cv_item)
+        @BindView(R.id.cv_item)
         CardView mCvItem;
 
-        @Bind(R.id.iv_news)
+        @BindView(R.id.iv_news)
         ImageView mIvNews;
 
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView mTvTitle;
 
         public NewsViewHolder(View itemView) {
@@ -203,7 +203,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsVi
     }
 
     class NewsDateViewHolder extends NewsViewHolder {
-        @Bind(R.id.tv_news_date)
+        @BindView(R.id.tv_news_date)
         TextView mTvNewsDate;
 
         public NewsDateViewHolder(View itemView) {
