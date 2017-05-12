@@ -80,7 +80,7 @@ public class LaunchActivity extends BaseActivity {
     private Observable<Long> defer, just, interval;
     private Subscriber<Long> intervalSubscriber;
 
-
+    private boolean isClipToPadding = false;
     private HeadPhonesRecivier recivier;
 
     @Override
@@ -266,6 +266,9 @@ public class LaunchActivity extends BaseActivity {
      * @param position
      */
     private void dealAciont(int position) {
+
+        listView.setClipToPadding(isClipToPadding = !isClipToPadding);
+
         switch (position) {
             case 0:
                 RxJavaCreatingObservables();
