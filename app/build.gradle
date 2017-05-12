@@ -142,15 +142,18 @@ dependencies {
     compile project(':SwipeLayoutLibrary')
     compile project(':PhotoPicker')
     compile project(':ScaleImagelibrary')
-    compile project(':emojiLibrary')
-    compile project(':emojiAllLibrary')
+    compile project(':emoji:emojiLibrary')
+    compile project(':emoji:emojiAllLibrary')
     compile project(':RxPermissions')
     compile project(':ArcLayoutLibrary')
     compile project(':autobahn')
-    compile project(':waveview')
-    compile project(':wavelibrary')
+    compile project(':wave:waveview')
+    compile project(':wave:wavelibrary')
     if (project.jnistudyIsLibrary)
-        compile project(':jnistudy')
+        compile project(':jni:jnistudy')
+
+    compile project(":Sdk:libjava")
+    compile project(":Sdk:libraryandroid")
 
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"

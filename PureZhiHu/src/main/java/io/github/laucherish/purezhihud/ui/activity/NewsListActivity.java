@@ -18,6 +18,8 @@ import butterknife.BindView;
 import io.github.laucherish.purezhihud.R;
 import io.github.laucherish.purezhihud.base.BaseActivity;
 import io.github.laucherish.purezhihud.base.Constant;
+import io.github.laucherish.purezhihud.ui.adapter.NewsListAdapter;
+import io.github.laucherish.purezhihud.ui.fragment.NewsListFragment;
 import io.github.laucherish.purezhihud.utils.PrefUtil;
 
 public class NewsListActivity extends BaseActivity {

@@ -38,6 +38,8 @@ import com.barswipe.jni.Jnidemo;
 import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
 import com.barswipe.volume.wave.HeadPhonesRecivier;
+import com.example.LibJavaTest;
+import com.example.libraryandroid.LibTestAndroid;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
@@ -159,6 +161,19 @@ public class LaunchActivity extends BaseActivity {
         registerReciver();
 
         testStream();
+
+        libSdkTest();
+    }
+
+    /**
+     *
+     */
+    private void libSdkTest() {
+        Log.e("libTestJava", new LibJavaTest().getStringFromLib());
+
+        LibTestAndroid test = new LibTestAndroid();
+        test.toast(this,"用android library来用");
+        Log.e("libTestAndroid", test.testOtherLib());
     }
 
     /**
@@ -175,14 +190,14 @@ public class LaunchActivity extends BaseActivity {
                 .filter(name -> name.startsWith("s"))
                 .collect(Collectors.toList());
 
-        Log.e("Stream",data.toString());
+        Log.e("Stream", data.toString());
 
         //按首字母分组并排序
         List<Map.Entry<String, List<String>>> group = Stream.of(names)
                 .groupBy(name -> String.valueOf(name.charAt(0)))
                 .sortBy(Map.Entry::getKey)
                 .collect(Collectors.toList());
-        Log.e("Stream",group.toString());
+        Log.e("Stream", group.toString());
     }
 
     /**
