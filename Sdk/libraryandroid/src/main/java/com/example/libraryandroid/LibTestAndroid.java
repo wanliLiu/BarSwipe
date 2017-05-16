@@ -29,6 +29,12 @@ public class LibTestAndroid {
     /**
      *
      */
+    private void mytest(){
+        System.out.println("我是私有方法打印我啊你这是！！！！！！！！！！");
+    }
+    /**
+     *
+     */
     public void sout() {
         System.out.println("测试信息，已经调用了sout()方法");
     }
@@ -36,12 +42,22 @@ public class LibTestAndroid {
     /**
      *
      */
+    private void testFuck()
+    {
+        System.out.println("testFuck");
+    }
+
+    /**
+     *
+     */
+    @NotProguard
     public String testOtherLib() {
         JSONObject object = new JSONObject();
         object.put("code", "12");
         object.put("message", "来自库里面的东西，依赖第三方东西");
         object.put("result", "结果好了");
-
+        mytest();
+        testFuck();
         return object.toJSONString();
     }
 }

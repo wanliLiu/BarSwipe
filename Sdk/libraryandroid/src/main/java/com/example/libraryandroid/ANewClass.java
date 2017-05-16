@@ -9,7 +9,7 @@ public class ANewClass {
     /**
      *
      */
-    public void testA()
+    private void testA()
     {
 
     }
@@ -25,7 +25,7 @@ public class ANewClass {
     /**
      *
      */
-    public void testC()
+    private void testC()
     {
 
     }
