@@ -22,6 +22,7 @@ public class LibTestAndroid {
      * @param context
      * @param msg
      */
+    @NotProguard
     public void toast(Context context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }

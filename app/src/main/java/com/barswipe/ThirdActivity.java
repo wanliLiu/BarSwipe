@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.ObjectAnimator;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -86,7 +88,7 @@ public class ThirdActivity extends BaseActivity {
         });
     }
 
-
+    @Subscribe
     public void onEvent(String dsd) {
         View view = findViewById(R.id.back);
         view.setVisibility(view.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);

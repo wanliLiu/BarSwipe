@@ -14,9 +14,11 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.lang.reflect.Method;
 
-import de.greenrobot.event.EventBus;
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -61,28 +63,25 @@ public class SecondActivity extends BaseActivity {
 
         EventBus.getDefault().register(this);
 
-        findViewById(R.id.crotuon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Configuration configuration = new Configuration.Builder()
-                        .setDuration(Configuration.DURATION_INFINITE)
-                        .build();
-                Style style = new Style.Builder()
-                        .setConfiguration(configuration)
-                        .setBackgroundColor(R.color.colorPrimary)
-                        .setTextColor(R.color.colorAccent)
-                        .setImageResource(R.mipmap.icon_loading_10)
-                        .setTextSize(30)
-                        .build();
-                Crouton.makeText(SecondActivity.this, "第二次点击", style, (ViewGroup) findViewById(R.id.dtesTe)).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        findViewById(R.id.crotuon).setOnClickListener(v -> {
+            Configuration configuration = new Configuration.Builder()
+                    .setDuration(Configuration.DURATION_INFINITE)
+                    .build();
+            Style style = new Style.Builder()
+                    .setConfiguration(configuration)
+                    .setBackgroundColor(R.color.colorPrimary)
+                    .setTextColor(R.color.colorAccent)
+                    .setImageResource(R.mipmap.icon_loading_10)
+                    .setTextSize(30)
+                    .build();
+            Crouton.makeText(SecondActivity.this, "第二次点击", style, (ViewGroup) findViewById(R.id.dtesTe)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 //                        ((Crouton)v.getTag()).hide();
-                        Snackbar.make(v, "你为啥要点击我啊？？？", Snackbar.LENGTH_SHORT).show();
-                        OpenNotify();
-                    }
-                }).show();
-            }
+                    Snackbar.make(v, "你为啥要点击我啊？？？", Snackbar.LENGTH_SHORT).show();
+                    OpenNotify();
+                }
+            }).show();
         });
 
         int actionBarContainerId = Resources.getSystem().getIdentifier("action_mode_bar_stub", "id", "android");
@@ -149,7 +148,7 @@ public class SecondActivity extends BaseActivity {
         }
 
     }
-
+    @Subscribe
     public void onEvent(String dsd) {
         View view = findViewById(R.id.back);
         view.setVisibility(view.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);

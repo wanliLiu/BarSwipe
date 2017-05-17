@@ -20,11 +20,13 @@ import com.barswipe.R;
 import com.barswipe.util.FileUtil;
 import com.barswipe.volume.wave.util.MusicSimilarityUtil;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.greenrobot.event.EventBus;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -103,6 +105,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_record_view_recycler);
+        ButterKnife.setDebug(true);
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
@@ -752,6 +755,7 @@ public class AcitivtyWaveTestRecycler extends AppCompatActivity implements View.
      *
      * @param event
      */
+    @Subscribe
     public void onEvent(HeadSetEvent event) {
         quitCurrentAction();
     }

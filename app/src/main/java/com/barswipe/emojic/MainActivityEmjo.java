@@ -26,7 +26,8 @@ import android.widget.CompoundButton;
 import com.barswipe.NotificationEvent;
 import com.barswipe.R;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconTextView;

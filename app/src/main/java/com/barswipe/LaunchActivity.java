@@ -43,6 +43,9 @@ import com.example.libraryandroid.LibTestAndroid;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.Serializable;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -52,7 +55,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import de.greenrobot.event.EventBus;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -1142,6 +1144,7 @@ public class LaunchActivity extends BaseActivity {
     /**
      * @param test
      */
+    @Subscribe
     public void onEvent(NotificationEvent test) {
 //        deferJust(test.event);
         if (intervalSubscriber != null)

@@ -201,4 +201,5 @@ dependencies {
     //一个比较有用的东西  用来筛选等一系列操作
     compile 'com.annimon:stream:1.1.7'
 
+    compile 'org.greenrobot:eventbus:3.+'
 }

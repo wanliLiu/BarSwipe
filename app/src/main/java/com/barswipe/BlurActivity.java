@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+
 
 /**
  * Created by SoLi on 2015/12/9.
