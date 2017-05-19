@@ -5,9 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.view.View;
 
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
-import rx.functions.Action1;
 
 /**
  * http://www.cnblogs.com/Chenshuai7/p/5321766.html
@@ -23,12 +22,7 @@ public class GridLayoutStudy extends AppCompatActivity {
         setContentView(R.layout.activity_grid_layout_study);
 
         RxView.clicks(findViewById(R.id.test))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        dd();
-                    }
-                });
+                .subscribe(avoid -> dd());
     }
 
 

@@ -17,7 +17,7 @@ import com.barswipe.Scroller.ScrollerActivity;
 import com.barswipe.ViewDragHelper.ViewDragHelperStudyActivity;
 import com.barswipe.animation.EaseInterpolator.MainActivityAnimation;
 import com.barswipe.snapscrollview.ProductDetailActivity;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import java.util.concurrent.TimeUnit;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
-import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
 
@@ -52,64 +51,33 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.dsdsd).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TrignalActivity.class));
-            }
-        });
+        findViewById(R.id.dsdsd).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, TrignalActivity.class)));
 
-        findViewById(R.id.webView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, WebViewActivity.class));
-            }
-        });
+        findViewById(R.id.webView).setOnClickListener(v -> startActivity(new Intent(MainActivity.this, WebViewActivity.class)));
 
-        findViewById(R.id.startScrooller).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ScrollerActivity.class));
-            }
-        });
-        findViewById(R.id.startProduct).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ProductDetailActivity.class));
-            }
-        });
+        findViewById(R.id.startScrooller).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, ScrollerActivity.class)));
+        findViewById(R.id.startProduct).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, ProductDetailActivity.class)));
 
-        findViewById(R.id.studyEaseAnimation).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MainActivityAnimation.class));
-            }
-        });
+        findViewById(R.id.studyEaseAnimation).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, MainActivityAnimation.class)));
 
         final TextView view = (TextView) findViewById(R.id.bottomLine);
         view.setTag(1);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String str = getResources().getString(R.string.str_rank_desc_renqi);
-                if ((Integer) v.getTag() == 1) {
-                    view.setText(str);
-                    v.setTag(2);
-                } else {
-                    v.setTag(1);
-                    view.setText(R.string.str_rank_desc_renqi);
-                }
+        view.setOnClickListener(v -> {
+            String str = getResources().getString(R.string.str_rank_desc_renqi);
+            if ((Integer) v.getTag() == 1) {
+                view.setText(str);
+                v.setTag(2);
+            } else {
+                v.setTag(1);
+                view.setText(R.string.str_rank_desc_renqi);
             }
         });
 
         RxView.clicks(findViewById(R.id.studyDragr))
                 .throttleFirst(ViewConfiguration.getDoubleTapTimeout(), TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        showToastFullscreen();
-                        startActivity(new Intent(MainActivity.this, MainActivityDragGridView.class));
-                    }
+                .subscribe(avoid ->{
+                    showToastFullscreen();
+                    startActivity(new Intent(MainActivity.this, MainActivityDragGridView.class));
                 });
 //        findViewById(R.id.studyDragr).setOnClickListener(new View.OnClickListener() {
 //            @Override

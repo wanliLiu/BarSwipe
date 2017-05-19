@@ -17,10 +17,11 @@ package com.naman14.timber.lastfmapi;
 import com.naman14.timber.lastfmapi.models.AlbumInfo;
 import com.naman14.timber.lastfmapi.models.ArtistInfo;
 
-import retrofit.Callback;
-import retrofit.http.GET;
-import retrofit.http.Headers;
-import retrofit.http.Query;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.Query;
+
 
 public interface LastFmRestService {
 
@@ -29,10 +30,10 @@ public interface LastFmRestService {
 
     @Headers("Cache-Control: public")
     @GET(BASE_PARAMETERS_ALBUM)
-    void getAlbumInfo(@Query("artist") String artist, @Query("album") String album, Callback<AlbumInfo> callback);
+    Call<AlbumInfo> getAlbumInfo(@Query("artist") String artist, @Query("album") String album);
 
     @Headers("Cache-Control: public")
     @GET(BASE_PARAMETERS_ARTIST)
-    void getArtistInfo(@Query("artist") String artist, Callback<ArtistInfo> callback);
+    Call<ArtistInfo> getArtistInfo(@Query("artist") String artist);
 
 }

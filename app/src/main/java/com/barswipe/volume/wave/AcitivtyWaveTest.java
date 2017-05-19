@@ -24,7 +24,6 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.functions.Action1;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -116,15 +115,12 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         updateUi();
 
         RxPermissions.getInstance(this)
-                .request(Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean aBoolean) {
-                        if (aBoolean)
-                            initAudioRecord();
-                        else
-                            AcitivtyWaveTest.this.finish();
-                    }
+                .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(aBoolean -> {
+                    if (aBoolean)
+                        initAudioRecord();
+                    else
+                        AcitivtyWaveTest.this.finish();
                 });
 
 

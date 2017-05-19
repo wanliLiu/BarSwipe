@@ -3,10 +3,10 @@ package io.github.laucherish.purezhihud.network.service;
 import io.github.laucherish.purezhihud.bean.NewsDetail;
 import io.github.laucherish.purezhihud.bean.NewsList;
 import io.github.laucherish.purezhihud.network.manager.RetrofitManager;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * Created by laucherish on 16/3/15.

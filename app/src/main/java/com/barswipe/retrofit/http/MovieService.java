@@ -7,10 +7,10 @@ import com.barswipe.retrofit.entity.Subject;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by liukun on 16/3/9.

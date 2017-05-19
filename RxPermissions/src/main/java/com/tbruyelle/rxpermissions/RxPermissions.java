@@ -17,6 +17,7 @@ package com.tbruyelle.rxpermissions;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,14 +32,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import rx.Observable;
-import rx.functions.Func1;
-import rx.subjects.PublishSubject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.subjects.PublishSubject;
 
 public class RxPermissions {
 
-    public static final String TAG = "RxPermissions";
-    static RxPermissions sSingleton;
+    static final Object TRIGGER = new Object();
+
+    private static final String TAG = "RxPermissions";
+    private static RxPermissions sSingleton;
 
     public static RxPermissions getInstance(Context ctx) {
         if (sSingleton == null) {
@@ -76,33 +82,28 @@ public class RxPermissions {
      * If one or several permissions have never been requested, invoke the related framework method
      * to ask the user if he allows the permissions.
      */
-    public Observable.Transformer<Object, Boolean> ensure(final String... permissions) {
-        return new Observable.Transformer<Object, Boolean>() {
-            @Override
-            public Observable<Boolean> call(Observable<Object> o) {
-                return request(o, permissions)
-                        // Transform Observable<Permission> to Observable<Boolean>
-                        .buffer(permissions.length)
-                        .flatMap(new Func1<List<Permission>, Observable<Boolean>>() {
-                            @Override
-                            public Observable<Boolean> call(List<Permission> permissions) {
-                                if (permissions.isEmpty()) {
-                                    // Occurs during orientation change, when the subject receives onComplete.
-                                    // In that case we don't want to propagate that empty list to the
-                                    // subscriber, only the onComplete.
-                                    return Observable.empty();
-                                }
-                                // Return true if all permissions are granted.
-                                for (Permission p : permissions) {
-                                    if (!p.granted) {
-                                        return Observable.just(false);
-                                    }
-                                }
-                                return Observable.just(true);
+    public <T> ObservableTransformer<T, Boolean> ensure(final String... permissions) {
+        return upstream -> request(upstream, permissions)
+                // Transform Observable<Permission> to Observable<Boolean>
+                .buffer(permissions.length)
+                .flatMap(new Function<List<Permission>, ObservableSource<Boolean>>() {
+                    @Override
+                    public ObservableSource<Boolean> apply(@NonNull List<Permission> permissions1) throws Exception {
+                        if (permissions1.isEmpty()) {
+                            // Occurs during orientation change, when the subject receives onComplete.
+                            // In that case we don't want to propagate that empty list to the
+                            // subscriber, only the onComplete.
+                            return Observable.empty();
+                        }
+                        // Return true if all permissions are granted.
+                        for (Permission p : permissions1) {
+                            if (!p.granted) {
+                                return Observable.just(false);
                             }
-                        });
-            }
-        };
+                        }
+                        return Observable.just(true);
+                    }
+                });
     }
 
     /**
@@ -112,13 +113,8 @@ public class RxPermissions {
      * If one or several permissions have never been requested, invoke the related framework method
      * to ask the user if he allows the permissions.
      */
-    public Observable.Transformer<Object, Permission> ensureEach(final String... permissions) {
-        return new Observable.Transformer<Object, Permission>() {
-            @Override
-            public Observable<Permission> call(Observable<Object> o) {
-                return request(o, permissions);
-            }
-        };
+    public <T> ObservableTransformer<T, Permission> ensureEach(final String... permissions) {
+        return o -> request(o, permissions);
     }
 
     /**
@@ -126,7 +122,7 @@ public class RxPermissions {
      * of your application</b>.
      */
     public Observable<Boolean> request(final String... permissions) {
-        return Observable.just(null).compose(ensure(permissions));
+        return Observable.just(TRIGGER).compose(ensure(permissions));
     }
 
     /**
@@ -134,19 +130,24 @@ public class RxPermissions {
      * of your application</b>.
      */
     public Observable<Permission> requestEach(final String... permissions) {
-        return Observable.just(null).compose(ensureEach(permissions));
+        return Observable.just(TRIGGER).compose(ensureEach(permissions));
     }
 
+    /**
+     * @param trigger
+     * @param permissions
+     * @return
+     */
     private Observable<Permission> request(final Observable<?> trigger,
                                            final String... permissions) {
         if (permissions == null || permissions.length == 0) {
             throw new IllegalArgumentException("RxPermissions.request/requestEach requires at least one input permission");
         }
         return oneOf(trigger, pending(permissions))
-                .flatMap(new Func1<Object, Observable<Permission>>() {
+                .flatMap(new Function<Object, Observable<Permission>>() {
                     @Override
-                    public Observable<Permission> call(Object o) {
-                        return request_(permissions);
+                    public Observable<Permission> apply(Object o) throws Exception {
+                        return requestImplementation(permissions);
                     }
                 });
     }
@@ -157,18 +158,18 @@ public class RxPermissions {
                 return Observable.empty();
             }
         }
-        return Observable.just(null);
+        return Observable.just(TRIGGER);
     }
 
     private Observable<?> oneOf(Observable<?> trigger, Observable<?> pending) {
         if (trigger == null) {
-            return Observable.just(null);
+            return Observable.just(TRIGGER);
         }
         return Observable.merge(trigger, pending);
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    private Observable<Permission> request_(final String... permissions) {
+    private Observable<Permission> requestImplementation(final String... permissions) {
 
         List<Observable<Permission>> list = new ArrayList<>(permissions.length);
         List<String> unrequestedPermissions = new ArrayList<>();
@@ -206,7 +207,7 @@ public class RxPermissions {
             startShadowActivity(unrequestedPermissions
                     .toArray(new String[unrequestedPermissions.size()]));
         }
-        return Observable.concat(Observable.from(list));
+        return Observable.concat(Observable.fromIterable(list));
     }
 
     /**
@@ -240,7 +241,28 @@ public class RxPermissions {
         return true;
     }
 
-    void startShadowActivity(String[] permissions) {
+    /**
+     * 获取当前进程名字
+     *
+     * @param ctx
+     * @return
+     */
+    private String getCurrentProcessName(Context ctx) {
+        final int processId = android.os.Process.myPid();
+        ActivityManager manager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo info : manager.getRunningAppProcesses()) {
+            if (processId == info.pid) {
+                return info.processName;
+            }
+        }
+
+        return "";
+    }
+
+    /**
+     * @param permissions
+     */
+    private void startShadowActivity(String[] permissions) {
         log("startShadowActivity " + TextUtils.join(", ", permissions));
         Intent intent = new Intent(mCtx, ShadowActivity.class);
         intent.putExtra("permissions", permissions);
@@ -278,14 +300,13 @@ public class RxPermissions {
         } else if (Manifest.permission.WRITE_SETTINGS.equals(permission)) {
             return Settings.System.canWrite(mCtx);
         }
-        return mCtx.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+        return mCtx.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     private boolean isRevoked_(String permission) {
         return mCtx.getPackageManager().isPermissionRevokedByPolicy(permission, mCtx.getPackageName());
     }
-
 
     /**
      * @param requestCode
@@ -294,19 +315,22 @@ public class RxPermissions {
      * @param shouldShowRequestPermissionRationale
      */
     void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
-        for (int i = 0, size = permissions.length; i < size; i++) {
-            log("onRequestPermissionsResult  " + permissions[i]);
-            // Find the corresponding subject
-            PublishSubject<Permission> subject = mSubjects.get(permissions[i]);
-            if (subject == null) {
-                // No subject found
-                throw new IllegalStateException("RxPermissions.onRequestPermissionsResult invoked but didn't find the corresponding permission request.");
+        try {
+            for (int i = 0, size = permissions.length; i < size; i++) {
+                log("onRequestPermissionsResult  " + permissions[i]);
+                // Find the corresponding subject
+                PublishSubject<Permission> subject = mSubjects.get(permissions[i]);
+                if (subject != null) {
+                    mSubjects.remove(permissions[i]);
+                    boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+                    subject.onNext(new Permission(permissions[i], granted, shouldShowRequestPermissionRationale[i]));
+                    subject.onComplete();
+                }
             }
-            mSubjects.remove(permissions[i]);
-            boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-            subject.onNext(new Permission(permissions[i], granted, shouldShowRequestPermissionRationale[i]));
-            subject.onCompleted();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     /**

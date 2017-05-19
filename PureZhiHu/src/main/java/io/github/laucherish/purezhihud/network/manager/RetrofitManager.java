@@ -11,6 +11,7 @@ import io.github.laucherish.purezhihud.bean.NewsDetail;
 import io.github.laucherish.purezhihud.bean.NewsList;
 import io.github.laucherish.purezhihud.network.service.ZhihuService;
 import io.github.laucherish.purezhihud.utils.NetUtil;
+import io.reactivex.Observable;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -19,9 +20,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
 /**
  * Created by laucherish on 16/3/15.
@@ -55,7 +55,7 @@ public class RetrofitManager {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_ZHIHU_URL)
                 .client(mOkHttpClient)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mZhihuService = retrofit.create(ZhihuService.class);

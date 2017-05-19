@@ -11,12 +11,11 @@ import android.widget.ToggleButton;
 import com.barswipe.BaseActivity;
 import com.barswipe.GridLayoutStudy;
 import com.barswipe.R;
-import com.jakewharton.rxbinding.view.RxView;
-import com.jakewharton.rxbinding.widget.RxCompoundButton;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxCompoundButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.functions.Action1;
 
 /**
  * Created by soli on 29/10/2016.
@@ -40,66 +39,33 @@ public class NewFramActivity extends BaseActivity {
         setTheme(R.style.lightTheme);
 
         RxView.clicks(findViewById(R.id.bottomNavigation))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(NewFramActivity.this, BottomNavigationActivity.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(NewFramActivity.this, BottomNavigationActivity.class)));
 
         RxCompoundButton.checkedChanges(btn)
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean aBoolean) {
-                        setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
-                        if (aBoolean) {
-                            startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
-                        }
+                .subscribe(aBoolean -> {
+                    setTheme(aBoolean ? R.style.darkTheme : R.style.lightTheme);
+                    if (aBoolean) {
+                        startActivity(new Intent(NewFramActivity.this, ScrollingActivity.class));
                     }
                 });
 
 
         RxView.clicks(findViewById(R.id.btnBottom))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        showBottomSheet();
-                    }
-                });
+                .subscribe(av -> showBottomSheet());
 
 
         RxView.clicks(findViewById(R.id.button6))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(NewFramActivity.this, FullscreenActivity.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(NewFramActivity.this, FullscreenActivity.class)));
 
         RxView.clicks(findViewById(R.id.btnBehavior))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(NewFramActivity.this, CustomBehaviorActivity.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(NewFramActivity.this, CustomBehaviorActivity.class)));
 
         RxView.clicks(findViewById(R.id.btnGridLayout))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(NewFramActivity.this, GridLayoutStudy.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(NewFramActivity.this, GridLayoutStudy.class)));
 
         RxView.clicks(findViewById(R.id.snackbarTest))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        Snackbar.make(findViewById(R.id.snackbarTest), "Snackbar 和 FloatingActionButton的联系", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });
+                .subscribe(a -> Snackbar.make(findViewById(R.id.snackbarTest), "Snackbar 和 FloatingActionButton的联系", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show());
     }
 
     /**

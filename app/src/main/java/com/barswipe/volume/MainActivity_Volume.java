@@ -23,14 +23,13 @@ import com.barswipe.volume.wave.AudioMaker;
 import com.barswipe.volume.wave.MainActivity_good_view;
 import com.barswipe.volume.wave.MainActivity_wave;
 import com.barswipe.volume.wave.StudyAudioRecord;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import rx.functions.Action1;
 
 /**
  * Created by Soli on 2017/1/16.
@@ -87,57 +86,23 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
 
 
         RxView.clicks(findViewById(R.id.recycle))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(MainActivity_Volume.this, RecordPlayActivity.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, RecordPlayActivity.class)));
         RxView.clicks(findViewById(R.id.job))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(MainActivity_Volume.this, StudyAudioRecord.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, StudyAudioRecord.class)));
+        ;
         RxView.clicks(findViewById(R.id.pcm2amr))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(MainActivity_Volume.this, MainActivity_pcm_amr.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, MainActivity_pcm_amr.class)));
 
         RxView.clicks(findViewById(R.id.audioWave))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(MainActivity_Volume.this, MainActivity_wave.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, MainActivity_wave.class)));
         RxView.clicks(findViewById(R.id.audioMaker))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(MainActivity_Volume.this, AudioMaker.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, AudioMaker.class)));
 
         RxView.clicks(findViewById(R.id.AudioFxActivity))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(MainActivity_Volume.this, AudioFxActivity.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, AudioFxActivity.class)));
 
         RxView.clicks(findViewById(R.id.goodView))
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        startActivity(new Intent(MainActivity_Volume.this, MainActivity_good_view.class));
-                    }
-                });
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, MainActivity_good_view.class)));
 
         timeInput = (EditText) findViewById(R.id.timeInput);
         countDownTimer = new CountDownTimer() {
@@ -279,39 +244,36 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
     public void onClick(final View v) {
 
         RxPermissions.getInstance(this).request(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean aBoolean) {
-                        switch (v.getId()) {
-                            case R.id.mediarecorder: {
-                                if (TextUtils.isEmpty(timeInput.getText().toString())) {
-                                    Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                .subscribe(aBoolean -> {
+                    switch (v.getId()) {
+                        case R.id.mediarecorder: {
+                            if (TextUtils.isEmpty(timeInput.getText().toString())) {
+                                Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 //                                mediarecorder();
 //                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
 //                                countDownTimer.start();
-                                startRecord();
+                            startRecord();
+                        }
+                        break;
+                        case R.id.audiorecorder: {
+                            if (TextUtils.isEmpty(timeInput.getText().toString())) {
+                                Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
+                                return;
                             }
-                            break;
-                            case R.id.audiorecorder: {
-                                if (TextUtils.isEmpty(timeInput.getText().toString())) {
-                                    Toast.makeText(MainActivity_Volume.this, "输入录制的时间", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-                                audiorecorder();
-                                countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
-                                countDownTimer.start();
+                            audiorecorder();
+                            countDownTimer.setTime(Integer.parseInt(timeInput.getText().toString()) * 1000, 1000);
+                            countDownTimer.start();
 
 //                                startRecord();
-                            }
-                            break;
-                            case R.id.play:
-                                startPlaying();
-                                break;
-                            default:
-                                break;
                         }
+                        break;
+                        case R.id.play:
+                            startPlaying();
+                            break;
+                        default:
+                            break;
                     }
                 });
     }

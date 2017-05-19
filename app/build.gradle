@@ -121,7 +121,7 @@ dependencies {
 
     compile "com.squareup.retrofit2:retrofit:${retrofit2_version}"
 //    compile 'com.squareup.retrofit2:adapter-rxjava2:latest.version'
-    compile "com.squareup.retrofit2:adapter-rxjava:${retrofit2_version}"
+    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
     compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
 //    compile 'com.squareup.retrofit2:converter-gson:latest.version'
 

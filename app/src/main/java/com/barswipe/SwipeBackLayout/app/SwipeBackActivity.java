@@ -8,7 +8,7 @@ import android.view.ViewConfiguration;
 
 import com.barswipe.SwipeBackLayout.SwipeBackLayout;
 import com.barswipe.SwipeBackLayout.Utils;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 
 public class SwipeBackActivity extends RxAppCompatActivity implements SwipeBackActivityBase {

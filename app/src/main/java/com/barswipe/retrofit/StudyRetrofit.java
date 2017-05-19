@@ -41,12 +41,9 @@ public class StudyRetrofit extends BaseActivity {
         setContentView(R.layout.study_retrofit);
         ButterKnife.bind(this);
 
-        getTopMovieOnNext = new SubscriberOnNextListener<List<Subject>>() {
-            @Override
-            public void onNext(List<Subject> subjects) {
+        getTopMovieOnNext = (SubscriberOnNextListener<List<Subject>>) subjects -> {
 //                resultTV.setText(subjects.toString());
-                resultTV.append(subjects.toString());
-            }
+            resultTV.append(subjects.toString());
         };
     }
 

@@ -3,24 +3,24 @@ package com.naman14.timber.lastfmapi;
 import com.naman14.timber.lastfmapi.models.ScrobbleInfo;
 import com.naman14.timber.lastfmapi.models.UserLoginInfo;
 
-import retrofit.Callback;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
-import retrofit.http.POST;
+import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
+
 
 /**
  * Created by christoph on 17.07.16.
  */
 public interface LastFmUserRestService {
 
-    String BASE = "/";
 
-    @POST(BASE)
+    @POST
     @FormUrlEncoded
-    void getUserLoginInfo(@Field("method") String method, @Field("format") String format, @Field("api_key") String apikey, @Field("api_sig") String apisig, @Field("username") String username, @Field("password") String password, Callback<UserLoginInfo> callback);
+    Call<UserLoginInfo> getUserLoginInfo(@Field("method") String method, @Field("format") String format, @Field("api_key") String apikey, @Field("api_sig") String apisig, @Field("username") String username, @Field("password") String password);
 
-    @POST(BASE)
+    @POST
     @FormUrlEncoded
-    void getScrobbleInfo(@Field("method") String method,  @Field("api_key") String apikey, @Field("api_sig") String apisig, @Field("sk") String token,@Field("artist") String artist, @Field("track") String track, @Field("timestamp") long timestamp, Callback<ScrobbleInfo> callback);
+    Call<ScrobbleInfo> getScrobbleInfo(@Field("method") String method, @Field("api_key") String apikey, @Field("api_sig") String apisig, @Field("sk") String token, @Field("artist") String artist, @Field("track") String track, @Field("timestamp") long timestamp);
 
 }

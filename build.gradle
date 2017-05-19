@@ -60,12 +60,14 @@ project.ext {
     FRESCO_VERSION = "1.+"
     butterknife_version = "8.5.1"
 
-    rxjava_version = "1.1.9"
-    rxandroid_version = "1.2.1"
-    RxBing_version = "0.4.0"
-    RxLifeCycle_version = "0.8.0"
+    //Rx
+    rxjava_version = "2.+"
+    rxandroid_version = "2.+"
+    RxBinding_version = "2.+"
+    RxLifeCycle_version = "2.+"
+
     OKHTTP_VERSION = "3.+"//3.4.1
-    retrofit2_version = "2.2.0"
+    retrofit2_version = "2.+"
     glide_version = "3.7.0"
 
     FAST_JSON_VERSION = "1.2.31"

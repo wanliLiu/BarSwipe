@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
@@ -40,6 +41,13 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+
+
+    //Lambda表达式 jack编译工具
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -55,7 +63,7 @@ dependencies {
 
     // retrofit2 + okhttp3
     compile "com.squareup.retrofit2:retrofit:${retrofit2_version}"
-    compile "com.squareup.retrofit2:adapter-rxjava:${retrofit2_version}"
+    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
     compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
 
 //    compile "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"

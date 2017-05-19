@@ -23,17 +23,14 @@ import butterknife.BindView;
 import io.github.laucherish.purezhihud.R;
 import io.github.laucherish.purezhihud.base.BaseFragment;
 import io.github.laucherish.purezhihud.bean.News;
-import io.github.laucherish.purezhihud.bean.NewsDetail;
 import io.github.laucherish.purezhihud.network.manager.RetrofitManager;
 import io.github.laucherish.purezhihud.ui.activity.AboutActivity;
 import io.github.laucherish.purezhihud.ui.activity.NewsDetailActivity;
 import io.github.laucherish.purezhihud.utils.HtmlUtil;
 import io.github.laucherish.purezhihud.utils.L;
 import io.github.laucherish.purezhihud.utils.PrefUtil;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by laucherish on 16/3/17.
@@ -87,7 +84,7 @@ public class NewsDetailFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_detail,menu);
+        inflater.inflate(R.menu.menu_detail, menu);
     }
 
     @Override
@@ -121,45 +118,34 @@ public class NewsDetailFragment extends BaseFragment {
         RetrofitManager.builder().getNewsDetail(mNews.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        showProgress();
-                    }
-                })
-                .subscribe(new Action1<NewsDetail>() {
-                    @Override
-                    public void call(NewsDetail newsDetail) {
-                        hideProgress();
-                        L.object(newsDetail);
-                        if (newsDetail == null) {
-                            mTvLoadEmpty.setVisibility(View.VISIBLE);
-                        } else {
-                            Glide.with(getActivity())
-                                    .load(newsDetail.getImage())
-                                    .into(mIvHeader);
-                            mTvTitle.setText(newsDetail.getTitle());
-                            mTvSource.setText(newsDetail.getImage_source());
+                .doOnSubscribe(disposable -> showProgress())
+                .subscribe(newsDetail -> {
+                    hideProgress();
+                    L.object(newsDetail);
+                    if (newsDetail == null) {
+                        mTvLoadEmpty.setVisibility(View.VISIBLE);
+                    } else {
+                        Glide.with(getActivity())
+                                .load(newsDetail.getImage())
+                                .into(mIvHeader);
+                        mTvTitle.setText(newsDetail.getTitle());
+                        mTvSource.setText(newsDetail.getImage_source());
 
-                            boolean isNight = PrefUtil.isDay();
-                            StringBuffer stringBuffer = HtmlUtil.handleHtml(newsDetail.getBody(),isNight);
-                            mWvNews.setDrawingCacheEnabled(true);
-                            mWvNews.loadDataWithBaseURL("file:///android_asset/", stringBuffer.toString(), "text/html", "utf-8", null);
+                        boolean isNight = PrefUtil.isDay();
+                        StringBuffer stringBuffer = HtmlUtil.handleHtml(newsDetail.getBody(), isNight);
+                        mWvNews.setDrawingCacheEnabled(true);
+                        mWvNews.loadDataWithBaseURL("file:///android_asset/", stringBuffer.toString(), "text/html", "utf-8", null);
 
 //                            String htmlData = HtmlUtil.createHtmlData(newsDetail);
 //                            mWvNews.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
-                            mTvLoadEmpty.setVisibility(View.GONE);
-                        }
-                        mTvLoadError.setVisibility(View.GONE);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        hideProgress();
-                        L.e(throwable,"Load news detail error");
-                        mTvLoadError.setVisibility(View.VISIBLE);
                         mTvLoadEmpty.setVisibility(View.GONE);
                     }
+                    mTvLoadError.setVisibility(View.GONE);
+                }, throwable -> {
+                    hideProgress();
+                    L.e(throwable, "Load news detail error");
+                    mTvLoadError.setVisibility(View.VISIBLE);
+                    mTvLoadEmpty.setVisibility(View.GONE);
                 });
     }
 

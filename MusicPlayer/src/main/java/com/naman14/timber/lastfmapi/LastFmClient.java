@@ -25,7 +25,6 @@ import com.naman14.timber.lastfmapi.models.AlbumQuery;
 import com.naman14.timber.lastfmapi.models.ArtistInfo;
 import com.naman14.timber.lastfmapi.models.ArtistQuery;
 import com.naman14.timber.lastfmapi.models.LastfmUserSession;
-import com.naman14.timber.lastfmapi.models.ScrobbleInfo;
 import com.naman14.timber.lastfmapi.models.ScrobbleQuery;
 import com.naman14.timber.lastfmapi.models.UserLoginInfo;
 import com.naman14.timber.lastfmapi.models.UserLoginQuery;
@@ -34,9 +33,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class LastFmClient {
 
@@ -46,8 +46,8 @@ public class LastFmClient {
 
     public static final String JSON = "json";
 
-    public static final String BASE_API_URL = "http://ws.audioscrobbler.com/2.0";
-    public static final String BASE_SECURE_API_URL = "https://ws.audioscrobbler.com/2.0";
+    public static final String BASE_API_URL = "http://ws.audioscrobbler.com/2.0/";
+    public static final String BASE_SECURE_API_URL = "https://ws.audioscrobbler.com/2.0/";
 
     private static LastFmClient sInstance;
     private LastFmRestService mRestService;
@@ -91,65 +91,61 @@ public class LastFmClient {
     }
 
     public void getAlbumInfo(AlbumQuery albumQuery) {
-        mRestService.getAlbumInfo(albumQuery.mArtist, albumQuery.mALbum, new Callback<AlbumInfo>() {
-            @Override
-            public void success(AlbumInfo albumInfo, Response response) {
+        mRestService.getAlbumInfo(albumQuery.mArtist, albumQuery.mALbum)
+                .enqueue(new Callback<AlbumInfo>() {
+                    @Override
+                    public void onResponse(Call<AlbumInfo> call, Response<AlbumInfo> response) {
 
-            }
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-
-                error.printStackTrace();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<AlbumInfo> call, Throwable rror) {
+                        rror.printStackTrace();
+                    }
+                });
     }
 
     public void getArtistInfo(ArtistQuery artistQuery, final ArtistInfoListener listener) {
-        mRestService.getArtistInfo(artistQuery.mArtist, new Callback<ArtistInfo>() {
-            @Override
-            public void success(ArtistInfo artistInfo, Response response) {
-                listener.artistInfoSucess(artistInfo.mArtist);
-            }
+        mRestService.getArtistInfo(artistQuery.mArtist)
+                .enqueue(new Callback<ArtistInfo>() {
+                    @Override
+                    public void onResponse(Call<ArtistInfo> call, Response<ArtistInfo> response) {
+                        listener.artistInfoSucess(response.body().mArtist);
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                listener.artistInfoFailed();
-                error.printStackTrace();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<ArtistInfo> call, Throwable error) {
+                        listener.artistInfoFailed();
+                        error.printStackTrace();
+                    }
+                });
     }
 
     public void getUserLoginInfo(UserLoginQuery userLoginQuery, final UserListener listener) {
-        mUserRestService.getUserLoginInfo(UserLoginQuery.Method, JSON, API_KEY, generateMD5(userLoginQuery.getSignature()), userLoginQuery.mUsername, userLoginQuery.mPassword, new Callback<UserLoginInfo>() {
-            @Override
-            public void success(UserLoginInfo userLoginInfo, Response response) {
-                Log.d("Logedin", userLoginInfo.mSession.mToken + " " + userLoginInfo.mSession.mUsername);
-                mUserSession = userLoginInfo.mSession;
-                mUserSession.update(context);
-                listener.userSuccess();
-            }
+        mUserRestService.getUserLoginInfo(UserLoginQuery.Method, JSON, API_KEY,
+                generateMD5(userLoginQuery.getSignature()),
+                userLoginQuery.mUsername,
+                userLoginQuery.mPassword)
+                .enqueue(new Callback<UserLoginInfo>() {
+                    @Override
+                    public void onResponse(Call<UserLoginInfo> call, Response<UserLoginInfo> response) {
+                        UserLoginInfo userLoginInfo = response.body();
+                        Log.d("Logedin", userLoginInfo.mSession.mToken + " " + userLoginInfo.mSession.mUsername);
+                        mUserSession = userLoginInfo.mSession;
+                        mUserSession.update(context);
+                        listener.userSuccess();
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                listener.userInfoFailed();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<UserLoginInfo> call, Throwable t) {
+                        listener.userInfoFailed();
+                    }
+                });
     }
 
     public void Scrobble(ScrobbleQuery scrobbleQuery) {
         try {
-            mUserRestService.getScrobbleInfo(ScrobbleQuery.Method, API_KEY, generateMD5(scrobbleQuery.getSignature(mUserSession.mToken)), mUserSession.mToken, scrobbleQuery.mArtist, scrobbleQuery.mTrack, scrobbleQuery.mTimestamp, new Callback<ScrobbleInfo>() {
-                @Override
-                public void success(ScrobbleInfo scrobbleInfo, Response response) {
-
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                }
-            });
+            mUserRestService.getScrobbleInfo(ScrobbleQuery.Method, API_KEY, generateMD5(scrobbleQuery.getSignature(mUserSession.mToken)), mUserSession.mToken, scrobbleQuery.mArtist, scrobbleQuery.mTrack, scrobbleQuery.mTimestamp).enqueue(null);
         } catch (Exception e) {
             e.printStackTrace();
         }

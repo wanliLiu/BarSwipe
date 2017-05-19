@@ -8,16 +8,16 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by liukun on 16/3/9.
@@ -42,7 +42,7 @@ public class HttpMethods {
         retrofit = new Retrofit.Builder()
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(BASE_URL)
                 .build();
 
@@ -66,7 +66,7 @@ public class HttpMethods {
      * @param start      起始位置
      * @param count      获取长度
      */
-    public void getTopMovie(Subscriber<List<Subject>> subscriber, int start, int count) {
+    public void getTopMovie(Observer<List<Subject>> subscriber, int start, int count) {
 
 //        movieService.getTopMovie(start, count)
 //                .map(new HttpResultFunc<List<Subject>>())
@@ -76,12 +76,18 @@ public class HttpMethods {
 //                .subscribe(subscriber);
 
         Observable observable = movieService.getTopMovieRxJava(start, count)
-                .map(new HttpResultFunc<List<Subject>>());
+                .map(new HttpResultFunc());
 
         toSubscribe(observable, subscriber);
     }
 
-    private <T> void toSubscribe(Observable<T> o, Subscriber<T> s) {
+    /**
+     *
+     * @param o
+     * @param s
+     * @param <T>
+     */
+    private <T> void toSubscribe(Observable<T> o, Observer<T> s) {
         o.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -93,10 +99,10 @@ public class HttpMethods {
      *
      * @param <T> Subscriber真正需要的数据类型，也就是Data部分的数据类型
      */
-    private class HttpResultFunc<T> implements Func1<HttpResult<T>, T> {
+    private class HttpResultFunc<T> implements Function<HttpResult<T>, T> {
 
         @Override
-        public T call(HttpResult<T> httpResult) {
+        public T apply(HttpResult<T> httpResult) {
             if (httpResult.getCount() == 0) {
                 throw new ApiException(100);
             }

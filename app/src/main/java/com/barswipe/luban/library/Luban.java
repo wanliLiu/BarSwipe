@@ -14,11 +14,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class Luban {
@@ -89,61 +87,29 @@ public class Luban {
 
         if (gear == Luban.FIRST_GEAR)
             Observable.just(mFile)
-                    .map(new Func1<File, File>() {
-                        @Override
-                        public File call(File file) {
-                            return firstCompress(file);
-                        }
-                    })
+                    .map(file -> firstCompress(file))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            if (compressListener != null) compressListener.onError(throwable);
-                        }
+                    .doOnError(throwable -> {
+                        if (compressListener != null) compressListener.onError(throwable);
                     })
-                    .onErrorResumeNext(Observable.<File>empty())
-                    .filter(new Func1<File, Boolean>() {
-                        @Override
-                        public Boolean call(File file) {
-                            return file != null;
-                        }
-                    })
-                    .subscribe(new Action1<File>() {
-                        @Override
-                        public void call(File file) {
-                            if (compressListener != null) compressListener.onSuccess(file);
-                        }
+                    .onErrorResumeNext(Observable.empty())
+                    .filter(file -> file != null)
+                    .subscribe(file -> {
+                        if (compressListener != null) compressListener.onSuccess(file);
                     });
         else if (gear == Luban.THIRD_GEAR)
             Observable.just(mFile)
-                    .map(new Func1<File, File>() {
-                        @Override
-                        public File call(File file) {
-                            return thirdCompress(file);
-                        }
-                    })
+                    .map(file -> thirdCompress(file))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            if (compressListener != null) compressListener.onError(throwable);
-                        }
+                    .doOnError(throwable -> {
+                        if (compressListener != null) compressListener.onError(throwable);
                     })
                     .onErrorResumeNext(Observable.<File>empty())
-                    .filter(new Func1<File, Boolean>() {
-                        @Override
-                        public Boolean call(File file) {
-                            return file != null;
-                        }
-                    })
-                    .subscribe(new Action1<File>() {
-                        @Override
-                        public void call(File file) {
-                            if (compressListener != null) compressListener.onSuccess(file);
-                        }
+                    .filter(file -> file != null)
+                    .subscribe(file -> {
+                        if (compressListener != null) compressListener.onSuccess(file);
                     });
 
         return this;
@@ -169,21 +135,16 @@ public class Luban {
         return this;
     }
 
+    /**
+     * @return
+     */
     public Observable<File> asObservable() {
         if (gear == FIRST_GEAR)
-            return Observable.just(mFile).map(new Func1<File, File>() {
-                @Override
-                public File call(File file) {
-                    return firstCompress(file);
-                }
-            });
+            return Observable.just(mFile)
+                    .map(file -> firstCompress(file));
         else if (gear == THIRD_GEAR)
-            return Observable.just(mFile).map(new Func1<File, File>() {
-                @Override
-                public File call(File file) {
-                    return thirdCompress(file);
-                }
-            });
+            return Observable.just(mFile)
+                    .map(file -> thirdCompress(file));
         else return Observable.empty();
     }
 
@@ -252,7 +213,7 @@ public class Luban {
         int shortSide = 1280;
 
         String filePath = file.getAbsolutePath();
-        String thumbFilePath = mCacheDir.getAbsolutePath() + File.separator + (TextUtils.isEmpty(filename) ? System.currentTimeMillis() : filename) ;
+        String thumbFilePath = mCacheDir.getAbsolutePath() + File.separator + (TextUtils.isEmpty(filename) ? System.currentTimeMillis() : filename);
 
         long size = 0;
         long maxSize = file.length() / 5;
@@ -405,6 +366,8 @@ public class Luban {
      * @param bitmap target image               目标图片
      */
     private static Bitmap rotatingImage(int angle, Bitmap bitmap) {
+        if (angle == 0)
+            return bitmap;
         //rotate image
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -432,11 +395,13 @@ public class Luban {
         int options = 100;
         bitmap.compress(Bitmap.CompressFormat.JPEG, options, stream);
 
-        while (stream.toByteArray().length / 1024 > size && options > 6) {
+        while (stream.toByteArray().length / 1024 > size && options >= 64) {
             stream.reset();
             options -= 6;
             bitmap.compress(Bitmap.CompressFormat.JPEG, options, stream);
         }
+
+        Log.e("图片压缩options", options + "");
 
         try {
             FileOutputStream fos = new FileOutputStream(filePath);

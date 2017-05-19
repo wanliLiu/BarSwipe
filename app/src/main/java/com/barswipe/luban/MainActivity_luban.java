@@ -15,19 +15,17 @@ import com.barswipe.R;
 import com.barswipe.luban.library.Luban;
 import com.barswipe.luban.library.OnCompressListener;
 import com.bumptech.glide.Glide;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import me.iwf.photopicker.PhotoPicker;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 public class MainActivity_luban extends AppCompatActivity {
 
@@ -54,17 +52,14 @@ public class MainActivity_luban extends AppCompatActivity {
         RxView.clicks(fab)
                 .throttleFirst(500, TimeUnit.MICROSECONDS)
                 .compose(RxPermissions.getInstance(this).ensure(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE))
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean aBoolean) {
-                        if (aBoolean) {
-                            PhotoPicker.builder()
-                                    .setPhotoCount(1)
-                                    .setShowCamera(true)
-                                    .setShowGif(true)
-                                    .setPreviewEnabled(false)
-                                    .start(MainActivity_luban.this, PhotoPicker.REQUEST_CODE);
-                        }
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        PhotoPicker.builder()
+                                .setPhotoCount(1)
+                                .setShowCamera(true)
+                                .setShowGif(true)
+                                .setPreviewEnabled(false)
+                                .start(MainActivity_luban.this, PhotoPicker.REQUEST_CODE);
                     }
                 });
     }
@@ -107,31 +102,18 @@ public class MainActivity_luban extends AppCompatActivity {
                 .asObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                })
-                .onErrorResumeNext(new Func1<Throwable, Observable<? extends File>>() {
-                    @Override
-                    public Observable<? extends File> call(Throwable throwable) {
-                        return Observable.empty();
-                    }
-                })
-                .subscribe(new Action1<File>() {
-                    @Override
-                    public void call(File file) {
-                        Glide.with(MainActivity_luban.this).load(file).into(image);
+                .doOnError(throwable -> throwable.printStackTrace())
+                .onErrorResumeNext(Observable.empty())
+                .subscribe(file1 -> {
+                    Glide.with(MainActivity_luban.this).load(file).into(image);
 
-                        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                        Uri uri = Uri.fromFile(file);
-                        intent.setData(uri);
-                        MainActivity_luban.this.sendBroadcast(intent);
+                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri uri = Uri.fromFile(file);
+                    intent.setData(uri);
+                    MainActivity_luban.this.sendBroadcast(intent);
 
-                        thumbFileSize.setText(file.length() / 1024 + "k");
-                        thumbImageSize.setText(Luban.get(getApplicationContext()).getImageSize(file.getPath())[0] + " * " + Luban.get(getApplicationContext()).getImageSize(file.getPath())[1]);
-                    }
+                    thumbFileSize.setText(file.length() / 1024 + "k");
+                    thumbImageSize.setText(Luban.get(getApplicationContext()).getImageSize(file.getPath())[0] + " * " + Luban.get(getApplicationContext()).getImageSize(file.getPath())[1]);
                 });
     }
 

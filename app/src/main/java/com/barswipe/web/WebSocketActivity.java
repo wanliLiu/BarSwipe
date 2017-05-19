@@ -53,6 +53,7 @@ import de.tavendo.autobahn.WebSocket;
 import de.tavendo.autobahn.WebSocketConnection;
 import de.tavendo.autobahn.WebSocketConnectionHandler;
 import de.tavendo.autobahn.WebSocketException;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import me.iwf.photopicker.PhotoPicker;
 import me.iwf.photopicker.PhotoPreview;
 import okhttp3.OkHttpClient;
@@ -63,8 +64,6 @@ import okhttp3.ResponseBody;
 import okhttp3.ws.WebSocketCall;
 import okhttp3.ws.WebSocketListener;
 import okio.Buffer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 
 public class WebSocketActivity extends AppCompatActivity {
 
@@ -189,15 +188,12 @@ public class WebSocketActivity extends AppCompatActivity {
                     }
                 }
 
-                AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-                    @Override
-                    public void call() {
-                        mStatusline.setText("Status: Connected to " + wsuri);
-                        savePrefs();
-                        mSendMessage.setEnabled(true);
-                        mMessage.setEnabled(true);
-                        setButtonDisconnect();
-                    }
+                AndroidSchedulers.mainThread().createWorker().schedule(() -> {
+                    mStatusline.setText("Status: Connected to " + wsuri);
+                    savePrefs();
+                    mSendMessage.setEnabled(true);
+                    mMessage.setEnabled(true);
+                    setButtonDisconnect();
                 });
             }
 
@@ -209,15 +205,12 @@ public class WebSocketActivity extends AppCompatActivity {
              */
             @Override
             public void onFailure(IOException e, Response response) {
-                AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-                    @Override
-                    public void call() {
-                        alert("Connection lost.");
-                        mStatusline.setText("Status: Ready.");
-                        setButtonConnect();
-                        mSendMessage.setEnabled(false);
-                        mMessage.setEnabled(false);
-                    }
+                AndroidSchedulers.mainThread().createWorker().schedule(() -> {
+                    alert("Connection lost.");
+                    mStatusline.setText("Status: Ready.");
+                    setButtonConnect();
+                    mSendMessage.setEnabled(false);
+                    mMessage.setEnabled(false);
                 });
             }
 
@@ -236,7 +229,6 @@ public class WebSocketActivity extends AppCompatActivity {
 
             /**
              * @param b
-             * @param ret
              * @return
              */
             public void getFileFromBytes(byte[] b) {
@@ -290,29 +282,26 @@ public class WebSocketActivity extends AppCompatActivity {
                 }
                 message.source().close();
 
-                AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-                    @Override
-                    public void call() {
-                        try {
-                            if (!TextUtils.isEmpty(str)) {//
-                                mLog.setText(mLog.getText() + "\n" + str);
-                                str = "";
-                                mLogScroller.post(new Runnable() {
-                                    public void run() {
-                                        mLogScroller.smoothScrollTo(0, mLog.getBottom());
-                                    }
-                                });
-                            }
-
-                            if (bitmap != null) {
-                                pic.setVisibility(View.VISIBLE);
-                                pic.setImageBitmap(bitmap);
-//                                bitmap.recycle();
-                                bitmap = null;
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                AndroidSchedulers.mainThread().createWorker().schedule(() -> {
+                    try {
+                        if (!TextUtils.isEmpty(str)) {//
+                            mLog.setText(mLog.getText() + "\n" + str);
+                            str = "";
+                            mLogScroller.post(new Runnable() {
+                                public void run() {
+                                    mLogScroller.smoothScrollTo(0, mLog.getBottom());
+                                }
+                            });
                         }
+
+                        if (bitmap != null) {
+                            pic.setVisibility(View.VISIBLE);
+                            pic.setImageBitmap(bitmap);
+//                                bitmap.recycle();
+                            bitmap = null;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
             }
@@ -331,15 +320,12 @@ public class WebSocketActivity extends AppCompatActivity {
              */
             @Override
             public void onClose(int code, String reason) {
-                AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-                    @Override
-                    public void call() {
-                        alert("Connection lost.");
-                        mStatusline.setText("Status: Ready.");
-                        setButtonConnect();
-                        mSendMessage.setEnabled(false);
-                        mMessage.setEnabled(false);
-                    }
+                AndroidSchedulers.mainThread().createWorker().schedule(() -> {
+                    alert("Connection lost.");
+                    mStatusline.setText("Status: Ready.");
+                    setButtonConnect();
+                    mSendMessage.setEnabled(false);
+                    mMessage.setEnabled(false);
                 });
             }
         });

@@ -40,13 +40,12 @@ import com.barswipe.model.Student;
 import com.barswipe.volume.wave.HeadPhonesRecivier;
 import com.example.LibJavaTest;
 import com.example.libraryandroid.LibTestAndroid;
-import com.jakewharton.rxbinding.widget.RxAdapterView;
+import com.jakewharton.rxbinding2.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.Serializable;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,16 +54,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func0;
-import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.observables.GroupedObservable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 //import com.soli.jnistudy.JniTest;
 
@@ -80,7 +75,8 @@ public class LaunchActivity extends BaseActivity {
     private activityListAdapter adapter;
 
     private Observable<Long> defer, just, interval;
-    private Subscriber<Long> intervalSubscriber;
+    private Observer<Long> intervalSubscriber;
+    private Disposable disposable;
 
     private boolean isClipToPadding = false;
     private HeadPhonesRecivier recivier;
@@ -122,7 +118,7 @@ public class LaunchActivity extends BaseActivity {
 //        });
 
         RxAdapterView.itemClicks(listView)
-                .compose(this.<Integer>bindToLifecycle())
+                .compose(bindToLifecycle())
                 .throttleFirst(ViewConfiguration.getDoubleTapTimeout(), TimeUnit.MILLISECONDS)
                 .subscribe(position -> RxPermissions.getInstance(LaunchActivity.this)
                         .request(
@@ -174,7 +170,7 @@ public class LaunchActivity extends BaseActivity {
         Log.e("libTestJava", new LibJavaTest().getStringFromLib());
 
         LibTestAndroid test = new LibTestAndroid();
-        test.toast(this,"用android library来用");
+        test.toast(this, "用android library来用");
         Log.e("libTestAndroid", test.testOtherLib());
     }
 
@@ -340,24 +336,16 @@ public class LaunchActivity extends BaseActivity {
                                         Manifest.permission.WRITE_CONTACTS,
                                         Manifest.permission.RECORD_AUDIO,
                                         Manifest.permission.WRITE_SETTINGS)
-                                .subscribe(new Action1<Boolean>() {
-                                    @Override
-                                    public void call(Boolean aBoolean) {
-                                        if (aBoolean) {
-                                            shotFloatView();
-                                        } else {
-                                            showRationaleDialog("需要开启必要的访问权限");
-                                        }
+                                .subscribe(aBoolean -> {
+                                    if (aBoolean) {
+                                        shotFloatView();
+                                    } else {
+                                        showRationaleDialog("需要开启必要的访问权限");
                                     }
                                 });
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(@NonNull DialogInterface dialog, int which) {
-                        finish();
-                    }
-                })
+                .setNegativeButton("取消", (dialog, which) -> finish())
                 .setTitle("帮助")
                 .setCancelable(false)
                 .setMessage(messageResId)
@@ -371,11 +359,8 @@ public class LaunchActivity extends BaseActivity {
         if (Looper.myLooper() == Looper.getMainLooper()) {
 
         } else {
-            AndroidSchedulers.mainThread().createWorker().schedule(new Action0() {
-                @Override
-                public void call() {
+            AndroidSchedulers.mainThread().createWorker().schedule(() -> {
 
-                }
             });
         }
     }
@@ -408,7 +393,7 @@ public class LaunchActivity extends BaseActivity {
      * @return
      */
     private Observable<Integer> createObserver(final int index) {
-        return Observable.create((Observable.OnSubscribe<Integer>) subscriber -> {
+        return Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
             for (int i = 1; i < 6; i++) {
                 subscriber.onNext(i * index);
                 try {
@@ -417,7 +402,7 @@ public class LaunchActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             }
-            subscriber.onCompleted();
+            subscriber.onComplete();
         }).subscribeOn(Schedulers.newThread());
     }
 
@@ -429,12 +414,9 @@ public class LaunchActivity extends BaseActivity {
 
         //CombineLatest
         //满足条件1的时候任何一个Observable发射一个数据，就将所有Observable最新发射的数据按照提供的函数组装起来发射出去。
-        Observable.combineLatest(createObserver(1), createObserver(2), new Func2<Integer, Integer, Integer>() {
-            @Override
-            public Integer call(Integer num1, Integer num2) {
-                Log.e(Tag, "combineLatest--call---left:" + num1 + " right:" + num2);
-                return num1 + num2;
-            }
+        Observable.combineLatest(createObserver(1), createObserver(2), (num1, num2) -> {
+            Log.e(Tag, "combineLatest--call---left:" + num1 + " right:" + num2);
+            return num1 + num2;
         }).subscribe(integer -> Log.e(Tag, "combineLatest--result:" + integer));
 
         List<Observable<Integer>> list = new ArrayList<>();
@@ -452,7 +434,7 @@ public class LaunchActivity extends BaseActivity {
 
         //join
         Observable.just("Left-").join(
-                Observable.create((Observable.OnSubscribe<String>) subscriber -> {
+                Observable.create((ObservableOnSubscribe<String>) subscriber -> {
                     for (int i = 1; i < 5; i++) {
                         subscriber.onNext("Right-" + i);
                         try {
@@ -461,113 +443,55 @@ public class LaunchActivity extends BaseActivity {
                             e.printStackTrace();
                         }
                     }
-                    subscriber.onCompleted();
+                    subscriber.onComplete();
                 }).subscribeOn(Schedulers.newThread()),
-                integer -> Observable.timer(3000, TimeUnit.MILLISECONDS),
-                Long -> Observable.timer(2000, TimeUnit.MILLISECONDS),
+                s -> Observable.interval(3000, TimeUnit.MILLISECONDS),
+                tRight -> Observable.interval(2000, TimeUnit.MILLISECONDS),
                 (left, Right) -> left + Right)
                 .subscribe(s -> Log.e(Tag, "join:" + s));
 
         //groupJoin
         Observable.just("Left-").groupJoin(
-                Observable.create(new Observable.OnSubscribe<String>() {
-                    @Override
-                    public void call(Subscriber<? super String> subscriber) {
-                        for (int i = 1; i < 5; i++) {
-                            subscriber.onNext("Right-" + i);
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                Observable.create((ObservableOnSubscribe<String>) subscriber -> {
+                    for (int i = 1; i < 5; i++) {
+                        subscriber.onNext("Right-" + i);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                        subscriber.onCompleted();
                     }
+                    subscriber.onComplete();
                 }).subscribeOn(Schedulers.newThread()),
-                new Func1<String, Observable<Long>>() {
-                    @Override
-                    public Observable<Long> call(String integer) {
-                        return Observable.timer(3000, TimeUnit.MILLISECONDS);
-                    }
-                },
-                new Func1<String, Observable<Long>>() {
-                    @Override
-                    public Observable<Long> call(String Long) {
-                        return Observable.timer(2000, TimeUnit.MILLISECONDS);
-                    }
-                },
-                new Func2<String, Observable<String>, Observable<String>>() {
-                    @Override
-                    public Observable<String> call(final String sB, Observable<String> stringObservable) {
-                        return stringObservable.map(new Func1<String, String>() {
-                            @Override
-                            public String call(String s) {
-                                return sB + s;
-                            }
-                        });
-                    }
-                })
-                .subscribe(new Action1<Observable<String>>() {
-                    @Override
-                    public void call(Observable<String> stringObservable) {
-                        stringObservable.subscribe(new Action1<String>() {
-                            @Override
-                            public void call(String s) {
-                                Log.e(Tag, "groupJoin:" + s);
-                            }
-                        });
-                    }
-                });
+                s -> Observable.interval(3000, TimeUnit.MILLISECONDS),
+                s -> Observable.timer(2000, TimeUnit.MILLISECONDS),
+                (s, stringObservable) -> stringObservable.map(s1 -> s + s1))
+                .subscribe(stringObservable -> stringObservable.subscribe(s -> Log.e(Tag, "groupJoin:" + s)));
+
 
         //concat
-        Observable.concat(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                Log.e(Tag, "concat-:" + integer);
-            }
-        });
+        Observable.concat(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(integer -> Log.e(Tag, "concat-:" + integer));
 
         //Merge
-        Observable.merge(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                Log.e(Tag, "merge-:" + integer);
-            }
-        });
+        Observable.merge(Observable.just(1, 2, 3), Observable.just(4, 5, 6)).subscribe(integer -> Log.e(Tag, "merge-:" + integer));
 
         //mergeDelayError
         Observable.mergeDelayError(
-                Observable.create(new Observable.OnSubscribe<Integer>() {
-                    @Override
-                    public void call(Subscriber<? super Integer> subscriber) {
-                        for (int i = 0; i < 5; i++) {
-                            if (i == 3) {
-                                subscriber.onError(new Throwable("error"));
-                            }
-                            subscriber.onNext(i);
+                Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
+                    for (int i = 0; i < 5; i++) {
+                        if (i == 3) {
+                            subscriber.onError(new Throwable("error"));
                         }
+                        subscriber.onNext(i);
                     }
                 }),
-                Observable.create(new Observable.OnSubscribe<Integer>() {
-                    @Override
-                    public void call(Subscriber<? super Integer> subscriber) {
-                        for (int i = 0; i < 5; i++) {
-                            subscriber.onNext(5 + i);
-                        }
-                        subscriber.onCompleted();
+                Observable.create(subscriber -> {
+                    for (int i = 0; i < 5; i++) {
+                        subscriber.onNext(5 + i);
                     }
+                    subscriber.onComplete();
                 }))
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        Log.e(Tag, "mergeDelayError-:" + integer);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Log.e(Tag, "mergeDelayError-:" + throwable.getMessage());
-                    }
-                });
+                .subscribe(integer -> Log.e(Tag, "mergeDelayError-:" + integer), throwable -> Log.e(Tag, "mergeDelayError-:" + throwable.getMessage()));
 
 
     }
@@ -578,66 +502,46 @@ public class LaunchActivity extends BaseActivity {
     private void RxJavaFilteringObservables() {
 
         //throttleWithTimeOut
-        Observable.create(new Observable.OnSubscribe<Integer>() {
-            @Override
-            public void call(Subscriber<? super Integer> subscriber) {
-
-                for (int i = 0; i < 18; i++) {
-                    if (!subscriber.isUnsubscribed()) {
-                        subscriber.onNext(i);
-                    }
-
-                    int sleep = 100;
-                    if (i % 3 == 0) {
-                        sleep = 300;
-                    }
-                    try {
-                        Thread.sleep(sleep);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        subscriber.onError(e);
-                    }
+        Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
+            for (int i = 0; i < 18; i++) {
+                if (!subscriber.isDisposed()) {
+                    subscriber.onNext(i);
                 }
-                subscriber.onCompleted();
+
+                int sleep = 100;
+                if (i % 3 == 0) {
+                    sleep = 300;
+                }
+                try {
+                    Thread.sleep(sleep);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    subscriber.onError(e);
+                }
             }
+            subscriber.onComplete();
         }).subscribeOn(Schedulers.computation())
 //                .debounce(200,TimeUnit.MILLISECONDS)
                 .throttleWithTimeout(200, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        Log.e(Tag, "throttleWithTimeout-" + String.valueOf(integer));
-                    }
-                });
+                .subscribe(integer -> Log.e(Tag, "throttleWithTimeout-" + String.valueOf(integer)));
 
 
         //debounce
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 //                .debounce(200, TimeUnit.MILLISECONDS)
-                .debounce(new Func1<Integer, Observable<Integer>>() {
-                    @Override
-                    public Observable<Integer> call(final Integer integer) {
-                        Log.e(Tag, "debounce-过滤前" + String.valueOf(integer));
-                        return Observable.create(new Observable.OnSubscribe<Integer>() {
-                            @Override
-                            public void call(Subscriber<? super Integer> subscriber) {
-                                Log.e(Tag, "debounce-complete:" + String.valueOf(integer));
-                                if (integer % 2 == 0 && !subscriber.isUnsubscribed()) {
-                                    subscriber.onNext(integer);
-                                    subscriber.onCompleted();
-                                }
-                            }
-                        });
-                    }
+                .debounce(integer -> {
+                    Log.e(Tag, "debounce-过滤前" + String.valueOf(integer));
+                    return Observable.create(subscriber -> {
+                        Log.e(Tag, "debounce-complete:" + String.valueOf(integer));
+                        if (integer % 2 == 0 && !subscriber.isDisposed()) {
+                            subscriber.onNext(integer);
+                            subscriber.onComplete();
+                        }
+                    });
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Integer>() {
-                    @Override
-                    public void call(Integer integer) {
-                        Log.e(Tag, "debounce-结果:" + String.valueOf(integer));
-                    }
-                });
+                .subscribe(integer -> Log.e(Tag, "debounce-结果:" + String.valueOf(integer)));
     }
 
     /**
@@ -647,35 +551,16 @@ public class LaunchActivity extends BaseActivity {
 
         //Buffer map flatmap flatmapIterable
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .flatMap(new Func1<Integer, Observable<Integer>>() {
-                    @Override
-                    public Observable<Integer> call(Integer integer) {
-                        return Observable.just(integer + 1);
+                .flatMap(integer -> Observable.just(integer + 1))
+                .map(integer -> integer + 1)
+                .flatMapIterable(integer -> {
+                    ArrayList<Integer> s = new ArrayList<>();
+                    for (int i = 0; i < integer; i++) {
+                        s.add(i);
                     }
+                    return s;
                 })
-                .map(new Func1<Integer, Integer>() {
-                    @Override
-                    public Integer call(Integer integer) {
-                        return integer + 1;
-                    }
-                })
-                .flatMapIterable(new Func1<Integer, Iterable<Integer>>() {
-                    @Override
-                    public Iterable<Integer> call(Integer integer) {
-                        ArrayList<Integer> s = new ArrayList<>();
-                        for (int i = 0; i < integer; i++) {
-                            s.add(i);
-                        }
-
-                        return s;
-                    }
-                })
-                .filter(new Func1<Integer, Boolean>() {
-                    @Override
-                    public Boolean call(Integer integer) {
-                        return integer % 2 == 0;
-                    }
-                })
+                .filter(integer -> integer % 2 == 0)
 //                .subscribe(new Action1<Integer>() {
 //                    @Override
 //                    public void call(Integer integer) {
@@ -683,62 +568,29 @@ public class LaunchActivity extends BaseActivity {
 //                    }
 //                });
                 .buffer(5)
-                .subscribe(new Action1<List<Integer>>() {
-                    @Override
-                    public void call(List<Integer> integers) {
-                        Log.e(Tag + "buffer", integers.toString());
-                    }
-                });
+                .subscribe(integers -> Log.e(Tag + "buffer", integers.toString()));
 
         Observable.interval(300, TimeUnit.MILLISECONDS)
 //                .compose(this.<Long>bindToLifecycle())
                 .buffer(3, TimeUnit.SECONDS)
                 .take(3)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Long>>() {
-                    @Override
-                    public void call(List<Long> longs) {
-                        Log.e(Tag + "bufferTime", longs.toString());
-                    }
-                });
+                .subscribe(longs -> Log.e(Tag + "bufferTime", longs.toString()));
 
         Observable.interval(300, TimeUnit.MILLISECONDS)
 //                .compose(this.<Long>bindToLifecycle())
                 .window(3, TimeUnit.SECONDS)
                 .take(3)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Observable<Long>>() {
-                    @Override
-                    public void call(Observable<Long> longObservable) {
-                        Log.e(Tag + "window 集合开始", longObservable.toString());
-                        longObservable.subscribe(new Action1<Long>() {
-                            @Override
-                            public void call(Long aLong) {
-                                Log.e(Tag + "window", aLong + "");
-                            }
-                        });
-                    }
+                .subscribe(longObservable -> {
+                    Log.e(Tag + "window 集合开始", longObservable.toString());
+                    longObservable.subscribe(aLong -> Log.e(Tag + "window", aLong + ""));
                 });
 
         //GroupBy
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9)
-                .groupBy(new Func1<Integer, Integer>() {
-                    @Override
-                    public Integer call(Integer integer) {
-                        return integer % 2;
-                    }
-                })
-                .subscribe(new Action1<GroupedObservable<Integer, Integer>>() {
-                    @Override
-                    public void call(final GroupedObservable<Integer, Integer> groupedObservable) {
-                        groupedObservable.count().subscribe(new Action1<Integer>() {
-                            @Override
-                            public void call(Integer integer) {
-                                Log.e(Tag + "groupBy", "key-" + groupedObservable.getKey() + ",contains:" + integer);
-                            }
-                        });
-                    }
-                });
+                .groupBy(integer -> integer % 2)
+                .subscribe(groupedObservable -> groupedObservable.count().subscribe(data -> Log.e(Tag + "groupBy", "key-" + groupedObservable.getKey() + ",contains:" + data)));
 //                .subscribe(new Subscriber<GroupedObservable<Integer, Integer>>() {
 //                    @Override
 //                    public void onCompleted() {
@@ -763,53 +615,23 @@ public class LaunchActivity extends BaseActivity {
 //                });
 
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .groupBy(new Func1<Integer, Integer>() {
-                    @Override
-                    public Integer call(Integer integer) {
-                        return integer % 2;
-                    }
-                }, new Func1<Integer, String>() {
-                    @Override
-                    public String call(Integer integer) {
-                        return "groupByKeyValue:" + integer;
-                    }
-                })
-                .subscribe(new Action1<GroupedObservable<Integer, String>>() {
-                    @Override
-                    public void call(GroupedObservable<Integer, String> integerStringGroupedObservable) {
-                        if (integerStringGroupedObservable.getKey() == 0) {
-                            integerStringGroupedObservable.subscribe(new Action1<String>() {
-                                @Override
-                                public void call(String s) {
-                                    Log.e(Tag + "groupBy", s);
-                                }
-                            });
-                        }
+                .groupBy(integer -> integer % 2, integer -> "groupByKeyValue:" + integer)
+                .subscribe(integerStringGroupedObservable -> {
+                    if (integerStringGroupedObservable.getKey() == 0) {
+                        integerStringGroupedObservable.subscribe(s -> Log.e(Tag + "groupBy", s));
                     }
                 });
 
         //cast Cast将Observable发射的数据强制转化为另外一种类型，属于Map的一种具体的实现
-        Observable.just(getAnimal()).cast(Dog.class).subscribe(new Action1<Dog>() {
-            @Override
-            public void call(Dog dog) {
-                log("Cast:" + dog.getName());
-            }
-        });
+        Observable.just(getAnimal()).cast(Dog.class).subscribe(dog -> log("Cast:" + dog.getName()));
 
 
         //Scan
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
-        Observable.from(list).scan(new Func2<Integer, Integer, Integer>() {
-            @Override
-            public Integer call(Integer x, Integer y) {
-                return x * y;
-            }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                Log.e(Tag, "scan---result:" + integer);
-            }
-        });
+        Observable.fromIterable(list)
+                .scan((x, y) -> x * y)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(integer -> Log.e(Tag, "scan---result:" + integer));
 
     }
 
@@ -851,141 +673,82 @@ public class LaunchActivity extends BaseActivity {
     private void RxJavaCreatingObservables() {
         //Map
         Observable.just("Hellp Map Operator")
-                .map(new Func1<String, Integer>() {
-                    @Override
-                    public Integer call(String s) {
-                        return 156;
-                    }
-                })
-                .map(new Func1<Integer, String>() {
-                    @Override
-                    public String call(Integer integer) {
-                        return "Secon" + String.valueOf(integer);
-                    }
-                })
-                .doOnNext(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Log.e(Tag, "----Map--doOnNext-" + s);
-                    }
-                })
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Log.e(Tag, "----Map--subscribe-" + s);
-                    }
-                });
+                .map(s -> 156)
+                .map(integer -> "Secon" + String.valueOf(integer))
+                .doOnNext(s -> Log.e(Tag, "----Map--doOnNext-" + s))
+                .subscribe(s -> Log.e(Tag, "----Map--subscribe-" + s));
 
         //From  一个一个发送出去
-        List<String> s = Arrays.asList("Java", "Android", "Ruby", "Ios", "Swift");
-        Observable.from(s)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Log.e(Tag + "----From", s);
-                    }
-                });
+        List<String> data = Arrays.asList("Java", "Android", "Ruby", "Ios", "Swift");
+        Observable.fromIterable(data)
+                .subscribe(s1 -> Log.e(Tag + "----From", s1));
 
         //FlatMap
-        Observable.just(s)
-                .flatMap(new Func1<List<String>, Observable<String>>() {
-                    @Override
-                    public Observable<String> call(List<String> strings) {
-                        return Observable.from(strings);
+        Observable.just(data)
+                .flatMap(strings -> Observable.fromIterable(strings))
+                .flatMap(s1 -> Observable.create((ObservableOnSubscribe<String>) subscriber -> {
+                    if (!subscriber.isDisposed()) {
+                        subscriber.onNext("addpre_" + s1);
+                        subscriber.onComplete();
                     }
-                })
-                .flatMap(new Func1<String, Observable<String>>() {
-                    @Override
-                    public Observable<String> call(final String s) {
-                        return Observable.create(new Observable.OnSubscribe<String>() {
-                            @Override
-                            public void call(Subscriber<? super String> subscriber) {
-                                if (!subscriber.isUnsubscribed()) {
-                                    subscriber.onNext("addpre_" + s);
-                                    subscriber.onCompleted();
-                                }
-                            }
-                        });
-//                        return Observable.just("addpre_" + s);
-                    }
-                })
-                .filter(new Func1<String, Boolean>() {
-                    @Override
-                    public Boolean call(String s) {
-                        return s.contains("a");
-                    }
-                })
+                }))
+                .filter(s12 -> s12.contains("a"))
                 .take(3)
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        Log.e(Tag + "----FlatMap", s);
-                    }
-                });
+                .subscribe(str -> Log.e(Tag + "----FlatMap", str));
         //just more  将整个对象一起全部发送出去
         Observable.just("23", 233)
-                .filter(new Func1<Serializable, Boolean>() {
-                    @Override
-                    public Boolean call(Serializable serializable) {
-                        Object tes = (Object) serializable;
-                        if (tes != null && tes instanceof String)
-                            return true;
-                        else
-                            return false;
-                    }
+                .filter(serializable -> {
+                    Object tes = (Object) serializable;
+                    if (tes != null && tes instanceof String)
+                        return true;
+                    else
+                        return false;
                 })
-                .subscribe(new Action1<Serializable>() {
-                    @Override
-                    public void call(Serializable serializable) {
-                        Log.e(Tag + "----just-more", serializable.toString());
-                    }
-                });
+                .subscribe(serializable -> Log.e(Tag + "----just-more", serializable.toString()));
 
         //Create
-        Observable.create(new Observable.OnSubscribe<Integer>() {
-            @Override
-            public void call(Subscriber<? super Integer> subscriber) {
-                if (!subscriber.isUnsubscribed()) {
-                    for (int i = 0; i < 5; i++) {
-                        int temp = new Random().nextInt(10);
-                        if (temp > 8) {
-                            //if value>8, we make an error
-                            subscriber.onError(new Throwable("value >8"));
-                            break;
-                        } else {
-                            subscriber.onNext(temp);
-                        }
-                        // on error,complete the job
-                        if (i == 4) {
-                            subscriber.onCompleted();
-                        }
+        Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
+            if (!subscriber.isDisposed()) {
+                for (int i = 0; i < 5; i++) {
+                    int temp = new Random().nextInt(10);
+                    if (temp > 8) {
+                        //if value>8, we make an error
+                        subscriber.onError(new Throwable("value >8"));
+                        break;
+                    } else {
+                        subscriber.onNext(temp);
+                    }
+                    // on error,complete the job
+                    if (i == 4) {
+                        subscriber.onComplete();
                     }
                 }
             }
-        }).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Integer>() {
-            @Override
-            public void onNext(Integer item) {
-                Log.e(Tag, "----create---onNext-" + item + "");
-            }
+        }).subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
-            @Override
-            public void onError(Throwable error) {
-                Log.e(Tag, "--create--onError-" + error.getMessage());
-            }
+                    }
 
-            @Override
-            public void onCompleted() {
-                Log.e(Tag, "----create--onCompleted onCompleted");
-            }
-        });
+                    @Override
+                    public void onNext(@io.reactivex.annotations.NonNull Integer integer) {
+                        Log.e(Tag, "----create---onNext-" + integer + "");
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable error) {
+                        Log.e(Tag, "--create--onError-" + error.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.e(Tag, "----create--onCompleted onCompleted");
+                    }
+                });
 
         //range
-        Observable.range(23, 10).subscribe(new Action1<Integer>() {
-            @Override
-            public void call(Integer integer) {
-                Log.e(Tag + "----range", String.valueOf(integer));
-            }
-        });
+        Observable.range(23, 10).subscribe(range -> Log.e(Tag + "----range", String.valueOf(range)));
 
         //defer  repeat
         deferJust(Tag);
@@ -998,28 +761,29 @@ public class LaunchActivity extends BaseActivity {
                 .delay(4, TimeUnit.SECONDS)
                 .repeat(3)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        Log.e(Tag + "----timer", String.valueOf(aLong));
-                    }
-                });
+                .subscribe(aLong -> Log.e(Tag + "----timer", String.valueOf(aLong)));
     }
 
     /**
      * @param Tag
      * @return
      */
-    private Subscriber<Long> getTntervalSubscriber(final String Tag) {
-        return new Subscriber<Long>() {
-            @Override
-            public void onCompleted() {
-
-            }
+    private Observer<Long> getTntervalSubscriber(final String Tag) {
+        return new Observer<Long>() {
 
             @Override
             public void onError(Throwable e) {
 
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                disposable = d;
             }
 
             @Override
@@ -1033,12 +797,7 @@ public class LaunchActivity extends BaseActivity {
      * @return
      */
     private Observable<Long> DeferObserver() {
-        return Observable.defer(new Func0<Observable<Long>>() {
-            @Override
-            public Observable<Long> call() {
-                return Observable.just(System.currentTimeMillis());
-            }
-        }).delay(3, TimeUnit.SECONDS).repeat(10);
+        return Observable.defer(() -> Observable.just(System.currentTimeMillis())).delay(3, TimeUnit.SECONDS).repeat(10);
     }
 
     /**
@@ -1120,6 +879,7 @@ public class LaunchActivity extends BaseActivity {
                 view.setTag(this);
             }
         }
+
     }
 
     /**
@@ -1127,18 +887,8 @@ public class LaunchActivity extends BaseActivity {
      */
     private void deferJust(final String Tag) {
         //defer
-        defer.subscribe(new Action1<Long>() {
-            @Override
-            public void call(Long t) {
-                Log.e(Tag + "----defer-repeat", String.valueOf(t));
-            }
-        });
-        just.subscribe(new Action1<Long>() {
-            @Override
-            public void call(Long aLong) {
-                Log.e(Tag + "----defer-just-repeat", String.valueOf(aLong));
-            }
-        });
+        defer.subscribe(t -> Log.e(Tag + "----defer-repeat", String.valueOf(t)));
+        just.subscribe(aLong -> Log.e(Tag + "----defer-just-repeat", String.valueOf(aLong)));
     }
 
     /**
@@ -1147,8 +897,8 @@ public class LaunchActivity extends BaseActivity {
     @Subscribe
     public void onEvent(NotificationEvent test) {
 //        deferJust(test.event);
-        if (intervalSubscriber != null)
-            intervalSubscriber.unsubscribe();
+        if (disposable != null && !disposable.isDisposed())
+            disposable.dispose();
     }
 
     @Override

@@ -78,19 +78,20 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:${supportPackageVersion}"
 
-    compile 'io.reactivex.rxjava2:rxjava:2.+'
+    //RxJava
+    compile "io.reactivex.rxjava2:rxjava:${rxjava_version}"
+    compile "io.reactivex.rxjava2:rxandroid:${rxandroid_version}"
+    //RxBinding
+    compile "com.jakewharton.rxbinding2:rxbinding:${RxBinding_version}"
+    compile "com.jakewharton.rxbinding2:rxbinding-support-v4:${RxBinding_version}"
+    compile "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${RxBinding_version}"
+    compile "com.jakewharton.rxbinding2:rxbinding-design:${RxBinding_version}"
+    compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${RxBinding_version}"
+    //Rxlife
+    compile "com.trello.rxlifecycle2:rxlifecycle:${RxLifeCycle_version}"
+    compile "com.trello.rxlifecycle2:rxlifecycle-android:${RxLifeCycle_version}"
+    compile "com.trello.rxlifecycle2:rxlifecycle-components:${RxLifeCycle_version}"
 
-    compile 'io.reactivex.rxjava2:rxandroid:2.+'
-
-    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-    compile 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0'
-    compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
-    compile 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0'
-    compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
-
-    compile 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
 
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
 
