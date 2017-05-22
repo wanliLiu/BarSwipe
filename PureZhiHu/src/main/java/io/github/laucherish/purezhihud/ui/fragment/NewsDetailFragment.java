@@ -84,7 +84,7 @@ public class NewsDetailFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_detail, menu);
+        inflater.inflate(R.menu.menu_detail,menu);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class NewsDetailFragment extends BaseFragment {
                         mTvTitle.setText(newsDetail.getTitle());
                         mTvSource.setText(newsDetail.getImage_source());
 
-                        boolean isNight = PrefUtil.isDay();
+                        boolean isNight = PrefUtil.isNight();
                         StringBuffer stringBuffer = HtmlUtil.handleHtml(newsDetail.getBody(), isNight);
                         mWvNews.setDrawingCacheEnabled(true);
                         mWvNews.loadDataWithBaseURL("file:///android_asset/", stringBuffer.toString(), "text/html", "utf-8", null);

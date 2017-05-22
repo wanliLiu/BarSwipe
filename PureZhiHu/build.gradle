@@ -85,6 +85,8 @@ dependencies {
 //    compile "com.trello:rxlifecycle-components:${RxLifeCycle_version}"
 
     compile "com.jakewharton:butterknife:${butterknife_version}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife_version}"
+    
     compile "com.github.bumptech.glide:glide:${glide_version}"
 
     compile 'com.yalantis:phoenix:1.2.3'

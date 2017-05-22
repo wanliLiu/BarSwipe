@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/testOne"
+        android:title="测试1"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/testOne1"
+        android:title="测试2"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/testOne2"
+        android:title="测试3"
+        app:showAsAction="never" />
+</menu>

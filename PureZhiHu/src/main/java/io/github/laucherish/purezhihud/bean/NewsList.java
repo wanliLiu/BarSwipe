@@ -67,4 +67,6 @@ public class NewsList implements Parcelable {
             return new NewsList[size];
         }
     };
+
+
 }

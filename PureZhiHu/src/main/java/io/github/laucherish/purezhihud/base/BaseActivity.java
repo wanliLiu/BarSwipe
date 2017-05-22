@@ -57,6 +57,7 @@ public abstract class BaseActivity extends SwipeBackActivity {
 //        }
 
         super.onCreate(savedInstanceState);
+        setTheme(PrefUtil.getThemeRes());
         setContentView(getLayoutId());
         mSwipeBackLayout = getSwipeBackLayout();
         mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);

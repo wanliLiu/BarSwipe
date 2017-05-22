@@ -88,10 +88,11 @@ public class HtmlUtil {
      * @param newsDetail NewsDetail
      * @return String
      */
-    public static String createHtmlData(NewsDetail newsDetail) {
+    public static String createHtmlData(NewsDetail newsDetail, boolean isNight) {
         final String css = HtmlUtil.createCssTag(newsDetail.getCss());
         final String js = HtmlUtil.createJsTag(newsDetail.getJs());
-        return createHtmlData(newsDetail.getBody(), css, js);
+        final String body = handleHtml(newsDetail.getBody(), isNight).toString();
+        return createHtmlData(body, css, js);
     }
 
     public static StringBuffer handleHtml(String body,boolean isNight) {

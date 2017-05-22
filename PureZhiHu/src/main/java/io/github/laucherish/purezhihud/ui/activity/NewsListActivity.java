@@ -47,10 +47,8 @@ public class NewsListActivity extends BaseActivity {
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
-        getSwipeBackLayout().setEnableGesture(false);
         addFragment(0, 0, null, null);
     }
-
 
     private void addFragment(int position, int scroll, NewsListAdapter adapter, String curDate) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -78,15 +76,13 @@ public class NewsListActivity extends BaseActivity {
                 return true;
 
             case R.id.menu_action_daynight:
-                boolean isNight = PrefUtil.isDay();
+                boolean isNight = PrefUtil.isNight();
                 if (isNight) {
                     PrefUtil.setDay();
                     setTheme(Constant.RESOURCES_DAYTHEME);
                 } else {
                     PrefUtil.setNight();
                     setTheme(Constant.RESOURCES_NIGHTTHEME);
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 }
                 setDrawableCahe();
                 getState();
@@ -120,12 +116,9 @@ public class NewsListActivity extends BaseActivity {
 
     private void startAnimation(final View view) {
         ValueAnimator animator = ValueAnimator.ofFloat(1f).setDuration(ANIMTION_TIME);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float n = (float) animation.getAnimatedValue();
-                view.setAlpha(1f - n);
-            }
+        animator.addUpdateListener(animation -> {
+            float n = (float) animation.getAnimatedValue();
+            view.setAlpha(1f - n);
         });
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -144,5 +137,4 @@ public class NewsListActivity extends BaseActivity {
             startAnimation(mIvMain);
         }
     }
-
 }
