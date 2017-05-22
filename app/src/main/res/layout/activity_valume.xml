@@ -36,8 +36,8 @@
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_marginTopPercent="10%"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_marginTopPercent="10%">
 
         <Button
             android:id="@+id/audioWave"
@@ -126,6 +126,15 @@
                 android:padding="10dp"
                 android:text="Re_Pl"
                 android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/mediaT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#bebebe"
+                android:padding="10dp"
+                android:text="MediaSe"
+                android:textSize="14sp" />
         </LinearLayout>
 
 

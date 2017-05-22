@@ -2,12 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.barswipe">
 
+    //mediaBrowserServiceCompat need
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     //蓝牙耳机插入与否
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -290,7 +292,7 @@
             android:description="@string/str_newFramge"
             android:icon="@drawable/ic_launcher"
             android:label="新框架搭建" />
-        <activity android:name=".fram.BottomNavigationActivity"/>
+        <activity android:name=".fram.BottomNavigationActivity" />
         <activity
             android:name=".fram.ScrollingActivity"
             android:theme="@style/AppThemeNoActionBar" />
@@ -369,8 +371,8 @@
             android:name=".volume.wave.AcitivtyWaveTest"
             android:hardwareAccelerated="false" />
         <activity android:name=".volume.wave.StudyAudioRecord" />
-        <activity android:name=".volume.wave.AcitivtyWaveTestRecycler"/>
-        <activity android:name=".volume.wave.ActivityWaveDisplayTest"/>
+        <activity android:name=".volume.wave.AcitivtyWaveTestRecycler" />
+        <activity android:name=".volume.wave.ActivityWaveDisplayTest" />
 
         <activity
             android:name=".volume.wave.ActivityVolumPlay"
@@ -413,7 +415,26 @@
             android:name=".volume.edit.ChooseContactActivity"
             android:theme="@style/AppThemeArcLayout" />
         <activity android:name=".volume.pcm.pcm2amr.MainActivity_pcm_amr" />
-        <activity android:name=".volume.RecordPlayActivity"/>
+        <activity android:name=".volume.RecordPlayActivity" />
+
+        <!--********************************************media*****************************************************-->
+        <activity android:name=".media.SupportMediaTest"/>
+        <service android:name=".media.BackgroundAudioService">
+            <intent-filter>
+                <!--//intercept control buttons-->
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <!--//headphone events-->
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+                <!--//media browsing for devices-->
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+                <action android:name="android.media.AUDIO_BECOMING_NOISY" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

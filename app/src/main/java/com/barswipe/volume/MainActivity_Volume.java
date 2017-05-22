@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.barswipe.R;
+import com.barswipe.media.SupportMediaTest;
 import com.barswipe.util.FileSizeUtil;
 import com.barswipe.util.FileUtil;
 import com.barswipe.volume.pcm.pcm2amr.MainActivity_pcm_amr;
@@ -84,6 +85,9 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         mediarecorder.setOnClickListener(this);
         play.setOnClickListener(this);
 
+
+        RxView.clicks(findViewById(R.id.mediaT))
+                .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, SupportMediaTest.class)));
 
         RxView.clicks(findViewById(R.id.recycle))
                 .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, RecordPlayActivity.class)));
