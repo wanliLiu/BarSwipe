@@ -79,12 +79,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
     private final Handler mHandler = new Handler();
     private MediaBrowserCompat mMediaBrowser;
 
-    private final Runnable mUpdateProgressTask = new Runnable() {
-        @Override
-        public void run() {
-            updateProgress();
-        }
-    };
+    private final Runnable mUpdateProgressTask = () -> updateProgress();
 
     private final ScheduledExecutorService mExecutorService =
         Executors.newSingleThreadScheduledExecutor();
@@ -146,45 +141,36 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         mLoading = (ProgressBar) findViewById(R.id.progressBar1);
         mControllers = findViewById(R.id.controllers);
 
-        mSkipNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaControllerCompat.TransportControls controls =
-                    getSupportMediaController().getTransportControls();
-                controls.skipToNext();
-            }
+        mSkipNext.setOnClickListener(v -> {
+            MediaControllerCompat.TransportControls controls =
+                getSupportMediaController().getTransportControls();
+            controls.skipToNext();
         });
 
-        mSkipPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaControllerCompat.TransportControls controls =
-                    getSupportMediaController().getTransportControls();
-                controls.skipToPrevious();
-            }
+        mSkipPrev.setOnClickListener(v -> {
+            MediaControllerCompat.TransportControls controls =
+                getSupportMediaController().getTransportControls();
+            controls.skipToPrevious();
         });
 
-        mPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PlaybackStateCompat state = getSupportMediaController().getPlaybackState();
-                if (state != null) {
-                    MediaControllerCompat.TransportControls controls =
-                            getSupportMediaController().getTransportControls();
-                    switch (state.getState()) {
-                        case PlaybackStateCompat.STATE_PLAYING: // fall through
-                        case PlaybackStateCompat.STATE_BUFFERING:
-                            controls.pause();
-                            stopSeekbarUpdate();
-                            break;
-                        case PlaybackStateCompat.STATE_PAUSED:
-                        case PlaybackStateCompat.STATE_STOPPED:
-                            controls.play();
-                            scheduleSeekbarUpdate();
-                            break;
-                        default:
-                            LogHelper.d(TAG, "onClick with state ", state.getState());
-                    }
+        mPlayPause.setOnClickListener(v -> {
+            PlaybackStateCompat state = getSupportMediaController().getPlaybackState();
+            if (state != null) {
+                MediaControllerCompat.TransportControls controls =
+                        getSupportMediaController().getTransportControls();
+                switch (state.getState()) {
+                    case PlaybackStateCompat.STATE_PLAYING: // fall through
+                    case PlaybackStateCompat.STATE_BUFFERING:
+                        controls.pause();
+                        stopSeekbarUpdate();
+                        break;
+                    case PlaybackStateCompat.STATE_PAUSED:
+                    case PlaybackStateCompat.STATE_STOPPED:
+                        controls.play();
+                        scheduleSeekbarUpdate();
+                        break;
+                    default:
+                        LogHelper.d(TAG, "onClick with state ", state.getState());
                 }
             }
         });
@@ -241,8 +227,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
 
     private void updateFromParams(Intent intent) {
         if (intent != null) {
-            MediaDescriptionCompat description = intent.getParcelableExtra(
-                MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION);
+            MediaDescriptionCompat description = intent.getParcelableExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION);
             if (description != null) {
                 updateMediaDescription(description);
             }
@@ -253,12 +238,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
         stopSeekbarUpdate();
         if (!mExecutorService.isShutdown()) {
             mScheduleFuture = mExecutorService.scheduleAtFixedRate(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            mHandler.post(mUpdateProgressTask);
-                        }
-                    }, PROGRESS_UPDATE_INITIAL_INTERVAL,
+                    () -> mHandler.post(mUpdateProgressTask), PROGRESS_UPDATE_INITIAL_INTERVAL,
                     PROGRESS_UPDATE_INTERNAL, TimeUnit.MILLISECONDS);
         }
     }

@@ -97,10 +97,8 @@ public class MediaItemViewHolder {
     }
 
     private static void initializeColorStateLists(Context ctx) {
-        sColorStateNotPlaying = ColorStateList.valueOf(ctx.getResources().getColor(
-            R.color.media_item_icon_not_playing));
-        sColorStatePlaying = ColorStateList.valueOf(ctx.getResources().getColor(
-            R.color.media_item_icon_playing));
+        sColorStateNotPlaying = ColorStateList.valueOf(ctx.getResources().getColor( R.color.media_item_icon_not_playing));
+        sColorStatePlaying = ColorStateList.valueOf(ctx.getResources().getColor(R.color.media_item_icon_playing));
     }
 
     public static Drawable getDrawableByState(Context context, int state) {
@@ -110,19 +108,16 @@ public class MediaItemViewHolder {
 
         switch (state) {
             case STATE_PLAYABLE:
-                Drawable pauseDrawable = ContextCompat.getDrawable(context,
-                        R.drawable.ic_play_arrow_black_36dp);
+                Drawable pauseDrawable = ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_black_36dp);
                 DrawableCompat.setTintList(pauseDrawable, sColorStateNotPlaying);
                 return pauseDrawable;
             case STATE_PLAYING:
-                AnimationDrawable animation = (AnimationDrawable)
-                        ContextCompat.getDrawable(context, R.drawable.ic_equalizer_white_36dp);
+                AnimationDrawable animation = (AnimationDrawable)ContextCompat.getDrawable(context, R.drawable.ic_equalizer_white_36dp);
                 DrawableCompat.setTintList(animation, sColorStatePlaying);
                 animation.start();
                 return animation;
             case STATE_PAUSED:
-                Drawable playDrawable = ContextCompat.getDrawable(context,
-                        R.drawable.ic_equalizer1_white_36dp);
+                Drawable playDrawable = ContextCompat.getDrawable(context,R.drawable.ic_equalizer1_white_36dp);
                 DrawableCompat.setTintList(playDrawable, sColorStatePlaying);
                 return playDrawable;
             default:

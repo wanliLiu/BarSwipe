@@ -65,7 +65,7 @@
         <!-- Placeholder activity for phone UI -->
         <activity
             android:name=".ui.PlaceholderActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name1">
         </activity>
 
         <!-- Proxy activity that opens either the NowPlaying TV or the mobile UI, depending on

@@ -40,6 +40,10 @@ import static android.support.v4.media.session.MediaSessionCompat.QueueItem;
 
 /**
  * An implementation of Playback that talks to Cast.
+ *
+ * 投递到远程设备播放，比如手机投射到TV上播放
+ *
+ * 我们需要的项目上，这个不用管
  */
 public class CastPlayback implements Playback {
 

@@ -57,15 +57,13 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
             ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
                     getTitle().toString(),
                     BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_white),
-                    ResourceHelper.getThemeColor(this, R.attr.colorPrimary,
-                            android.R.color.darker_gray));
+                    ResourceHelper.getThemeColor(this, R.attr.colorPrimary,android.R.color.darker_gray));
             setTaskDescription(taskDesc);
         }
 
         // Connect a media browser just to get the media session token. There are other ways
         // this can be done, for example by sharing the session token directly.
-        mMediaBrowser = new MediaBrowserCompat(this,
-            new ComponentName(this, MusicService.class), mConnectionCallback, null);
+        mMediaBrowser = new MediaBrowserCompat(this,new ComponentName(this, MusicService.class), mConnectionCallback, null);
     }
 
     @Override
@@ -73,8 +71,7 @@ public abstract class BaseActivity extends ActionBarCastActivity implements Medi
         super.onStart();
         LogHelper.d(TAG, "Activity onStart");
 
-        mControlsFragment = (PlaybackControlsFragment) getFragmentManager()
-            .findFragmentById(R.id.fragment_playback_controls);
+        mControlsFragment = (PlaybackControlsFragment) getFragmentManager().findFragmentById(R.id.fragment_playback_controls);
         if (mControlsFragment == null) {
             throw new IllegalStateException("Mising fragment with id 'controls'. Cannot continue.");
         }

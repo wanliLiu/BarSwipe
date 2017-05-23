@@ -277,8 +277,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
      */
     private void tryToGetAudioFocus() {
         LogHelper.d(TAG, "tryToGetAudioFocus");
-        int result = mAudioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN);
+        int result = mAudioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN);
         if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             mAudioFocus = AUDIO_FOCUSED;
         } else {
@@ -451,8 +450,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
             // Make sure the media player will acquire a wake-lock while
             // playing. If we don't do that, the CPU might go to sleep while the
             // song is playing, causing playback to stop.
-            mMediaPlayer.setWakeMode(mContext.getApplicationContext(),
-                    PowerManager.PARTIAL_WAKE_LOCK);
+            mMediaPlayer.setWakeMode(mContext.getApplicationContext(),PowerManager.PARTIAL_WAKE_LOCK);
 
             // we want the media player to notify us when it's ready preparing,
             // and when it's done playing:

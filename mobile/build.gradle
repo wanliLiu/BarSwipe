@@ -60,7 +60,7 @@ dependencies {
     compile "com.android.support:gridlayout-v7:${supportPackageVersion}"
     compile "com.android.support:percent:${supportPackageVersion}"
     compile "com.android.support:mediarouter-v7:${supportPackageVersion}"
-    //地市tv
+    //电视tv 好像最低版本要17
     compile "com.android.support:leanback-v17:${supportPackageVersion}"
 
     testCompile 'junit:junit:4.12'

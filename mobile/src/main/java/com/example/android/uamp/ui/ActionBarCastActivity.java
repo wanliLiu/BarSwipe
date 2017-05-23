@@ -72,13 +72,10 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
         @Override
         public void onCastStateChanged(int newState) {
             if (newState != CastState.NO_DEVICES_AVAILABLE) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mMediaRouteMenuItem.isVisible()) {
-                            LogHelper.d(TAG, "Cast Icon is visible");
-                            showFtu();
-                        }
+                new Handler().postDelayed(() -> {
+                    if (mMediaRouteMenuItem.isVisible()) {
+                        LogHelper.d(TAG, "Cast Icon is visible");
+                        showFtu();
                     }
                 }, DELAY_MILLIS);
             }
@@ -128,12 +125,7 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
     };
 
     private final FragmentManager.OnBackStackChangedListener mBackStackChangedListener =
-        new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                updateDrawerToggle();
-            }
-        };
+            () -> updateDrawerToggle();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -283,14 +275,11 @@ public abstract class ActionBarCastActivity extends AppCompatActivity {
 
     private void populateDrawerItems(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
-                        mItemToOpenWhenDrawerCloses = menuItem.getItemId();
-                        mDrawerLayout.closeDrawers();
-                        return true;
-                    }
+                menuItem -> {
+                    menuItem.setChecked(true);
+                    mItemToOpenWhenDrawerCloses = menuItem.getItemId();
+                    mDrawerLayout.closeDrawers();
+                    return true;
                 });
         if (MusicPlayerActivity.class.isAssignableFrom(getClass())) {
             navigationView.setCheckedItem(R.id.navigation_allmusic);

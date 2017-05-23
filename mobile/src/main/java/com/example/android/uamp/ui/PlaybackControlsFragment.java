@@ -86,20 +86,17 @@ public class PlaybackControlsFragment extends Fragment {
         mSubtitle = (TextView) rootView.findViewById(R.id.artist);
         mExtraInfo = (TextView) rootView.findViewById(R.id.extra_info);
         mAlbumArt = (ImageView) rootView.findViewById(R.id.album_art);
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FullScreenPlayerActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                MediaControllerCompat controller = ((FragmentActivity) getActivity())
-                        .getSupportMediaController();
-                MediaMetadataCompat metadata = controller.getMetadata();
-                if (metadata != null) {
-                    intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
-                        metadata.getDescription());
-                }
-                startActivity(intent);
+        rootView.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), FullScreenPlayerActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            MediaControllerCompat controller = ((FragmentActivity) getActivity())
+                    .getSupportMediaController();
+            MediaMetadataCompat metadata = controller.getMetadata();
+            if (metadata != null) {
+                intent.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION,
+                    metadata.getDescription());
             }
+            startActivity(intent);
         });
         return rootView;
     }
@@ -232,29 +229,26 @@ public class PlaybackControlsFragment extends Fragment {
         setExtraInfo(extraInfo);
     }
 
-    private final View.OnClickListener mButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            MediaControllerCompat controller = ((FragmentActivity) getActivity())
-                    .getSupportMediaController();
-            PlaybackStateCompat stateObj = controller.getPlaybackState();
-            final int state = stateObj == null ?
-                    PlaybackStateCompat.STATE_NONE : stateObj.getState();
-            LogHelper.d(TAG, "Button pressed, in state " + state);
-            switch (v.getId()) {
-                case R.id.play_pause:
-                    LogHelper.d(TAG, "Play button pressed, in state " + state);
-                    if (state == PlaybackStateCompat.STATE_PAUSED ||
-                            state == PlaybackStateCompat.STATE_STOPPED ||
-                            state == PlaybackStateCompat.STATE_NONE) {
-                        playMedia();
-                    } else if (state == PlaybackStateCompat.STATE_PLAYING ||
-                            state == PlaybackStateCompat.STATE_BUFFERING ||
-                            state == PlaybackStateCompat.STATE_CONNECTING) {
-                        pauseMedia();
-                    }
-                    break;
-            }
+    private final View.OnClickListener mButtonListener = v -> {
+        MediaControllerCompat controller = ((FragmentActivity) getActivity())
+                .getSupportMediaController();
+        PlaybackStateCompat stateObj = controller.getPlaybackState();
+        final int state = stateObj == null ?
+                PlaybackStateCompat.STATE_NONE : stateObj.getState();
+        LogHelper.d(TAG, "Button pressed, in state " + state);
+        switch (v.getId()) {
+            case R.id.play_pause:
+                LogHelper.d(TAG, "Play button pressed, in state " + state);
+                if (state == PlaybackStateCompat.STATE_PAUSED ||
+                        state == PlaybackStateCompat.STATE_STOPPED ||
+                        state == PlaybackStateCompat.STATE_NONE) {
+                    playMedia();
+                } else if (state == PlaybackStateCompat.STATE_PLAYING ||
+                        state == PlaybackStateCompat.STATE_BUFFERING ||
+                        state == PlaybackStateCompat.STATE_CONNECTING) {
+                    pauseMedia();
+                }
+                break;
         }
     };
 

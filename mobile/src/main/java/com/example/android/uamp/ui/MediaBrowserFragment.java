@@ -32,7 +32,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -156,13 +155,10 @@ public class MediaBrowserFragment extends Fragment {
 
         ListView listView = (ListView) rootView.findViewById(R.id.list_view);
         listView.setAdapter(mBrowserAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                checkForUserVisibleErrors(false);
-                MediaBrowserCompat.MediaItem item = mBrowserAdapter.getItem(position);
-                mMediaFragmentListener.onMediaItemSelected(item);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            checkForUserVisibleErrors(false);
+            MediaBrowserCompat.MediaItem item = mBrowserAdapter.getItem(position);
+            mMediaFragmentListener.onMediaItemSelected(item);
         });
 
         return rootView;
@@ -194,8 +190,7 @@ public class MediaBrowserFragment extends Fragment {
         if (mediaBrowser != null && mediaBrowser.isConnected() && mMediaId != null) {
             mediaBrowser.unsubscribe(mMediaId);
         }
-        MediaControllerCompat controller = ((FragmentActivity) getActivity())
-                .getSupportMediaController();
+        MediaControllerCompat controller = ((FragmentActivity) getActivity()).getSupportMediaController();
         if (controller != null) {
             controller.unregisterCallback(mMediaControllerCallback);
         }
@@ -264,8 +259,7 @@ public class MediaBrowserFragment extends Fragment {
             showError = true;
         } else {
             // otherwise, if state is ERROR and metadata!=null, use playback state error message:
-            MediaControllerCompat controller = ((FragmentActivity) getActivity())
-                    .getSupportMediaController();
+            MediaControllerCompat controller = ((FragmentActivity) getActivity()) .getSupportMediaController();
             if (controller != null
                 && controller.getMetadata() != null
                 && controller.getPlaybackState() != null

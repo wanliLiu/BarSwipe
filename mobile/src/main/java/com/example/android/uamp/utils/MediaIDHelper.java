@@ -39,6 +39,14 @@ public class MediaIDHelper {
     private static final char CATEGORY_SEPARATOR = '/';
     private static final char LEAF_SEPARATOR = '|';
 
+    private static boolean isValidCategory(String category) {
+        return category == null ||
+                (
+                    category.indexOf(CATEGORY_SEPARATOR) < 0 &&
+                    category.indexOf(LEAF_SEPARATOR) < 0
+                );
+    }
+
     /**
      * Create a String value that represents a playable or a browsable media.
      *
@@ -72,14 +80,6 @@ public class MediaIDHelper {
             sb.append(LEAF_SEPARATOR).append(musicID);
         }
         return sb.toString();
-    }
-
-    private static boolean isValidCategory(String category) {
-        return category == null ||
-                (
-                    category.indexOf(CATEGORY_SEPARATOR) < 0 &&
-                    category.indexOf(LEAF_SEPARATOR) < 0
-                );
     }
 
     /**
@@ -150,13 +150,10 @@ public class MediaIDHelper {
                                              MediaBrowserCompat.MediaItem mediaItem) {
         // Media item is considered to be playing or paused based on the controller's current
         // media id
-        MediaControllerCompat controller = ((FragmentActivity) context)
-                .getSupportMediaController();
+        MediaControllerCompat controller = ((FragmentActivity) context).getSupportMediaController();
         if (controller != null && controller.getMetadata() != null) {
-            String currentPlayingMediaId = controller.getMetadata().getDescription()
-                    .getMediaId();
-            String itemMusicId = MediaIDHelper.extractMusicIDFromMediaID(
-                    mediaItem.getDescription().getMediaId());
+            String currentPlayingMediaId = controller.getMetadata().getDescription().getMediaId();
+            String itemMusicId = MediaIDHelper.extractMusicIDFromMediaID(mediaItem.getDescription().getMediaId());
             if (currentPlayingMediaId != null
                     && TextUtils.equals(currentPlayingMediaId, itemMusicId)) {
                 return true;
