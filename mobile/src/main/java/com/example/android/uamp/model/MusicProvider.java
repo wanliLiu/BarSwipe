@@ -41,6 +41,7 @@ import java.util.concurrent.ConcurrentMap;
 import static com.example.android.uamp.utils.MediaIDHelper.MEDIA_ID_MUSICS_BY_GENRE;
 import static com.example.android.uamp.utils.MediaIDHelper.MEDIA_ID_ROOT;
 import static com.example.android.uamp.utils.MediaIDHelper.createMediaID;
+
 /**
  * Simple data provider for music tracks. The actual metadata source is delegated to a
  * MusicProviderSource defined by a constructor argument of this class.
@@ -70,6 +71,7 @@ public class MusicProvider {
     public MusicProvider() {
         this(new RemoteJSONSource());
     }
+
     public MusicProvider(MusicProviderSource source) {
         mSource = source;
         mMusicListByGenre = new ConcurrentHashMap<>();
@@ -96,17 +98,18 @@ public class MusicProvider {
         if (mCurrentState != State.INITIALIZED) {
             return Collections.emptyList();
         }
+        //那所有的数据，然后打乱
         List<MediaMetadataCompat> shuffled = new ArrayList<>(mMusicListById.size());
-        for (MutableMediaMetadata mutableMetadata: mMusicListById.values()) {
+        for (MutableMediaMetadata mutableMetadata : mMusicListById.values()) {
             shuffled.add(mutableMetadata.metadata);
         }
+        //随机打乱数据
         Collections.shuffle(shuffled);
         return shuffled;
     }
 
     /**
      * Get music tracks of the given genre
-     *
      */
     public Iterable<MediaMetadataCompat> getMusicsByGenre(String genre) {
         if (mCurrentState != State.INITIALIZED || !mMusicListByGenre.containsKey(genre)) {
@@ -118,7 +121,6 @@ public class MusicProvider {
     /**
      * Very basic implementation of a search that filter music tracks with title containing
      * the given query.
-     *
      */
     public Iterable<MediaMetadataCompat> searchMusicBySongTitle(String query) {
         return searchMusic(MediaMetadataCompat.METADATA_KEY_TITLE, query);
@@ -127,7 +129,6 @@ public class MusicProvider {
     /**
      * Very basic implementation of a search that filter music tracks with album containing
      * the given query.
-     *
      */
     public Iterable<MediaMetadataCompat> searchMusicByAlbum(String query) {
         return searchMusic(MediaMetadataCompat.METADATA_KEY_ALBUM, query);
@@ -136,7 +137,6 @@ public class MusicProvider {
     /**
      * Very basic implementation of a search that filter music tracks with artist containing
      * the given query.
-     *
      */
     public Iterable<MediaMetadataCompat> searchMusicByArtist(String query) {
         return searchMusic(MediaMetadataCompat.METADATA_KEY_ARTIST, query);
@@ -150,7 +150,7 @@ public class MusicProvider {
         query = query.toLowerCase(Locale.US);
         for (MutableMediaMetadata track : mMusicListById.values()) {
             if (track.metadata.getString(metadataField).toLowerCase(Locale.US)
-                .contains(query)) {
+                    .contains(query)) {
                 result.add(track.metadata);
             }
         }
@@ -226,7 +226,7 @@ public class MusicProvider {
      * Get the list of music tracks from a server and caches the track information
      * for future reference, keying tracks by musicId and grouping by genre.
      */
-    public void  retrieveMediaAsync(final Callback callback) {
+    public void retrieveMediaAsync(final Callback callback) {
         LogHelper.d(TAG, "retrieveMediaAsync called");
         if (mCurrentState == State.INITIALIZED) {
             if (callback != null) {
@@ -317,7 +317,7 @@ public class MusicProvider {
     }
 
     private MediaBrowserCompat.MediaItem createBrowsableMediaItemForGenre(String genre,
-                                                                    Resources resources) {
+                                                                          Resources resources) {
         MediaDescriptionCompat description = new MediaDescriptionCompat.Builder()
                 .setMediaId(createMediaID(null, MEDIA_ID_MUSICS_BY_GENRE, genre))
                 .setTitle(genre)

@@ -21,6 +21,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 /**
+ * google的语音搜索
  * For more information about voice search parameters,
  * check https://developer.android.com/guide/components/intents-common.html#PlaySearch
  */

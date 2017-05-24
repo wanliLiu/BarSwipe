@@ -42,8 +42,14 @@ public class QueueHelper {
 
     private static final int RANDOM_QUEUE_SIZE = 10;
 
+    /**
+     *
+     * @param mediaId
+     * @param musicProvider
+     * @return
+     */
     public static List<MediaSessionCompat.QueueItem> getPlayingQueue(String mediaId,
-            MusicProvider musicProvider) {
+                                                                     MusicProvider musicProvider) {
 
         // extract the browsing hierarchy from the media ID:
         String[] hierarchy = MediaIDHelper.getHierarchy(mediaId);
@@ -73,11 +79,18 @@ public class QueueHelper {
         return convertToQueue(tracks, hierarchy[0], hierarchy[1]);
     }
 
+    /**
+     * google语音搜索  根据相关进行音乐搜索
+     *
+     * @param query
+     * @param queryParams
+     * @param musicProvider
+     * @return
+     */
     public static List<MediaSessionCompat.QueueItem> getPlayingQueueFromSearch(String query,
-            Bundle queryParams, MusicProvider musicProvider) {
+                                                                               Bundle queryParams, MusicProvider musicProvider) {
 
-        LogHelper.d(TAG, "Creating playing queue for musics from search: ", query,
-            " params=", queryParams);
+        LogHelper.d(TAG, "Creating playing queue for musics from search: ", query, " params=", queryParams);
 
         VoiceSearchParams params = new VoiceSearchParams(query, queryParams);
 
@@ -114,9 +127,14 @@ public class QueueHelper {
         return convertToQueue(result, MEDIA_ID_MUSICS_BY_SEARCH, query);
     }
 
-
+    /**
+     *
+     * @param queue
+     * @param mediaId
+     * @return
+     */
     public static int getMusicIndexOnQueue(Iterable<MediaSessionCompat.QueueItem> queue,
-             String mediaId) {
+                                           String mediaId) {
         int index = 0;
         for (MediaSessionCompat.QueueItem item : queue) {
             if (mediaId.equals(item.getDescription().getMediaId())) {
@@ -127,8 +145,14 @@ public class QueueHelper {
         return -1;
     }
 
+    /**
+     *
+     * @param queue
+     * @param queueId
+     * @return
+     */
     public static int getMusicIndexOnQueue(Iterable<MediaSessionCompat.QueueItem> queue,
-             long queueId) {
+                                           long queueId) {
         int index = 0;
         for (MediaSessionCompat.QueueItem item : queue) {
             if (queueId == item.getQueueId()) {
@@ -173,7 +197,7 @@ public class QueueHelper {
     public static List<MediaSessionCompat.QueueItem> getRandomQueue(MusicProvider musicProvider) {
         List<MediaMetadataCompat> result = new ArrayList<>(RANDOM_QUEUE_SIZE);
         Iterable<MediaMetadataCompat> shuffled = musicProvider.getShuffledMusic();
-        for (MediaMetadataCompat metadata: shuffled) {
+        for (MediaMetadataCompat metadata : shuffled) {
             if (result.size() == RANDOM_QUEUE_SIZE) {
                 break;
             }
@@ -206,7 +230,7 @@ public class QueueHelper {
         if (list1.size() != list2.size()) {
             return false;
         }
-        for (int i=0; i<list1.size(); i++) {
+        for (int i = 0; i < list1.size(); i++) {
             if (list1.get(i).getQueueId() != list2.get(i).getQueueId()) {
                 return false;
             }
@@ -221,7 +245,7 @@ public class QueueHelper {
     /**
      * Determine if queue item matches the currently playing queue item
      *
-     * @param context for retrieving the {@link MediaControllerCompat}
+     * @param context   for retrieving the {@link MediaControllerCompat}
      * @param queueItem to compare to currently playing {@link MediaSessionCompat.QueueItem}
      * @return boolean indicating whether queue item matches currently playing queue item
      */

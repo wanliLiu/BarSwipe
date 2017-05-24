@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.barswipe">
 
     //mediaBrowserServiceCompat need
@@ -418,7 +419,7 @@
         <activity android:name=".volume.RecordPlayActivity" />
 
         <!--********************************************media*****************************************************-->
-        <activity android:name=".media.SupportMediaTest"/>
+        <activity android:name=".media.SupportMediaTest" />
         <service android:name=".media.BackgroundAudioService">
             <intent-filter>
                 <!--//intercept control buttons-->
@@ -435,6 +436,15 @@
                 <action android:name="android.media.AUDIO_BECOMING_NOISY" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".media.google.MusicService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

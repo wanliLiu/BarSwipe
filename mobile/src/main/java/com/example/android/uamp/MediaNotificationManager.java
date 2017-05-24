@@ -54,6 +54,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
     public static final String ACTION_PLAY = "com.example.android.uamp.play";
     public static final String ACTION_PREV = "com.example.android.uamp.prev";
     public static final String ACTION_NEXT = "com.example.android.uamp.next";
+    public static final String ACIONT_CANCLE = "com.example.android.uamp.cancle";
     public static final String ACTION_STOP_CASTING = "com.example.android.uamp.stop_cast";
 
     private final MusicService mService;
@@ -70,6 +71,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
     private final PendingIntent mPlayIntent;
     private final PendingIntent mPreviousIntent;
     private final PendingIntent mNextIntent;
+    private final PendingIntent mCancleIntent;
 
     private final PendingIntent mStopCastIntent;
 
@@ -94,6 +96,8 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 new Intent(ACTION_PREV).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
         mNextIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
                 new Intent(ACTION_NEXT).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
+        mCancleIntent = PendingIntent.getBroadcast(mService,REQUEST_CODE,
+                new Intent(ACIONT_CANCLE).setPackage(pkg),PendingIntent.FLAG_CANCEL_CURRENT);
 
         mStopCastIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
                 new Intent(ACTION_STOP_CASTING).setPackage(pkg),
@@ -299,8 +303,10 @@ public class MediaNotificationManager extends BroadcastReceiver {
 
         notificationBuilder
                 .setStyle(new NotificationCompat.MediaStyle()
+                        .setShowCancelButton(true)
+                        .setCancelButtonIntent(mCancleIntent)
                         .setShowActionsInCompactView(
-                                new int[]{playPauseButtonPosition})  // show only play/pause in compact view
+                                new int[]{playPauseButtonPosition})  // show only play/pause in compact view  playPauseButtonPosition
                         .setMediaSession(mSessionToken))
                 .setColor(mNotificationColor)
                 .setSmallIcon(R.drawable.ic_notification)

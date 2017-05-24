@@ -1,11 +1,16 @@
 package com.barswipe;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.session.MediaControllerCompat;
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.barswipe.SwipeBackLayout.app.SwipeBackActivity;
+import com.barswipe.media.google.MusicService;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
@@ -14,12 +19,47 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
  */
 public class BaseActivity extends SwipeBackActivity {
 
+    private MediaBrowserCompat mMediaBrowserCompat;
+    protected MediaControllerCompat mMediaController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initMediaService();
     }
 
-//    @Override
+    /**
+     *
+     */
+    private void initMediaService() {
+        mMediaBrowserCompat = new MediaBrowserCompat(this, new ComponentName(this, MusicService.class), new MediaBrowserCompat.ConnectionCallback() {
+            @Override
+            public void onConnected() {
+                super.onConnected();
+                try {
+                    mMediaController = new MediaControllerCompat(BaseActivity.this, mMediaBrowserCompat.getSessionToken());
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, null);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mMediaBrowserCompat != null)
+            mMediaBrowserCompat.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mMediaBrowserCompat != null)
+            mMediaBrowserCompat.disconnect();
+    }
+
+    //    @Override
 //    public void startActivity(Intent intent) {
 //        super.startActivity(intent);
 //        overridePendingTransition(R.anim.push_left_in, R.anim.quiet_fixedly);

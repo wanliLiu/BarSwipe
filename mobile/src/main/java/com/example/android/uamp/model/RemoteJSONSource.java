@@ -41,7 +41,7 @@ public class RemoteJSONSource implements MusicProviderSource {
     private static final String TAG = LogHelper.makeLogTag(RemoteJSONSource.class);
 
     protected static final String CATALOG_URL =
-        "http://storage.googleapis.com/automotive-media/music.json";
+            "http://storage.googleapis.com/automotive-media/music.json";
 
     private static final String JSON_MUSIC = "music";
     private static final String JSON_TITLE = "title";
@@ -108,7 +108,8 @@ public class RemoteJSONSource implements MusicProviderSource {
         //noinspection ResourceType
         return new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, id)
-                .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, source)
+//                .putString(MusicProviderSource.CUSTOM_METADATA_TRACK_SOURCE, source)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, source)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, album)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration)

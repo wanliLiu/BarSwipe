@@ -385,8 +385,7 @@ public class FullScreenPlayerActivity extends ActionBarCastActivity {
             // paused, we can assume (delta * speed) + current position is approximately the
             // latest position. This ensure that we do not repeatedly call the getPlaybackState()
             // on MediaControllerCompat.
-            long timeDelta = SystemClock.elapsedRealtime() -
-                    mLastPlaybackState.getLastPositionUpdateTime();
+            long timeDelta = SystemClock.elapsedRealtime() -mLastPlaybackState.getLastPositionUpdateTime();
             currentPosition += (int) timeDelta * mLastPlaybackState.getPlaybackSpeed();
         }
         mSeekbar.setProgress((int) currentPosition);
