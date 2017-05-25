@@ -129,6 +129,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
 
         QueueManager queueManager = new QueueManager(new QueueManager.MetadataUpdateListener() {
 
+
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
                 mSession.setMetadata(metadata);
@@ -262,6 +263,11 @@ public class MusicService extends MediaBrowserServiceCompat implements
     @Override
     public void onPlaybackStateUpdated(PlaybackStateCompat newState) {
         mSession.setPlaybackState(newState);
+    }
+
+    @Override
+    public void onAudioPlayProgress(double time) {
+        mSession.sendSessionEvent(String.valueOf(time),null);
     }
 
     /**

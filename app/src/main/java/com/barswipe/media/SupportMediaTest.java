@@ -8,16 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.media.session.MediaControllerCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
 import com.barswipe.media.google.utils.MediaMetaHelper;
 import com.barswipe.volume.wave.AcitivtyWaveTestRecycler;
 import com.jakewharton.rxbinding2.view.RxView;
-
-import java.util.Random;
 
 /**
  * Created by Soli on 2017/5/22.
@@ -100,24 +96,7 @@ public class SupportMediaTest extends BaseActivity {
 //        });
 
         RxView.clicks(findViewById(R.id.btnEffic))
-                .subscribe(o -> {
-                    MediaControllerCompat mMediaController = getSupportMediaController();
-                    if (mMediaController != null) {
-                        int statest = mMediaController.getPlaybackState().getState();
-                        switch (statest) {
-                            case PlaybackStateCompat.STATE_NONE:
-                            case PlaybackStateCompat.STATE_STOPPED:
-                                mMediaController.getTransportControls().playFromMediaId("我是meida" + new Random().nextInt(), MediaMetaHelper.getData());
-                                break;
-                            case PlaybackStateCompat.STATE_PLAYING:
-                                mMediaController.getTransportControls().pause();
-                                break;
-                            case PlaybackStateCompat.STATE_PAUSED:
-                                mMediaController.getTransportControls().play();
-                                break;
-                        }
-                    }
-                });
+                .subscribe(o -> MediaMetaHelper.decidePlayStatus(getSupportMediaController(), MediaMetaHelper.getData()));
         RxView.clicks(findViewById(R.id.notify1))
                 .subscribe(o -> showNotification());
         RxView.clicks(findViewById(R.id.notify2))

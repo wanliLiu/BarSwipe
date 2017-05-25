@@ -2,6 +2,7 @@ package com.barswipe.volume.wave;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,8 +18,6 @@ import android.widget.TextView;
 
 import com.barswipe.R;
 import com.barswipe.media.google.utils.MediaMetaHelper;
-
-import java.util.Random;
 
 /**
  * Created by Soli on 2017/3/28.
@@ -78,8 +77,6 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
         audioDuration = (TextView) findViewById(R.id.audioDuration);
         actionText = (TextView) findViewById(R.id.actionText);
         actionText.setOnClickListener(this);
-
-        mMediaController = ((AppCompatActivity) ctx).getSupportMediaController();
     }
 
     @Override
@@ -126,23 +123,26 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
     }
 
     /**
+     * @return
+     */
+    private MediaControllerCompat getMediaController() {
+        if (mMediaController == null) {
+            mMediaController = ((AppCompatActivity) getContext()).getSupportMediaController();
+        }
+
+        if (mMediaController == null)
+            throw new IllegalArgumentException("MediaControllerCompat cannot be null");
+
+        return mMediaController;
+    }
+
+    /**
      * 开始播放
      */
     private void startPlay() {
-        int statest = mMediaController.getPlaybackState().getState();
-        switch (statest) {
-            case PlaybackStateCompat.STATE_NONE:
-            case PlaybackStateCompat.STATE_STOPPED:
-                mMediaController.getTransportControls().playFromMediaId("我是meida" + new Random().nextInt(), MediaMetaHelper.getData(volumPath));
-                break;
-            case PlaybackStateCompat.STATE_PLAYING:
-                mMediaController.getTransportControls().pause();
-                break;
-            case PlaybackStateCompat.STATE_PAUSED:
-                mMediaController.getTransportControls().play();
-                break;
-        }
-        mMediaController.registerCallback(mCb);
+
+        MediaMetaHelper.decidePlayStatus(getMediaController(), MediaMetaHelper.getData(volumPath));
+        getMediaController().registerCallback(mCb);
     }
 
     /**
@@ -184,19 +184,17 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
                     break;
             }
         }
-    };
 
-//    @Override
-//    public void onAudioPlayProgress(final double timeMs) {
-//        wavePlay.updateData();
-//        getHandler().post(new Runnable() {
-//            @Override
-//            public void run() {
-//                int timeSec = (int) (timeMs / 1000.f);
-//                audioDuration.setText(timeSec + "''");
-//            }
-//        });
-//    }
+        @Override
+        public void onSessionEvent(String event, Bundle extras) {
+            super.onSessionEvent(event, extras);
+            wavePlay.updateData();
+            getHandler().post(() -> {
+                int timeSec = (int) (Double.valueOf(event) / 1000.f);
+                audioDuration.setText(timeSec + "''");
+            });
+        }
+    };
 
     @Override
     protected void onDetachedFromWindow() {

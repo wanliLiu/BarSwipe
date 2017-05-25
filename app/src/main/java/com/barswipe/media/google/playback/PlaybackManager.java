@@ -175,6 +175,11 @@ public class PlaybackManager implements Playback.Callback {
         updatePlaybackState(error);
     }
 
+    @Override
+    public void onAudioPlayProgress(double timeMs) {
+        mServiceCallback.onAudioPlayProgress(timeMs);
+    }
+
     /**
      *
      */
@@ -258,5 +263,7 @@ public class PlaybackManager implements Playback.Callback {
         void onPlaybackStop();
 
         void onPlaybackStateUpdated(PlaybackStateCompat newState);
+
+        void onAudioPlayProgress(double time);
     }
 }

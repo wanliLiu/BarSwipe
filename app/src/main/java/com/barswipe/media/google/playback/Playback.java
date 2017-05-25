@@ -123,6 +123,14 @@ public interface Playback {
          * @param error to be added to the PlaybackState
          */
         void onError(String error);
+
+
+        /**
+         * 录音播放进度
+         *
+         * @param timeMs
+         */
+        void onAudioPlayProgress(double timeMs);
     }
 
     /**
