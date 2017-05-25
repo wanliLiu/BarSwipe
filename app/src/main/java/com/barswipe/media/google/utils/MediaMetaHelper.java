@@ -10,7 +10,6 @@ import android.support.v4.media.MediaMetadataCompat;
 public class MediaMetaHelper {
 
     /**
-     *
      * @return
      */
     public static MediaMetadataCompat test() {
@@ -24,12 +23,31 @@ public class MediaMetaHelper {
     }
 
     /**
-     *
      * @return
      */
-    public static Bundle getdata() {
+    public static Bundle getData() {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(MediaConstants.MediaMetaDataKey, test());
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, String.valueOf("Jazz in Paris".hashCode()));
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, "http://storage.googleapis.com/automotive-media/Jazz_In_Paris.mp3");
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Jazz in Paris");
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, "我是我");
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, "我是描述");
         return bundle;
+    }
+
+    /**
+     * @param bundle
+     * @return
+     */
+    public static MediaMetadataCompat getMeta(Bundle bundle) {
+        if (bundle == null)
+            return new MediaMetadataCompat.Builder().build();
+        return new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, bundle.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID))
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, bundle.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI))
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, bundle.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE))
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, bundle.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE))
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, bundle.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION))
+                .build();
     }
 }

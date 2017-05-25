@@ -113,6 +113,7 @@ public class QueueManager {
      */
     public void setQueueFromUri(MediaMetadataCompat metadata) {
         setCurrentQueue(metadata.getString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE), QueueHelper.getPlayingQueue(metadata));
+        updateMetadata();
     }
 
     /**
@@ -161,7 +162,17 @@ public class QueueManager {
         mListener.onQueueUpdated(title, newQueue);
     }
 
+    /**
+     * 更新当前的session meta数据
+     */
+    public void updateMetadata() {
+        mListener.onMetadataChanged(QueueHelper.converTo(getCurrentMusic()));
+    }
+
     public interface MetadataUpdateListener {
+
+        void onMetadataChanged(MediaMetadataCompat metadata);
+
         void onCurrentQueueIndexUpdated(int queueIndex);
 
         void onQueueUpdated(String title, List<MediaSessionCompat.QueueItem> newQueue);

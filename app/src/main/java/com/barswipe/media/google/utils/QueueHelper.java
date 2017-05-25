@@ -16,6 +16,7 @@
 
 package com.barswipe.media.google.utils;
 
+import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 
@@ -26,6 +27,24 @@ import java.util.List;
  * Utility class to help on queue related tasks.
  */
 public class QueueHelper {
+
+    /**
+     * @param item
+     * @return
+     */
+    public static MediaMetadataCompat converTo(MediaSessionCompat.QueueItem item) {
+        if (item == null)
+            return new MediaMetadataCompat.Builder().build();
+
+        MediaDescriptionCompat desc = item.getDescription();
+        return new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, desc.getMediaId())
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, desc.getMediaUri().toString())
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, desc.getTitle().toString())
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, desc.getSubtitle().toString())
+                .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, desc.getDescription().toString())
+                .build();
+    }
 
     /**
      * @param metadata

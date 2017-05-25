@@ -102,9 +102,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
         PlaybackManager.PlaybackServiceCallback {
 
     private static final String TAG = LogHelper.makeLogTag(MusicService.class);
-
-    // Extra on MediaSession that contains the Cast device name currently connected to
-    public static final String EXTRA_CONNECTED_CAST = "com.example.android.uamp.CAST_NAME";
     // The action of the incoming Intent indicating that it contains a command
     // to be executed (see {@link #onStartCommand})
     public static final String ACTION_CMD = "com.example.android.uamp.ACTION_CMD";
@@ -123,7 +120,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
 
     private MediaSessionCompat mSession;
     private MediaNotificationManager mMediaNotificationManager;
-    private Bundle mSessionExtras;
     private final DelayedStopHandler mDelayedStopHandler = new DelayedStopHandler(this);
 
     /*
@@ -137,6 +133,12 @@ public class MusicService extends MediaBrowserServiceCompat implements
 
 
         QueueManager queueManager = new QueueManager(new QueueManager.MetadataUpdateListener() {
+
+            @Override
+            public void onMetadataChanged(MediaMetadataCompat metadata) {
+                mSession.setMetadata(metadata);
+            }
+
             @Override
             public void onCurrentQueueIndexUpdated(int queueIndex) {
                 mPlaybackManager.handlePlayRequest();
@@ -164,9 +166,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
         PendingIntent pi = PendingIntent.getActivity(context, 99 /*request code*/,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         mSession.setSessionActivity(pi);
-
-        mSessionExtras = new Bundle();
-        mSession.setExtras(mSessionExtras);
 
         mPlaybackManager.updatePlaybackState(null);
 
@@ -231,11 +230,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
                                @NonNull final Result<List<MediaItem>> result) {
         LogHelper.d(TAG, "OnLoadChildren: parentMediaId=", parentMediaId);
         result.sendResult(new ArrayList<MediaItem>());
-    }
-
-    @Override
-    public void setMediaMetaData(MediaMetadataCompat data) {
-        mSession.setMetadata(data);
     }
 
     /**

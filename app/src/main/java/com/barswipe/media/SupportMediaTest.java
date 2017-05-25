@@ -93,7 +93,7 @@ public class SupportMediaTest extends BaseActivity {
                     int statest = mMediaController.getPlaybackState().getState();
                     switch (statest) {
                         case PlaybackStateCompat.STATE_NONE:
-                            mMediaController.getTransportControls().playFromMediaId("sds", MediaMetaHelper.getdata());
+                            mMediaController.getTransportControls().playFromMediaId("我是meida", MediaMetaHelper.getData());
                             break;
                         case PlaybackStateCompat.STATE_PLAYING:
                             mMediaController.getTransportControls().pause();

@@ -16,16 +16,13 @@
 
 package com.barswipe.media.google.playback;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import com.barswipe.media.google.utils.LogHelper;
-import com.barswipe.media.google.utils.MediaConstants;
 import com.barswipe.media.google.utils.MediaMetaHelper;
 
 
@@ -196,6 +193,7 @@ public class PlaybackManager implements Playback.Callback {
         public void onSkipToQueueItem(long queueId) {
             LogHelper.d(TAG, "OnSkipToQueueItem:" + queueId);
             mQueueManager.setCurrentQueueItem(queueId);
+            mQueueManager.updateMetadata();
         }
 
         @Override
@@ -208,20 +206,7 @@ public class PlaybackManager implements Playback.Callback {
         public void onPlayFromMediaId(String mediaId, Bundle extras) {
             super.onPlayFromMediaId(mediaId, extras);
             if (extras != null) {
-//                mQueueManager.setQueueFromUri(extras.getParcelable(MediaConstants.MediaMetaDataKey));
-                if (mServiceCallback != null)
-                    mServiceCallback.setMediaMetaData(MediaMetaHelper.test());
-                mQueueManager.setQueueFromUri(MediaMetaHelper.test());
-                handlePlayRequest();
-            }
-        }
-
-        @Override
-        public void onPlayFromUri(Uri uri, Bundle extras) {
-            super.onPlayFromUri(uri, extras);
-            if (extras != null) {
-                LogHelper.d(TAG, "playFromMediaId mediaId:", uri.toString(), "  extras=", extras);
-                mQueueManager.setQueueFromUri(extras.getParcelable(MediaConstants.MediaMetaDataKey));
+                mQueueManager.setQueueFromUri(MediaMetaHelper.getMeta(extras));
                 handlePlayRequest();
             }
         }
@@ -246,6 +231,7 @@ public class PlaybackManager implements Playback.Callback {
             } else {
                 handleStopRequest("Cannot skip");
             }
+            mQueueManager.updateMetadata();
         }
 
         @Override
@@ -255,6 +241,7 @@ public class PlaybackManager implements Playback.Callback {
             } else {
                 handleStopRequest("Cannot skip");
             }
+            mQueueManager.updateMetadata();
         }
 
         @Override
@@ -265,8 +252,6 @@ public class PlaybackManager implements Playback.Callback {
 
 
     public interface PlaybackServiceCallback {
-
-        void setMediaMetaData(MediaMetadataCompat data);
 
         void onPlaybackStart();
 
