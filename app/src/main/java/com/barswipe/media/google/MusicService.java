@@ -16,8 +16,6 @@
 
 package com.barswipe.media.google;
 
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,7 +29,6 @@ import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
-import com.barswipe.media.SupportMediaTest;
 import com.barswipe.media.google.playback.LocalPlayback;
 import com.barswipe.media.google.playback.MediaNotificationManager;
 import com.barswipe.media.google.playback.PlaybackManager;
@@ -111,8 +108,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
     // A value of a CMD_NAME key in the extras of the incoming Intent that
     // indicates that the music playback should be paused (see {@link #onStartCommand})
     public static final String CMD_PAUSE = "CMD_PAUSE";
-    //关闭播放
-    public static final String CMD_CANCLE = "CMD_CANCLE";
     // Delay stopSelf by using a handler.
     private static final int STOP_DELAY = 30000;
 
@@ -161,11 +156,11 @@ public class MusicService extends MediaBrowserServiceCompat implements
         mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-        Context context = getApplicationContext();
-        Intent intent = new Intent(context, SupportMediaTest.class);
-        PendingIntent pi = PendingIntent.getActivity(context, 99 /*request code*/,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mSession.setSessionActivity(pi);
+//        Context context = getApplicationContext();
+//        Intent intent = new Intent(context, SupportMediaTest.class);
+//        PendingIntent pi = PendingIntent.getActivity(context, 99 /*request code*/,
+//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        mSession.setSessionActivity(pi);
 
         mPlaybackManager.updatePlaybackState(null);
 
@@ -189,8 +184,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
             if (ACTION_CMD.equals(action)) {
                 if (CMD_PAUSE.equals(command)) {
                     mPlaybackManager.handlePauseRequest();
-                } else if (CMD_CANCLE.equals(command)) {
-                    stopSelf();
                 }
             } else {
                 // Try to handle the intent as a media button event wrapped by MediaButtonReceiver
@@ -264,11 +257,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
     @Override
     public void onNotificationRequired() {
         mMediaNotificationManager.startNotification();
-    }
-
-    @Override
-    public void hideNotification() {
-        mMediaNotificationManager.stopNotification();
     }
 
     @Override

@@ -74,7 +74,7 @@ public class PlaybackManager implements Playback.Callback {
         LogHelper.d(TAG, "handlePauseRequest: mState=" + mPlayback.getState());
         if (mPlayback.isPlaying()) {
             mPlayback.pause();
-            mServiceCallback.onPlaybackStop();
+//            mServiceCallback.onPlaybackStop();
         }
     }
 
@@ -131,18 +131,16 @@ public class PlaybackManager implements Playback.Callback {
         if (state == PlaybackStateCompat.STATE_PLAYING ||
                 state == PlaybackStateCompat.STATE_PAUSED) {
             mServiceCallback.onNotificationRequired();
-        } else if (state == PlaybackStateCompat.STATE_STOPPED) {
-            mServiceCallback.hideNotification();
         }
     }
 
     private long getAvailableActions() {
-        long actions =
-                PlaybackStateCompat.ACTION_PLAY_PAUSE |
-                        PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
-                        PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH |
-                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
+        long actions = PlaybackStateCompat.ACTION_PLAY_PAUSE;
+//        |
+//        PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
+//                PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH |
+//                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+//                PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
         if (mPlayback.isPlaying()) {
             actions |= PlaybackStateCompat.ACTION_PAUSE;
         } else {
@@ -256,8 +254,6 @@ public class PlaybackManager implements Playback.Callback {
         void onPlaybackStart();
 
         void onNotificationRequired();
-
-        void hideNotification();
 
         void onPlaybackStop();
 

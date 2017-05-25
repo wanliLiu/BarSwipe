@@ -20,7 +20,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 public class BaseActivity extends SwipeBackActivity {
 
     private MediaBrowserCompat mMediaBrowserCompat;
-    protected MediaControllerCompat mMediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,8 @@ public class BaseActivity extends SwipeBackActivity {
             public void onConnected() {
                 super.onConnected();
                 try {
-                    mMediaController = new MediaControllerCompat(BaseActivity.this, mMediaBrowserCompat.getSessionToken());
+                    MediaControllerCompat mMediaController = new MediaControllerCompat(BaseActivity.this, mMediaBrowserCompat.getSessionToken());
+                    setSupportMediaController(mMediaController);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

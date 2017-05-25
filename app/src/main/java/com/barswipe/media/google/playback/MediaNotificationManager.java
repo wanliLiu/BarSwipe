@@ -32,6 +32,8 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.NotificationCompat;
+import android.view.View;
+import android.widget.RemoteViews;
 
 import com.barswipe.R;
 import com.barswipe.media.SupportMediaTest;
@@ -113,7 +115,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
             mPlaybackState = mController.getPlaybackState();
 
             // The notification must be updated after setting started to true
-            Notification notification = createNotification();
+            Notification notification = createCustomNotification();
             if (notification != null) {
                 mController.registerCallback(mCb);
                 IntentFilter filter = new IntentFilter();
@@ -166,10 +168,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 mTransportControls.skipToPrevious();
                 break;
             case ACIONT_CANCLE:
-                Intent i = new Intent(context, MusicService.class);
-                i.setAction(MusicService.ACTION_CMD);
-                i.putExtra(MusicService.CMD_NAME, MusicService.CMD_CANCLE);
-                mService.startService(i);
+                mTransportControls.stop();
                 break;
             default:
                 LogHelper.w(TAG, "Unknown intent ignored. Action=", action);
@@ -219,7 +218,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
                     state.getState() == PlaybackStateCompat.STATE_NONE) {
                 stopNotification();
             } else {
-                Notification notification = createNotification();
+                Notification notification = createCustomNotification();
                 if (notification != null) {
                     mNotificationManager.notify(NOTIFICATION_ID, notification);
                 }
@@ -230,7 +229,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
         public void onMetadataChanged(MediaMetadataCompat metadata) {
             mMetadata = metadata;
             LogHelper.d(TAG, "Received new metadata ", metadata);
-            Notification notification = createNotification();
+            Notification notification = createCustomNotification();
             if (notification != null) {
                 mNotificationManager.notify(NOTIFICATION_ID, notification);
             }
@@ -263,6 +262,70 @@ public class MediaNotificationManager extends BroadcastReceiver {
             intent = mPlayIntent;
         }
         builder.addAction(new NotificationCompat.Action(icon, label, intent));
+    }
+
+    /**
+     * @return
+     */
+    private Notification createCustomNotification() {
+        LogHelper.d(TAG, "updateNotificationMetadata. mMetadata=" + mMetadata);
+        if (mMetadata == null || mPlaybackState == null) {
+            return null;
+        }
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mService);
+
+        RemoteViews remoteViews = new RemoteViews(mService.getPackageName(), R.layout.item_media_notification);
+
+        // If skip to previous action is enabled
+        if ((mPlaybackState.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) != 0) {
+            remoteViews.setViewVisibility(R.id.previous, View.VISIBLE);
+            remoteViews.setOnClickPendingIntent(R.id.previous, mPreviousIntent);
+        } else {
+            remoteViews.setViewVisibility(R.id.previous, View.GONE);
+        }
+
+        //play pause
+        int icon;
+        PendingIntent intent;
+        if (mPlaybackState.getState() == PlaybackStateCompat.STATE_PLAYING) {
+            icon = R.drawable.uamp_ic_pause_white_24dp;
+            intent = mPauseIntent;
+        } else {
+            icon = R.drawable.uamp_ic_play_arrow_white_24dp;
+            intent = mPlayIntent;
+        }
+        remoteViews.setImageViewResource(R.id.playPause, icon);
+        remoteViews.setOnClickPendingIntent(R.id.playPause, intent);
+
+        // If skip to next action is enabled
+        if ((mPlaybackState.getActions() & PlaybackStateCompat.ACTION_SKIP_TO_NEXT) != 0) {
+            remoteViews.setViewVisibility(R.id.next, View.VISIBLE);
+            remoteViews.setOnClickPendingIntent(R.id.next, mNextIntent);
+        } else {
+            remoteViews.setViewVisibility(R.id.next, View.GONE);
+        }
+
+        remoteViews.setOnClickPendingIntent(R.id.cancle, mCancleIntent);
+
+        MediaDescriptionCompat description = mMetadata.getDescription();
+
+        remoteViews.setTextViewText(R.id.title, description.getTitle());
+        remoteViews.setTextViewText(R.id.content, description.getSubtitle());
+
+        notificationBuilder
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setUsesChronometer(true)
+                .setContentIntent(createContentIntent(description))
+                .setContentTitle(description.getTitle())
+                .setContentText(description.getSubtitle())
+                .setContent(remoteViews);
+
+
+        setNotificationPlaybackState(notificationBuilder);
+
+        return notificationBuilder.build();
     }
 
     private Notification createNotification() {
@@ -312,8 +375,8 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 .setContentText(description.getSubtitle());
 //                .setLargeIcon(art);
 
-        notificationBuilder.setSubText("取消");
-        notificationBuilder.addAction(R.drawable.ic_close_black_24dp, mService.getString(R.string.stop_casting), mCancleIntent);
+//        notificationBuilder.setSubText("取消");
+//        notificationBuilder.addAction(R.drawable.ic_close_black_24dp, mService.getString(R.string.stop_casting), mCancleIntent);
 
         setNotificationPlaybackState(notificationBuilder);
 

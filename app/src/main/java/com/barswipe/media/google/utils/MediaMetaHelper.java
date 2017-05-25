@@ -25,6 +25,19 @@ public class MediaMetaHelper {
     /**
      * @return
      */
+    public static Bundle getData(String url) {
+        Bundle bundle = new Bundle();
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, String.valueOf("Jazz in Paris".hashCode()));
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, url);
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "Jazz in Paris");
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, "我是我");
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, "我是描述");
+        return bundle;
+    }
+
+    /**
+     * @return
+     */
     public static Bundle getData() {
         Bundle bundle = new Bundle();
         bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, String.valueOf("Jazz in Paris".hashCode()));

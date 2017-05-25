@@ -6,9 +6,15 @@
     android:orientation="vertical"
     android:padding="20dp">
 
+    <com.barswipe.volume.wave.MediaVolumePlayView
+        android:id="@+id/MediavolumePlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <com.barswipe.volume.wave.VolumePlayView
         android:id="@+id/volumePlay"
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content" />
 
     <TextView
