@@ -26,11 +26,10 @@ public class MediaMetaHelper {
 
 
     /**
-     *
      * @param controller
      * @param bundle
      */
-    public static void decidePlayStatus(MediaControllerCompat controller, Bundle bundle) {
+    public static void decidePlayStatus(MediaControllerCompat controller, Bundle bundle, MediaControllerCompat.Callback callback) {
         if (controller == null)
             return;
 
@@ -49,6 +48,11 @@ public class MediaMetaHelper {
                 controller.getTransportControls().stop();
             }
             controller.getTransportControls().playFromMediaId(bundle.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID), bundle);
+
+            if (callback != null) {
+                controller.unregisterCallback(callback);
+                controller.registerCallback(callback);
+            }
         }
     }
 
@@ -72,9 +76,9 @@ public class MediaMetaHelper {
     public static Bundle getData() {
         Bundle bundle = new Bundle();
         bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, String.valueOf("http://storage.googleapis.com/automotive-media/Jazz_In_Paris.mp3".hashCode()));
-        bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, "http://storage.googleapis.com/automotive-media/Jazz_In_Paris.mp3");
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, "http://yinyueshiting.baidu.com/data2/music/87e00d9644b6b2395a740b470d45c3e2/539705970/539705970.mp3?xcode=41fd43f8616877768c3c42cb27c397d9");
         bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, "直接播放网络的适配");
-        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, "我是我");
+        bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, "深夜书店");
         bundle.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_DESCRIPTION, "我是描述");
         return bundle;
     }

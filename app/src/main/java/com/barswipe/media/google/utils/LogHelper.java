@@ -24,7 +24,7 @@ public class LogHelper {
 
     private static final String LOG_PREFIX = "uamp_";
     private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
-    private static final int MAX_LOG_TAG_LENGTH = 23;
+    private static final int MAX_LOG_TAG_LENGTH = 23 - LOG_PREFIX.length();
 
     public static String makeLogTag(String str) {
         if (str.length() > MAX_LOG_TAG_LENGTH - LOG_PREFIX_LENGTH) {
@@ -77,7 +77,7 @@ public class LogHelper {
     }
 
     public static void log(String tag, int level, Throwable t, Object... messages) {
-//        if (Log.isLoggable(tag, level)) {
+        if (Log.isLoggable(tag, level)) {
             String message;
             if (t == null && messages != null && messages.length == 1) {
                 // handle this common case without the extra cost of creating a stringbuffer:
@@ -93,6 +93,6 @@ public class LogHelper {
                 message = sb.toString();
             }
             Log.println(level, tag, message);
-//        }
+        }
     }
 }

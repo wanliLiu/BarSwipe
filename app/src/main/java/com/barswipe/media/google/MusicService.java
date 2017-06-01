@@ -128,8 +128,6 @@ public class MusicService extends MediaBrowserServiceCompat implements
 
 
         QueueManager queueManager = new QueueManager(new QueueManager.MetadataUpdateListener() {
-
-
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
                 mSession.setMetadata(metadata);
@@ -154,14 +152,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
         mSession = new MediaSessionCompat(this, "MusicService");
         setSessionToken(mSession.getSessionToken());
         mSession.setCallback(mPlaybackManager.getMediaSessionCallback());
-        mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-//        Context context = getApplicationContext();
-//        Intent intent = new Intent(context, SupportMediaTest.class);
-//        PendingIntent pi = PendingIntent.getActivity(context, 99 /*request code*/,
-//                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        mSession.setSessionActivity(pi);
+        mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
         mPlaybackManager.updatePlaybackState(null);
 
@@ -267,7 +258,7 @@ public class MusicService extends MediaBrowserServiceCompat implements
 
     @Override
     public void onAudioPlayProgress(double time) {
-        mSession.sendSessionEvent(String.valueOf(time),null);
+        mSession.sendSessionEvent(String.valueOf(time), null);
     }
 
     /**

@@ -96,7 +96,7 @@ public class SupportMediaTest extends BaseActivity {
 //        });
 
         RxView.clicks(findViewById(R.id.btnEffic))
-                .subscribe(o -> MediaMetaHelper.decidePlayStatus(getSupportMediaController(), MediaMetaHelper.getData()));
+                .subscribe(o -> MediaMetaHelper.decidePlayStatus(getSupportMediaController(), MediaMetaHelper.getData(),null));
         RxView.clicks(findViewById(R.id.notify1))
                 .subscribe(o -> showNotification());
         RxView.clicks(findViewById(R.id.notify2))

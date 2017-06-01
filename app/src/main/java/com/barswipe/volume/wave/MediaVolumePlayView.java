@@ -44,6 +44,7 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
     private ImageView audioPlay;
 
     private MediaControllerCompat mMediaController;
+    private playbackCallback callback;
 
     private onActionTypeListener listener;
 
@@ -123,11 +124,14 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
     }
 
     /**
+     * 获取媒体控制器
+     *
      * @return
      */
     private MediaControllerCompat getMediaController() {
         if (mMediaController == null) {
             mMediaController = ((AppCompatActivity) getContext()).getSupportMediaController();
+            callback = new playbackCallback();
         }
 
         if (mMediaController == null)
@@ -140,9 +144,7 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
      * 开始播放
      */
     private void startPlay() {
-
-        MediaMetaHelper.decidePlayStatus(getMediaController(), MediaMetaHelper.getData(volumPath));
-        getMediaController().registerCallback(mCb);
+        MediaMetaHelper.decidePlayStatus(getMediaController(), MediaMetaHelper.getData(volumPath), callback);
     }
 
     /**
@@ -166,7 +168,10 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
         wavePlay.setWaveData(waveData);
     }
 
-    private final MediaControllerCompat.Callback mCb = new MediaControllerCompat.Callback() {
+    /**
+     * 播放器回调
+     */
+    private class playbackCallback extends MediaControllerCompat.Callback {
         @Override
         public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
             switch (state.getState()) {
@@ -194,13 +199,18 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
                 audioDuration.setText(timeSec + "''");
             });
         }
-    };
+
+        @Override
+        public void onExtrasChanged(Bundle extras) {
+            super.onExtrasChanged(extras);
+        }
+    }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         if (mMediaController != null)
-            mMediaController.unregisterCallback(mCb);
+            mMediaController.unregisterCallback(callback);
     }
 
     /**

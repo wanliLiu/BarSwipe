@@ -162,6 +162,24 @@ public class LaunchActivity extends BaseActivity {
         testStream();
 
         libSdkTest();
+
+        logTag();
+    }
+
+    /**
+     *
+     */
+    private void logTag() {
+        String Tag = "日志打印";
+        Log.v(Tag, " Log.v");
+        Log.d(Tag, " Log.d");
+        if (Log.isLoggable(Tag,Log.ERROR)){
+
+        }
+        Log.i(Tag, " Log.i");
+        Log.w(Tag, " Log.w");
+        Log.e(Tag, " Log.e");
+        Log.wtf(Tag, " Log.wtf");
     }
 
     /**
@@ -928,7 +946,7 @@ public class LaunchActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.test_menu,menu);
+        getMenuInflater().inflate(R.menu.test_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
