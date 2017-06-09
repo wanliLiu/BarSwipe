@@ -6,7 +6,7 @@ buildscript {
         jcenter() // If not already there
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:2.3.3'
         //注解工具
 //        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         //可以不用这个，直接官方的支持jack Lambda --------------- 官方的兼容性有问题
@@ -58,7 +58,7 @@ project.ext {
 
     REBOUND_VERSION = "0.3.8"
     FRESCO_VERSION = "1.+"
-    butterknife_version = "8.5.1"
+    butterknife_version = "8.+"
 
     //Rx
     rxjava_version = "2.+"
