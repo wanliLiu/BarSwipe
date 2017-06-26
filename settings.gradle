@@ -13,9 +13,12 @@ include ':wave:waveview'
 include ':wave:wavelibrary'
 include ':audio:amr'
 include ':audio:lame'
-include ':jni:jnistudy'
-include ':jni:cmake'
+include ':jnistudy'
+include ':cmake'
 include ':sipdroid'
 include ':MusicPlayer'
 include ':Sdk:libraryandroid'
 include ':Sdk:libjava'
+
+project(':jnistudy').projectDir = new File(settingsDir, 'jni/jnistudy')
+project(':cmake').projectDir = new File(settingsDir, 'jni/cmake')

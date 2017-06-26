@@ -150,7 +150,7 @@ dependencies {
     compile project(':wave:waveview')
     compile project(':wave:wavelibrary')
     if (project.jnistudyIsLibrary)
-        compile project(':jni:jnistudy')
+        compile project(':jnistudy')
 
     compile project(":Sdk:libjava")
     compile project(":Sdk:libraryandroid")

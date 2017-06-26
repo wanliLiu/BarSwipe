@@ -18,7 +18,7 @@ public class LibTestAndroid {
         return "StringFromLibTestAndroid";
     }
 
-    /**
+    /**我是注释
      * @param context
      * @param msg
      */
@@ -41,7 +41,7 @@ public class LibTestAndroid {
     }
 
     /**
-     *
+     *我是注释
      */
     private void testFuck()
     {
@@ -49,7 +49,7 @@ public class LibTestAndroid {
     }
 
     /**
-     *
+     *我是注释
      */
     @NotProguard
     public String testOtherLib() {

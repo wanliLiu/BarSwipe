@@ -67,6 +67,9 @@ android {
             } else {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
             }
+//            jni.srcDirs = ['jni/jnistudy/src/main/jni']
+            jni.srcDirs = []
+            jniLibs.srcDir 'jni/jnistudy/src/main/libs'
         }
     }
     lintOptions {
