@@ -4,6 +4,10 @@ android {
     compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
+    dataBinding {
+        enabled true
+    }
+
     defaultConfig {
         applicationId "com.example.soli.jnitest"
         minSdkVersion project.ANDROID_MIN_SDK_VERSION
@@ -13,8 +17,11 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++11"
+                cppFlags ""
             }
+        }
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a"//, "x86", "x86_64"
         }
     }
     buildTypes {
@@ -23,6 +30,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets.main {
+        jniLibs.srcDirs = ['libs']
+        jni.srcDirs = []
+    }
+
     /**
      * cmake图标
      */

@@ -11,6 +11,10 @@ android {
     compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
+    dataBinding {
+        enabled true
+    }
+
 //    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
