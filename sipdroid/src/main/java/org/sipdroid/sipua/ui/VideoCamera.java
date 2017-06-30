@@ -366,7 +366,7 @@ public class VideoCamera extends CallScreen implements
 			{
 				try
 				{
-					Method method = Class.forName("android.hardware.HtcFrontFacingCamera").getDeclaredMethod("getCamera", null);
+					Method method = Class.forName("android.hardware.HtcFrontFacingCamera").getDeclaredMethod("getCamera",null);
 					mCamera = (Camera) method.invoke(null, null);
 				}
 				catch (Exception ex)
