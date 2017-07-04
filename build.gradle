@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.novoda:bintray-release:0.3.4'
         //注解工具
 //        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         //可以不用这个，直接官方的支持jack Lambda --------------- 官方的兼容性有问题
@@ -28,6 +29,7 @@ allprojects {
     repositories {
         jcenter() // If not already there
         maven { url "https://jitpack.io" }
+        maven { url "https://dl.bintray.com/soli/maven" }
         mavenCentral()
     }
 
@@ -82,4 +84,11 @@ project.ext {
     jnistudyIsLibrary = false
 
     lameIsLibrary = true
+
+    //jencter
+    releaseRepoName = "maven"
+    releaseUserOrg = 'soli'
+    releaseGroupId = 'com.taihe.music'
+    releaseVersion = '0.0.1'
+    releaseWebsite = 'https://github.com/wanliLiu/BarSwipe'
 }

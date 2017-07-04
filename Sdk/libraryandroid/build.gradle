@@ -43,31 +43,10 @@ dependencies {
 }
 
 
-
-
-
-/*****************************************自定义生成jar*******************************************/
-def SDK_BASENAME = "TestSdk";
-def SDK_VERSION = "_V1.0";
-def sdkDestinationPath = "build";
-def zipFile = file('build/intermediates/bundles/default/classes.jar')
-
-/**
- * 删除已有的文件
- */
-task deleteBuild(type: Delete) {
-    delete sdkDestinationPath + SDK_BASENAME + SDK_VERSION + ".jar"
+ext {
+    releaseArtifact = 'sdk-test'
+    releaseDescription = 'test'
 }
-/**
- * 生成jar
- */
-task makeJar(type: Jar) {
-    from zipTree(zipFile)
-    from fileTree(dir: 'src/main', includes: ['assets/**'])
-    baseName = SDK_BASENAME + SDK_VERSION
-    destinationDir = file(sdkDestinationPath)
-}
-/**
- * 执行
- */
-makeJar.dependsOn(deleteBuild, build)
+
+apply from: 'generateJar.gradle'
+apply from: '../../publish.gradle'

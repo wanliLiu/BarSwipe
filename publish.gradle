@@ -1,0 +1,32 @@
+// Copyright (C) 2017 The Android Open Source Project
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+    repoName = releaseRepoName////远程仓库名字
+    userOrg = releaseUserOrg
+    groupId = releaseGroupId
+    artifactId = releaseArtifact
+    publishVersion = releaseVersion
+    desc = releaseDescription
+//    website = releaseWebsite
+}
+
+tasks.withType(Javadoc) {//防止编码问题
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+//gradlew bintrayUpload -PbintrayUser=soli -PbintrayKey=ebaf0660d0f7ae6f270c9d229510e440d958a26b -PdryRun=false
