@@ -121,19 +121,49 @@
 #保护泛型
 -keepattributes Signature
 
-#-keep class com.example.libraryandroid.LibTestAndroid{
-#    public *;
-#}
+-keep class com.example.libraryandroid.test.LibTestAndroid{
+    public *;
+}
 
 #-keep class com.example.libraryandroid.**{
 #    public *;
 #}
 
 # keep annotated by NotProguard
--keep @com.example.libraryandroid.NotProguard class * {*;}
--keep class * {
-    @com.example.libraryandroid.NotProguard <fields>;
+#-keep @com.example.libraryandroid.NotProguard class * {*;}
+#-keep class * {
+#    @com.example.libraryandroid.NotProguard <fields>;
+#}
+#
+#-keepclassmembers class * {
+#    @com.example.libraryandroid.NotProguard <methods>;
+#}
+
+# Understand the @Keep support annotation.
+-keep class android.support.annotation.Keep
+
+-keep @android.support.annotation.Keep class * {*;}
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <methods>;
 }
--keepclassmembers class * {
-    @com.example.libraryandroid.NotProguard <methods>;
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <fields>;
 }
+
+-keepclasseswithmembers class * {
+    @android.support.annotation.Keep <init>(...);
+}
+
+#assume no side effects:删除android.util.Log输出的日志
+-assumenosideeffects class android.util.Log {
+    public static *** v(...);
+    public static *** d(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+
+#混淆
+#http://www.cnblogs.com/bugly/p/7085469.html

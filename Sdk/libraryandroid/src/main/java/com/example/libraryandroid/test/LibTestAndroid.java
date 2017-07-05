@@ -1,9 +1,12 @@
-package com.example.libraryandroid;
+package com.example.libraryandroid.test;
 
 import android.content.Context;
+import android.support.annotation.Keep;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.libraryandroid.ANewClass;
+import com.example.libraryandroid.NotProguard;
 
 /**
  * 这里是注释数据
@@ -16,6 +19,7 @@ public class LibTestAndroid {
      * @return
      */
     public String getStringFromLib() {
+        new ANewClass().testB();
         return "StringFromLibTestAndroid";
     }
 
@@ -23,8 +27,9 @@ public class LibTestAndroid {
      * @param context
      * @param msg
      */
-    @NotProguard
+    @Keep
     public void toast(Context context, String msg) {
+        new ANewClass().testB();
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 
@@ -32,12 +37,14 @@ public class LibTestAndroid {
      *
      */
     private void mytest(){
+        new ANewClass().testB();
         System.out.println("我是私有方法打印我啊你这是！！！！！！！！！！");
     }
     /**
      *
      */
     public void sout() {
+        new ANewClass().testB();
         System.out.println("测试信息，已经调用了sout()方法");
     }
 
@@ -46,6 +53,7 @@ public class LibTestAndroid {
      */
     private void testFuck()
     {
+        new ANewClass().testB();
         System.out.println("testFuck");
     }
 

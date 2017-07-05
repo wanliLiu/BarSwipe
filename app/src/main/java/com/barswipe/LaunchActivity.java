@@ -40,7 +40,7 @@ import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
 import com.barswipe.volume.wave.HeadPhonesRecivier;
 import com.example.LibJavaTest;
-import com.example.libraryandroid.LibTestAndroid;
+import com.example.libraryandroid.test.LibTestAndroid;
 import com.jakewharton.rxbinding2.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
 

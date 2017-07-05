@@ -156,8 +156,8 @@ dependencies {
     if (project.jnistudyIsLibrary)
         compile project(':jnistudy')
 
-    compile project(":Sdk:libjava")
-    compile project(":Sdk:libraryandroid")
+    compile project(":Sdk:java")
+    compile project(":Sdk:android")
 
     //constraint-layout 学习  constraint_layout.xml
     compile "com.jakewharton:butterknife:${butterknife_version}"
@@ -206,4 +206,6 @@ dependencies {
     compile 'com.annimon:stream:1.1.7'
 
     compile 'org.greenrobot:eventbus:3.+'
+
+    compile 'com.taihe.music:sdk-test:0.0.5'
 }

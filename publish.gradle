@@ -20,7 +20,7 @@ publish {
     artifactId = releaseArtifact
     publishVersion = releaseVersion
     desc = releaseDescription
-//    website = releaseWebsite
+    website = releaseWebsite
 }
 
 tasks.withType(Javadoc) {//防止编码问题

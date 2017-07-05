@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.novoda:bintray-release:0.3.4'
+        classpath 'com.novoda:bintray-release:0.5.0'
         //注解工具
 //        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         //可以不用这个，直接官方的支持jack Lambda --------------- 官方的兼容性有问题
@@ -89,6 +89,6 @@ project.ext {
     releaseRepoName = "maven"
     releaseUserOrg = 'soli'
     releaseGroupId = 'com.taihe.music'
-    releaseVersion = '0.0.1'
+    releaseVersion = '0.0.5'
     releaseWebsite = 'https://github.com/wanliLiu/BarSwipe'
 }

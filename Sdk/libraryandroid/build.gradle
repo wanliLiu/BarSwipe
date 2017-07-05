@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        consumerProguardFiles 'proguard-rules.pro'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -39,13 +40,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
 
-    compile "com.alibaba:fastjson:1.2.32"
+    compile "com.alibaba:fastjson:1.2.9"
 }
 
 
 ext {
     releaseArtifact = 'sdk-test'
-    releaseDescription = 'test'
+    releaseDescription = 'bintray test upload'
 }
 
 apply from: 'generateJar.gradle'
