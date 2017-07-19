@@ -290,7 +290,7 @@ public class VideoFilePresenter extends BasePresenter<IMVPView> {
                 .filter(new Func1<File, Boolean>() {
                     @Override
                     public Boolean call(File file) {
-                        return f.exists() && f.canRead() && FileUtils.isVideo(f);
+                        return file.exists() && file.canRead() && FileUtils.isVideo(file);
                 }
             });
         }

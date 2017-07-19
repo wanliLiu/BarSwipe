@@ -208,4 +208,8 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.+'
 
     compile 'com.taihe.music:sdk-test:0.0.5'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
 }

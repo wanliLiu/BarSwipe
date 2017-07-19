@@ -814,8 +814,7 @@ public class MDPlayer extends RelativeLayout {
 	}
 
 	private int getScreenOrientation() {
-		int rotation = activity.getWindowManager().getDefaultDisplay()
-				.getRotation();
+		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
 		DisplayMetrics dm = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int width = dm.widthPixels;
@@ -997,8 +996,7 @@ public class MDPlayer extends RelativeLayout {
 	 */
 	private void updateFullScreenButton() {
 		if (getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {// 全屏幕
-			$.id(R.id.view_jky_player_fullscreen).image(
-					R.drawable.shrink_fullscreen);
+			$.id(R.id.view_jky_player_fullscreen).image(R.drawable.shrink_fullscreen);
 			$.id(R.id.view_jky_player_iv_share).gone();
 			$.id(R.id.view_jky_play_iv_setting).visible();
 		} else {

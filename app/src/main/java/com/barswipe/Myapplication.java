@@ -11,6 +11,7 @@ import com.barswipe.dragger2.HouseModule;
 import com.barswipe.draweePhotoView.lib.FrescoUtil;
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,8 @@ public class Myapplication extends Application {
 
         //Stetho是一个Android应用的调试工具 Chrome Developer Tools
         Stetho.initializeWithDefaults(this);
+
+        LeakCanary.install(this);
     }
 
     /**
