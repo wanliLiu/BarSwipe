@@ -18,13 +18,11 @@ public class JCVideoPlayerStandardShowTextureViewAfterAutoComplete extends JCVid
     public JCVideoPlayerStandardShowTextureViewAfterAutoComplete(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
     @Override
     public void onAutoCompletion() {
         super.onAutoCompletion();
         thumbImageView.setVisibility(View.GONE);
     }
-
     @Override
     public void onClickUiToggle() {
         super.onClickUiToggle();

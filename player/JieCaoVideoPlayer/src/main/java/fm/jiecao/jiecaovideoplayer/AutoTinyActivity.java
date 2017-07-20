@@ -12,9 +12,7 @@ import android.widget.Button;
  * Created by Nathen on 16/8/23.
  */
 public class AutoTinyActivity extends AppCompatActivity implements View.OnClickListener {
-
     Button normal, list;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,10 +24,8 @@ public class AutoTinyActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_auto_tiny);
         normal = (Button) findViewById(R.id.screen_normal);
         list = (Button) findViewById(R.id.screen_list);
-
         normal.setOnClickListener(this);
         list.setOnClickListener(this);
-
     }
 
     @Override

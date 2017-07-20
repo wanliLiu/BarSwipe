@@ -38,7 +38,6 @@ public class MyJCVideoPlayerStandard extends JCVideoPlayerStandard {
             }
         }
     }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return super.onTouch(v, event);

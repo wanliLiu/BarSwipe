@@ -20,7 +20,6 @@ public class DemoFragment extends Fragment {
         this.index = index;
         return this;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

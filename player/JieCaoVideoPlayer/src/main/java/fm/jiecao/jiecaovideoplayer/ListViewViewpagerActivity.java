@@ -19,7 +19,6 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
  */
 public class ListViewViewpagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
     List<DemoFragment> fragmentList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

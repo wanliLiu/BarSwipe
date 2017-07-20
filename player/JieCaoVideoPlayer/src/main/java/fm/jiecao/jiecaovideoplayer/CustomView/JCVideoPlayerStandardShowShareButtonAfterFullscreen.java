@@ -24,13 +24,11 @@ public class JCVideoPlayerStandardShowShareButtonAfterFullscreen extends JCVideo
     public JCVideoPlayerStandardShowShareButtonAfterFullscreen(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
     @Override
     public void init(Context context) {
         super.init(context);
         shareButton = (ImageView) findViewById(R.id.share);
         shareButton.setOnClickListener(this);
-
     }
 
     @Override

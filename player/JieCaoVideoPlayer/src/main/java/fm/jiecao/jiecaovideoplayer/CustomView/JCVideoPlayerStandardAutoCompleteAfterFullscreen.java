@@ -17,7 +17,6 @@ public class JCVideoPlayerStandardAutoCompleteAfterFullscreen extends JCVideoPla
     public JCVideoPlayerStandardAutoCompleteAfterFullscreen(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
     @Override
     public void onAutoCompletion() {
         if (currentScreen == SCREEN_WINDOW_FULLSCREEN) {

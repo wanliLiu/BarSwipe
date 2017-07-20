@@ -16,7 +16,6 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 public class ListViewNormalActivity extends AppCompatActivity {
     ListView listView;
     VideoListAdapter adapterVideoList;
-
     SensorManager sensorManager;
     JCVideoPlayer.JCAutoFullscreenListener sensorEventListener;
 

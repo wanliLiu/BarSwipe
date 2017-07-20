@@ -33,7 +33,6 @@ public class PlayDirectlyActivity extends AppCompatActivity implements View.OnCl
 
         mStartFullscreen.setOnClickListener(this);
         mStartTiny.setOnClickListener(this);
-
     }
 
     @Override

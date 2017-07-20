@@ -66,8 +66,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/SwipeBackAppTheme">
+        <!--当下面属性改变的时候，activity重启，用下面这些属性就不会重启，会调用onConfigurationChanged函数-->
         <activity
             android:name=".LaunchActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/BaseTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

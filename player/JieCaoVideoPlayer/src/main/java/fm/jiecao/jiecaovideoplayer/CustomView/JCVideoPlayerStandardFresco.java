@@ -43,7 +43,6 @@ public class JCVideoPlayerStandardFresco extends JCVideoPlayerStandard {
         tinyBackImageView.setOnClickListener(this);
 
     }
-
     @Override
     public void setUp(String url, int screen, Object... objects) {
         super.setUp(url, screen, objects);
@@ -59,8 +58,7 @@ public class JCVideoPlayerStandardFresco extends JCVideoPlayerStandard {
             tinyBackImageView.setVisibility(View.INVISIBLE);
         } else if (currentScreen == SCREEN_WINDOW_TINY) {
             tinyBackImageView.setVisibility(View.VISIBLE);
-            setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,
-                    View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
+            setAllControlsVisible(View.INVISIBLE, View.INVISIBLE, View.INVISIBLE,View.INVISIBLE, View.INVISIBLE, View.INVISIBLE, View.INVISIBLE);
         }
     }
 

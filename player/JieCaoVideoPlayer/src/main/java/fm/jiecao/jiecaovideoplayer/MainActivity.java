@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .load("http://img4.jiecaojingxuan.com/2016/11/23/00b026e7-b830-4994-bc87-38f4033806a6.jpg@!640_360")
                 .into(myJCVideoPlayerStandard.thumbImageView);
 
-        JCVideoPlayer.setJcUserAction(new MyUserActionStandard());
+        myJCVideoPlayerStandard.setJcUserAction(new MyUserActionStandard());
     }
 
     @Override

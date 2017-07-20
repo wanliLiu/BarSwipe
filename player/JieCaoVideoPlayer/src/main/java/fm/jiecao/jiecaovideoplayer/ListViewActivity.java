@@ -33,7 +33,6 @@ public class ListViewActivity extends AppCompatActivity implements View.OnClickL
         mViewPagerList.setOnClickListener(this);
         mMultiHolderList.setOnClickListener(this);
         mRecyleView.setOnClickListener(this);
-
     }
 
     @Override

@@ -133,7 +133,6 @@ public class ListViewMultiHolderActivity extends AppCompatActivity {
         }
         super.onBackPressed();
     }
-
     @Override
     protected void onPause() {
         super.onPause();

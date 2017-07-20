@@ -18,7 +18,6 @@ public class JCVideoPlayerStandardShowTitleAfterFullscreen extends JCVideoPlayer
     public JCVideoPlayerStandardShowTitleAfterFullscreen(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
     @Override
     public void setUp(String url, int screen, Object... objects) {
         super.setUp(url, screen, objects);

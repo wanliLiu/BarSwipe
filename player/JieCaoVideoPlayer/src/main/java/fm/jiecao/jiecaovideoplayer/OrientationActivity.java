@@ -16,7 +16,6 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
  */
 public class OrientationActivity extends AppCompatActivity {
     JCVideoPlayerStandard mJcVideoPlayerStandard;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

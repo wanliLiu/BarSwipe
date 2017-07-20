@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.AbsoluteLayout;
+import android.widget.SeekBar;
 
 import com.squareup.picasso.Picasso;
 
@@ -21,7 +22,6 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 
 public class WebViewActivity extends AppCompatActivity {
     WebView mWebView;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,16 +29,22 @@ public class WebViewActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayUseLogoEnabled(false);
-        getSupportActionBar().setTitle("AboutWebView");
+        getSupportActionBar().setTitle("AboutWebView--WebView里可以在任意位置添加视图");
         setContentView(R.layout.activity_webview);
         mWebView = (WebView) findViewById(R.id.webview);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new JCCallBack(), "jcvd");
         mWebView.loadUrl("file:///android_asset/jcvd.html");
+
+        SeekBar bar = new SeekBar(this);
+        bar.setMax(100);
+        bar.setProgress(50);
+        ViewGroup.LayoutParams ll = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        AbsoluteLayout.LayoutParams layoutParams = new AbsoluteLayout.LayoutParams(ll);
+        mWebView.addView(bar, layoutParams);
     }
 
     public class JCCallBack {
-
         @JavascriptInterface
         public void adViewJieCaoVideoPlayer(final int width, final int height, final int top, final int left, final int index) {
             runOnUiThread(new Runnable() {

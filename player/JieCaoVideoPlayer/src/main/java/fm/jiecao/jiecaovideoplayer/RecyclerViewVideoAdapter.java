@@ -52,7 +52,7 @@ public class RecyclerViewVideoAdapter extends RecyclerView.Adapter<RecyclerViewV
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            jcVideoPlayer = (JCVideoPlayerStandard) itemView.findViewById(R.id.videoplayer);
+            jcVideoPlayer =  itemView.findViewById(R.id.videoplayer);
         }
     }
 

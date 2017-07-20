@@ -35,7 +35,6 @@ public class RecyclerViewNormalActivity extends AppCompatActivity {
         recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
             public void onChildViewAttachedToWindow(View view) {
-
             }
 
             @Override

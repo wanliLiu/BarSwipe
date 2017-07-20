@@ -42,7 +42,6 @@ public class UISmallChangeActivity extends AppCompatActivity {
                 .load("http://img4.jiecaojingxuan.com/2016/11/17/6fc2ae91-36e2-44c5-bb10-29ae5d5c678c.png@!640_360")
                 .into(jcVideoPlayerStandardWithShareButton.thumbImageView);
 
-
         jcVideoPlayerStandardShowTitleAfterFullscreen = (JCVideoPlayerStandardShowTitleAfterFullscreen) findViewById(R.id.custom_videoplayer_standard_show_title_after_fullscreen);
         jcVideoPlayerStandardShowTitleAfterFullscreen.setUp("http://video.jiecao.fm/11/18/xu/%E6%91%87%E5%A4%B4.mp4", JCVideoPlayer.SCREEN_LAYOUT_NORMAL
                 , "嫂子想摇头");
