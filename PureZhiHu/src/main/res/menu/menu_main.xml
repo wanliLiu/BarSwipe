@@ -5,13 +5,11 @@
     <item
         android:id="@+id/menu_action_daynight"
         android:title="@string/change_daynight"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/menu_action_about"
         android:title="@string/about"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never"/>
 
 </menu>
