@@ -292,6 +292,7 @@
     <string name="str_arclayout">1.enum 新用法，不仅可以自定义方法还可以重写，参看Demo和Arc的用法\n2.获取枚举的值，可以用api，Enum.name(),同样转换Enum.valueof(Name),在传递的时候可以这样子\n3.AnimatorSet.playSequentially一个完成接下来另外一个\n4.Log.d(tag, String.format(format, args));这种方式不错!</string>
     <string name="str_volume">音频相关学习 MediaPlayer AudioTrack MediaRecorder AudioRecord</string>
     <string name="str_websccket">autobahn  和okhttp websocket</string>
+    <string name="str_autowrap">Android Tag布局实践</string>
 
     <string name="rc_voice_rec">手指上滑，取消发送</string>
     <string name="rc_voice_cancel">松开手指，取消发送</string>

@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
+import java.util.List;
+
 public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
 
     private AutoWrapListView myCustomListView;
@@ -14,6 +16,11 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
     public AutoWrapAdapter(Context context) {
         super(context);
     }
+
+    public AutoWrapAdapter(Context context, List<T> list) {
+        super(context, list);
+    }
+
 
     /**
      * Add all the View controls to the custom SexangleViewList
