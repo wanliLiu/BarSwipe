@@ -36,13 +36,14 @@
             android:padding="10dp" />
 
         <TextView
+            android:id="@+id/thrid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="使用第三方TagFlowLayout"
+            android:text="使用第三方TagFlowLayout -----点击我进入dmeo"
             android:textSize="16sp" />
 
-        <com.zhy.view.flowlayout.TagFlowLayout
+        <com.barswipe.flowlayout.view.TagFlowLayout
             android:id="@+id/id_flowlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

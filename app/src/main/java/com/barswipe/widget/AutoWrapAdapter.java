@@ -2,8 +2,10 @@ package com.barswipe.widget;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.FrameLayout;
 
 import java.util.List;
 
@@ -21,6 +23,15 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
         super(context, list);
     }
 
+    /**
+     * @param context
+     * @param dpValue
+     * @return
+     */
+    private int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
 
     /**
      * Add all the View controls to the custom SexangleViewList
@@ -31,10 +42,19 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
      */
     private final void getAllViewAdd() {
         if (myCustomListView == null) return;
-        this.myCustomListView.removeAllViews();
+        myCustomListView.removeAllViews();
         for (int i = 0; i < getCount(); i++) {
             View viewItem = getView(i, null, null);
-            this.myCustomListView.addView(viewItem, i);
+//            viewItem.setDuplicateParentStateEnabled(true);
+
+            FrameLayout layout = new FrameLayout(ctx);
+            layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            int _5Marign = dip2px(ctx, 5);
+            params.setMargins(_5Marign, _5Marign, _5Marign, _5Marign);
+            layout.addView(viewItem, params);
+
+            myCustomListView.addView(layout);
         }
     }
 
@@ -47,7 +67,6 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
     public void notifyDataSetChanged() {
         if (myCustomListView == null)
             return;
-        myCustomListView.setAddChildType(true);
         notifyCustomListView(this.myCustomListView);
     }
 
@@ -83,7 +102,8 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
         RxJavaUtil.runOnThread(() -> {
             for (int i = 0; i < myCustomListView.getChildCount(); i++) {
                 final int parame = i;
-                View view = myCustomListView.getChildAt(i);
+                ViewGroup group = (ViewGroup) myCustomListView.getChildAt(i);
+                View view = group.getChildAt(0);
                 view.setOnClickListener(v -> {
                     if (singlelistener != null) {
                         singlelistener.onItemClick(null, v, parame, getCount());
@@ -106,7 +126,8 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
         RxJavaUtil.runOnThread(() -> {
             for (int i = 0; i < myCustomListView.getChildCount(); i++) {
                 final int parame = i;
-                View view = myCustomListView.getChildAt(i);
+                ViewGroup group = (ViewGroup) myCustomListView.getChildAt(i);
+                View view = group.getChildAt(0);
                 view.setOnLongClickListener(v -> {
                     if (longListener != null) {
                         longListener.onItemLongClick(null, v, parame, getCount());

@@ -212,6 +212,5 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-
-    compile 'com.zhy:flowlayout-lib:1.0.3'
+    compile 'com.zhy:base-adapter:2.0.1'
 }

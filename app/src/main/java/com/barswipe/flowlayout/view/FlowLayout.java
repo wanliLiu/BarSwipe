@@ -1,41 +1,44 @@
-package com.barswipe.widget;
+package com.barswipe.flowlayout.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+
+import com.barswipe.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * wrap_content --- MeasureSpec.AT_MOST
- * match_parent 和 fill_parent--- MeasureSpec.EXACTLY
- *
- * @param <T>
- */
-public class AutoWrapListView<T> extends ViewGroup {
+public class FlowLayout extends ViewGroup {
+    private static final String TAG = "FlowLayout";
+    private static final int LEFT = -1;
+    private static final int CENTER = 0;
+    private static final int RIGHT = 1;
 
     protected List<List<View>> mAllViews = new ArrayList<List<View>>();
     protected List<Integer> mLineHeight = new ArrayList<Integer>();
     protected List<Integer> mLineWidth = new ArrayList<Integer>();
-    private AutoWrapAdapter<T> myCustomAdapter;
+    private int mGravity;
     private List<View> lineViews = new ArrayList<>();
 
     private int maxRows = -1;
 
-    public AutoWrapListView(Context context) {
-        super(context);
-    }
-
-    public AutoWrapListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public AutoWrapListView(Context context, AttributeSet attrs, int defStyle) {
+    public FlowLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.TagFlowLayout);
+        mGravity = ta.getInt(R.styleable.TagFlowLayout_gravity, LEFT);
+        maxRows = ta.getInt(R.styleable.TagFlowLayout_max_rows, -1);
+        ta.recycle();
+    }
+
+    public FlowLayout(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public FlowLayout(Context context) {
+        this(context, null);
     }
 
     @Override
@@ -157,6 +160,19 @@ public class AutoWrapListView<T> extends ViewGroup {
             lineHeight = mLineHeight.get(i);
 
             // set gravity
+            int currentLineWidth = this.mLineWidth.get(i);
+            switch (this.mGravity) {
+                case LEFT:
+                    left = getPaddingLeft();
+                    break;
+                case CENTER:
+                    left = (width - currentLineWidth) / 2 + getPaddingLeft();
+                    break;
+                case RIGHT:
+                    left = width - currentLineWidth + getPaddingLeft();
+                    break;
+            }
+
             for (int j = 0; j < lineViews.size(); j++) {
                 View child = lineViews.get(j);
                 if (child.getVisibility() == View.GONE) {
@@ -174,35 +190,22 @@ public class AutoWrapListView<T> extends ViewGroup {
 
     }
 
-    /**
-     * @param adapter
-     */
-    public void setAdapter(AutoWrapAdapter<T> adapter) {
-        this.myCustomAdapter = adapter;
-        adapter.notifyCustomListView(this);
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new MarginLayoutParams(getContext(), attrs);
     }
 
-    /**
-     * @param listener
-     */
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        myCustomAdapter.setOnItemClickListener(listener);
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     }
 
-    /**
-     * Corresponding Item long click event
-     *
-     * @param listener
-     */
-    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
-        myCustomAdapter.setOnItemLongClickListener(listener);
+    @Override
+    protected LayoutParams generateLayoutParams(LayoutParams p) {
+        return new MarginLayoutParams(p);
     }
 
-    /**
-     * @param maxRows
-     */
-    public void setMaxNumRows(int maxRows) {
+    public void setMaxRows(int maxRows) {
         this.maxRows = maxRows;
     }
-
 }

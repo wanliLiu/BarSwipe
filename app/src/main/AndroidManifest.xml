@@ -452,7 +452,16 @@
             android:name=".ActivityAutoWrapList"
             android:description="@string/str_autowrap"
             android:icon="@drawable/ic_launcher"
-            android:label="AutoWrapListView 学习" />
+            android:label="AutoWrapListView 学习">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".flowlayout.CategoryActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
     </application>
 
 </manifest>
