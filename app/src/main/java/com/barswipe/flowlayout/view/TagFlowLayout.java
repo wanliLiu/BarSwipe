@@ -89,7 +89,8 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         HashSet preCheckedList = mTagAdapter.getPreCheckedList();
         for (int i = 0; i < adapter.getCount(); i++) {
             View tagView = adapter.getView(this, i, adapter.getItem(i));
-//            tagView.setDuplicateParentStateEnabled(true);
+
+            tagView.setDuplicateParentStateEnabled(true);
 
             tagViewContainer = new TagView(getContext());
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);

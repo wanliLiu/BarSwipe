@@ -93,8 +93,6 @@ public class FlowLayout extends ViewGroup {
             width = sizeWidth;
         } else {
             width += getPaddingLeft() + getPaddingRight();
-//            if (width >= sizeWidth)
-//                width = sizeWidth;
         }
 
         if (modeHeight == MeasureSpec.EXACTLY) {

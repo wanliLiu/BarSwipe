@@ -18,6 +18,10 @@ import java.util.List;
  */
 public class AutoWrapListView<T> extends ViewGroup {
 
+    private static final int LEFT = -1;
+    private static final int CENTER = 0;
+    private static final int RIGHT = 1;
+
     protected List<List<View>> mAllViews = new ArrayList<List<View>>();
     protected List<Integer> mLineHeight = new ArrayList<Integer>();
     protected List<Integer> mLineWidth = new ArrayList<Integer>();
@@ -90,8 +94,6 @@ public class AutoWrapListView<T> extends ViewGroup {
             width = sizeWidth;
         } else {
             width += getPaddingLeft() + getPaddingRight();
-//            if (width >= sizeWidth)
-//                width = sizeWidth;
         }
 
         if (modeHeight == MeasureSpec.EXACTLY) {
@@ -156,7 +158,7 @@ public class AutoWrapListView<T> extends ViewGroup {
             lineViews = mAllViews.get(i);
             lineHeight = mLineHeight.get(i);
 
-            // set gravity
+            left = getPaddingLeft();
             for (int j = 0; j < lineViews.size(); j++) {
                 View child = lineViews.get(j);
                 if (child.getVisibility() == View.GONE) {

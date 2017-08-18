@@ -42,7 +42,6 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
      */
     private final void getAllViewAdd() {
         if (myCustomListView == null) return;
-        myCustomListView.removeAllViews();
         for (int i = 0; i < getCount(); i++) {
             View viewItem = getView(i, null, null);
 //            viewItem.setDuplicateParentStateEnabled(true);

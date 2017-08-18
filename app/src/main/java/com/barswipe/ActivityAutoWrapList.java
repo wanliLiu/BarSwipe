@@ -67,17 +67,18 @@ public class ActivityAutoWrapList extends BaseActivity {
 
     private List<String> getData() {
         List<String> data = new ArrayList<>();
+        data.add("一代记忆设备，由于它体积小、数据传输速度助理（外语缩助理（外语缩快");
+        data.add("，例如数码相机、个人数码助理（外语缩写P助理（外语缩助理（外语缩DA）和");
         data.add("SD存储卡");
         data.add("是一种基助理（外语缩助理（外语缩于半导体快闪记忆器的新");
-        data.add("一代记忆设备，由于它体积小、数据传输速度助理（外语缩助理（外语缩快");
+
         data.add("可热插拔");
         data.add("等优良的");
         data.add("特性");
         data.add("它被广泛地于便携式装置上使用");
-        data.add("，例如数码相机、个人数码助理（外语缩写P助理（外语缩助理（外语缩DA）和");
+
         data.add("多媒体播放器等");
         data.add("Secure Digital Memory Card/SD card");
-
 
         return data;
     }
