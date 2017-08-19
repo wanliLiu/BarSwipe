@@ -50,7 +50,8 @@ public class AutoWrapAdapter<T> extends BaseListAdapter<T> {
             layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             int _5Marign = dip2px(ctx, 5);
-            params.setMargins(_5Marign, _5Marign, _5Marign, _5Marign);
+            int topBottom = myCustomListView.getMaxRows() == 1 ? 0 : _5Marign;
+            params.setMargins(_5Marign, topBottom, _5Marign, topBottom);
             layout.addView(viewItem, params);
 
             myCustomListView.addView(layout);

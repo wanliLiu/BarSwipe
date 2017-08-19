@@ -73,18 +73,25 @@ public class FlowLayout extends ViewGroup {
             int childHeight = child.getMeasuredHeight();
 
             if (lineWidth + childWidth > sizeWidth - getPaddingLeft() - getPaddingRight()) {
-                if (maxRows > 0 && ++rows > maxRows)
-                    break;
+                //上一行的视图宽度
                 width = Math.max(width, lineWidth);
+                //下一行的行宽
                 lineWidth = childWidth;
+                //到目前为止上一行的高度
                 height += lineHeight;
+                //下一行的行高
                 lineHeight = childHeight;
+
+                if (maxRows > 0 && ++rows >= maxRows)
+                    break;
+
             } else {
                 lineWidth += childWidth;
                 lineHeight = Math.max(lineHeight, childHeight);
             }
             if (i == cCount - 1) {
                 width = Math.max(lineWidth, width);
+                //最后加上最后一行的高度
                 height += lineHeight;
             }
         }
@@ -128,8 +135,9 @@ public class FlowLayout extends ViewGroup {
             int childHeight = child.getMeasuredHeight();
 
             if (childWidth + lineWidth > width - getPaddingLeft() - getPaddingRight()) {
-                if (maxRows > 0 && ++rows > maxRows)
+                if (maxRows > 0 && ++rows >= maxRows)
                     break;
+                //上一行的相关数据
                 mLineHeight.add(lineHeight);
                 mAllViews.add(lineViews);
                 mLineWidth.add(lineWidth);
@@ -143,6 +151,7 @@ public class FlowLayout extends ViewGroup {
             lineViews.add(child);
 
         }
+        //最后一行
         mLineHeight.add(lineHeight);
         mLineWidth.add(lineWidth);
         mAllViews.add(lineViews);

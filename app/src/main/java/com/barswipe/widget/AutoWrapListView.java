@@ -18,13 +18,9 @@ import java.util.List;
  */
 public class AutoWrapListView<T> extends ViewGroup {
 
-    private static final int LEFT = -1;
-    private static final int CENTER = 0;
-    private static final int RIGHT = 1;
-
-    protected List<List<View>> mAllViews = new ArrayList<List<View>>();
-    protected List<Integer> mLineHeight = new ArrayList<Integer>();
-    protected List<Integer> mLineWidth = new ArrayList<Integer>();
+    protected List<List<View>> mAllViews = new ArrayList<>();
+    protected List<Integer> mLineHeight = new ArrayList<>();
+    protected List<Integer> mLineWidth = new ArrayList<>();
     private AutoWrapAdapter<T> myCustomAdapter;
     private List<View> lineViews = new ArrayList<>();
 
@@ -74,18 +70,25 @@ public class AutoWrapListView<T> extends ViewGroup {
             int childHeight = child.getMeasuredHeight();
 
             if (lineWidth + childWidth > sizeWidth - getPaddingLeft() - getPaddingRight()) {
-                if (maxRows > 0 && ++rows > maxRows)
-                    break;
+                //上一行的视图宽度
                 width = Math.max(width, lineWidth);
+                //下一行的行宽
                 lineWidth = childWidth;
+                //到目前为止上一行的高度
                 height += lineHeight;
+                //下一行的行高
                 lineHeight = childHeight;
+
+                if (maxRows > 0 && ++rows >= maxRows)
+                    break;
+
             } else {
                 lineWidth += childWidth;
                 lineHeight = Math.max(lineHeight, childHeight);
             }
             if (i == cCount - 1) {
                 width = Math.max(lineWidth, width);
+                //最后加上最后一行的高度
                 height += lineHeight;
             }
         }
@@ -129,8 +132,9 @@ public class AutoWrapListView<T> extends ViewGroup {
             int childHeight = child.getMeasuredHeight();
 
             if (childWidth + lineWidth > width - getPaddingLeft() - getPaddingRight()) {
-                if (maxRows > 0 && ++rows > maxRows)
+                if (maxRows > 0 && ++rows >= maxRows)
                     break;
+                //上一行的相关数据
                 mLineHeight.add(lineHeight);
                 mAllViews.add(lineViews);
                 mLineWidth.add(lineWidth);
@@ -144,12 +148,13 @@ public class AutoWrapListView<T> extends ViewGroup {
             lineViews.add(child);
 
         }
+        //最后一行
         mLineHeight.add(lineHeight);
         mLineWidth.add(lineWidth);
         mAllViews.add(lineViews);
 
 
-        int left = getPaddingLeft();
+        int left;
         int top = getPaddingTop();
 
         int lineNum = mAllViews.size();
@@ -207,4 +212,7 @@ public class AutoWrapListView<T> extends ViewGroup {
         this.maxRows = maxRows;
     }
 
+    public int getMaxRows() {
+        return maxRows;
+    }
 }
