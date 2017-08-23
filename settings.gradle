@@ -1,4 +1,4 @@
-include ':app', ':mobile', ':SDL', ':JieCaoVideoPlayer', ':jcvideoplayer-lib', ':ijkplayer-java', ':MDplayer', ':ijkplayer-exo'
+include ':app', ':mobile', ':SDL', ':JieCaoVideoPlayer', ':jcvideoplayer-lib', ':ijkplayer-java', ':MDplayer', ':ijkplayer-exo', ':kotlin'
 include ':EaseInterpolatorLib'
 include ':SwipeLayoutLibrary'
 include ':PhotoPicker'

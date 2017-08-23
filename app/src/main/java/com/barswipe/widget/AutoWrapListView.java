@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class AutoWrapListView<T> extends ViewGroup {
 
-    protected List<List<View>> mAllViews = new ArrayList<>();
-    protected List<Integer> mLineHeight = new ArrayList<>();
-    protected List<Integer> mLineWidth = new ArrayList<>();
+    private List<List<View>> mAllViews = new ArrayList<>();
+    private List<Integer> mLineHeight = new ArrayList<>();
+    private List<Integer> mLineWidth = new ArrayList<>();
     private AutoWrapAdapter<T> myCustomAdapter;
     private List<View> lineViews = new ArrayList<>();
 
