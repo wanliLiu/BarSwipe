@@ -1,6 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
 
 #include "SDL.h"
 
@@ -80,7 +78,7 @@ int main(int argc, char *argv[])
 		
 		
 		/* Draw a gray background */
-		SDL_SetRenderDrawColor(renderer, 0xA0, 0xA0, 0xA0, 0xFF);
+        SDL_SetRenderDrawColor(renderer, 0xC8, 0x64, 0x21, 0x1A);//C864211A
 		SDL_RenderClear(renderer);
 		
 		draw(window, renderer, sprite);
