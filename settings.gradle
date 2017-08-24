@@ -1,4 +1,4 @@
-include ':app', ':mobile', ':SDL', ':JieCaoVideoPlayer', ':jcvideoplayer-lib', ':ijkplayer-java', ':MDplayer', ':ijkplayer-exo', ':kotlin'
+include ':app', ':mobile', ':SDL', ':JieCaoVideoPlayer', ':jcvideoplayer-lib', ':ijkplayer-java', ':MDplayer', ':ijkplayer-exo', ':kotlin', ':ffmpeg_sdl'
 include ':EaseInterpolatorLib'
 include ':SwipeLayoutLibrary'
 include ':PhotoPicker'
@@ -23,6 +23,7 @@ include ':Sdk:libjava'
 //一个文件夹下多个module的方式
 project(':jnistudy').projectDir = new File(settingsDir, 'jni/jnistudy')
 project(':cmake').projectDir = new File(settingsDir, 'jni/cmake')
+project(':ffmpeg_sdl').projectDir = new File(settingsDir, 'jni/ffmpeg_sdl')
 
 project(':JieCaoVideoPlayer').projectDir = new File(settingsDir, 'player/JieCaoVideoPlayer')
 project(':jcvideoplayer-lib').projectDir = new File(settingsDir, 'player/jcvideoplayer-lib')
