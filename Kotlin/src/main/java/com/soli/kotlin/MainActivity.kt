@@ -12,4 +12,9 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this,"用Kotlin编写Android",Toast.LENGTH_LONG).show()
     }
+
+    fun test()
+    {
+
+    }
 }

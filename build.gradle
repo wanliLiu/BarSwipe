@@ -20,8 +20,7 @@ buildscript {
 
         //蒲公英插件
         classpath 'org.quanqi:pgyer:0.1.2'
-
-//        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-2'
     }
 
     configurations.classpath.exclude group: 'com.android.tools.external.lombok'
