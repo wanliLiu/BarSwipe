@@ -73,6 +73,7 @@ public class MainActivityJS extends Activity implements OnClickListener {
 		});
 
 		webView.loadUrl("file:///android_asset/demo.html");
+//		webView.loadUrl("http://wap.ci.dev.showstart.com:9527/venue/app/3579");
 
 		webView.registerHandler("submitFromWeb", new BridgeHandler() {
 

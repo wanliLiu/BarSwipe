@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import java.util.ArrayList;
@@ -17,110 +18,131 @@ import java.util.Map;
 @SuppressLint("SetJavaScriptEnabled")
 public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
 
-	private final String TAG = "BridgeWebView";
+    private final String TAG = "BridgeWebView";
 
-	public static final String toLoadJs = "WebViewJavascriptBridge.js";
-	Map<String, CallBackFunction> responseCallbacks = new HashMap<String, CallBackFunction>();
-	Map<String, BridgeHandler> messageHandlers = new HashMap<String, BridgeHandler>();
-	BridgeHandler defaultHandler = new DefaultHandler();
+    public static final String toLoadJs = "WebViewJavascriptBridge.js";
+    Map<String, CallBackFunction> responseCallbacks = new HashMap<String, CallBackFunction>();
+    Map<String, BridgeHandler> messageHandlers = new HashMap<String, BridgeHandler>();
+    BridgeHandler defaultHandler = new DefaultHandler();
 
-	private List<Message> startupMessage = new ArrayList<Message>();
+    private List<Message> startupMessage = new ArrayList<Message>();
 
-	public List<Message> getStartupMessage() {
-		return startupMessage;
-	}
+    public List<Message> getStartupMessage() {
+        return startupMessage;
+    }
 
-	public void setStartupMessage(List<Message> startupMessage) {
-		this.startupMessage = startupMessage;
-	}
+    public void setStartupMessage(List<Message> startupMessage) {
+        this.startupMessage = startupMessage;
+    }
 
-	private long uniqueId = 0;
+    private long uniqueId = 0;
 
-	public BridgeWebView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init();
-	}
+    public BridgeWebView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
-	public BridgeWebView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		init();
-	}
+    public BridgeWebView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+    }
 
-	public BridgeWebView(Context context) {
-		super(context);
-		init();
-	}
+    public BridgeWebView(Context context) {
+        super(context);
+        init();
+    }
 
-	/**
-	 * 
-	 * @param handler
-	 *            default handler,handle messages send by js without assigned handler name,
-     *            if js message has handler name, it will be handled by named handlers registered by native
-	 */
-	public void setDefaultHandler(BridgeHandler handler) {
-       this.defaultHandler = handler;
-	}
+    /**
+     * @param handler default handler,handle messages send by js without assigned handler name,
+     *                if js message has handler name, it will be handled by named handlers registered by native
+     */
+    public void setDefaultHandler(BridgeHandler handler) {
+        this.defaultHandler = handler;
+    }
 
     private void init() {
-		this.setVerticalScrollBarEnabled(false);
-		this.setHorizontalScrollBarEnabled(false);
-		this.getSettings().setJavaScriptEnabled(true);
+
+        setVerticalScrollBarEnabled(false);
+        setHorizontalScrollBarEnabled(false);
+        // 支持通过js打开新的窗口
+        getSettings().setJavaScriptEnabled(true);
+        getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        getSettings().setAppCacheEnabled(true);// 开启缓存
+        getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);// 缓存优先模式
+        getSettings().setAppCacheMaxSize(8 * 1024 * 1024);// 设置最大缓存为8M
+
+//        getSettings().setSupportMultipleWindows(true);
+
+        getSettings().setUseWideViewPort(true);
+        getSettings().setLoadWithOverviewMode(true);
+        getSettings().setAllowFileAccess(true);
+        getSettings().setLightTouchEnabled(true);
+        getSettings().setDomStorageEnabled(true);
+        getSettings().setDefaultTextEncodingName("gbk");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
-		this.setWebViewClient(generateBridgeWebViewClient());
-	}
+
+        this.setWebViewClient(generateBridgeWebViewClient());
+        //webview在安卓5.0之前默认允许其加载混合网络协议内容
+        // 在安卓5.0之后，默认不允许加载http与https混合内容，需要设置webview允许其加载混合网络协议内容
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+    }
 
     protected BridgeWebViewClient generateBridgeWebViewClient() {
         return new BridgeWebViewClient(this);
     }
 
-	void handlerReturnData(String url) {
-		String functionName = BridgeUtil.getFunctionFromReturnUrl(url);
-		CallBackFunction f = responseCallbacks.get(functionName);
-		String data = BridgeUtil.getDataFromReturnUrl(url);
-		if (f != null) {
-			f.onCallBack(data);
-			responseCallbacks.remove(functionName);
-			return;
-		}
-	}
+    void handlerReturnData(String url) {
+        String functionName = BridgeUtil.getFunctionFromReturnUrl(url);
+        CallBackFunction f = responseCallbacks.get(functionName);
+        String data = BridgeUtil.getDataFromReturnUrl(url);
+        if (f != null) {
+            f.onCallBack(data);
+            responseCallbacks.remove(functionName);
+            return;
+        }
+    }
 
-	@Override
-	public void send(String data) {
-		send(data, null);
-	}
+    @Override
+    public void send(String data) {
+        send(data, null);
+    }
 
-	@Override
-	public void send(String data, CallBackFunction responseCallback) {
-		doSend(null, data, responseCallback);
-	}
+    @Override
+    public void send(String data, CallBackFunction responseCallback) {
+        doSend(null, data, responseCallback);
+    }
 
-	private void doSend(String handlerName, String data, CallBackFunction responseCallback) {
-		Message m = new Message();
-		if (!TextUtils.isEmpty(data)) {
-			m.setData(data);
-		}
-		if (responseCallback != null) {
-			String callbackStr = String.format(BridgeUtil.CALLBACK_ID_FORMAT, ++uniqueId + (BridgeUtil.UNDERLINE_STR + SystemClock.currentThreadTimeMillis()));
-			responseCallbacks.put(callbackStr, responseCallback);
-			m.setCallbackId(callbackStr);
-		}
-		if (!TextUtils.isEmpty(handlerName)) {
-			m.setHandlerName(handlerName);
-		}
-		queueMessage(m);
-	}
+    private void doSend(String handlerName, String data, CallBackFunction responseCallback) {
+        Message m = new Message();
+        if (!TextUtils.isEmpty(data)) {
+            m.setData(data);
+        }
+        if (responseCallback != null) {
+            String callbackStr = String.format(BridgeUtil.CALLBACK_ID_FORMAT, ++uniqueId + (BridgeUtil.UNDERLINE_STR + SystemClock.currentThreadTimeMillis()));
+            responseCallbacks.put(callbackStr, responseCallback);
+            m.setCallbackId(callbackStr);
+        }
+        if (!TextUtils.isEmpty(handlerName)) {
+            m.setHandlerName(handlerName);
+        }
+        queueMessage(m);
+    }
 
-	private void queueMessage(Message m) {
-		if (startupMessage != null) {
-			startupMessage.add(m);
-		} else {
-			dispatchMessage(m);
-		}
-	}
+    private void queueMessage(Message m) {
+        if (startupMessage != null) {
+            startupMessage.add(m);
+        } else {
+            dispatchMessage(m);
+        }
+    }
 
-	void dispatchMessage(Message m) {
+    void dispatchMessage(Message m) {
         String messageJson = m.toJson();
         //escape special characters for json string
         messageJson = messageJson.replaceAll("(\\\\)([^utrn])", "\\\\\\\\$1$2");
@@ -131,95 +153,95 @@ public class BridgeWebView extends WebView implements WebViewJavascriptBridge {
         }
     }
 
-	void flushMessageQueue() {
-		if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
-			loadUrl(BridgeUtil.JS_FETCH_QUEUE_FROM_JAVA, new CallBackFunction() {
+    void flushMessageQueue() {
+        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
+            loadUrl(BridgeUtil.JS_FETCH_QUEUE_FROM_JAVA, new CallBackFunction() {
 
-				@Override
-				public void onCallBack(String data) {
-					// deserializeMessage
-					List<Message> list = null;
-					try {
-						list = Message.toArrayList(data);
-					} catch (Exception e) {
+                @Override
+                public void onCallBack(String data) {
+                    // deserializeMessage
+                    List<Message> list = null;
+                    try {
+                        list = Message.toArrayList(data);
+                    } catch (Exception e) {
                         e.printStackTrace();
-						return;
-					}
-					if (list == null || list.size() == 0) {
-						return;
-					}
-					for (int i = 0; i < list.size(); i++) {
-						Message m = list.get(i);
-						String responseId = m.getResponseId();
-						// 是否是response
-						if (!TextUtils.isEmpty(responseId)) {
-							CallBackFunction function = responseCallbacks.get(responseId);
-							String responseData = m.getResponseData();
-							function.onCallBack(responseData);
-							responseCallbacks.remove(responseId);
-						} else {
-							CallBackFunction responseFunction = null;
-							// if had callbackId
-							final String callbackId = m.getCallbackId();
-							if (!TextUtils.isEmpty(callbackId)) {
-								responseFunction = new CallBackFunction() {
-									@Override
-									public void onCallBack(String data) {
-										Message responseMsg = new Message();
-										responseMsg.setResponseId(callbackId);
-										responseMsg.setResponseData(data);
-										queueMessage(responseMsg);
-									}
-								};
-							} else {
-								responseFunction = new CallBackFunction() {
-									@Override
-									public void onCallBack(String data) {
-										// do nothing
-									}
-								};
-							}
-							BridgeHandler handler;
-							if (!TextUtils.isEmpty(m.getHandlerName())) {
-								handler = messageHandlers.get(m.getHandlerName());
-							} else {
-								handler = defaultHandler;
-							}
-							if (handler != null){
-								handler.handler(m.getData(), responseFunction);
-							}
-						}
-					}
-				}
-			});
-		}
-	}
+                        return;
+                    }
+                    if (list == null || list.size() == 0) {
+                        return;
+                    }
+                    for (int i = 0; i < list.size(); i++) {
+                        Message m = list.get(i);
+                        String responseId = m.getResponseId();
+                        // 是否是response
+                        if (!TextUtils.isEmpty(responseId)) {
+                            CallBackFunction function = responseCallbacks.get(responseId);
+                            String responseData = m.getResponseData();
+                            function.onCallBack(responseData);
+                            responseCallbacks.remove(responseId);
+                        } else {
+                            CallBackFunction responseFunction = null;
+                            // if had callbackId
+                            final String callbackId = m.getCallbackId();
+                            if (!TextUtils.isEmpty(callbackId)) {
+                                responseFunction = new CallBackFunction() {
+                                    @Override
+                                    public void onCallBack(String data) {
+                                        Message responseMsg = new Message();
+                                        responseMsg.setResponseId(callbackId);
+                                        responseMsg.setResponseData(data);
+                                        queueMessage(responseMsg);
+                                    }
+                                };
+                            } else {
+                                responseFunction = new CallBackFunction() {
+                                    @Override
+                                    public void onCallBack(String data) {
+                                        // do nothing
+                                    }
+                                };
+                            }
+                            BridgeHandler handler;
+                            if (!TextUtils.isEmpty(m.getHandlerName())) {
+                                handler = messageHandlers.get(m.getHandlerName());
+                            } else {
+                                handler = defaultHandler;
+                            }
+                            if (handler != null) {
+                                handler.handler(m.getData(), responseFunction);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
 
-	public void loadUrl(String jsUrl, CallBackFunction returnCallback) {
-		this.loadUrl(jsUrl);
-		responseCallbacks.put(BridgeUtil.parseFunctionName(jsUrl), returnCallback);
-	}
+    public void loadUrl(String jsUrl, CallBackFunction returnCallback) {
+        this.loadUrl(jsUrl);
+        responseCallbacks.put(BridgeUtil.parseFunctionName(jsUrl), returnCallback);
+    }
 
-	/**
-	 * register handler,so that javascript can call it
-	 * 
-	 * @param handlerName
-	 * @param handler
-	 */
-	public void registerHandler(String handlerName, BridgeHandler handler) {
-		if (handler != null) {
-			messageHandlers.put(handlerName, handler);
-		}
-	}
-
-	/**
-	 * call javascript registered handler
-	 *
+    /**
+     * register handler,so that javascript can call it
+     *
      * @param handlerName
-	 * @param data
-	 * @param callBack
-	 */
-	public void callHandler(String handlerName, String data, CallBackFunction callBack) {
+     * @param handler
+     */
+    public void registerHandler(String handlerName, BridgeHandler handler) {
+        if (handler != null) {
+            messageHandlers.put(handlerName, handler);
+        }
+    }
+
+    /**
+     * call javascript registered handler
+     *
+     * @param handlerName
+     * @param data
+     * @param callBack
+     */
+    public void callHandler(String handlerName, String data, CallBackFunction callBack) {
         doSend(handlerName, data, callBack);
-	}
+    }
 }

@@ -8,11 +8,11 @@ android {
         minSdkVersion project.ANDROID_MIN_SDK_VERSION
         targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
 
-//        ndk {
-//            abiFilters "armeabi", "armeabi-v7a", "x86"
-//            moduleName "main"
-//            ldLibs "log", "z", "m", "jnigraphics", "android"
-//        }
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+            moduleName "main"
+            ldLibs "log", "z", "m", "jnigraphics", "android"
+        }
     }
 
     buildTypes {
