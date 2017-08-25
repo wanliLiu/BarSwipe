@@ -25,7 +25,7 @@ public class VideoListAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
     private ArrayList<LoadImage> thumbnail = new ArrayList<LoadImage>();
 
-    public VideoListAdapter(Context context, List<VideoItem> videoItems){
+    public VideoListAdapter(Context context, List<VideoItem> videoItems) {
         mLayoutInflater = LayoutInflater.from(context);
         this.videoItems = videoItems;
     }
@@ -35,7 +35,7 @@ public class VideoListAdapter extends BaseAdapter {
         return thumbnail.size();
     }
 
-    public void addthumbnail(LoadImage loadimage){
+    public void addthumbnail(LoadImage loadimage) {
         thumbnail.add(loadimage);
     }
 
@@ -52,22 +52,26 @@ public class VideoListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        if (convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mLayoutInflater.inflate(R.layout.videolistitem,null);
+            convertView = mLayoutInflater.inflate(R.layout.videolistitem, null);
             holder.img = (ImageView) convertView.findViewById(R.id.video_thumbnail);
             holder.videoname = (TextView) convertView.findViewById(R.id.video_name);
             holder.time = (TextView) convertView.findViewById(R.id.video_duration);
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.videoname.setText(videoItems.get(position).getDisplayname());
-        long min = videoItems.get(position).getmVideoDuration()/1000/60;
-        long sec = videoItems.get(position).getmVideoDuration()/1000%60;
-        holder.time.setText(min + " : " + sec);
-        holder.img.setImageBitmap(thumbnail.get(position).getBitmap());
+        try {
+            holder.videoname.setText(videoItems.get(position).getDisplayname());
+            long min = videoItems.get(position).getmVideoDuration() / 1000 / 60;
+            long sec = videoItems.get(position).getmVideoDuration() / 1000 % 60;
+            holder.time.setText(min + " : " + sec);
+            holder.img.setImageBitmap(thumbnail.get(position).getBitmap());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return convertView;
     }
 }

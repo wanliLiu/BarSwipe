@@ -22,6 +22,9 @@ public class VideoItem implements Serializable {
     private String path;
     private LoadImage loadImage;
 
+    public VideoItem(){
+
+    }
     /**
      * @param id 视频文件的id
      * @param mVideoDuration 视频的文件时长

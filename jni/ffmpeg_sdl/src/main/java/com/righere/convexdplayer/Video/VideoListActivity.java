@@ -39,6 +39,11 @@ public class VideoListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_videolist);
         AbstractProvider provider = new VideoProvider(this);
         videoItems = provider.getList();
+        if (videoItems != null){
+            VideoItem item = new VideoItem();
+            item.setPath("http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4");
+            videoItems.add(item);
+        }
         VideoSize = videoItems.size();
         mVideoListAdapter = new VideoListAdapter(VideoListActivity.this,videoItems);
         mVideoList = (ListView) findViewById(R.id.video_list);
