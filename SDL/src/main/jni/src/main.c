@@ -15,8 +15,10 @@ typedef struct Sprite {
     Uint16 h;
 } Sprite;
 
+
 /* Adapted from SDL's testspriteminimal.c */
-Sprite LoadSprite(const char *file, SDL_Renderer *renderer) {
+static Sprite
+LoadSprite(const char *file, SDL_Renderer *renderer) {
     Sprite result;
     result.texture = NULL;
     result.w = 0;
@@ -45,7 +47,8 @@ Sprite LoadSprite(const char *file, SDL_Renderer *renderer) {
     return result;
 }
 
-void draw(SDL_Window *window, SDL_Renderer *renderer, const Sprite sprite) {
+static void
+draw(SDL_Window *window, SDL_Renderer *renderer, const Sprite sprite) {
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
     SDL_Rect destRect = {w / 2 - sprite.w / 2, h / 2 - sprite.h / 2, sprite.w, sprite.h};
@@ -61,7 +64,8 @@ void draw(SDL_Window *window, SDL_Renderer *renderer, const Sprite sprite) {
  * @param argv
  * @return
  */
-int displayBmp(int argc, char *argv[]) {
+static int
+displayBmp(int argc, char *argv[]) {
 
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -117,14 +121,17 @@ static Uint8 *audio_pos;
  * len: The length (in bytes) of the audio buffer
  *
 */
-void fill_audio(void *udata, Uint8 *stream, int len) {
+static void
+fill_audio(void *udata, Uint8 *stream, int len) {
     //SDL 2.0
     SDL_memset(stream, 0, len);
+
     if (audio_len == 0)        /*  Only  play  if  we  have  data  left  */
         return;
     len = (len > audio_len ? audio_len : len);    /*  Mix  as  much  data  as  possible  */
 
     SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
+
     audio_pos += len;
     audio_len -= len;
 }
@@ -135,7 +142,8 @@ void fill_audio(void *udata, Uint8 *stream, int len) {
  * @param argv
  * @return
  */
-int playPCMAudio(int argc, char *argv[]) {
+static int
+playPCMAudio(int argc, char *argv[]) {
     //Init
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
         LOGE("Could not initialize SDL - %s\n", SDL_GetError());
@@ -207,7 +215,8 @@ int playPCMAudio(int argc, char *argv[]) {
  * @param argc
  * @param argv
  */
-void displayAll(int argc, char *argv[]) {
+static void
+displayAll(int argc, char *argv[]) {
     //Init
     if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER)) {
         LOGE("Could not initialize SDL - %s\n", SDL_GetError());
@@ -255,6 +264,13 @@ void displayAll(int argc, char *argv[]) {
     SDL_Event event;
     while (!done) {
 
+        /* Check for events */
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN ||
+                event.type == SDL_FINGERDOWN) {
+                done = 1;
+            }
+        }
 
         /* Draw a gray background */
         SDL_SetRenderDrawColor(renderer, 0xC8, 0x64, 0x21, 0x1A);//C864211A
@@ -265,16 +281,7 @@ void displayAll(int argc, char *argv[]) {
         /* Update the screen! */
         SDL_RenderPresent(renderer);
 
-        SDL_Delay(10);
 
-
-        /* Check for events */
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN ||
-                event.type == SDL_FINGERDOWN) {
-                done = 1;
-            }
-        }
 
         if (fread(pcm_buffer, 1, pcm_buffer_size, fp) != pcm_buffer_size) {
             // Loop

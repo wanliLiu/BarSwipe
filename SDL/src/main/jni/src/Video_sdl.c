@@ -1,5 +1,5 @@
 #include "SDL.h"
-
+#include <android/log.h>
 
 //set '1' to choose a type of file to play
 #define LOAD_BGRA    1
@@ -54,11 +54,22 @@ void CONVERT_24to32(unsigned char *image_in, unsigned char *image_out, int w, in
 
 int thread_exit = 0;
 
-int refresh_video(void *opaque) {
-    while (thread_exit == 0) {
+
+typedef struct {
+    const char *data;
+} thredTest;
+
+static int
+refresh_video(void *opaque) {
+
+    thredTest *esd = (thredTest *) opaque;
+    const char *da = esd->data;
+
+    while (esd && thread_exit == 0) {
         SDL_Event event;
         event.type = REFRESH_EVENT;
         SDL_PushEvent(&event);
+        __android_log_print(ANDROID_LOG_ERROR, "REFRESH_EVENT", "SDL_strdup(esd->data)传递有问题了呢");
         SDL_Delay(40);
     }
     return 0;
@@ -80,6 +91,7 @@ VideoSDL_play(int argc, char *argv[]) {
         printf("SDL: could not create window - exiting:%s\n", SDL_GetError());
         return -1;
     }
+
     SDL_Renderer *sdlRenderer = SDL_CreateRenderer(screen, -1, 0);
 
     Uint32 pixformat = 0;
@@ -104,11 +116,15 @@ VideoSDL_play(int argc, char *argv[]) {
 #if HAS_BORDER
     border = 30;
 #endif
+
+    int w, h;
+    SDL_GetWindowSize(screen, &w, &h);
+
     SDL_Rect sdlRect;
     sdlRect.x = 0 + border;
     sdlRect.y = 0 + border;
-    sdlRect.w = screen_w - border * 2;
-    sdlRect.h = screen_h - border * 2;
+    sdlRect.w = w - border * 2;
+    sdlRect.h = h - border * 2;
 
     FILE *fp = NULL;
 #if LOAD_BGRA
@@ -125,7 +141,12 @@ VideoSDL_play(int argc, char *argv[]) {
         return -1;
     }
 
-    SDL_Thread *refresh_thread = SDL_CreateThread(refresh_video, NULL, NULL);
+    thredTest test;
+    test.data = "线程传入的参数";
+
+    /* Create the thread and go! */
+    SDL_CreateThread(refresh_video, "RefreshUI", &test);
+
     SDL_Event event;
     while (1) {
         //Wait
@@ -156,10 +177,13 @@ VideoSDL_play(int argc, char *argv[]) {
             //Delay 40ms
             SDL_Delay(40);
 
-        } else if (event.type == SDL_QUIT) {
+        } else if (event.type == SDL_QUIT ||
+                   event.type == SDL_KEYDOWN ||
+                   event.type == SDL_FINGERDOWN) {
             break;
         }
     }
 
-    return 0;
+    exit(0);
+//    return 0;
 }
