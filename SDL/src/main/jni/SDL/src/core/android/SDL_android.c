@@ -22,7 +22,6 @@
 #include "SDL_stdinc.h"
 #include "SDL_assert.h"
 #include "SDL_hints.h"
-#include "SDL_log.h"
 
 #ifdef __ANDROID__
 
@@ -34,13 +33,11 @@
 #include "../../video/android/SDL_androidkeyboard.h"
 #include "../../video/android/SDL_androidmouse.h"
 #include "../../video/android/SDL_androidtouch.h"
-#include "../../video/android/SDL_androidvideo.h"
 #include "../../video/android/SDL_androidwindow.h"
 #include "../../joystick/android/SDL_sysjoystick_c.h"
 
 #include <android/log.h>
 #include <pthread.h>
-#include <sys/types.h>
 #include <unistd.h>
 #define LOG_TAG "SDL_android"
 /* #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__) */
@@ -56,8 +53,6 @@ static void Android_JNI_ThreadDestroyed(void*);
 /*******************************************************************************
  This file links the Java side of Android with libsdl
 *******************************************************************************/
-#include <jni.h>
-#include <android/log.h>
 
 
 /*******************************************************************************
@@ -106,6 +101,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
     if (pthread_key_create(&mThreadKey, Android_JNI_ThreadDestroyed) != 0) {
         __android_log_print(ANDROID_LOG_ERROR, "SDL", "Error initializing pthread key");
     }
+
     Android_JNI_SetupThread();
 
     return JNI_VERSION_1_4;

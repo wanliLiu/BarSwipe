@@ -16,6 +16,9 @@
 
          An example Java class can be found in README-android.txt
     -->
+
+    <uses-sdk android:minSdkVersion="14" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"

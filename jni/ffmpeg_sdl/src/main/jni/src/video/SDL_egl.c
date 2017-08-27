@@ -18,6 +18,7 @@
  *     misrepresented as being the original software.
  *  3. This notice may not be removed or altered from any source distribution.
  */
+#include <android/native_window.h>
 #include "../SDL_internal.h"
 
 #if SDL_VIDEO_OPENGL_EGL
@@ -29,7 +30,6 @@
 #include "SDL_sysvideo.h"
 #include "SDL_egl_c.h"
 #include "SDL_loadso.h"
-#include "SDL_hints.h"
 
 #ifdef EGL_KHR_create_context
 /* EGL_OPENGL_ES3_BIT_KHR was added in version 13 of the extension. */
