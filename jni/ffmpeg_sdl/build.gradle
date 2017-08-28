@@ -35,3 +35,8 @@ dependencies {
     compile "com.android.support:appcompat-v7:${supportPackageVersion}"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
+//An ffmpeg and SDL Tutorial
+//http://dranger.com/ffmpeg/tutorial01.html
+
+//如何在Android用FFmpeg+SDL2.0解码声音
+//http://www.cnblogs.com/tanlon/p/3966130.html
