@@ -5,7 +5,6 @@
 
 #ifdef __ANDROID__
 
-#include <jni.h>
 #include <android/log.h>
 //使用NDK的log
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,"ERROR: ", __VA_ARGS__)
@@ -36,13 +35,11 @@ int SCREEN_H = 1080;
 
 //Android平台上使用SDL官方demo播放视频（使用ffmpeg最新版解码）
 //http://blog.csdn.net/danjuan123/article/details/65444098
-//最简单的基于FFmpeg的移动端例子附件：SDL Android HelloWorld
-//http://blog.csdn.net/leixiaohua1020/article/details/47059553
 int main(int argc, char **argv) {
 
     //FFmpeg Parameters
     AVFormatContext *pFormatCtx;
-    int streamIdx;
+    int videoStream;
     AVCodecContext *pCodecCtx;
     AVCodecParameters *avCodecParameters;
     AVCodec *pCodec;
@@ -67,6 +64,7 @@ int main(int argc, char **argv) {
     }
     //获取文件名
     const char *mediaUri = (const char *) argv[1];
+//    const char *mediaUri = "http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4";
 
     av_register_all();//注册所有支持的文件格式以及编解码器
 
@@ -85,21 +83,21 @@ int main(int argc, char **argv) {
     }
     //打印文件信息
     av_dump_format(pFormatCtx, -1, mediaUri, 0);
-    streamIdx = -1;
+    videoStream = -1;
     for (int i = 0; i < pFormatCtx->nb_streams; i++)
         //新版本ffmpeg将AVCodecContext *codec替换成*codecpar
         if (pFormatCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
-            streamIdx = i;
+            videoStream = i;
             break;
         }
-    if (streamIdx == -1) {
+    if (videoStream == -1) {
         LOGE("Couldn't find a video stream !\n");
         return -1;
     }
 
 
     // Get a pointer to the codec context for the video stream
-    avCodecParameters = pFormatCtx->streams[streamIdx]->codecpar;
+    avCodecParameters = pFormatCtx->streams[videoStream]->codecpar;
 
     // Find the decoder for the video stream
     pCodec = avcodec_find_decoder(avCodecParameters->codec_id);
@@ -191,7 +189,7 @@ int main(int argc, char **argv) {
     // Read frames
     while (av_read_frame(pFormatCtx, packet) >= 0) {
         // Is this a packet from the video stream?
-        if (packet->stream_index == streamIdx) {
+        if (packet->stream_index == videoStream) {
             //decoder allocate frame to pFrame,new api
             LOGI("%s", "Got Video Packet Succeed");
             int getPacketCode = avcodec_send_packet(pCodecCtx, packet);

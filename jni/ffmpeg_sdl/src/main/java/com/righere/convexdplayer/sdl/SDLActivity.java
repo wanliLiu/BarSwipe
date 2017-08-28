@@ -12,15 +12,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -30,26 +24,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.BaseInputConnection;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -61,72 +47,49 @@ import com.righere.convexdplayer.Video.VideoItem;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
 
 
 /**
  SDL Activity
  */
 public class SDLActivity extends AppCompatActivity {
-    private static final String TAG = "SDL";
-
+    public static final int COMMAND_USER = 0x8000;
+    // Messages from the SDLMain thread
+    static final int COMMAND_CHANGE_TITLE = 1;
+    static final int COMMAND_UNUSED = 2;
+    static final int COMMAND_TEXTEDIT_HIDE = 3;
+    static final int COMMAND_SET_KEEP_SCREEN_ON = 5;
+    private static final String TAG = "SDLActivity";
     // Keep track of the paused state
     public static boolean mIsPaused, mIsSurfaceReady, mHasFocus;
     public static boolean mExitCalledFromJava;
-
     /** If shared libraries (e.g. SDL or the native application) could not be loaded. */
     public static boolean mBrokenLibraries;
-
     // If we want to separate mouse and touch events.
     //  This is only toggled in native code when a hint is set!
     public static boolean mSeparateMouseAndTouch;
-
     // Main components
     public static SDLActivity mSingleton;
     public static SDLSurface mSurface;
     public static View mTextEdit;
     public static ViewGroup mLayout;
     public static SDLJoystickHandler mJoystickHandler;
-
     // This is what SDL runs in. It invokes SDL_main(), eventually
     public static Thread mSDLThread;
-
     // Audio
     public static AudioTrack mAudioTrack;
     public static AudioRecord mAudioRecord;
-
     /**
-     * This method is called by SDL before loading the native shared libraries.
-     * It can be overridden to provide names of shared libraries to be loaded.
-     * The default implementation returns the defaults. It never returns null.
-     * An array returned by a new implementation must at least contain "SDL2".
-     * Also keep in mind that the order the libraries are loaded may matter.
-     * @return names of shared libraries to be loaded (e.g. "SDL2", "main").
+     * Result of current messagebox. Also used for blocking the calling thread.
      */
-    public String[] getLibraries() {
-        return new String[] {
-                "SDL2",
-                // "SDL2_image",
-                // "SDL2_mixer",
-                // "SDL2_net",
-                // "SDL2_ttf",
-                "SDL2main"
-        };
-    }
-
-    // Load the .so
-    public void loadLibraries() {
-        for (String lib : getLibraries()) {
-            System.loadLibrary(lib);
-        }
-    }
-
-
+    public final int[] messageboxSelection = new int[1];
+    /**
+     * Id of current dialog.
+     */
+    public int dialogs = 0;
+    // Handler for the messages
+    Handler commandHandler = new SDLCommandHandler();
     /**
      * This method is called by SDL before starting the native application thread.
      * It can be overridden to provide the arguments after the application name.
@@ -136,10 +99,14 @@ public class SDLActivity extends AppCompatActivity {
     private VideoItem mPlayVideoFile;
     private String mVideoPath;
     private String mVideoTitle;
-
-    public String getPath(){
-        return mVideoPath;
-    }
+    /**
+     * com.android.vending.expansion.zipfile.ZipResourceFile object or null.
+     */
+    private Object expansionFile;
+    /**
+     * com.android.vending.expansion.zipfile.ZipResourceFile's getInputStream() or null.
+     */
+    private Method expansionFileMethod;
 
     public static void initialize() {
         // The static nature of the singleton and Android quirkyness force us to initialize everything here
@@ -157,207 +124,6 @@ public class SDLActivity extends AppCompatActivity {
         mIsPaused = false;
         mIsSurfaceReady = false;
         mHasFocus = true;
-    }
-
-    // Setup
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.v(TAG, "Device: " + android.os.Build.DEVICE);
-        Log.v(TAG, "Model: " + android.os.Build.MODEL);
-        Log.v(TAG, "onCreate(): " + mSingleton);
-
-        super.onCreate(savedInstanceState);
-
-
-        SDLActivity.initialize();
-        // So we can call stuff from static callbacks
-        mSingleton = this;
-
-        Intent intent = getIntent();
-        if (intent != null){
-            Bundle bundle = intent.getExtras();
-            mPlayVideoFile = (VideoItem) bundle.getSerializable("video");
-            if(mPlayVideoFile != null) {
-                mVideoPath = mPlayVideoFile.getPath();
-                mVideoTitle = mPlayVideoFile.getmVideoTitle();
-                Log.v(TAG,"Got videoName: " + mVideoTitle);
-                Log.v(TAG,"Got videoPath: " + mVideoPath);
-            }
-        }
-        // Load shared libraries
-        if (loadSharedLibraries()) return;
-
-        // Set up the surface
-        mSurface = new SDLSurface(getApplication());
-
-        if(Build.VERSION.SDK_INT >= 12) {
-            mJoystickHandler = new SDLJoystickHandler_API12();
-        }
-        else {
-            mJoystickHandler = new SDLJoystickHandler();
-        }
-
-        mLayout = new RelativeLayout(this);
-        mLayout.addView(mSurface);
-
-        setContentView(mLayout);
-
-//        // Get filename from "Open with" of another application
-//        Intent intent = getIntent();
-//
-//        if (intent != null && intent.getData() != null) {
-//            String filename = intent.getData().getPath();
-//            if (filename != null) {
-//                Log.v(TAG, "Got filename: " + filename);
-//                SDLActivity.onNativeDropFile(filename);
-//            }
-//        }
-
-
-    }
-
-    //load shared libraries
-    public boolean loadSharedLibraries() {
-        String errorMsgBrokenLib = "";
-        try {
-            loadLibraries();
-        } catch(UnsatisfiedLinkError e) {
-            System.err.println(e.getMessage());
-            mBrokenLibraries = true;
-            errorMsgBrokenLib = e.getMessage();
-        } catch(Exception e) {
-            System.err.println(e.getMessage());
-            mBrokenLibraries = true;
-            errorMsgBrokenLib = e.getMessage();
-        }
-
-        if (mBrokenLibraries)
-        {
-            AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
-            dlgAlert.setMessage("An error occurred while trying to start the application. Please try again and/or reinstall."
-                    + System.getProperty("line.separator")
-                    + System.getProperty("line.separator")
-                    + "Error: " + errorMsgBrokenLib);
-            dlgAlert.setTitle("SDL Error");
-            dlgAlert.setPositiveButton("Exit",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog,int id) {
-                            // if this button is clicked, close current activity
-                            SDLActivity.mSingleton.finish();
-                        }
-                    });
-            dlgAlert.setCancelable(false);
-            dlgAlert.create().show();
-
-            return true;
-        }
-        return false;
-    }
-
-    // Events
-    @Override
-    public void onPause() {
-        Log.v(TAG, "onPause()");
-        super.onPause();
-
-        if (SDLActivity.mBrokenLibraries) {
-            return;
-        }
-
-        SDLActivity.handlePause();
-    }
-
-    @Override
-    public void onResume() {
-        Log.v(TAG, "onResume()");
-        super.onResume();
-
-        if (SDLActivity.mBrokenLibraries) {
-            return;
-        }
-
-        SDLActivity.handleResume();
-    }
-
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        Log.v(TAG, "onWindowFocusChanged(): " + hasFocus);
-
-        if (SDLActivity.mBrokenLibraries) {
-            return;
-        }
-
-        SDLActivity.mHasFocus = hasFocus;
-        if (hasFocus) {
-            SDLActivity.handleResume();
-        }
-    }
-
-    @Override
-    public void onLowMemory() {
-        Log.v(TAG, "onLowMemory()");
-        super.onLowMemory();
-
-        if (SDLActivity.mBrokenLibraries) {
-            return;
-        }
-
-        SDLActivity.nativeLowMemory();
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.v(TAG, "onDestroy()");
-
-        if (SDLActivity.mBrokenLibraries) {
-            super.onDestroy();
-            // Reset everything in case the user re opens the app
-            SDLActivity.initialize();
-            return;
-        }
-
-        // Send a quit message to the application
-        SDLActivity.mExitCalledFromJava = true;
-        SDLActivity.nativeQuit();
-
-        // Now wait for the SDL thread to quit
-        if (SDLActivity.mSDLThread != null) {
-            try {
-                SDLActivity.mSDLThread.join();
-            } catch(Exception e) {
-                Log.v(TAG, "Problem stopping thread: " + e);
-            }
-            SDLActivity.mSDLThread = null;
-
-            //Log.v(TAG, "Finished waiting for SDL thread");
-        }
-
-        super.onDestroy();
-        // Reset everything in case the user re opens the app
-        SDLActivity.initialize();
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-
-        if (SDLActivity.mBrokenLibraries) {
-            return false;
-        }
-
-        int keyCode = event.getKeyCode();
-        // Ignore certain special keys so they're handled by Android
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
-                keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
-                keyCode == KeyEvent.KEYCODE_CAMERA ||
-                keyCode == 168 || /* API 11: KeyEvent.KEYCODE_ZOOM_IN */
-                keyCode == 169 /* API 11: KeyEvent.KEYCODE_ZOOM_OUT */
-                ) {
-            return false;
-        }
-        return super.dispatchKeyEvent(event);
     }
 
     /** Called by onPause or surfaceDestroyed. Even if surfaceDestroyed
@@ -390,118 +156,55 @@ public class SDLActivity extends AppCompatActivity {
         mSingleton.finish();
     }
 
-
-    // Messages from the SDLMain thread
-    static final int COMMAND_CHANGE_TITLE = 1;
-    static final int COMMAND_UNUSED = 2;
-    static final int COMMAND_TEXTEDIT_HIDE = 3;
-    static final int COMMAND_SET_KEEP_SCREEN_ON = 5;
-
-    public static final int COMMAND_USER = 0x8000;
-
-    /**
-     * This method is called by SDL if SDL did not handle a message itself.
-     * This happens if a received message contains an unsupported command.
-     * Method can be overwritten to handle Messages in a different class.
-     * @param command the command of the message.
-     * @param param the parameter of the message. May be null.
-     * @return if the message was handled in overridden method.
-     */
-    public boolean onUnhandledMessage(int command, Object param) {
-        return false;
-    }
-
-    /**
-     * A Handler class for Messages from native SDL applications.
-     * It uses current Activities as target (e.g. for the title).
-     * static to prevent implicit references to enclosing object.
-     */
-    public static class SDLCommandHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            Context context = getContext();
-            if (context == null) {
-                Log.e(TAG, "error handling message, getContext() returned null");
-                return;
-            }
-            switch (msg.arg1) {
-                case COMMAND_CHANGE_TITLE:
-                    if (context instanceof Activity) {
-                        ((Activity) context).setTitle((String)msg.obj);
-                    } else {
-                        Log.e(TAG, "error handling message, getContext() returned no Activity");
-                    }
-                    break;
-                case COMMAND_TEXTEDIT_HIDE:
-                    if (mTextEdit != null) {
-                        // Note: On some devices setting view to GONE creates a flicker in landscape.
-                        // Setting the View's sizes to 0 is similar to GONE but without the flicker.
-                        // The sizes will be set to useful values when the keyboard is shown again.
-                        mTextEdit.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
-
-                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(mTextEdit.getWindowToken(), 0);
-                    }
-                    break;
-                case COMMAND_SET_KEEP_SCREEN_ON:
-                {
-                    Window window = ((Activity) context).getWindow();
-                    if (window != null) {
-                        if ((msg.obj instanceof Integer) && (((Integer) msg.obj).intValue() != 0)) {
-                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                        } else {
-                            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                        }
-                    }
-                    break;
-                }
-                default:
-                    if ((context instanceof SDLActivity) && !((SDLActivity) context).onUnhandledMessage(msg.arg1, msg.obj)) {
-                        Log.e(TAG, "error handling message, command is " + msg.arg1);
-                    }
-            }
-        }
-    }
-
-    // Handler for the messages
-    Handler commandHandler = new SDLCommandHandler();
-
-    // Send a message from the SDLMain thread
-    boolean sendCommand(int command, Object data) {
-        Message msg = commandHandler.obtainMessage();
-        msg.arg1 = command;
-        msg.obj = data;
-        return commandHandler.sendMessage(msg);
-    }
-
     // C functions we call
     public static native int nativeInit(String string);
+
     public static native void nativeLowMemory();
+
     public static native void nativeQuit();
+
     public static native void nativePause();
+
     public static native void nativeResume();
+
     public static native void onNativeDropFile(String filename);
+
     public static native void onNativeResize(int x, int y, int format, float rate);
+
     public static native int onNativePadDown(int device_id, int keycode);
+
     public static native int onNativePadUp(int device_id, int keycode);
+
     public static native void onNativeJoy(int device_id, int axis,
                                           float value);
+
     public static native void onNativeHat(int device_id, int hat_id,
                                           int x, int y);
+
     public static native void onNativeKeyDown(int keycode);
+
     public static native void onNativeKeyUp(int keycode);
+
     public static native void onNativeKeyboardFocusLost();
+
     public static native void onNativeMouse(int button, int action, float x, float y);
+
     public static native void onNativeTouch(int touchDevId, int pointerFingerId,
                                             int action, float x,
                                             float y, float p);
+
     public static native void onNativeAccel(float x, float y, float z);
+
     public static native void onNativeSurfaceChanged();
+
     public static native void onNativeSurfaceDestroyed();
+
     public static native int nativeAddJoystick(int device_id, String name,
                                                int is_accelerometer, int nbuttons,
                                                int naxes, int nhats, int nballs);
+
     public static native int nativeRemoveJoystick(int device_id);
+
     public static native String nativeGetHint(String name);
 
     /**
@@ -528,74 +231,6 @@ public class SDLActivity extends AppCompatActivity {
 
     /**
      * This method is called by SDL using JNI.
-     * @return result of getSystemService(name) but executed on UI thread.
-     */
-    public Object getSystemServiceFromUiThread(final String name) {
-        final Object lock = new Object();
-        final Object[] results = new Object[2]; // array for writable variables
-        synchronized (lock) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (lock) {
-                        results[0] = getSystemService(name);
-                        results[1] = Boolean.TRUE;
-                        lock.notify();
-                    }
-                }
-            });
-            if (results[1] == null) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-        return results[0];
-    }
-
-    static class ShowTextInputTask implements Runnable {
-        /*
-         * This is used to regulate the pan&scan method to have some offset from
-         * the bottom edge of the input region and the top edge of an input
-         * method (soft keyboard)
-         */
-        static final int HEIGHT_PADDING = 15;
-
-        public int x, y, w, h;
-
-        public ShowTextInputTask(int x, int y, int w, int h) {
-            this.x = x;
-            this.y = y;
-            this.w = w;
-            this.h = h;
-        }
-
-        @Override
-        public void run() {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w, h + HEIGHT_PADDING);
-            params.leftMargin = x;
-            params.topMargin = y;
-
-            if (mTextEdit == null) {
-                mTextEdit = new DummyEdit(getContext());
-
-                mLayout.addView(mTextEdit, params);
-            } else {
-                mTextEdit.setLayoutParams(params);
-            }
-
-            mTextEdit.setVisibility(View.VISIBLE);
-            mTextEdit.requestFocus();
-
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(mTextEdit, 0);
-        }
-    }
-
-    /**
-     * This method is called by SDL using JNI.
      */
     public static boolean showTextInput(int x, int y, int w, int h) {
         // Transfer the task to the main thread as a Runnable
@@ -608,8 +243,6 @@ public class SDLActivity extends AppCompatActivity {
     public static Surface getNativeSurface() {
         return SDLActivity.mSurface.getNativeSurface();
     }
-
-    // Audio
 
     /**
      * This method is called by SDL using JNI.
@@ -739,7 +372,6 @@ public class SDLActivity extends AppCompatActivity {
         return mAudioRecord.read(buffer, 0, buffer.length);
     }
 
-
     /** This method is called by SDL using JNI. */
     public static void audioClose() {
         if (mAudioTrack != null) {
@@ -757,9 +389,6 @@ public class SDLActivity extends AppCompatActivity {
             mAudioRecord = null;
         }
     }
-
-
-    // Input
 
     /**
      * This method is called by SDL using JNI.
@@ -807,13 +436,292 @@ public class SDLActivity extends AppCompatActivity {
         );
     }
 
+    // Audio
+
+    /**
+     * This method is called by SDL before loading the native shared libraries.
+     * It can be overridden to provide names of shared libraries to be loaded.
+     * The default implementation returns the defaults. It never returns null.
+     * An array returned by a new implementation must at least contain "SDL2".
+     * Also keep in mind that the order the libraries are loaded may matter.
+     *
+     * @return names of shared libraries to be loaded (e.g. "SDL2", "main").
+     */
+    public String[] getLibraries() {
+        return new String[]{
+                "SDL2",
+                // "SDL2_image",
+                // "SDL2_mixer",
+                // "SDL2_net",
+                // "SDL2_ttf",
+                "SDL2main"
+        };
+    }
+
+    // Load the .so
+    public void loadLibraries() {
+        for (String lib : getLibraries()) {
+            System.loadLibrary(lib);
+        }
+    }
+
+    public String getPath() {
+        return mVideoPath;
+    }
+
+    // Setup
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.v(TAG, "Device: " + android.os.Build.DEVICE);
+        Log.v(TAG, "Model: " + android.os.Build.MODEL);
+        Log.v(TAG, "onCreate(): " + mSingleton);
+
+        super.onCreate(savedInstanceState);
+
+
+        SDLActivity.initialize();
+        // So we can call stuff from static callbacks
+        mSingleton = this;
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getExtras();
+            mPlayVideoFile = (VideoItem) bundle.getSerializable("video");
+            if (mPlayVideoFile != null) {
+                mVideoPath = mPlayVideoFile.getPath();
+                mVideoTitle = mPlayVideoFile.getmVideoTitle();
+                Log.v(TAG, "Got videoName: " + mVideoTitle);
+                Log.v(TAG, "Got videoPath: " + mVideoPath);
+            }
+        }
+        // Load shared libraries
+        if (loadSharedLibraries()) return;
+
+        // Set up the surface
+        mSurface = new SDLSurface(getApplication());
+
+        if (Build.VERSION.SDK_INT >= 12) {
+            mJoystickHandler = new SDLJoystickHandler_API12();
+        } else {
+            mJoystickHandler = new SDLJoystickHandler();
+        }
+
+        mLayout = new RelativeLayout(this);
+        mLayout.addView(mSurface);
+
+        setContentView(mLayout);
+
+//        // Get filename from "Open with" of another application
+//        Intent intent = getIntent();
+//
+//        if (intent != null && intent.getData() != null) {
+//            String filename = intent.getData().getPath();
+//            if (filename != null) {
+//                Log.v(TAG, "Got filename: " + filename);
+//                SDLActivity.onNativeDropFile(filename);
+//            }
+//        }
+
+
+    }
+
+    //load shared libraries
+    public boolean loadSharedLibraries() {
+        String errorMsgBrokenLib = "";
+        try {
+            loadLibraries();
+        } catch (UnsatisfiedLinkError e) {
+            System.err.println(e.getMessage());
+            mBrokenLibraries = true;
+            errorMsgBrokenLib = e.getMessage();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            mBrokenLibraries = true;
+            errorMsgBrokenLib = e.getMessage();
+        }
+
+        if (mBrokenLibraries) {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+            dlgAlert.setMessage("An error occurred while trying to start the application. Please try again and/or reinstall."
+                    + System.getProperty("line.separator")
+                    + System.getProperty("line.separator")
+                    + "Error: " + errorMsgBrokenLib);
+            dlgAlert.setTitle("SDL Error");
+            dlgAlert.setPositiveButton("Exit",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close current activity
+                            SDLActivity.mSingleton.finish();
+                        }
+                    });
+            dlgAlert.setCancelable(false);
+            dlgAlert.create().show();
+
+            return true;
+        }
+        return false;
+    }
+
+    // Events
+    @Override
+    public void onPause() {
+        Log.v(TAG, "onPause()");
+        super.onPause();
+
+        if (SDLActivity.mBrokenLibraries) {
+            return;
+        }
+
+        SDLActivity.handlePause();
+    }
+
+    @Override
+    public void onResume() {
+        Log.v(TAG, "onResume()");
+        super.onResume();
+
+        if (SDLActivity.mBrokenLibraries) {
+            return;
+        }
+
+        SDLActivity.handleResume();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Log.v(TAG, "onWindowFocusChanged(): " + hasFocus);
+
+        if (SDLActivity.mBrokenLibraries) {
+            return;
+        }
+
+        SDLActivity.mHasFocus = hasFocus;
+        if (hasFocus) {
+            SDLActivity.handleResume();
+        }
+    }
+
+
+    // Input
+
+    @Override
+    public void onLowMemory() {
+        Log.v(TAG, "onLowMemory()");
+        super.onLowMemory();
+
+        if (SDLActivity.mBrokenLibraries) {
+            return;
+        }
+
+        SDLActivity.nativeLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.v(TAG, "onDestroy()");
+
+        if (SDLActivity.mBrokenLibraries) {
+            super.onDestroy();
+            // Reset everything in case the user re opens the app
+            SDLActivity.initialize();
+            return;
+        }
+
+        // Send a quit message to the application
+        SDLActivity.mExitCalledFromJava = true;
+        SDLActivity.nativeQuit();
+
+        // Now wait for the SDL thread to quit
+        if (SDLActivity.mSDLThread != null) {
+            try {
+                SDLActivity.mSDLThread.join();
+            } catch (Exception e) {
+                Log.v(TAG, "Problem stopping thread: " + e);
+            }
+            SDLActivity.mSDLThread = null;
+
+            //Log.v(TAG, "Finished waiting for SDL thread");
+        }
+
+        super.onDestroy();
+        // Reset everything in case the user re opens the app
+        SDLActivity.initialize();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+
+        if (SDLActivity.mBrokenLibraries) {
+            return false;
+        }
+
+        int keyCode = event.getKeyCode();
+        // Ignore certain special keys so they're handled by Android
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+                keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+                keyCode == KeyEvent.KEYCODE_CAMERA ||
+                keyCode == 168 || /* API 11: KeyEvent.KEYCODE_ZOOM_IN */
+                keyCode == 169 /* API 11: KeyEvent.KEYCODE_ZOOM_OUT */
+                ) {
+            return false;
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    /**
+     * This method is called by SDL if SDL did not handle a message itself.
+     * This happens if a received message contains an unsupported command.
+     * Method can be overwritten to handle Messages in a different class.
+     *
+     * @param command the command of the message.
+     * @param param   the parameter of the message. May be null.
+     * @return if the message was handled in overridden method.
+     */
+    public boolean onUnhandledMessage(int command, Object param) {
+        return false;
+    }
+
     // APK expansion files support
 
-    /** com.android.vending.expansion.zipfile.ZipResourceFile object or null. */
-    private Object expansionFile;
+    // Send a message from the SDLMain thread
+    boolean sendCommand(int command, Object data) {
+        Message msg = commandHandler.obtainMessage();
+        msg.arg1 = command;
+        msg.obj = data;
+        return commandHandler.sendMessage(msg);
+    }
 
-    /** com.android.vending.expansion.zipfile.ZipResourceFile's getInputStream() or null. */
-    private Method expansionFileMethod;
+    /**
+     * This method is called by SDL using JNI.
+     *
+     * @return result of getSystemService(name) but executed on UI thread.
+     */
+    public Object getSystemServiceFromUiThread(final String name) {
+        final Object lock = new Object();
+        final Object[] results = new Object[2]; // array for writable variables
+        synchronized (lock) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (lock) {
+                        results[0] = getSystemService(name);
+                        results[1] = Boolean.TRUE;
+                        lock.notify();
+                    }
+                }
+            });
+            if (results[1] == null) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return results[0];
+    }
 
     /**
      * This method is called by SDL using JNI.
@@ -878,12 +786,6 @@ public class SDLActivity extends AppCompatActivity {
     }
 
     // Messagebox
-
-    /** Result of current messagebox. Also used for blocking the calling thread. */
-    public final int[] messageboxSelection = new int[1];
-
-    /** Id of current dialog. */
-    public int dialogs = 0;
 
     /**
      * This method is called by SDL using JNI.
@@ -1080,6 +982,96 @@ public class SDLActivity extends AppCompatActivity {
         });
 
         return dialog;
+    }
+
+    /**
+     * A Handler class for Messages from native SDL applications.
+     * It uses current Activities as target (e.g. for the title).
+     * static to prevent implicit references to enclosing object.
+     */
+    public static class SDLCommandHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            Context context = getContext();
+            if (context == null) {
+                Log.e(TAG, "error handling message, getContext() returned null");
+                return;
+            }
+            switch (msg.arg1) {
+                case COMMAND_CHANGE_TITLE:
+                    if (context instanceof Activity) {
+                        ((Activity) context).setTitle((String) msg.obj);
+                    } else {
+                        Log.e(TAG, "error handling message, getContext() returned no Activity");
+                    }
+                    break;
+                case COMMAND_TEXTEDIT_HIDE:
+                    if (mTextEdit != null) {
+                        // Note: On some devices setting view to GONE creates a flicker in landscape.
+                        // Setting the View's sizes to 0 is similar to GONE but without the flicker.
+                        // The sizes will be set to useful values when the keyboard is shown again.
+                        mTextEdit.setLayoutParams(new RelativeLayout.LayoutParams(0, 0));
+
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mTextEdit.getWindowToken(), 0);
+                    }
+                    break;
+                case COMMAND_SET_KEEP_SCREEN_ON: {
+                    Window window = ((Activity) context).getWindow();
+                    if (window != null) {
+                        if ((msg.obj instanceof Integer) && (((Integer) msg.obj).intValue() != 0)) {
+                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        } else {
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        }
+                    }
+                    break;
+                }
+                default:
+                    if ((context instanceof SDLActivity) && !((SDLActivity) context).onUnhandledMessage(msg.arg1, msg.obj)) {
+                        Log.e(TAG, "error handling message, command is " + msg.arg1);
+                    }
+            }
+        }
+    }
+
+    static class ShowTextInputTask implements Runnable {
+        /*
+         * This is used to regulate the pan&scan method to have some offset from
+         * the bottom edge of the input region and the top edge of an input
+         * method (soft keyboard)
+         */
+        static final int HEIGHT_PADDING = 15;
+
+        public int x, y, w, h;
+
+        public ShowTextInputTask(int x, int y, int w, int h) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+        }
+
+        @Override
+        public void run() {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(w, h + HEIGHT_PADDING);
+            params.leftMargin = x;
+            params.topMargin = y;
+
+            if (mTextEdit == null) {
+                mTextEdit = new DummyEdit(getContext());
+
+                mLayout.addView(mTextEdit, params);
+            } else {
+                mTextEdit.setLayoutParams(params);
+            }
+
+            mTextEdit.setVisibility(View.VISIBLE);
+            mTextEdit.requestFocus();
+
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(mTextEdit, 0);
+        }
     }
 }
 

@@ -263,7 +263,6 @@ displayAll(int argc, char *argv[]) {
     Uint8 done = 0;
     SDL_Event event;
     while (!done) {
-
         /* Check for events */
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN ||
@@ -271,7 +270,6 @@ displayAll(int argc, char *argv[]) {
                 done = 1;
             }
         }
-
         /* Draw a gray background */
         SDL_SetRenderDrawColor(renderer, 0xC8, 0x64, 0x21, 0x1A);//C864211A
         SDL_RenderClear(renderer);
@@ -280,8 +278,6 @@ displayAll(int argc, char *argv[]) {
 
         /* Update the screen! */
         SDL_RenderPresent(renderer);
-
-
 
         if (fread(pcm_buffer, 1, pcm_buffer_size, fp) != pcm_buffer_size) {
             // Loop

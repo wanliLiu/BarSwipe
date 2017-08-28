@@ -2,6 +2,8 @@ include $(call all-subdir-makefiles)
 
 
 #可以通过查询 《Android.mk语法》来了解更多和Android.mk相关的知识
+#Android.mk 文件语法详解
+#http://www.cnblogs.com/wainiwann/p/3837936.html
 ##############################----Android.mk 说明-----###################################
 #
 # LOCAL_PATH := $(call my-dir)
@@ -26,6 +28,13 @@ include $(call all-subdir-makefiles)
 #
 # LOCAL_STATIC_LIBRARIES: 表示该模块需要使用哪些静态库，以便在编译时进行链接
 # LOCAL_SHARED_LIBRARIES:  表示模块在运行时要依赖的共享库（动态库），在链接时就需要，以便在生成文件时嵌入其相应的信息
+#
+# PREBUILT_SHARED_LIBRARY: 把这个共享库声明为 “一个” 独立的模块,此时模块的LOCAL_SRC_FILES应该被指定为一个预先编译好的动态库，而非source file
+# PREBUILT_STATIC_LIBRARY:  主要是用在将已经编译好的第三方库
+# BUILD_SHARED_LIBRARY:
+# BUILD_STATIC_LIBRARY:
+#
+#
 #
 # LOCAL_LDLIBS:  编译模块时要使用的附加的链接器选项
 #
