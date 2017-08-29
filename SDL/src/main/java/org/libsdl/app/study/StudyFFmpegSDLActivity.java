@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.libsdl.app.R;
-import org.libsdl.app.SDLActivity;
+import org.libsdl.app.sdl.SDLActivity;
 
 /**
  * Created by soli on 28/08/2017.

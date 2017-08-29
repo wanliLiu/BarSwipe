@@ -1,4 +1,4 @@
-package org.libsdl.app;
+package org.libsdl.app.sdl;
 
 import android.view.InputDevice;
 import android.view.MotionEvent;
@@ -10,20 +10,6 @@ import java.util.List;
 
 /* Actual joystick functionality available for API >= 12 devices */
 class SDLJoystickHandler_API12 extends SDLJoystickHandler {
-
-    static class SDLJoystick {
-        public int device_id;
-        public String name;
-        public ArrayList<InputDevice.MotionRange> axes;
-        public ArrayList<InputDevice.MotionRange> hats;
-    }
-
-    static class RangeComparator implements Comparator<InputDevice.MotionRange> {
-        @Override
-        public int compare(InputDevice.MotionRange arg0, InputDevice.MotionRange arg1) {
-            return arg0.getAxis() - arg1.getAxis();
-        }
-    }
 
     private ArrayList<SDLJoystick> mJoysticks;
 
@@ -132,5 +118,19 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
             }
         }
         return true;
+    }
+
+    static class SDLJoystick {
+        public int device_id;
+        public String name;
+        public ArrayList<InputDevice.MotionRange> axes;
+        public ArrayList<InputDevice.MotionRange> hats;
+    }
+
+    static class RangeComparator implements Comparator<InputDevice.MotionRange> {
+        @Override
+        public int compare(InputDevice.MotionRange arg0, InputDevice.MotionRange arg1) {
+            return arg0.getAxis() - arg1.getAxis();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package org.libsdl.app;
+package org.libsdl.app.sdl;
 
 
 import android.view.MotionEvent;

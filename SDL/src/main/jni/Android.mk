@@ -1,3 +1,4 @@
+LOCAL_PATH := $(call my-dir)
 include $(call all-subdir-makefiles)
 
 
@@ -34,11 +35,12 @@ include $(call all-subdir-makefiles)
 # BUILD_SHARED_LIBRARY:
 # BUILD_STATIC_LIBRARY:
 #
-#
+# LOCAL_EXPORT_C_INCLUDES :一个第三方的依赖库头文件需要被自己写的so所所用，那么在编译这个第三方库的时候应该用此标记这个include需要在别的地方使用
+# LOCAL_C_INCLUDES ：自己写so的头文件位置
 #
 # LOCAL_LDLIBS:  编译模块时要使用的附加的链接器选项
 #
-# OCAL_CFLAGS:  可选的编译器选项，在编译 C 代码文件的时候使用，相当于#define isEnable 2
+# LOCAL_CFLAGS:  可选的编译器选项，在编译 C 代码文件的时候使用，相当于#define isEnable 2
 # androdi.mk中定义
 #  ifeq ($(BACKCAR_DATA_SOURCE), GPIO)
 #     CFLAGS += -DGPIO_ENABLE
@@ -59,67 +61,5 @@ include $(call all-subdir-makefiles)
 # LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 #
 #
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
+
 

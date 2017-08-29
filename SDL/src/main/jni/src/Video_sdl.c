@@ -54,22 +54,13 @@ void CONVERT_24to32(unsigned char *image_in, unsigned char *image_out, int w, in
 
 int thread_exit = 0;
 
-
-typedef struct {
-    const char *data;
-} thredTest;
-
 static int
 refresh_video(void *opaque) {
-
-    thredTest *esd = (thredTest *) opaque;
-    const char *da = esd->data;
-
-    while (esd && thread_exit == 0) {
+    while (thread_exit == 0) {
         SDL_Event event;
         event.type = REFRESH_EVENT;
         SDL_PushEvent(&event);
-        __android_log_print(ANDROID_LOG_ERROR, "REFRESH_EVENT", "SDL_strdup(esd->data)传递有问题了呢");
+        __android_log_print(ANDROID_LOG_ERROR, "REFRESH_EVENT", "线程传递的数据：%s", opaque);
         SDL_Delay(40);
     }
     return 0;
@@ -141,11 +132,9 @@ VideoSDL_play(int argc, char *argv[]) {
         return -1;
     }
 
-    thredTest test;
-    test.data = "线程传入的参数";
 
     /* Create the thread and go! */
-    SDL_CreateThread(refresh_video, "RefreshUI", &test);
+    SDL_CreateThread(refresh_video, "RefreshUI", "------线程传入的参数!!!!!!");
 
     SDL_Event event;
     while (1) {

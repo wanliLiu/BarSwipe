@@ -2,9 +2,8 @@
 
 #include "SDL.h"
 #include <android/log.h>
-
 #include "Video_sdl.h"
-
+#include <libavformat/avformat.h>
 
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,"SDL_study", __VA_ARGS__)
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,"SDL_study", __VA_ARGS__)
@@ -301,6 +300,26 @@ displayAll(int argc, char *argv[]) {
     exit(0);
 }
 
+static void
+ifFFmpegIsOkay() {
+    char info[40000] = {0};
+    av_register_all();
+    AVInputFormat *if_temp = av_iformat_next(NULL);
+    while (if_temp) {
+        sprintf(info, "%s,%s", info, if_temp->name);
+        if_temp = if_temp->next;
+    }
+    sprintf(info, "%s\n%s\n", info, "输出");
+    AVOutputFormat *of_temp = av_oformat_next(NULL);
+    while (of_temp) {
+        sprintf(info, "%s,%s", info, of_temp->name);
+        of_temp = of_temp->next;
+    }
+
+
+    LOGE("%s", info);
+    LOGE("Ffmpeg is Okay,free to go");
+}
 
 #define DisplayBmp 0
 #define AudioPlay 0
@@ -313,6 +332,9 @@ displayAll(int argc, char *argv[]) {
  * @return
  */
 int main(int argc, char *argv[]) {
+
+    ifFFmpegIsOkay();
+
 #if VideoPlay
     VideoSDL_play(argc, argv);
 #elif  DisplayBmp
@@ -324,3 +346,4 @@ int main(int argc, char *argv[]) {
 #endif
     return 0;
 }
+

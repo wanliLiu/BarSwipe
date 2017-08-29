@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="SDLActivity"
+            android:name=".sdl.SDLActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     </application>
 

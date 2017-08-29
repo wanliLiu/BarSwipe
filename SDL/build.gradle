@@ -9,7 +9,7 @@ android {
         targetSdkVersion 22
 
         ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86"
+            abiFilters "armeabi"//, "armeabi-v7a", "x86"
             moduleName "main"
             ldLibs "log", "z", "m", "jnigraphics", "android"
         }
