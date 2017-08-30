@@ -61,5 +61,7 @@ include $(call all-subdir-makefiles)
 # LOCAL_SRC_FILES := $(FILE_LIST:$(LOCAL_PATH)/%=%)
 #
 #
+#
+# LOCAL_LDLIBS：故名思议，ldlibs，就是指定那些存在于系统目录下本模块需要连接的库。如果某一个库既有动态库又有静态库，那么在默认情况下是链接的动态库而非静态库
 
 
