@@ -41,6 +41,8 @@
         </activity>
         <activity
             android:name=".sdl.SDLActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
     </application>
 

@@ -26,13 +26,13 @@ Java_com_example_soli_jnitest_MainActivity_urlprotocolinfo(
     struct URLProtocol *pup = NULL;
 
     struct URLProtocol **p_temp = &pup;
-    avio_enum_protocols((void **) p_temp, 0);
+//    avio_enum_protocols((void **) p_temp, 0);
 
     while ((*p_temp) != NULL) {
         sprintf(info, "%sInput: %s\n", info, avio_enum_protocols((void **) p_temp, 0));
     }
     pup = NULL;
-    avio_enum_protocols((void **) p_temp, 1);
+//    avio_enum_protocols((void **) p_temp, 1);
     while ((*p_temp) != NULL) {
         sprintf(info, "%sInput: %s\n", info, avio_enum_protocols((void **) p_temp, 1));
     }

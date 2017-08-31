@@ -83,8 +83,8 @@ SDL_PATH := ../SDL
 
 # Add your application source files here...
 LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
+    VideoPlay.c \
     Video_sdl.c \
-    CList.c \
 	main.c
 
 LOCAL_SHARED_LIBRARIES := SDL2 avcodec avdevice avfilter avformat avutil postproc swresample swscale

@@ -61,4 +61,7 @@ key_frame：是否为关键帧（只针对视频） 。
 pict_type：帧类型（只针对视频） 。例如I， P， B。
 
 
+container -> streams -> frames -> codec
+                          ↓
+                        Packets
 

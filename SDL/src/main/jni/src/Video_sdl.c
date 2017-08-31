@@ -1,6 +1,6 @@
 #include "SDL.h"
 #include <android/log.h>
-
+#include "VideoPlay.h"
 //set '1' to choose a type of file to play
 #define LOAD_BGRA    1
 #define LOAD_RGB24   0
@@ -68,6 +68,10 @@ refresh_video(void *opaque) {
 
 int
 VideoSDL_play(int argc, char *argv[]) {
+
+#ifndef RealVideoPlay
+    videPlay(argc, argv);
+#else
     if (SDL_Init(SDL_INIT_VIDEO)) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());
         return -1;
@@ -172,7 +176,7 @@ VideoSDL_play(int argc, char *argv[]) {
             break;
         }
     }
-
+#endif
     exit(0);
 //    return 0;
 }

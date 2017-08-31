@@ -32,6 +32,40 @@ int SCREEN_H = 1080;
 //设置buffer输出格式，YUV：1， RGB：0
 #define BUFFER_FMT_YUV 0
 
+/**
+ * 把FFmpeg的日志打印输出到adb
+ * @param ptr
+ * @param level
+ * @param fmt
+ * @param vl
+ */
+static void log_callback_null(void *ptr, int level, const char *fmt, va_list vl) {
+    static int print_prefix = 1;
+    static int count;
+    static char prev[1024];
+    char line[1024];
+    static int is_atty;
+
+    av_log_format_line(ptr, level, fmt, vl, line, sizeof(line), &print_prefix);
+
+    strcpy(prev, line);
+    //sanitize((uint8_t *)line);
+
+//    switch (level) {
+//        case AV_LOG_DEBUG:
+//            __android_log_print(ANDROID_LOG_DEBUG, "ffmpeg: ", "%s", line);
+//            break;
+//        case AV_LOG_ERROR:
+    __android_log_print(ANDROID_LOG_ERROR, "ffmpeg: ", "%s", line);
+//            break;
+//        case AV_LOG_INFO:
+//            __android_log_print(ANDROID_LOG_INFO, "ffmpeg: ", "%s", line);
+//            break;
+//        case AV_LOG_WARNING:
+//            __android_log_print(ANDROID_LOG_WARN, "ffmpeg: ", "%s", line);
+//            break;
+//    }
+}
 
 //Android平台上使用SDL官方demo播放视频（使用ffmpeg最新版解码）
 //http://blog.csdn.net/danjuan123/article/details/65444098
@@ -39,7 +73,7 @@ int main(int argc, char **argv) {
 
     //FFmpeg Parameters
     AVFormatContext *pFormatCtx;
-    int videoStream;
+    int videoStream, audioStream;
     AVCodecContext *pCodecCtx;
     AVCodecParameters *avCodecParameters;
     AVCodec *pCodec;
@@ -62,6 +96,9 @@ int main(int argc, char **argv) {
         LOGE("no media input!");
         return -1;
     }
+//    把FFmpeg的日志打印输出到adb
+    av_log_set_callback(log_callback_null);
+
     //获取文件名
     const char *mediaUri = (const char *) argv[1];
 //    const char *mediaUri = "http://ips.ifeng.com/video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4";
@@ -83,15 +120,16 @@ int main(int argc, char **argv) {
     }
     //打印文件信息
     av_dump_format(pFormatCtx, -1, mediaUri, 0);
-    videoStream = -1;
+    videoStream = audioStream = -1;
     for (int i = 0; i < pFormatCtx->nb_streams; i++)
         //新版本ffmpeg将AVCodecContext *codec替换成*codecpar
         if (pFormatCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
             videoStream = i;
-            break;
-        }
-    if (videoStream == -1) {
-        LOGE("Couldn't find a video stream !\n");
+        } else if (pFormatCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO)
+            audioStream = i;
+
+    if (videoStream == -1 || audioStream == -1) {
+        LOGE("Couldn't find a video stream or audio stream!\n");
         return -1;
     }
 

@@ -3,8 +3,8 @@
 #include "SDL.h"
 #include <android/log.h>
 #include "Video_sdl.h"
-#include "CList.h"
 #include <libavformat/avformat.h>
+
 
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,"SDL_study", __VA_ARGS__)
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,"SDL_study", __VA_ARGS__)
@@ -317,7 +317,6 @@ displayAll(int argc, char *argv[]) {
  */
 int main(int argc, char *argv[]) {
     ifFFmpegIsOkay();
-    clistTest();
 
 #if VideoPlay
     VideoSDL_play(argc, argv);
