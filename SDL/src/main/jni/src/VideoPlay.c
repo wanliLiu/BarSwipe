@@ -11,12 +11,7 @@
 #include <libswscale/swscale.h>
 #include <libswresample/swresample.h>
 #include <libavutil/avstring.h>
-#include <libavutil/pixfmt.h>
-#include <libavutil/log.h>
 #include <SDL.h>
-#include <SDL_thread.h>
-#include <stdio.h>
-#include <math.h>
 #include <android/log.h>
 
 
@@ -38,6 +33,9 @@ int SCREEN_H = 1080;
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,"ERROR: ", __VA_ARGS__)
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,"INFO: ", __VA_ARGS__)
 
+/**
+ *
+ */
 typedef struct PacketQueue {
     AVPacketList *first_pkt, *last_pkt;
     int nb_packets;
@@ -46,6 +44,10 @@ typedef struct PacketQueue {
     SDL_cond *cond;
 } PacketQueue;
 
+
+/**
+ *
+ */
 typedef struct VideoState {
     char filename[1024];
     AVFormatContext *ic;
@@ -55,12 +57,13 @@ typedef struct VideoState {
     PacketQueue audioq;
     unsigned int audio_buf_size;
     unsigned int audio_buf_index;
+    AVCodecContext *pCodecContext;
     AVPacket audio_pkt;
     uint8_t *audio_pkt_data;
     int audio_pkt_size;
     uint8_t *audio_buf;
     uint8_t *audio_buf1;
-    DECLARE_ALIGNED(16,uint8_t,audio_buf2)[AVCODEC_MAX_AUDIO_FRAME_SIZE * 4];
+    DECLARE_ALIGNED(16, uint8_t, audio_buf2)[AVCODEC_MAX_AUDIO_FRAME_SIZE * 4];
     enum AVSampleFormat audio_src_fmt;
     enum AVSampleFormat audio_tgt_fmt;
     int audio_src_channels;
@@ -76,13 +79,23 @@ typedef struct VideoState {
 
 VideoState *global_video_state;
 
-void packet_queue_init(PacketQueue *q) {
+/**
+ *
+ * @param q
+ */
+static void packet_queue_init(PacketQueue *q) {
     memset(q, 0, sizeof(PacketQueue));
     q->mutex = SDL_CreateMutex();
     q->cond = SDL_CreateCond();
 }
 
-int packet_queue_put(PacketQueue *q, AVPacket *pkt) {
+/**
+ *向队列中添加元素
+ * @param q
+ * @param pkt
+ * @return
+ */
+static int packet_queue_put(PacketQueue *q, AVPacket *pkt) {
     AVPacketList *pkt1;
 
     pkt1 = (AVPacketList *) av_malloc(sizeof(AVPacketList));
@@ -95,6 +108,7 @@ int packet_queue_put(PacketQueue *q, AVPacket *pkt) {
     SDL_LockMutex(q->mutex);
 
     if (!q->last_pkt) {
+        //第一次的时候，也就是插入第一个元素
         q->first_pkt = pkt1;
     } else {
         q->last_pkt->next = pkt1;
@@ -108,6 +122,13 @@ int packet_queue_put(PacketQueue *q, AVPacket *pkt) {
     return 0;
 }
 
+/**
+ * 从队列中取出元素
+ * @param q
+ * @param pkt
+ * @param block
+ * @return
+ */
 static int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block) {
     AVPacketList *pkt1;
     int ret;
@@ -146,13 +167,17 @@ static int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block) {
     return ret;
 }
 
+/**
+ * 清楚整个队列
+ * @param q
+ */
 static void packet_queue_flush(PacketQueue *q) {
     AVPacketList *pkt, *pkt1;
 
     SDL_LockMutex(q->mutex);
     for (pkt = q->first_pkt; pkt != NULL; pkt = pkt1) {
         pkt1 = pkt->next;
-        av_free_packet(&pkt->pkt);
+        av_packet_unref(&pkt->pkt);
         av_freep(&pkt);
     }
     q->last_pkt = NULL;
@@ -162,7 +187,12 @@ static void packet_queue_flush(PacketQueue *q) {
     SDL_UnlockMutex(q->mutex);
 }
 
-int audio_decode_frame(VideoState *is) {
+/**
+ *
+ * @param is
+ * @return
+ */
+static int audio_decode_frame(VideoState *is) {
     int len1, len2, decoded_data_size;
     AVPacket *pkt = &is->audio_pkt;
     int got_frame = 0;
@@ -178,6 +208,7 @@ int audio_decode_frame(VideoState *is) {
             } else
                 av_frame_unref(is->audio_frame);
 
+//            int get = avcodec_send_packet()
             len1 = avcodec_decode_audio4(is->audio_st->codec, is->audio_frame, &got_frame, pkt);
             if (len1 < 0) {
                 // error, skip the frame
@@ -211,7 +242,8 @@ int audio_decode_frame(VideoState *is) {
                 dec_channel_layout != is->audio_src_channel_layout ||
                 is->audio_frame->sample_rate != is->audio_src_freq ||
                 (wanted_nb_samples != is->audio_frame->nb_samples && !is->swr_ctx)) {
-                if (is->swr_ctx) swr_free(&is->swr_ctx);
+                if (is->swr_ctx)
+                    swr_free(&is->swr_ctx);
                 is->swr_ctx = swr_alloc_set_opts(NULL,
                                                  is->audio_tgt_channel_layout,
                                                  is->audio_tgt_fmt,
@@ -269,16 +301,25 @@ int audio_decode_frame(VideoState *is) {
             return resampled_data_size;
         }
 
-        if (pkt->data) av_free_packet(pkt);
+        if (pkt->data)
+            av_packet_unref(pkt);
         memset(pkt, 0, sizeof(*pkt));
-        if (is->quit) return -1;
-        if (packet_queue_get(&is->audioq, pkt, 1) < 0) return -1;
+        if (is->quit)
+            return -1;
+        if (packet_queue_get(&is->audioq, pkt, 1) < 0)
+            return -1;
 
         is->audio_pkt_data = pkt->data;
         is->audio_pkt_size = pkt->size;
     }
 }
 
+/**
+ *
+ * @param userdata
+ * @param stream
+ * @param len
+ */
 void audio_callback(void *userdata, Uint8 *stream, int len) {
     VideoState *is = (VideoState *) userdata;
     int len1, audio_data_size;
@@ -309,6 +350,12 @@ void audio_callback(void *userdata, Uint8 *stream, int len) {
     }
 }
 
+/**
+ *
+ * @param is
+ * @param stream_index
+ * @return
+ */
 int stream_component_open(VideoState *is, int stream_index) {
     AVFormatContext *ic = is->ic;
     AVCodecContext *codecCtx;
@@ -322,7 +369,16 @@ int stream_component_open(VideoState *is, int stream_index) {
         return -1;
     }
 
-    codecCtx = ic->streams[stream_index]->codec;
+    AVCodecParameters *parameters = ic->streams[stream_index]->codecpar;
+    codec = avcodec_find_decoder(parameters->codec_id);
+    codecCtx = avcodec_alloc_context3(codec);
+
+    //transform
+    if (avcodec_parameters_to_context(codecCtx, parameters) < 0) {
+        LOGE("copy the codec parameters to context fail!");
+        return -1;
+    }
+
     wanted_nb_channels = codecCtx->channels;
     if (!wanted_channel_layout ||
         wanted_nb_channels != av_get_channel_layout_nb_channels(wanted_channel_layout)) {
@@ -379,7 +435,6 @@ int stream_component_open(VideoState *is, int stream_index) {
     is->audio_src_channel_layout = is->audio_tgt_channel_layout = wanted_channel_layout;
     is->audio_src_channels = is->audio_tgt_channels = spec.channels;
 
-    codec = avcodec_find_decoder(codecCtx->codec_id);
     if (!codec || (avcodec_open2(codecCtx, codec, NULL) < 0)) {
         fprintf(stderr, "Unsupported codec!\n");
         return -1;
@@ -394,6 +449,8 @@ int stream_component_open(VideoState *is, int stream_index) {
             memset(&is->audio_pkt, 0, sizeof(is->audio_pkt));
             packet_queue_init(&is->audioq);
             SDL_PauseAudio(0);
+            break;
+        case AVMEDIA_TYPE_VIDEO:
             break;
         default:
             break;
@@ -410,11 +467,17 @@ static void stream_component_close(VideoState *is, int stream_index) {
 
 }
 */
+
+/**
+ *
+ * @param arg
+ * @return
+ */
 static int decode_thread(void *arg) {
     VideoState *is = (VideoState *) arg;
     AVFormatContext *ic = NULL;
     AVPacket pkt1, *packet = &pkt1;
-    int ret, i, audio_index = -1;
+    int ret, i, audio_index = -1, video_index = -1;
 
     is->audioStream = -1;
     global_video_state = is;
@@ -427,14 +490,18 @@ static int decode_thread(void *arg) {
     }
     av_dump_format(ic, 0, is->filename, 0);
     for (i = 0; i < ic->nb_streams; i++) {
-        if (ic->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO && audio_index < 0) {
+        if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO && audio_index < 0) {
             audio_index = i;
-            break;
+        } else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO && video_index < 0) {
+            video_index = i;
         }
     }
+
+
     if (audio_index >= 0) {
         stream_component_open(is, audio_index);
     }
+
     if (is->audioStream < 0) {
         fprintf(stderr, "%s: could not open codecs\n", is->filename);
         goto fail;
@@ -448,7 +515,7 @@ static int decode_thread(void *arg) {
         }
         ret = av_read_frame(is->ic, packet);
         if (ret < 0) {
-            if (ret == AVERROR_EOF || url_feof(is->ic->pb)) {
+            if (ret == AVERROR_EOF || avio_feof(is->ic->pb)) {
                 break;
             }
             if (is->ic->pb && is->ic->pb->error) {
@@ -460,7 +527,7 @@ static int decode_thread(void *arg) {
         if (packet->stream_index == is->audioStream) {
             packet_queue_put(&is->audioq, packet);
         } else {
-            av_free_packet(packet);
+            av_packet_unref(packet);
         }
     }
 
