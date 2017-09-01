@@ -369,16 +369,7 @@ int stream_component_open(VideoState *is, int stream_index) {
         return -1;
     }
 
-    AVCodecParameters *parameters = ic->streams[stream_index]->codecpar;
-    codec = avcodec_find_decoder(parameters->codec_id);
-    codecCtx = avcodec_alloc_context3(codec);
-
-    //transform
-    if (avcodec_parameters_to_context(codecCtx, parameters) < 0) {
-        LOGE("copy the codec parameters to context fail!");
-        return -1;
-    }
-
+    codecCtx = ic->streams[stream_index]->codec;
     wanted_nb_channels = codecCtx->channels;
     if (!wanted_channel_layout ||
         wanted_nb_channels != av_get_channel_layout_nb_channels(wanted_channel_layout)) {
@@ -434,7 +425,7 @@ int stream_component_open(VideoState *is, int stream_index) {
     is->audio_src_freq = is->audio_tgt_freq = spec.freq;
     is->audio_src_channel_layout = is->audio_tgt_channel_layout = wanted_channel_layout;
     is->audio_src_channels = is->audio_tgt_channels = spec.channels;
-
+    codec = avcodec_find_decoder(codecCtx->codec_id);
     if (!codec || (avcodec_open2(codecCtx, codec, NULL) < 0)) {
         fprintf(stderr, "Unsupported codec!\n");
         return -1;
