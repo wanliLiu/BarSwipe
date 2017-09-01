@@ -13,6 +13,7 @@
 #include <libavutil/avstring.h>
 #include <SDL.h>
 #include <android/log.h>
+#include <libavutil/imgutils.h>
 
 
 //屏幕参数
@@ -389,6 +390,7 @@ int stream_component_open(VideoState *is, int stream_index) {
     wanted_spec.callback = audio_callback;
     wanted_spec.userdata = is;
 
+    //输入我们希望的参数 初始化成功 获取实际使用的参数
     while (SDL_OpenAudio(&wanted_spec, &spec) < 0) {
         fprintf(stderr, "SDL_OpenAudio (%d channels): %s\n", wanted_spec.channels, SDL_GetError());
         wanted_spec.channels = next_nb_channels[FFMIN(7, wanted_spec.channels)];
@@ -425,11 +427,13 @@ int stream_component_open(VideoState *is, int stream_index) {
     is->audio_src_freq = is->audio_tgt_freq = spec.freq;
     is->audio_src_channel_layout = is->audio_tgt_channel_layout = wanted_channel_layout;
     is->audio_src_channels = is->audio_tgt_channels = spec.channels;
+
     codec = avcodec_find_decoder(codecCtx->codec_id);
     if (!codec || (avcodec_open2(codecCtx, codec, NULL) < 0)) {
         fprintf(stderr, "Unsupported codec!\n");
         return -1;
     }
+
     ic->streams[stream_index]->discard = AVDISCARD_DEFAULT;
     switch (codecCtx->codec_type) {
         case AVMEDIA_TYPE_AUDIO:
@@ -572,50 +576,13 @@ static void log_callback_null(void *ptr, int level, const char *fmt, va_list vl)
 //    }
 }
 
+/**
+ *
+ * @return
+ */
+static int play_video() {
 
-void videPlay(int argc, char *argv[]) {
-    __android_log_print(ANDROID_LOG_INFO, "SDL", "%d", avcodec_version());
     SDL_Event event;
-    VideoState *is;
-
-    av_register_all();
-
-    is = (VideoState *) av_mallocz(sizeof(VideoState));
-
-//    if (argc < 2) {
-//       fprintf(stderr, "Usage: test <file>\n");
-//        exit(1);
-//    }
-
-    if (SDL_Init(SDL_INIT_AUDIO)) {
-        fprintf(stderr, "Could not initialize SDL - %s\n", SDL_GetError());
-        exit(1);
-    }
-
-    av_strlcpy(is->filename, "/storage/emulated/0/convexd/1989823-102-086-0009.mp4",
-               sizeof(is->filename));
-
-    const char *name = "Particles";
-    is->parse_tid = SDL_CreateThread(decode_thread, name, is);
-    if (!is->parse_tid) {
-        av_free(is);
-        return;
-    }
-
-//    for(;;) {
-//        SDL_WaitEvent(&event);
-//        switch(event.type) {
-//            case FF_QUIT_EVENT:
-//            case SDL_QUIT:
-//                is->quit = 1;
-//                SDL_Quit();
-//                exit(0);
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
     //FFmpeg Parameters
     AVFormatContext *pFormatCtx;
     int videoStream, audioStream;
@@ -652,12 +619,12 @@ void videPlay(int argc, char *argv[]) {
     //判断文件流是否能打开
     if (avformat_open_input(&pFormatCtx, mediaUri, NULL, NULL) != 0) {
         LOGE("Couldn't open input stream! \n");
-        return;
+        return -1;
     }
     //判断能够找到文件流信息
     if (avformat_find_stream_info(pFormatCtx, NULL) < 0) {
         LOGE("couldn't find open stream information !\n");
-        return;
+        return -1;
     }
     //打印文件信息
     av_dump_format(pFormatCtx, -1, mediaUri, 0);
@@ -671,7 +638,7 @@ void videPlay(int argc, char *argv[]) {
 
     if (videoStream == -1 || audioStream == -1) {
         LOGE("Couldn't find a video stream or audio stream!\n");
-        return;
+        return -1;
     }
 
 
@@ -693,13 +660,13 @@ void videPlay(int argc, char *argv[]) {
     //transform
     if (avcodec_parameters_to_context(pCodecCtx, avCodecParameters) < 0) {
         LOGE("copy the codec parameters to context fail!");
-        return;
+        return -1;
     }
     //打开codec
     int errorCode = avcodec_open2(pCodecCtx, pCodec, NULL);
     if (errorCode < 0) {
         LOGE("Unable to open codec!\n");
-        return;
+        return -1;
     };
 
     //alloc frame of ffmpeg decode
@@ -707,7 +674,7 @@ void videPlay(int argc, char *argv[]) {
 
     if (pFrame == NULL) {
         LOGE("Unable to allocate an AVFrame!\n");
-        return;
+        return -1;
     }
 
     //decode packet
@@ -828,4 +795,73 @@ void videPlay(int argc, char *argv[]) {
     avcodec_close(pCodecCtx);
     avformat_close_input(&pFormatCtx);
     //   SDL_Quit();
+}
+
+/**
+ *
+ * @return
+ */
+static int play_audio() {
+    __android_log_print(ANDROID_LOG_INFO, "SDL", "%d", avcodec_version());
+    SDL_Event event;
+    VideoState *is;
+
+    av_register_all();
+    avformat_network_init();
+
+//    把FFmpeg的日志打印输出到adb
+    av_log_set_callback(log_callback_null);
+
+    is = (VideoState *) av_mallocz(sizeof(VideoState));
+
+//    if (argc < 2) {
+//       fprintf(stderr, "Usage: test <file>\n");
+//        exit(1);
+//    }
+
+    if (SDL_Init(SDL_INIT_AUDIO)) {
+        fprintf(stderr, "Could not initialize SDL - %s\n", SDL_GetError());
+        exit(1);
+    }
+
+//    const char *Url = "http://video19.ifeng.com/video09/2014/06/16/1989823-102-086-0009.mp4";
+    const char *Url = "/storage/emulated/0/convexd/1989823-102-086-0009.mp4";
+    av_strlcpy(is->filename, Url, sizeof(is->filename));
+
+    const char *name = "Particles";
+    is->parse_tid = SDL_CreateThread(decode_thread, name, is);
+    if (!is->parse_tid) {
+        av_free(is);
+        return -1;
+    }
+
+    for (;;) {
+        SDL_WaitEvent(&event);
+        switch (event.type) {
+            case FF_QUIT_EVENT:
+            case SDL_QUIT:
+                is->quit = 1;
+                SDL_Quit();
+                exit(0);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+#define video_play 0
+#define audio_play 1
+
+void VideoPlay(int argc, char *argv[]) {
+
+#if audio_play
+    play_audio();
+#endif
+
+#if video_play
+    play_video();
+#endif
+
+    return;
 }
