@@ -70,7 +70,7 @@ int
 VideoSDL_play(int argc, char *argv[]) {
 
 #ifndef RealVideoPlay
-    videPlay(argc, argv);
+    VideoPlay(argc, argv);
 #else
     if (SDL_Init(SDL_INIT_VIDEO)) {
         printf("Could not initialize SDL - %s\n", SDL_GetError());

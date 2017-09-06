@@ -5,6 +5,6 @@
 #ifndef BARSWIPE_VIDEOPLAY_H
 #define BARSWIPE_VIDEOPLAY_H
 
-extern void videPlay(int argc, char *argv[]);
+extern void VideoPlay(int argc, char *argv[]);
 
 #endif //BARSWIPE_VIDEOPLAY_H
