@@ -19,6 +19,11 @@ import android.widget.Toast;
 
 import com.barswipe.R;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Soli on 2016/9/27.
  */
@@ -43,12 +48,57 @@ public class clickTextview extends TextView {
         return new String(Character.toChars(unicode));
     }
 
+    /**
+     *
+     */
+    private void findUrlString() {
+        String rule = "((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+        String str = "https://www.baidu.com/\n是代理十多块\nhttp://www.jianshu.com/p/4276163968c8是的是的是的https://github.com/打开十多块www.baidu.com熟练度";
 
+        Matcher matcher = Pattern.compile(rule).matcher(str);
+        List<String> urlList = new ArrayList<>();
+        while (matcher.find()) {
+            urlList.add(matcher.group());
+        }
+
+        if (urlList.isEmpty()) {
+            setText(str);
+            return;
+        }
+
+        for (int i = 0; i < urlList.size(); i++) {
+            String temp = urlList.get(i);
+            int urlIndex = str.indexOf(temp);
+            if (i == 0 && urlIndex == 0) {
+                SpannableString sp = new SpannableString("网页链接");
+                sp.setSpan(new clickSpan(temp), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//SPAN_EXCLUSIVE_INCLUSIVE SPAN_EXCLUSIVE_EXCLUSIVE
+                setText(sp);
+            } else {
+                String text = str.substring(0, urlIndex);
+                if (i == 0) {
+                    setText(text);
+                } else {
+                    append(text);
+                }
+                SpannableString sp = new SpannableString("网页链接");
+                sp.setSpan(new clickSpan(temp), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//SPAN_EXCLUSIVE_INCLUSIVE SPAN_EXCLUSIVE_EXCLUSIVE
+                append(sp);
+            }
+            str = str.substring(urlIndex + temp.length());
+        }
+
+        append(str);
+    }
+
+    /**
+     *
+     */
     private void init() {
+        findUrlString();
 
         int unicodeJoy = 0x1F602;
         String emojiString = getEmojiStringByUnicode(unicodeJoy);
-        setText(emojiString);
+        append(emojiString);
 
         //这句话很重要
         /**用自定义这个 点击图片友按压效果没有**/
