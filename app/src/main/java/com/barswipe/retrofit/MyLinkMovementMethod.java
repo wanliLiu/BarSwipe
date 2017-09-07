@@ -1,13 +1,13 @@
 package com.barswipe.retrofit;
 
 import android.text.Layout;
+import android.text.NoCopySpan;
 import android.text.Selection;
 import android.text.Spannable;
-import android.text.method.BaseMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
@@ -16,15 +16,46 @@ import android.widget.TextView;
  * @author Soli
  * @Time 2017/9/7
  */
-public class MyLinkMovementMethod extends BaseMovementMethod {
+public class MyLinkMovementMethod implements MovementMethod {
 
     private static MyLinkMovementMethod sInstance;
+    private static Object FROM_BELOW = new NoCopySpan.Concrete();
 
     public static MovementMethod getInstance() {
         if (sInstance == null)
             sInstance = new MyLinkMovementMethod();
 
         return sInstance;
+    }
+
+    @Override
+    public void initialize(TextView widget, Spannable text) {
+
+    }
+
+    @Override
+    public boolean onKeyDown(TextView widget, Spannable text, int keyCode, KeyEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyUp(TextView widget, Spannable text, int keyCode, KeyEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onKeyOther(TextView view, Spannable text, KeyEvent event) {
+        return false;
+    }
+
+    @Override
+    public void onTakeFocus(TextView widget, Spannable text, int direction) {
+
+    }
+
+    @Override
+    public boolean onTrackballEvent(TextView widget, Spannable text, MotionEvent event) {
+        return false;
     }
 
     @Override
@@ -61,13 +92,19 @@ public class MyLinkMovementMethod extends BaseMovementMethod {
                 return true;
             } else {
                 Selection.removeSelection(buffer);
-                ViewGroup parent = (ViewGroup) widget.getParent();
-                if (parent != null) {
-                    parent.onTouchEvent(event);
-                }
             }
         }
 
+        return false;
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(TextView widget, Spannable text, MotionEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean canSelectArbitrarily() {
         return false;
     }
 }

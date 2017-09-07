@@ -13,6 +13,7 @@ import com.barswipe.flowlayout.CategoryActivity;
 import com.barswipe.flowlayout.view.FlowLayout;
 import com.barswipe.flowlayout.view.TagAdapter;
 import com.barswipe.flowlayout.view.TagFlowLayout;
+import com.barswipe.retrofit.CustomTextView;
 import com.barswipe.volume.pcm.pcm2amr.ToastUtil;
 import com.barswipe.widget.AutoWrapAdapter;
 import com.barswipe.widget.AutoWrapListView;
@@ -38,6 +39,9 @@ public class ActivityAutoWrapList extends BaseActivity {
 
     @BindView(R.id.id_flowlayout)
     TagFlowLayout id_flowlayout;
+
+    @BindView(R.id.custom)
+    CustomTextView custom;
 
     private List<String> data;
 
@@ -69,6 +73,10 @@ public class ActivityAutoWrapList extends BaseActivity {
         });
 
         findViewById(R.id.clike).setOnClickListener(view -> Toast.makeText(ActivityAutoWrapList.this, "ActivityAutoWrapList", Toast.LENGTH_LONG).show());
+
+
+//        custom.setText("dskdlsdklsdksldksldklsdk");
+        custom.addShowOriginalPicture(view -> Toast.makeText(ActivityAutoWrapList.this, "CustomTextView", Toast.LENGTH_LONG).show());
     }
 
 

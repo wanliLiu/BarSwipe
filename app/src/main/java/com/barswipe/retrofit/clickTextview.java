@@ -16,6 +16,7 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -108,7 +109,7 @@ public class clickTextview extends TextView implements View.OnTouchListener {
     private void init() {
 
 //        setHighlightColor(getContext().getResources().getColor(R.color.red_press));
-        setOnTouchListener(this);
+//        setOnTouchListener(this);
 
         SpannableStringBuilder builder = findUrlString();
 
@@ -116,18 +117,19 @@ public class clickTextview extends TextView implements View.OnTouchListener {
         String emojiString = getEmojiStringByUnicode(unicodeJoy);
         builder.append(emojiString);
 
-        setFocusable(true);
+//        setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
+
         //这句话很重要
         /**用自定义这个 点击图片友按压效果没有**/
 //        LocalLinkMovementMethod method = LocalLinkMovementMethod.getInstance();
 //        method.setClickColor(getResources().getColor(R.color.colorPrimary_press));
 //        setMovementMethod(method);
         /**用默认 点击图片友按压效果**/
-//        setMovementMethod(LinkMovementMethod.getInstance());
-        setFocusable(true);
-        setClickable(true);
+        setMovementMethod(MyLinkMovementMethod.getInstance());
+//        setFocusable(true);
+//        setClickable(true);
 //        setOnLongClickListener(view -> true);
-        setLongClickable(true);
+//        setLongClickable(true);
 //        setBackgroundResource(R.drawable.default_view_press_selector);
         builder.append("开始到好似看电视了贷款 ");
 
@@ -160,6 +162,40 @@ public class clickTextview extends TextView implements View.OnTouchListener {
         setText(builder);
     }
 
+    /**
+     * @param textView
+     * @param spannable
+     * @param event
+     * @return
+     */
+    private clickSpan getPressedSpan(TextView textView, Spannable spannable, MotionEvent event) {
+
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+
+        x -= textView.getTotalPaddingLeft();
+        y -= textView.getTotalPaddingTop();
+
+        x += textView.getScrollX();
+        y += textView.getScrollY();
+
+        Layout layout = textView.getLayout();
+        int line = layout.getLineForVertical(y);
+        int off = layout.getOffsetForHorizontal(line, x);
+
+        clickSpan[] link = spannable.getSpans(off, off, clickSpan.class);
+        clickSpan touchedSpan = null;
+        if (link.length > 0) {
+            touchedSpan = link[0];
+        }
+        return touchedSpan;
+    }
+
+    /**
+     * @param v
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         CharSequence text = ((TextView) v).getText();
@@ -182,11 +218,13 @@ public class clickTextview extends TextView implements View.OnTouchListener {
             int line = layout.getLineForVertical(y);
             int off = layout.getOffsetForHorizontal(line, x);
 
-            ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
+            clickSpan[] link = buffer.getSpans(off, off, clickSpan.class);
             if (link.length != 0) {
                 if (action == MotionEvent.ACTION_UP) {
+                    link[0].setPressed(false);
                     link[0].onClick(v);
                 } else if (action == MotionEvent.ACTION_DOWN) {
+                    link[0].setPressed(true);
                     Selection.setSelection(buffer,
                             buffer.getSpanStart(link[0]),
                             buffer.getSpanEnd(link[0]));
@@ -247,6 +285,8 @@ public class clickTextview extends TextView implements View.OnTouchListener {
     private class clickSpan extends ClickableSpan {
 
         String attention = "";
+        private TextPaint paint;
+        private boolean mIsPressed;
 
         public clickSpan(String temp) {
             attention = temp;
@@ -257,11 +297,23 @@ public class clickTextview extends TextView implements View.OnTouchListener {
             Toast.makeText(getContext(), attention, Toast.LENGTH_SHORT).show();
         }
 
+        /**
+         * @param isSelected
+         */
+        public void setPressed(boolean isSelected) {
+//            mIsPressed = isSelected;
+//            if (paint != null)
+//                paint.bgColor = mIsPressed ? 0xffFF3B00 : 0x00000000;
+        }
+
         @Override
         public void updateDrawState(TextPaint ds) {
+            paint = ds;
 //            super.updateDrawState(ds);
             ds.setColor(getResources().getColor(R.color.colorPrimary));
+//            ds.bgColor = mIsPressed ? 0xffFF3B00 : 0x00000000;
             ds.setUnderlineText(false);
+            Log.e("IsPressed", String.valueOf(mIsPressed));
         }
     }
 }
