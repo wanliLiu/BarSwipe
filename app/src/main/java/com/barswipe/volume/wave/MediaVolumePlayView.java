@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -130,7 +129,7 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
      */
     private MediaControllerCompat getMediaController() {
         if (mMediaController == null) {
-            mMediaController = ((AppCompatActivity) getContext()).getSupportMediaController();
+//            mMediaController = ((AppCompatActivity) getContext()).getSupportMediaController();
             callback = new playbackCallback();
         }
 
@@ -166,6 +165,32 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
     public void setData(String path, String waveData) {
         this.volumPath = path;
         wavePlay.setWaveData(waveData);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mMediaController != null)
+            mMediaController.unregisterCallback(callback);
+    }
+
+    /**
+     * @param mlistener
+     */
+    public void setonActionTypeListener(onActionTypeListener mlistener) {
+        listener = mlistener;
+    }
+
+    /**
+     * 右边视图点击回调
+     */
+    public interface onActionTypeListener {
+        /**
+         * @param type
+         * @link actionType_delete
+         * @link actionType_record
+         */
+        public void onActionType(int type);
     }
 
     /**
@@ -204,31 +229,5 @@ public class MediaVolumePlayView extends FrameLayout implements View.OnClickList
         public void onExtrasChanged(Bundle extras) {
             super.onExtrasChanged(extras);
         }
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (mMediaController != null)
-            mMediaController.unregisterCallback(callback);
-    }
-
-    /**
-     * @param mlistener
-     */
-    public void setonActionTypeListener(onActionTypeListener mlistener) {
-        listener = mlistener;
-    }
-
-    /**
-     * 右边视图点击回调
-     */
-    public interface onActionTypeListener {
-        /**
-         * @param type
-         * @link actionType_delete
-         * @link actionType_record
-         */
-        public void onActionType(int type);
     }
 }

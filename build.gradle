@@ -31,6 +31,9 @@ allprojects {
         jcenter() // If not already there
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/soli/maven" }
+        maven {
+            url "https://maven.google.com"
+        }
         mavenCentral()
     }
 

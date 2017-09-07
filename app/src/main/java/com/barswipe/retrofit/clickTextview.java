@@ -6,13 +6,18 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.text.Layout;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +33,8 @@ import java.util.regex.Pattern;
  * Created by Soli on 2016/9/27.
  */
 
-public class clickTextview extends TextView {
+public class clickTextview extends TextView implements View.OnTouchListener {
+
     public clickTextview(Context context) {
         super(context);
         init();
@@ -49,11 +55,23 @@ public class clickTextview extends TextView {
     }
 
     /**
+     * @param url
+     * @return
+     */
+    private SpannableString getUrlSpan(String url) {
+        SpannableString sp = new SpannableString("网页链接");
+        sp.setSpan(new clickSpan(url), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sp;
+    }
+
+    /**
      *
      */
-    private void findUrlString() {
+    private SpannableStringBuilder findUrlString() {
+        SpannableStringBuilder builder = new SpannableStringBuilder("");
+
         String rule = "((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
-        String str = "https://www.baidu.com/\n是代理十多块\nhttp://www.jianshu.com/p/4276163968c8是的是的是的https://github.com/打开十多块www.baidu.com熟练度";
+        String str = "https://www.baidu.com/是代理十多块是代理十多块http://www.jianshu.com/p/4276163968c8是的是理十多块是代理十多块是的是的https://github.com/打开十多块www.baidu.com熟练度代理十多块是代理十多块是代理十多块是代理十多块是代理十多块是代理十多";
 
         Matcher matcher = Pattern.compile(rule).matcher(str);
         List<String> urlList = new ArrayList<>();
@@ -62,52 +80,56 @@ public class clickTextview extends TextView {
         }
 
         if (urlList.isEmpty()) {
-            setText(str);
-            return;
+            builder.append(str);
+            return builder;
         }
+
 
         for (int i = 0; i < urlList.size(); i++) {
             String temp = urlList.get(i);
             int urlIndex = str.indexOf(temp);
             if (i == 0 && urlIndex == 0) {
-                SpannableString sp = new SpannableString("网页链接");
-                sp.setSpan(new clickSpan(temp), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//SPAN_EXCLUSIVE_INCLUSIVE SPAN_EXCLUSIVE_EXCLUSIVE
-                setText(sp);
+                builder.append(getUrlSpan(temp));
             } else {
-                String text = str.substring(0, urlIndex);
-                if (i == 0) {
-                    setText(text);
-                } else {
-                    append(text);
-                }
-                SpannableString sp = new SpannableString("网页链接");
-                sp.setSpan(new clickSpan(temp), 0, sp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//SPAN_EXCLUSIVE_INCLUSIVE SPAN_EXCLUSIVE_EXCLUSIVE
-                append(sp);
+                builder.append(str.substring(0, urlIndex));
+                builder.append(getUrlSpan(temp));
             }
             str = str.substring(urlIndex + temp.length());
         }
 
-        append(str);
+        builder.append(str);
+
+        return builder;
     }
 
     /**
      *
      */
     private void init() {
-        findUrlString();
+
+//        setHighlightColor(getContext().getResources().getColor(R.color.red_press));
+        setOnTouchListener(this);
+
+        SpannableStringBuilder builder = findUrlString();
 
         int unicodeJoy = 0x1F602;
         String emojiString = getEmojiStringByUnicode(unicodeJoy);
-        append(emojiString);
+        builder.append(emojiString);
 
+        setFocusable(true);
         //这句话很重要
         /**用自定义这个 点击图片友按压效果没有**/
-        LocalLinkMovementMethod method = LocalLinkMovementMethod.getInstance();
-        method.setClickColor(getResources().getColor(R.color.colorPrimary_press));
-        setMovementMethod(method);
+//        LocalLinkMovementMethod method = LocalLinkMovementMethod.getInstance();
+//        method.setClickColor(getResources().getColor(R.color.colorPrimary_press));
+//        setMovementMethod(method);
         /**用默认 点击图片友按压效果**/
 //        setMovementMethod(LinkMovementMethod.getInstance());
-        append("开始到好似看电视了贷款 ");
+        setFocusable(true);
+        setClickable(true);
+//        setOnLongClickListener(view -> true);
+        setLongClickable(true);
+//        setBackgroundResource(R.drawable.default_view_press_selector);
+        builder.append("开始到好似看电视了贷款 ");
 
         String temp = "   " + " " + "@许嵩";
         SpannableString sp = new SpannableString(temp);
@@ -125,16 +147,59 @@ public class clickTextview extends TextView {
         };
         sp.setSpan(span, 2, 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//图片
         sp.setSpan(new clickSpan(temp), 0, temp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//SPAN_EXCLUSIVE_INCLUSIVE SPAN_EXCLUSIVE_EXCLUSIVE
-        append(sp);
+        builder.append(sp);
 
-        append("有开始了哦 sssssssssssssssssssss不是慢");
+        builder.append("有开始了哦 sssssssssssssssssssss不是慢");
 
         String tes = "@刘万里 我也iwelkelwke了看完饿了";
         SpannableString s23p = new SpannableString(tes);
         s23p.setSpan(new clickSpan(tes), 0, tes.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//SPAN_EXCLUSIVE_INCLUSIVE SPAN_EXCLUSIVE_EXCLUSIVE
-        append(s23p);
-        append("  内容开始了哦");
+        builder.append(s23p);
+        builder.append("  内容开始了哦 \n 内容开始了哦内容开始了哦内容开始了哦内容开始了哦内容开始了哦内容开始了哦");
+
+        setText(builder);
     }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        CharSequence text = ((TextView) v).getText();
+        Spannable buffer = Spannable.Factory.getInstance().newSpannable(text);
+        TextView widget = (TextView) v;
+        int action = event.getAction();
+
+        if (action == MotionEvent.ACTION_UP ||
+                action == MotionEvent.ACTION_DOWN) {
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+
+            x -= widget.getTotalPaddingLeft();
+            y -= widget.getTotalPaddingTop();
+
+            x += widget.getScrollX();
+            y += widget.getScrollY();
+
+            Layout layout = widget.getLayout();
+            int line = layout.getLineForVertical(y);
+            int off = layout.getOffsetForHorizontal(line, x);
+
+            ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
+            if (link.length != 0) {
+                if (action == MotionEvent.ACTION_UP) {
+                    link[0].onClick(v);
+                } else if (action == MotionEvent.ACTION_DOWN) {
+                    Selection.setSelection(buffer,
+                            buffer.getSpanStart(link[0]),
+                            buffer.getSpanEnd(link[0]));
+                }
+
+                return true;
+            } else {
+                Selection.removeSelection(buffer);
+            }
+        }
+        return false;
+    }
+
 
     /**
      * 默认的图片点击是没有事件的，这里我们自己添加事件

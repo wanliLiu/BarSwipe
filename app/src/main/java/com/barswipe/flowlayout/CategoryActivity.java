@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.barswipe.R;
 import com.barswipe.flowlayout.view.FlowLayout;
@@ -84,6 +85,9 @@ public class CategoryActivity extends AppCompatActivity {
 
 
         mTabLayout.setupWithViewPager(mViewPager);
+
+
+        findViewById(R.id.clike).setOnClickListener(view -> Toast.makeText(CategoryActivity.this, "CategoryActivity", Toast.LENGTH_LONG).show());
     }
 
     private List<String> getData() {

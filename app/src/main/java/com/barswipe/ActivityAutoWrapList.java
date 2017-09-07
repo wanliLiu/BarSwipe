@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.barswipe.flowlayout.CategoryActivity;
 import com.barswipe.flowlayout.view.FlowLayout;
@@ -38,7 +39,6 @@ public class ActivityAutoWrapList extends BaseActivity {
     @BindView(R.id.id_flowlayout)
     TagFlowLayout id_flowlayout;
 
-
     private List<String> data;
 
 
@@ -67,7 +67,10 @@ public class ActivityAutoWrapList extends BaseActivity {
                 return view;
             }
         });
+
+        findViewById(R.id.clike).setOnClickListener(view -> Toast.makeText(ActivityAutoWrapList.this, "ActivityAutoWrapList", Toast.LENGTH_LONG).show());
     }
+
 
     @OnClick({R.id.thrid})
     public void onClick(View view) {
@@ -104,7 +107,6 @@ public class ActivityAutoWrapList extends BaseActivity {
         data.add("可热插拔");
         data.add("等优良的");
         data.add("特性");
-
 
 
         return data;
