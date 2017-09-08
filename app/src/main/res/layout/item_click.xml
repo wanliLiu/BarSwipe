@@ -3,6 +3,7 @@
     android:id="@+id/clike"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/default_view_press_selector"
     android:orientation="vertical"
     android:padding="10dp">
 

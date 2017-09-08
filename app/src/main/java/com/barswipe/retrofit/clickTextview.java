@@ -108,8 +108,9 @@ public class clickTextview extends TextView implements View.OnTouchListener {
      */
     private void init() {
 
+        setBackgroundResource(R.drawable.selector_transparent);
 //        setHighlightColor(getContext().getResources().getColor(R.color.red_press));
-//        setOnTouchListener(this);
+        setOnTouchListener(this);
 
         SpannableStringBuilder builder = findUrlString();
 
@@ -125,7 +126,7 @@ public class clickTextview extends TextView implements View.OnTouchListener {
 //        method.setClickColor(getResources().getColor(R.color.colorPrimary_press));
 //        setMovementMethod(method);
         /**用默认 点击图片友按压效果**/
-        setMovementMethod(MyLinkMovementMethod.getInstance());
+//        setMovementMethod(MyLinkMovementMethod.getInstance());
 //        setFocusable(true);
 //        setClickable(true);
 //        setOnLongClickListener(view -> true);
@@ -225,9 +226,7 @@ public class clickTextview extends TextView implements View.OnTouchListener {
                     link[0].onClick(v);
                 } else if (action == MotionEvent.ACTION_DOWN) {
                     link[0].setPressed(true);
-                    Selection.setSelection(buffer,
-                            buffer.getSpanStart(link[0]),
-                            buffer.getSpanEnd(link[0]));
+                    Selection.setSelection(buffer, buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
                 }
 
                 return true;

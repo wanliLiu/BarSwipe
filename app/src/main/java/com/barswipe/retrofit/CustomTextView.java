@@ -47,13 +47,8 @@ public class CustomTextView extends TextView {
      */
     private void init() {
         setBackgroundResource(R.drawable.selector_transparent);
-
-        setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                return true;
-            }
-        });
+//
+//        setOnLongClickListener(view -> true);
 
     }
 //
