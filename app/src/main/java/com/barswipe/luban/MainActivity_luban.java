@@ -35,6 +35,8 @@ public class MainActivity_luban extends AppCompatActivity {
     private TextView thumbImageSize;
     private ImageView image;
 
+    private RxPermissions permissions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +50,12 @@ public class MainActivity_luban extends AppCompatActivity {
         thumbImageSize = (TextView) findViewById(R.id.thumb_image_size);
         image = (ImageView) findViewById(R.id.image);
 
+        permissions = new RxPermissions(this);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         RxView.clicks(fab)
                 .throttleFirst(500, TimeUnit.MICROSECONDS)
-                .compose(RxPermissions.getInstance(this).ensure(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE))
+                .compose(permissions.ensure(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE))
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
                         PhotoPicker.builder()

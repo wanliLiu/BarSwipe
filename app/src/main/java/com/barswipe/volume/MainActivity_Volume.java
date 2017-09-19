@@ -45,12 +45,9 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
     public final String AUDIORECORDER = "audiorecorder";
 
     public TextView duration, voice, size;
-    private EditText timeInput;
-
-    private Button audiorecorder, mediarecorder, play;
-
     public boolean recordering = false;
-
+    private EditText timeInput;
+    private Button audiorecorder, mediarecorder, play;
     private int isMediaRecord = 1;
 
     private long originalTime = -1l;
@@ -61,6 +58,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
     private Timer timer;
 
     private Uri uri;
+    private RxPermissions permissions;
 
     private String getTime() {
         long time = System.currentTimeMillis() - originalTime;
@@ -68,7 +66,6 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         long mSecond = time - second * 1000;
         return second + "." + mSecond;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +82,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
         mediarecorder.setOnClickListener(this);
         play.setOnClickListener(this);
 
+        permissions = new RxPermissions(this);
 
         RxView.clicks(findViewById(R.id.mediaT))
                 .subscribe(a -> startActivity(new Intent(MainActivity_Volume.this, SupportMediaTest.class)));
@@ -247,7 +245,7 @@ public class MainActivity_Volume extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(final View v) {
 
-        RxPermissions.getInstance(this).request(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        permissions.request(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(aBoolean -> {
                     switch (v.getId()) {
                         case R.id.mediarecorder: {
