@@ -272,6 +272,7 @@ public class RxPermissionsFragment extends Fragment {
                 .show();
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
