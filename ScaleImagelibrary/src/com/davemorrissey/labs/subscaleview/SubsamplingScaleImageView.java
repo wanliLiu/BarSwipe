@@ -50,6 +50,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -84,12 +85,15 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -2380,6 +2384,63 @@ public class SubsamplingScaleImageView extends View {
         mDraweeHolder.setController(controller);
     }
 
+    final String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/t2323est.jpg";
+
+    private Handler DATAhandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (new File(path).exists()) {
+                setImage(ImageSource.uri(path));
+                setMaxScale(SubsamplingScaleImageView.SCALE_TYPE_CUSTOM);
+                setMinimumScaleType(SCALE_TYPE_CUSTOM);
+                int width = getWidth();
+                int height = getHeight();
+                if (width == 0 || height == 0) {
+                    width = AndroidUtils.getScreenWidth(getContext());
+                    height = AndroidUtils.getScreenHeight(getContext());
+                }
+                if ((getSHeight() > height) && getSHeight() / getSWidth() > height / width) {
+                    PointF center = new PointF(getSWidth() / 2, 0);
+                    float targetScale = Math.max(width / (float) getSWidth(), height / (float) getSHeight());
+                    setScaleAndCenter(targetScale, center);
+                    setMinScale(targetScale);
+                }
+
+                if (getSWidth() * 4 < getSHeight()) {
+                    SubsamplingScaleImageView.this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                }
+            }
+        }
+    };
+
+    public void tesst() {
+        try {
+
+            final DownUtil util = new DownUtil("http://img01.starfans.com/100016_699e814fe7a18ae66b48bc72f3e59ede[600_8986_561].jpg", path, 4);
+            util.download();
+            // 定义每秒调度获取一次系统的完成进度
+            final Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                public void run() {
+                    // 获取下载任务的完成比率
+                    double completeRate = util.getCompleteRate();
+                    int mDownStatus = (int) (completeRate * 100);
+                    Log.e("下载进度", String.valueOf(mDownStatus));
+                    // 下载完成后取消任务调度
+                    if (mDownStatus >= 100) {
+                        DATAhandler.sendEmptyMessage(0);
+                    }
+                }
+            }, 0, 100);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * An event listener, allowing subclasses and activities to be notified of significant events.
      */
@@ -2639,6 +2700,7 @@ public class SubsamplingScaleImageView extends View {
     private static class ScaleAndTranslate {
         private float scale;
         private PointF vTranslate;
+
         private ScaleAndTranslate(float scale, PointF vTranslate) {
             this.scale = scale;
             this.vTranslate = vTranslate;

@@ -18,7 +18,8 @@ public class SubsamplingActvity extends BaseActivity {
 //		subsamplingScaleImageView.setImageUri("asset:///big_pic.jpg");
 //		subsamplingScaleImageView.setDebug(true);
 //		subsamplingScaleImageView.setImageUri("res:///" + R.drawable.big_pic_big);
-		subsamplingScaleImageView.setImageUri("http://xusong.bceimg.com/100016_0cbf1e5246d28f4b5b89e352e528a039_1360.jpg");
+//		subsamplingScaleImageView.setImageUri("http://img01.starfans.com/100016_699e814fe7a18ae66b48bc72f3e59ede[600_8986_561].jpg");
+		subsamplingScaleImageView.tesst();
 		setContentView(subsamplingScaleImageView);
 	}
 }

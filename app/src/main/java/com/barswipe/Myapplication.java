@@ -34,11 +34,8 @@ public class Myapplication extends Application {
         super.onCreate();
         houseComponent = DaggerHouseComponent.builder().houseModule(new HouseModule()).build();
         app = this;
-//        Fresco.initialize(this);
-//        FrescoUtil.Init(this);
 
         FrescoUtil.Init(this);
-//        Fresco.initialize(this, ImagePipelineConfigUtils.getDefaultImagePipelineConfig(this));
 
         JSONObject object = new JSONObject();
         object.put("UserToken", "sssssdsdwqeewewe");
