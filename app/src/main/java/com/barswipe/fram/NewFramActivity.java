@@ -66,6 +66,9 @@ public class NewFramActivity extends BaseActivity {
         RxView.clicks(findViewById(R.id.snackbarTest))
                 .subscribe(a -> Snackbar.make(findViewById(R.id.snackbarTest), "Snackbar 和 FloatingActionButton的联系", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show());
+
+        RxView.clicks(findViewById(R.id.btnNew))
+                .subscribe(a -> startActivity(new Intent(NewFramActivity.this, NewScrollingActivity.class)));
     }
 
     /**
