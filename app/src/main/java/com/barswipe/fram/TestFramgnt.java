@@ -5,12 +5,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.barswipe.R;
@@ -53,7 +57,23 @@ public class TestFramgnt extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (pos == 2) {
-            return new BridgeWebView(getContext());
+            NestedScrollView view = new NestedScrollView(getContext());
+
+            LinearLayout layou = new LinearLayout(getContext());
+            layou.setOrientation(LinearLayout.VERTICAL);
+
+            TextView tex = new TextView(getContext());
+            tex.setText("我是测试的");
+            tex.setPadding(60, 60, 60, 60);
+            tex.setGravity(Gravity.CENTER);
+            tex.setBackgroundColor(getContext().getResources().getColor(R.color.green_500));
+            layou.addView(tex, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            BridgeWebView bridgeWebView = new BridgeWebView(getContext());
+            bridgeWebView.setId(29302);
+            layou.addView(bridgeWebView);
+            view.addView(layou);
+            return view;
         } else {
             return new RecyclerView(getContext());
         }
@@ -63,8 +83,8 @@ public class TestFramgnt extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (pos == 2 && view instanceof BridgeWebView) {
-            BridgeWebView webView = (BridgeWebView) view;
+        if (pos == 2 && view instanceof NestedScrollView) {
+            BridgeWebView webView = (BridgeWebView) view.findViewById(29302);
             webView.loadUrl("https://www.baidu.com");
         } else if (view instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) view;
@@ -109,7 +129,7 @@ public class TestFramgnt extends Fragment {
         @Override
         public void onBindViewHolder(TestViewHolder holder, int position) {
             holder.text.setText(String.valueOf(position));
-            holder.text.setBackgroundColor(Color.parseColor(getRandColorCode()));
+            holder.carview.setCardBackgroundColor(Color.parseColor(getRandColorCode()));
         }
 
         @Override
@@ -121,10 +141,12 @@ public class TestFramgnt extends Fragment {
     public class TestViewHolder extends RecyclerView.ViewHolder {
 
         TextView text;
+        CardView carview;
 
         public TestViewHolder(View itemView) {
             super(itemView);
             text = itemView.findViewById(R.id.text);
+            carview = itemView.findViewById(R.id.carview);
         }
     }
 }
