@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -12,22 +11,22 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <com.barswipe.fram.MyCollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:minHeight="20dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/color_orange"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false"
+            app:scrimVisibleHeightTrigger="100dp"
+            app:statusBarScrim="@color/color_orange"
             app:toolbarId="@id/toolbar">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
+                android:minHeight="?attr/actionBarSize"
                 android:orientation="vertical"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -150,8 +149,10 @@
             </RelativeLayout>
 
             <FrameLayout
+                android:id="@+id/toolbarContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/actionbar_color"
                 app:layout_collapseMode="pin">
 
                 <android.support.v7.widget.Toolbar
@@ -159,21 +160,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_gravity="top"
-                    android:minHeight="?attr/actionBarSize" />
-
-                <TextView
-                    android:id="@+id/toolbTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/color_white"
-                    android:textSize="18sp"
-                    tools:text="测试" />
+                    android:minHeight="?attr/actionBarSize"
+                    app:contentInsetStart="0dp" />
             </FrameLayout>
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        </com.barswipe.fram.MyCollapsingToolbarLayout>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout"

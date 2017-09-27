@@ -8,7 +8,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
+import android.util.Log;
+import android.view.View;
 
 import com.barswipe.R;
 
@@ -32,8 +33,8 @@ public class NewScrollingActivity extends AppCompatActivity {
 
     @BindView(R.id.app_bar)
     AppBarLayout app_bar;
-    @BindView(R.id.toolbTitle)
-    TextView toolbTitle;
+//    @BindView(R.id.toolbTitle)
+//    TextView toolbTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class NewScrollingActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        setTitle("");
+//        setTitle("");
 
         viewpage.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -63,20 +64,37 @@ public class NewScrollingActivity extends AppCompatActivity {
                 return title[position];
             }
         });
-
+        viewpage.setOffscreenPageLimit(3);
         tablayout.setupWithViewPager(viewpage);
 
-        toolbTitle.setText("小酒馆音乐空间");
+//        toolbTitle.setText("小酒馆音乐空间");
+        final View group = findViewById(R.id.toolbarContent);
         app_bar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
             int scrollRangle = appBarLayout.getTotalScrollRange();
             //初始verticalOffset为0，不能参与计算。
             if (verticalOffset == 0) {
-                toolbTitle.setAlpha(0.0f);
+//                toolbTitle.setAlpha(0.0f);
+                group.setBackgroundColor(getColorWithAlpha(0.0f, this.getResources().getColor(R.color.actionbar_color)));
             } else {
                 //保留一位小数
                 float alpha = Math.abs(Math.round(1.0f * verticalOffset / scrollRangle) * 10) / 10;
-                toolbTitle.setAlpha(alpha);
+//                toolbTitle.setAlpha(alpha);
+                group.setBackgroundColor(getColorWithAlpha(alpha, this.getResources().getColor(R.color.actionbar_color)));
             }
         });
     }
+
+
+    /**
+     * @param alpha
+     * @param baseColor
+     * @return
+     */
+    private int getColorWithAlpha(float alpha, int baseColor) {
+        Log.e("alpha", String.valueOf(alpha));
+        int a = Math.min(255, Math.max(0, (int) (alpha * 255))) << 24;
+        int rgb = 0x00ffffff & baseColor;
+        return a + rgb;
+    }
+
 }

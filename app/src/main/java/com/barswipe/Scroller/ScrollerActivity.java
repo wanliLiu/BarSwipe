@@ -2,6 +2,7 @@ package com.barswipe.Scroller;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.Button;
 
@@ -49,8 +50,10 @@ public class ScrollerActivity extends BaseActivity implements View.OnClickListen
                 startActivity(new Intent(this, MultiScreenActivity.class));
                 break;
             case R.id.bt_offset:
-                tv.offsetLeftAndRight(10);
-                tv.offsetTopAndBottom(10);
+//                tv.offsetLeftAndRight(10);
+//                tv.offsetTopAndBottom(10);
+                ViewCompat.offsetLeftAndRight(tv, 10);
+                ViewCompat.offsetTopAndBottom(tv, 10);
                 break;
         }
         int tvscrllX = findViewById(R.id.test).getScrollX();
