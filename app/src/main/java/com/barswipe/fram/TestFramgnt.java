@@ -65,11 +65,15 @@ public class TestFramgnt extends Fragment {
             TextView tex = new TextView(getContext());
             tex.setText("我是测试的");
             tex.setPadding(60, 60, 60, 60);
+            tex.setFocusable(true);
+            tex.setFocusableInTouchMode(true);
             tex.setGravity(Gravity.CENTER);
             tex.setBackgroundColor(getContext().getResources().getColor(R.color.green_500));
             layou.addView(tex, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             BridgeWebView bridgeWebView = new BridgeWebView(getContext());
+            bridgeWebView.setFocusable(false);
+            bridgeWebView.setFocusableInTouchMode(false);
             bridgeWebView.setId(29302);
             layou.addView(bridgeWebView);
             view.addView(layou);

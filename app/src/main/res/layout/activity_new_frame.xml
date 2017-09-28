@@ -36,7 +36,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Behavior"
-        app:layout_constraintBaseline_toBaselineOf="@id/themeCheck"
+        app:layout_constraintBaseline_toBaselineOf="@+id/themeCheck"
         app:layout_constraintLeft_toRightOf="@+id/themeCheck"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,12 +45,10 @@
         android:id="@+id/btnBottom"
         android:layout_width="147dp"
         android:layout_height="51dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:text="BottomSheetDialog"
-        app:layout_constraintBottom_toTopOf="@id/button6"
+        app:layout_constraintBottom_toTopOf="@+id/button6"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
@@ -61,7 +59,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:text="GirdLayout"
-        app:layout_constraintBottom_toTopOf="@id/btnBottom"
+        app:layout_constraintBottom_toTopOf="@+id/btnBottom"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
@@ -82,7 +80,7 @@
         android:layout_marginStart="16dp"
         android:text="SnackBar"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/themeCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/themeCheck" />
 
     <Button
         android:id="@+id/bottomNavigation"
@@ -91,7 +89,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:text="BottomNavigation"
-        app:layout_constraintBaseline_toBaselineOf="@id/snackbarTest"
+        app:layout_constraintBaseline_toBaselineOf="@+id/snackbarTest"
         app:layout_constraintLeft_toRightOf="@+id/snackbarTest"
         app:layout_constraintTop_toBottomOf="@+id/btnBehavior" />
 
@@ -100,8 +98,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:text="Scroll"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/snackbarTest" />
+        app:layout_constraintTop_toBottomOf="@+id/snackbarTest" />
 
 </android.support.constraint.ConstraintLayout>

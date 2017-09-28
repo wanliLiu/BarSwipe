@@ -299,9 +299,7 @@
         <activity
             android:name=".fram.ScrollingActivity"
             android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".fram.NewScrollingActivity"
-            android:theme="@style/AppThemeNoActionBar" />
+        <activity android:name=".fram.NewScrollingActivity" />
         <activity
             android:name=".fram.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

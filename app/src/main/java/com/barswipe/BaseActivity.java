@@ -122,6 +122,7 @@ public class BaseActivity extends SwipeBackActivity {
 //        super.onResume();
 //    }
 
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {

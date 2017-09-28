@@ -9,26 +9,26 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/color_white"
         android:fitsSystemWindows="true">
 
         <com.barswipe.fram.MyCollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentScrim="@color/color_orange"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimVisibleHeightTrigger="100dp"
-            app:statusBarScrim="@color/color_orange"
-            app:toolbarId="@id/toolbar">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
+                android:id="@+id/tesdkcon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 android:minHeight="?attr/actionBarSize"
                 android:orientation="vertical"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7">
 
                 <ImageView
                     android:id="@+id/imageBack"
@@ -160,7 +160,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_gravity="top"
-                    android:minHeight="?attr/actionBarSize"
                     app:contentInsetStart="0dp" />
             </FrameLayout>
 
@@ -169,8 +168,9 @@
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="60dp"
+            android:layout_gravity="center"
             app:tabBackground="@color/color_white"
             app:tabIndicatorColor="@android:color/transparent"
             app:tabMode="fixed"

@@ -1,17 +1,20 @@
 package com.barswipe.fram;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.TextView;
 
+import com.barswipe.BaseActivity;
 import com.barswipe.R;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +23,7 @@ import butterknife.ButterKnife;
  * AppBarLayout CollapsingToolbarLayout 的进一步使用
  * http://blog.csdn.net/litengit/article/details/52958721
  */
-public class NewScrollingActivity extends AppCompatActivity {
+public class NewScrollingActivity extends BaseActivity {
 
     private String[] title = new String[]{"演出", "相册", "详情"};
 
@@ -35,6 +38,11 @@ public class NewScrollingActivity extends AppCompatActivity {
     AppBarLayout app_bar;
 //    @BindView(R.id.toolbTitle)
 //    TextView toolbTitle;
+
+    @BindView(R.id.tesdkcon)
+    View tesdkcon;
+
+    private boolean isExpand = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,36 +73,81 @@ public class NewScrollingActivity extends AppCompatActivity {
             }
         });
         viewpage.setOffscreenPageLimit(3);
-        tablayout.setupWithViewPager(viewpage);
-
 //        toolbTitle.setText("小酒馆音乐空间");
-        final View group = findViewById(R.id.toolbarContent);
-        app_bar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
-            int scrollRangle = appBarLayout.getTotalScrollRange();
-            //初始verticalOffset为0，不能参与计算。
-            if (verticalOffset == 0) {
-//                toolbTitle.setAlpha(0.0f);
-                group.setBackgroundColor(getColorWithAlpha(0.0f, this.getResources().getColor(R.color.actionbar_color)));
-            } else {
-                //保留一位小数
-                float alpha = Math.abs(Math.round(1.0f * verticalOffset / scrollRangle) * 10) / 10;
-//                toolbTitle.setAlpha(alpha);
-                group.setBackgroundColor(getColorWithAlpha(alpha, this.getResources().getColor(R.color.actionbar_color)));
+//        final View group = findViewById(R.id.toolbarContent);
+//        app_bar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+//            int scrollRangle = appBarLayout.getTotalScrollRange();
+//            //初始verticalOffset为0，不能参与计算。
+//            Log.e("位置", scrollRangle + "  ----------  " + verticalOffset);
+//            if (verticalOffset == 0) {
+////                toolbTitle.setAlpha(0.0f);
+//                group.setBackgroundColor(getColorWithAlpha(0.0f, this.getResources().getColor(R.color.actionbar_color)));
+//            } else {
+//                //保留一位小数
+//                double alpha = Math.abs(verticalOffset) * 1.0 / scrollRangle * 1.0;
+////                toolbTitle.setAlpha(alpha);
+//                group.setBackgroundColor(getColorWithAlpha(alpha, this.getResources().getColor(R.color.actionbar_color)));
+//            }
+//        });
+
+
+        initTag();
+        viewpage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                tablayout.getTabAt(position).select();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
+        tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewpage.setCurrentItem(tab.getPosition());
+                TextView textView = tab.getCustomView().findViewById(R.id.text);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                textView.setTextColor(Color.parseColor("#FF4081"));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                TextView textView = tab.getCustomView().findViewById(R.id.text);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                textView.setTextColor(Color.parseColor("#96333333"));
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        RxView.clicks(app_bar)
+                .subscribe(te -> app_bar.setExpanded(isExpand = !isExpand));
     }
 
-
-    /**
-     * @param alpha
-     * @param baseColor
-     * @return
-     */
-    private int getColorWithAlpha(float alpha, int baseColor) {
-        Log.e("alpha", String.valueOf(alpha));
-        int a = Math.min(255, Math.max(0, (int) (alpha * 255))) << 24;
-        int rgb = 0x00ffffff & baseColor;
-        return a + rgb;
+    private void initTag() {
+        for (int i = 0; i < title.length; i++) {
+            tablayout.addTab(getTag(i, i == 0 ? true : false));
+        }
     }
 
+    private TabLayout.Tab getTag(int post, boolean iselect) {
+        TabLayout.Tab tab = tablayout.newTab();
+        View view = getLayoutInflater().inflate(R.layout.custom_title, null);
+        TextView textView = view.findViewById(R.id.text);
+        textView.setText(title[post]);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, iselect ? 18 : 14);
+        textView.setTextColor(Color.parseColor(iselect ? "#FF4081" : "#96333333"));
+        tab.setCustomView(view);
+        return tab;
+    }
 }
