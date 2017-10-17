@@ -1,6 +1,6 @@
 
 /*****************************************自定义生成jar*******************************************/
-def SDK_BASENAME = "MusicSdk";
+def SDK_BASENAME = "libTest";
 def SDK_VERSION = "_V1.0";
 def sdkDestinationPath = "build";
 def zipFile = file('build/intermediates/bundles/default/classes.jar')

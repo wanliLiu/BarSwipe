@@ -70,4 +70,8 @@ public class LibTestAndroid {
         testFuck();
         return object.toJSONString();
     }
+
+    public interface testInterface {
+        void test();
+    }
 }

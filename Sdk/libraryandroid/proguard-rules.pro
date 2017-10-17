@@ -95,23 +95,6 @@
 # 不提示兼容库的错误警告
 -dontwarn android.support.**
 
-# Understand the @Keep support annotation.
--keep class android.support.annotation.Keep
-
--keep @android.support.annotation.Keep class * {*;}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <methods>;
-}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <fields>;
-}
-
--keepclasseswithmembers class * {
-    @android.support.annotation.Keep <init>(...);
-}
-
 #################################以下是自己添加的混淆协议###################################
 
 #忽略警告
@@ -121,48 +104,48 @@
 #保护泛型
 -keepattributes Signature
 
--keep class com.example.libraryandroid.test.LibTestAndroid{
+#com.example.libraryandroid 包下所有的public不被混淆
+-keep class com.example.libraryandroid.**{
     public *;
 }
 
-#-keep class com.example.libraryandroid.**{
-#    public *;
-#}
-
+#有#NotProguard不被混淆
 # keep annotated by NotProguard
-#-keep @com.example.libraryandroid.NotProguard class * {*;}
-#-keep class * {
-#    @com.example.libraryandroid.NotProguard <fields>;
-#}
-#
-#-keepclassmembers class * {
-#    @com.example.libraryandroid.NotProguard <methods>;
-#}
+-keep @com.example.libraryandroid.NotProguard class * {*;}
+-keep class * {
+    @com.example.libraryandroid.NotProguard <fields>;
+    @com.example.libraryandroid.NotProguard <methods>;
+}
 
+#有@Keep不被混淆
 # Understand the @Keep support annotation.
 -keep class android.support.annotation.Keep
-
 -keep @android.support.annotation.Keep class * {*;}
 
--keepclasseswithmembers class * {
+-keep class * {
     @android.support.annotation.Keep <methods>;
-}
-
--keepclasseswithmembers class * {
     @android.support.annotation.Keep <fields>;
-}
-
--keepclasseswithmembers class * {
     @android.support.annotation.Keep <init>(...);
 }
 
-#assume no side effects:删除android.util.Log输出的日志
--assumenosideeffects class android.util.Log {
-    public static *** v(...);
-    public static *** d(...);
-    public static *** i(...);
-    public static *** w(...);
-    public static *** e(...);
+
+#
+##assume no side effects:删除android.util.Log输出的日志
+#-assumenosideeffects class android.util.Log {
+#    public static *** v(...);
+#    public static *** d(...);
+#    public static *** i(...);
+#    public static *** w(...);
+#    public static *** e(...);
+#}
+#
+#DontObfuscateInterface 不被混淆
+-keep public interface com.example.libraryandroid.DontObfuscateInterface{
+    public *;
+}
+-keep class * implements com.example.libraryandroid.DontObfuscateInterface {
+  public <methods>;
+  public <fields>;
 }
 
 #混淆

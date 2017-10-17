@@ -45,7 +45,7 @@ dependencies {
 
 
 ext {
-    releaseArtifact = 'sdk-test'
+    releaseArtifact = 'test_sdk'
     releaseDescription = 'bintray test upload'
 }
 

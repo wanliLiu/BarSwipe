@@ -18,7 +18,6 @@ include ':cmake'
 include ':sipdroid'
 include ':MusicPlayer'
 include ':Sdk:libraryandroid'
-include ':Sdk:libjava'
 
 //一个文件夹下多个module的方式
 project(':jnistudy').projectDir = new File(settingsDir, 'jni/jnistudy')
@@ -31,6 +30,4 @@ project(':ijkplayer-java').projectDir = new File(settingsDir, 'player/ijkplayer-
 project(':ijkplayer-exo').projectDir = new File(settingsDir, 'player/ijkplayer-exo')
 project(':MDplayer').projectDir = new File(settingsDir, 'player/MDplayer')
 
-//动态修改module 的name
-project(':Sdk:libjava').name = "java"
 project(':Sdk:libraryandroid').name = "android"

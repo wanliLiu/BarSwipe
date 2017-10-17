@@ -92,7 +92,7 @@ project.ext {
     //jencter
     releaseRepoName = "maven"
     releaseUserOrg = 'soli'
-    releaseGroupId = 'com.taihe.music'
-    releaseVersion = '0.0.5'
+    releaseGroupId = 'com.soli.libtest'
+    releaseVersion = '0.0.1'
     releaseWebsite = 'https://github.com/wanliLiu/BarSwipe'
 }

@@ -156,7 +156,6 @@ dependencies {
     if (project.jnistudyIsLibrary)
         compile project(':jnistudy')
 
-    compile project(":Sdk:java")
     compile project(":Sdk:android")
 
     //constraint-layout 学习  constraint_layout.xml
