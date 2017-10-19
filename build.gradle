@@ -1,6 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+
+    ext.kotlinVersion = '1.1.4-3'
+
     repositories {
         mavenCentral()
         jcenter() // If not already there
@@ -20,7 +23,8 @@ buildscript {
 
         //蒲公英插件
         classpath 'org.quanqi:pgyer:0.1.2'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.4-2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
     }
 
     configurations.classpath.exclude group: 'com.android.tools.external.lombok'
@@ -29,11 +33,10 @@ buildscript {
 allprojects {
     repositories {
         jcenter() // If not already there
+        google()
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/soli/maven" }
-        maven {
-            url "https://maven.google.com"
-        }
+        maven { url "https://maven.google.com" }
         mavenCentral()
     }
 
@@ -60,7 +63,7 @@ project.ext {
     VERSION_CODE = "22"
 
     // Google Stuffs
-    supportPackageVersion = "25.3.1" //26.+ 25.3.1
+    supportPackageVersion = "26.1.0"
 
     REBOUND_VERSION = "0.3.8"
     FRESCO_VERSION = "1.+"

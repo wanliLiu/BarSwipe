@@ -1,3 +1,5 @@
+//rootProject.name = 'StudyRecord'
+
 include ':app', ':mobile', ':SDL', ':JieCaoVideoPlayer', ':jcvideoplayer-lib', ':ijkplayer-java', ':MDplayer', ':ijkplayer-exo', ':kotlin', ':ffmpeg_sdl'
 include ':EaseInterpolatorLib'
 include ':SwipeLayoutLibrary'

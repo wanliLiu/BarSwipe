@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.quanqi.pgyer'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
@@ -206,7 +208,10 @@ dependencies {
 
     compile 'org.greenrobot:eventbus:3.+'
 
+
     compile 'com.taihe.music:sdk-test:0.0.5'
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'

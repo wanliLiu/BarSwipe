@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
         applicationId "com.danxx.mdplayer"
-        minSdkVersion 15
-        targetSdkVersion 22
+        minSdkVersion project.ANDROID_MIN_SDK_VERSION
+        targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
         versionCode 20
         versionName "2.0.0"
     }
@@ -62,12 +62,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':ijkplayer-exo')
     compile project(':ijkplayer-java')
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:preference-v7:23.0.1'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
+    compile "com.android.support:preference-v7:${supportPackageVersion}"
+    compile "com.android.support:support-v4:${supportPackageVersion}"
+    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
+    compile "com.android.support:design:${supportPackageVersion}"
+    compile "com.android.support:cardview-v7:${supportPackageVersion}"
+    compile "com.android.support:palette-v7:${supportPackageVersion}"
+    compile "com.android.support:recyclerview-v7:${supportPackageVersion}"
+
     compile 'com.takisoft.fix:preference-v7:23.4.0.4'
     compile 'com.github.clans:fab:1.6.4'
     //retrofit
@@ -86,7 +88,7 @@ dependencies {
     //picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
     //fresco
-    compile 'com.facebook.fresco:fresco:0.11.0'
+    compile "com.facebook.fresco:fresco:${FRESCO_VERSION}"
     //umeng
     compile 'com.umeng.analytics:analytics:latest.integration'
 
