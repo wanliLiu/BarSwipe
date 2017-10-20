@@ -61,14 +61,17 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.studyEaseAnimation).setOnClickListener(view -> startActivity(new Intent(MainActivity.this, MainActivityAnimation.class)));
 
         final TextView view = (TextView) findViewById(R.id.bottomLine);
+        final TextView bringToFront = (TextView) findViewById(R.id.bringToFront);
         view.setTag(1);
         view.setOnClickListener(v -> {
             String str = getResources().getString(R.string.str_rank_desc_renqi);
             if ((Integer) v.getTag() == 1) {
                 view.setText(str);
                 v.setTag(2);
+                bringToFront.bringToFront();
             } else {
                 v.setTag(1);
+                view.bringToFront();
                 view.setText(R.string.str_rank_desc_renqi);
             }
         });

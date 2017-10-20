@@ -37,7 +37,6 @@ import com.barswipe.jni.Jnidemo;
 import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
 import com.barswipe.volume.wave.HeadPhonesRecivier;
-import com.example.LibJavaTest;
 import com.example.libraryandroid.test.LibTestAndroid;
 import com.jakewharton.rxbinding2.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -189,8 +188,6 @@ public class LaunchActivity extends BaseActivity {
      *
      */
     private void libSdkTest() {
-        Log.e("libTestJava", new LibJavaTest().getStringFromLib());
-
         LibTestAndroid test = new LibTestAndroid();
         test.toast(this, "用android library来用");
         Log.e("libTestAndroid", test.testOtherLib());
