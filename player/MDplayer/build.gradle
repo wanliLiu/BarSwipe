@@ -10,6 +10,9 @@ android {
         targetSdkVersion project.ANDROID_TARGET_SDK_VERSION
         versionCode 20
         versionName "2.0.0"
+
+        //android 3.0  flavor
+        flavorDimensions "packageChannel"
     }
     lintOptions {
         abortOnError false
@@ -58,39 +61,39 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile project(':ijkplayer-exo')
-    compile project(':ijkplayer-java')
-    compile "com.android.support:preference-v7:${supportPackageVersion}"
-    compile "com.android.support:support-v4:${supportPackageVersion}"
-    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
-    compile "com.android.support:design:${supportPackageVersion}"
-    compile "com.android.support:cardview-v7:${supportPackageVersion}"
-    compile "com.android.support:palette-v7:${supportPackageVersion}"
-    compile "com.android.support:recyclerview-v7:${supportPackageVersion}"
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    api project(':ijkplayer-exo')
+    api project(':ijkplayer-java')
+    api "com.android.support:preference-v7:${supportPackageVersion}"
+    api "com.android.support:support-v4:${supportPackageVersion}"
+    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "com.android.support:design:${supportPackageVersion}"
+    api "com.android.support:cardview-v7:${supportPackageVersion}"
+    api "com.android.support:palette-v7:${supportPackageVersion}"
+    api "com.android.support:recyclerview-v7:${supportPackageVersion}"
 
-    compile 'com.takisoft.fix:preference-v7:23.4.0.4'
-    compile 'com.github.clans:fab:1.6.4'
+    api 'com.takisoft.fix:preference-v7:23.4.0.4'
+    api 'com.github.clans:fab:1.6.4'
     //retrofit
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    api 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    api 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
+    api 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
     //Rxjava + Rxandroid
-    compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'io.reactivex:rxjava:1.1.5'
+    api 'io.reactivex:rxandroid:1.2.0'
+    api 'io.reactivex:rxjava:1.1.5'
     //blurview
-    compile 'com.eightbitlab:blurview:1.0.2'
+    api 'com.eightbitlab:blurview:1.0.2'
     //photoview
-    compile 'com.bm.photoview:library:1.4.0'
+    api 'com.bm.photoview:library:1.4.0'
 
-    compile 'me.relex:photodraweeview:1.1.2'
+    api 'me.relex:photodraweeview:1.1.2'
     //picasso
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    api 'com.squareup.picasso:picasso:2.5.2'
     //fresco
-    compile "com.facebook.fresco:fresco:${FRESCO_VERSION}"
+    api "com.facebook.fresco:fresco:${FRESCO_VERSION}"
     //umeng
-    compile 'com.umeng.analytics:analytics:latest.integration'
+    api 'com.umeng.analytics:analytics:latest.integration'
 
-    compile "com.facebook.stetho:stetho:${stethoVersion}"
+    api "com.facebook.stetho:stetho:${stethoVersion}"
 }

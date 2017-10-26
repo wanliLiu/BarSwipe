@@ -33,9 +33,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
-    compile "com.alibaba:fastjson:${FAST_JSON_VERSION}"
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "com.alibaba:fastjson:${FAST_JSON_VERSION}"
 }
 
 

@@ -42,7 +42,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
-    compile project(':emoji:emojiLibrary')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api project(':emoji:emojiLibrary')
 }

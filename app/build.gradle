@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.quanqi.pgyer'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -42,6 +41,9 @@ android {
 //        jackOptions {
 //            enabled true
 //        }
+
+        //android 3.0  flavor
+        flavorDimensions "packageChannel"
     }
 
     //Lambda表达式 jack编译工具
@@ -110,111 +112,126 @@ android {
             distributionKey = "gradle 自动上传到蒲公英测试"
         }
     }
-
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+        exclude 'META-INF/ASL2.0'
+    }
     lintOptions {
         abortOnError false
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    //    compile 'de.keyboardsurfer.android.widget:crouton:1.8.5'
-    //    compile 'com.daimajia.easing:library:1.0.2'
-    //    compile 'com.daimajia.androidanimations:library:1.1.3@aar'
-    //    compile 'com.github.chrisbanes:PhotoView:1.3.0'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:multidex:1.0.1'
+    //    api 'de.keyboardsurfer.android.widget:crouton:1.8.5'
+    //    api 'com.daimajia.easing:library:1.0.2'
+    //    api 'com.daimajia.androidanimations:library:1.1.3@aar'
+    //    api 'com.github.chrisbanes:PhotoView:1.3.0'
 
-    compile "com.github.bumptech.glide:glide:${glide_version}"
+    implementation "com.github.bumptech.glide:glide:${glide_version}"
 
-    compile "com.squareup.retrofit2:retrofit:${retrofit2_version}"
-//    compile 'com.squareup.retrofit2:adapter-rxjava2:latest.version'
-    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
-    compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
-//    compile 'com.squareup.retrofit2:converter-gson:latest.version'
+    implementation "com.squareup.retrofit2:retrofit:${retrofit2_version}"
+//    api 'com.squareup.retrofit2:adapter-rxjava2:latest.version'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
+//    api 'com.squareup.retrofit2:converter-gson:latest.version'
 
-//    compile "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
-    compile "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"
+//    api "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
+    implementation "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"
 
-    compile "com.squareup.okhttp3:okhttp-ws:3.4.2"
-    compile 'com.koushikdutta.async:androidasync:2.1.9'
-    compile 'org.java-websocket:Java-WebSocket:1.3.0'
+    implementation "com.squareup.okhttp3:okhttp-ws:3.4.2"
+    implementation 'com.koushikdutta.async:androidasync:2.1.9'
+    implementation 'org.java-websocket:Java-WebSocket:1.3.0'
 
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
 
-    compile "com.facebook.rebound:rebound:${REBOUND_VERSION}"
+    implementation "com.facebook.rebound:rebound:${REBOUND_VERSION}"
 
-    compile project(':EaseInterpolatorLib')
-    compile project(':SwipeLayoutLibrary')
-    compile project(':PhotoPicker')
-    compile project(':ScaleImagelibrary')
-    compile project(':emoji:emojiLibrary')
-    compile project(':emoji:emojiAllLibrary')
-    compile project(':RxPermissions')
-    compile project(':ArcLayoutLibrary')
-    compile project(':autobahn')
-    compile project(':wave:waveview')
-    compile project(':wave:wavelibrary')
+    api project(':EaseInterpolatorLib')
+    api project(':SwipeLayoutLibrary')
+    api project(':PhotoPicker')
+    api project(':ScaleImagelibrary')
+    api project(':emoji:emojiLibrary')
+    api project(':emoji:emojiAllLibrary')
+    api project(':RxPermissions')
+    implementation project(':ArcLayoutLibrary')
+    implementation project(':autobahn')
+    implementation project(':wave:waveview')
+    implementation project(':wave:wavelibrary')
     if (project.jnistudyIsLibrary)
-        compile project(':jnistudy')
+        api project(':jnistudy')
 
-    compile project(":Sdk:android")
+    api project(":Sdk:android")
 
     //constraint-layout 学习  constraint_layout.xml
-    compile "com.jakewharton:butterknife:${butterknife_version}"
+    api "com.jakewharton:butterknife:${butterknife_version}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife_version}"
 
     //PermissionsDispatcher
-    //    compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.8.1@aar'
+    //    api 'com.tbruyelle.rxpermissions2:rxpermissions:0.8.1@aar'
 
-    compile "jp.co.cyberagent.android.gpuimage:gpuimage-library:${GPUIMAGE_VERSION}"
-    compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
-    compile 'jp.wasabeef:recyclerview-animators:1.2.2@aar'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.chrisbanes.photoview:library:1.2.4'
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
-    compile "com.alibaba:fastjson:${FAST_JSON_VERSION}"
-    compile 'com.google.code.gson:gson:2.7'
+    implementation "jp.co.cyberagent.android.gpuimage:gpuimage-library:${GPUIMAGE_VERSION}"
+    implementation 'com.github.ksoichiro:android-observablescrollview:1.6.0'
+    implementation 'jp.wasabeef:recyclerview-animators:1.2.2@aar'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.chrisbanes.photoview:library:1.2.4'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
+    implementation "com.alibaba:fastjson:${FAST_JSON_VERSION}"
+    implementation 'com.google.code.gson:gson:2.7'
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile 'com.github.hotchemi:permissionsdispatcher:2.1.3'
+    implementation 'com.github.hotchemi:permissionsdispatcher:2.1.3'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.1.3'
 
     //https://github.com/kevinho/opencore-amr-android
-//    compile 'io.kvh:amr:1.1.1'
+//    api 'io.kvh:amr:1.1.1'
 
     //Stetho是一个Android应用的调试工具 Chrome Developer Tools
-    compile "com.facebook.stetho:stetho:${stethoVersion}"
-    compile "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
+    implementation "com.facebook.stetho:stetho:${stethoVersion}"
+    implementation "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
 
     //dragger使用
     //这个比较简单直白
     //http://blog.csdn.net/a15286856575/article/details/53156774?locationNum=2&fps=1
-    compile 'com.google.dagger:dagger:2.+'
+    api 'com.google.dagger:dagger:2.+'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.+'
 
-    compile 'com.google.dagger:dagger-android:2.+'
-    compile 'com.google.dagger:dagger-android-support:2.+' // if you use the support libraries
+    implementation 'com.google.dagger:dagger-android:2.+'
+    implementation 'com.google.dagger:dagger-android-support:2.+' // if you use the support libraries
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.+'
 
     //一个比较有用的东西  用来筛选等一系列操作
-    compile 'com.annimon:stream:1.1.7'
+    implementation 'com.annimon:stream:1.1.7'
 
-    compile 'org.greenrobot:eventbus:3.+'
+    implementation 'org.greenrobot:eventbus:3.+'
 
 
-    compile 'com.taihe.music:sdk-test:0.0.5'
+    implementation 'com.taihe.music:sdk-test:0.0.5'
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
-    compile 'com.zhy:base-adapter:2.0.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
+    implementation 'com.zhy:base-adapter:2.0.1'
+
+    implementation 'in.srain.cube:ultra-ptr:1.0.11'
 }

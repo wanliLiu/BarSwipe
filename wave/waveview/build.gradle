@@ -45,8 +45,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
-    compile "com.danikula:videocache:${videocache}"
+    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "com.danikula:videocache:${videocache}"
 }
