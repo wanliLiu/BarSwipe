@@ -33,10 +33,12 @@ import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.barswipe.ExpandableTextView.ExpandableTextView;
 import com.barswipe.FloatView.FloatWindowService;
+import com.barswipe.excel.WriteExcelUtils;
 import com.barswipe.jni.Jnidemo;
 import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
 import com.barswipe.volume.wave.HeadPhonesRecivier;
+import com.barswipe.widget.RxJavaUtil;
 import com.example.libraryandroid.test.LibTestAndroid;
 import com.jakewharton.rxbinding2.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -166,6 +168,8 @@ public class LaunchActivity extends BaseActivity {
         libSdkTest();
 
         logTag();
+
+        RxJavaUtil.runOnThread(() -> WriteExcelUtils.writeExecleToFile(LaunchActivity.this));
     }
 
     /**

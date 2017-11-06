@@ -131,7 +131,7 @@ android {
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:multidex:1.0.1'
     //    api 'de.keyboardsurfer.android.widget:crouton:1.8.5'
     //    api 'com.daimajia.easing:library:1.0.2'
