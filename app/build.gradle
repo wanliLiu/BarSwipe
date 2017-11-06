@@ -36,14 +36,10 @@ android {
             abiFilters "armeabi", "armeabi-v7a", "x86"
         }
 
-        //Lambda表达式 jack编译工具
-        //使用Google官方的方式有一定的兼容性，使用Jack时不能同时使用APT，如果使用butterknife、Dagger等使用了APT的注解框架就不行了
-//        jackOptions {
-//            enabled true
-//        }
 
         //android 3.0  flavor
         flavorDimensions "packageChannel"
+
     }
 
     //Lambda表达式 jack编译工具

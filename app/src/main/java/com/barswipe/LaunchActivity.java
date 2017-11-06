@@ -169,6 +169,11 @@ public class LaunchActivity extends BaseActivity {
 
         logTag();
 
+
+        //Apache POI架包
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+        System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
         RxJavaUtil.runOnThread(() -> WriteExcelUtils.writeExecleToFile(LaunchActivity.this));
     }
 
