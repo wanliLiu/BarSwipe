@@ -5,18 +5,19 @@ import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
+import android.text.method.BaseMovementMethod;
 import android.text.method.Touch;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
  * Created by Soli on 2016/9/29.
  */
 
-public class LocalLinkMovementMethod extends LinkMovementMethod {
+public class LocalLinkMovementMethod extends BaseMovementMethod {
     static LocalLinkMovementMethod sInstance;
 
     private ClickableSpan tempLick;
@@ -81,11 +82,15 @@ public class LocalLinkMovementMethod extends LinkMovementMethod {
                 setSelect(false, buffer);
                 Selection.removeSelection(buffer);
                 Touch.onTouchEvent(widget, buffer, event);
+                ViewGroup parent = (ViewGroup) widget.getParent();
+                if (parent != null) {
+                    parent.onTouchEvent(event);
+                }
                 return false;
             }
         }
 
-        return Touch.onTouchEvent(widget, buffer, event);
+        return false;
     }
 
     /**

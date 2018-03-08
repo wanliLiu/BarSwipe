@@ -81,19 +81,9 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
     private double recordMinTime = 2;
     //录制的实际大于最小录制时间 就可以编辑和保存当前录制的音频数据
     private boolean isCanAction = false, isCanRecord = true;
-
-    enum ActionStatus {
-        parareStart,//准备开始，初始状态
-        startRecording,//开始录音，录音状态
-        stopRecording,//暂停录音
-        playAudio,//播放录音,包括裁剪中
-        stopPlayAudio,//停止播放录音 包括裁剪中
-        clipAudio,//裁剪
-    }
-
     private ActionStatus currentStatus = ActionStatus.parareStart;
-
     private ProgressDialog dialog;
+    private RxPermissions permissions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,8 +103,8 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         editClip.setOnClickListener(this);
 
         updateUi();
-
-        RxPermissions.getInstance(this)
+        permissions = new RxPermissions(this);
+        permissions
                 .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe(aBoolean -> {
                     if (aBoolean)
@@ -288,7 +278,6 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         updateData(timeMs);
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -423,7 +412,6 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
         startActivity(intent);
     }
 
-
     /**
      * 是否进入编辑模式
      *
@@ -521,7 +509,6 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
             clipViewEnable(true);
         }
     }
-
 
     /**
      * 停止播放录音
@@ -749,5 +736,14 @@ public class AcitivtyWaveTest extends AppCompatActivity implements View.OnClickL
                 enterAudioEditUI(true);
                 break;
         }
+    }
+
+    enum ActionStatus {
+        parareStart,//准备开始，初始状态
+        startRecording,//开始录音，录音状态
+        stopRecording,//暂停录音
+        playAudio,//播放录音,包括裁剪中
+        stopPlayAudio,//停止播放录音 包括裁剪中
+        clipAudio,//裁剪
     }
 }

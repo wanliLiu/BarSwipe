@@ -14,23 +14,15 @@
 
 package com.tbruyelle.rxpermissions;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -42,37 +34,48 @@ import io.reactivex.subjects.PublishSubject;
 public class RxPermissions {
 
     static final Object TRIGGER = new Object();
+    static final String TAG = "RxPermissions";
+    RxPermissionsFragment mRxPermissionsFragment;
 
-    private static final String TAG = "RxPermissions";
-    private static RxPermissions sSingleton;
+    /**
+     * @param activity
+     */
+    public RxPermissions(@NonNull Activity activity) {
+        mRxPermissionsFragment = getRxPermissionsFragment(activity);
+    }
 
-    public static RxPermissions getInstance(Context ctx) {
-        if (sSingleton == null) {
-            sSingleton = new RxPermissions(ctx.getApplicationContext());
+    /**
+     * @param activity
+     * @return
+     */
+    private RxPermissionsFragment getRxPermissionsFragment(Activity activity) {
+        RxPermissionsFragment rxPermissionsFragment = findRxPermissionsFragment(activity);
+        boolean isNewInstance = rxPermissionsFragment == null;
+        if (isNewInstance) {
+            rxPermissionsFragment = new RxPermissionsFragment();
+            FragmentManager fragmentManager = ((FragmentActivity) activity).getSupportFragmentManager();
+            fragmentManager
+                    .beginTransaction()
+                    .add(rxPermissionsFragment, TAG)
+                    .commitAllowingStateLoss();
+            fragmentManager.executePendingTransactions();
         }
-        return sSingleton;
+        return rxPermissionsFragment;
     }
 
-    private Context mCtx;
-
-    // Contains all the current permission requests.
-    // Once granted or denied, they are removed from it.
-    private Map<String, PublishSubject<Permission>> mSubjects = new HashMap<>();
-    private boolean mLogging;
-
-    RxPermissions(Context ctx) {
-        mCtx = ctx;
+    /**
+     * @param activity
+     * @return
+     */
+    private RxPermissionsFragment findRxPermissionsFragment(Activity activity) {
+        return (RxPermissionsFragment) ((FragmentActivity) activity).getSupportFragmentManager().findFragmentByTag(TAG);
     }
 
-    public RxPermissions setLogging(boolean logging) {
-        mLogging = logging;
-        return this;
-    }
-
-    private void log(String message) {
-        if (mLogging) {
-            Log.d(TAG, message);
-        }
+    /**
+     * @param logging
+     */
+    public void setLogging(boolean logging) {
+        mRxPermissionsFragment.setLogging(logging);
     }
 
     /**
@@ -154,7 +157,7 @@ public class RxPermissions {
 
     private Observable<?> pending(final String... permissions) {
         for (String p : permissions) {
-            if (!mSubjects.containsKey(p)) {
+            if (!mRxPermissionsFragment.containsByPermission(p)) {
                 return Observable.empty();
             }
         }
@@ -177,7 +180,7 @@ public class RxPermissions {
         // In case of multiple permissions, we create an Observable for each of them.
         // At the end, the observables are combined to have a unique response.
         for (String permission : permissions) {
-            log("Requesting permission " + permission);
+            mRxPermissionsFragment.log("Requesting permission " + permission);
 
             if (isGranted(permission)) {
                 // Already granted, or not Android M
@@ -192,82 +195,32 @@ public class RxPermissions {
                 continue;
             }
 
-            PublishSubject<Permission> subject = mSubjects.get(permission);
+            PublishSubject<Permission> subject = mRxPermissionsFragment.getSubjectByPermission(permission);
             // Create a new subject if not exists
             if (subject == null) {
                 unrequestedPermissions.add(permission);
                 subject = PublishSubject.create();
-                mSubjects.put(permission, subject);
+                mRxPermissionsFragment.setSubjectForPermission(permission, subject);
             }
 
             list.add(subject);
         }
 
         if (!unrequestedPermissions.isEmpty()) {
-            startShadowActivity(unrequestedPermissions
-                    .toArray(new String[unrequestedPermissions.size()]));
+            String[] unrequestedPermissionsArray = unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]);
+            requestPermissionsFromFragment(unrequestedPermissionsArray);
         }
+
         return Observable.concat(Observable.fromIterable(list));
-    }
-
-    /**
-     * Invokes Activity.shouldShowRequestPermissionRationale and wraps
-     * the returned value in an observable.
-     * <p>
-     * In case of multiple permissions, only emits true if
-     * Activity.shouldShowRequestPermissionRationale returned true for
-     * all revoked permissions.
-     * <p>
-     * You shouldn't call this method if all permissions have been granted.
-     * <p>
-     * For SDK &lt; 23, the observable will always emit false.
-     */
-    public Observable<Boolean> shouldShowRequestPermissionRationale(final Activity activity,
-                                                                    final String... permissions) {
-        if (!isMarshmallow()) {
-            return Observable.just(false);
-        }
-        return Observable.just(shouldShowRequestPermissionRationale_(activity, permissions));
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean shouldShowRequestPermissionRationale_(final Activity activity,
-                                                          final String... permissions) {
-        for (String p : permissions) {
-            if (!isGranted(p) && !activity.shouldShowRequestPermissionRationale(p)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 获取当前进程名字
-     *
-     * @param ctx
-     * @return
-     */
-    private String getCurrentProcessName(Context ctx) {
-        final int processId = android.os.Process.myPid();
-        ActivityManager manager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningAppProcessInfo info : manager.getRunningAppProcesses()) {
-            if (processId == info.pid) {
-                return info.processName;
-            }
-        }
-
-        return "";
     }
 
     /**
      * @param permissions
      */
-    private void startShadowActivity(String[] permissions) {
-        log("startShadowActivity " + TextUtils.join(", ", permissions));
-        Intent intent = new Intent(mCtx, ShadowActivity.class);
-        intent.putExtra("permissions", permissions);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mCtx.startActivity(intent);
+    @TargetApi(Build.VERSION_CODES.M)
+    private void requestPermissionsFromFragment(String[] permissions) {
+        mRxPermissionsFragment.log("requestPermissionsFromFragment " + TextUtils.join(", ", permissions));
+        mRxPermissionsFragment.handleRequest(permissions);
     }
 
     /**
@@ -276,7 +229,7 @@ public class RxPermissions {
      * Always true if SDK &lt; 23.
      */
     public boolean isGranted(String permission) {
-        return !isMarshmallow() || isGranted_(permission);
+        return !isMarshmallow() || mRxPermissionsFragment.isGranted(permission);
     }
 
     /**
@@ -285,68 +238,14 @@ public class RxPermissions {
      * Always false if SDK &lt; 23.
      */
     public boolean isRevoked(String permission) {
-        return isMarshmallow() && isRevoked_(permission);
+        return isMarshmallow() && mRxPermissionsFragment.isRevoked(permission);
     }
 
+    /**
+     * @return
+     */
     boolean isMarshmallow() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean isGranted_(String permission) {
-        //special grant permissions
-        if (Manifest.permission.SYSTEM_ALERT_WINDOW.equals(permission)) {
-            return Settings.canDrawOverlays(mCtx);
-        } else if (Manifest.permission.WRITE_SETTINGS.equals(permission)) {
-            return Settings.System.canWrite(mCtx);
-        }
-        return mCtx.checkCallingOrSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    private boolean isRevoked_(String permission) {
-        return mCtx.getPackageManager().isPermissionRevokedByPolicy(permission, mCtx.getPackageName());
-    }
-
-    /**
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     * @param shouldShowRequestPermissionRationale
-     */
-    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults, boolean[] shouldShowRequestPermissionRationale) {
-        try {
-            for (int i = 0, size = permissions.length; i < size; i++) {
-                log("onRequestPermissionsResult  " + permissions[i]);
-                // Find the corresponding subject
-                PublishSubject<Permission> subject = mSubjects.get(permissions[i]);
-                if (subject != null) {
-                    mSubjects.remove(permissions[i]);
-                    boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-                    subject.onNext(new Permission(permissions[i], granted, shouldShowRequestPermissionRationale[i]));
-                    subject.onComplete();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * @param requestCode
-     * @param activity
-     * @param permissions
-     */
-    void onRequestPermissionsResultFailure(int requestCode, Activity activity, String[] permissions) {
-        int[] grantResults = new int[permissions.length];
-        boolean[] shouldShowRequestPermissionRationale = new boolean[permissions.length];
-
-        for (int i = 0; i < permissions.length; i++) {
-            grantResults[i] = PackageManager.PERMISSION_DENIED;
-            shouldShowRequestPermissionRationale[i] = ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[i]);
-        }
-
-        onRequestPermissionsResult(requestCode, permissions, grantResults, shouldShowRequestPermissionRationale);
-    }
 }

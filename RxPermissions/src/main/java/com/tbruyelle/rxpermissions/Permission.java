@@ -5,17 +5,18 @@ public class Permission {
     public final boolean granted;
     public final boolean shouldShowRequestPermissionRationale;
 
-    Permission(String name, boolean granted) {
+    public Permission(String name, boolean granted) {
         this(name, granted, false);
     }
 
-    Permission(String name, boolean granted, boolean shouldShowRequestPermissionRationale) {
+    public Permission(String name, boolean granted, boolean shouldShowRequestPermissionRationale) {
         this.name = name;
         this.granted = granted;
         this.shouldShowRequestPermissionRationale = shouldShowRequestPermissionRationale;
     }
 
     @Override
+    @SuppressWarnings("SimplifiableIfStatement")
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

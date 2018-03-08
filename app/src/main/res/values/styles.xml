@@ -179,6 +179,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarSize">@dimen/BarSize</item>
 
 
         <!--<item name="android:windowIsTranslucent">true</item>-->
@@ -279,6 +280,7 @@
         <item name="android:layout_marginLeft">4px</item>
         <item name="android:background">#666677</item>
     </style>
+
     <style name="VerticalDividerRight">
         <item name="android:layout_width">1px</item>
         <item name="android:layout_height">fill_parent</item>
@@ -291,6 +293,7 @@
         <item name="android:layout_height">1px</item>
         <item name="android:background">#666677</item>
     </style>
+
     <style name="HorizontalDividerBottom">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">1px</item>

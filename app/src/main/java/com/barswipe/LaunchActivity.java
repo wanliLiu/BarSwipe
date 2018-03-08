@@ -2,7 +2,6 @@ package com.barswipe;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -15,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -39,7 +37,6 @@ import com.barswipe.jni.Jnidemo;
 import com.barswipe.model.DataBaseManager;
 import com.barswipe.model.Student;
 import com.barswipe.volume.wave.HeadPhonesRecivier;
-import com.example.LibJavaTest;
 import com.example.libraryandroid.test.LibTestAndroid;
 import com.jakewharton.rxbinding2.widget.RxAdapterView;
 import com.tbruyelle.rxpermissions.RxPermissions;
@@ -82,10 +79,15 @@ public class LaunchActivity extends BaseActivity {
     private boolean isClipToPadding = false;
     private HeadPhonesRecivier recivier;
 
+    private RxPermissions permissions;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+
+        permissions = new RxPermissions(this);
+        permissions.setLogging(true);
 
         setSwipeBackEnable(false);
 
@@ -121,7 +123,7 @@ public class LaunchActivity extends BaseActivity {
         RxAdapterView.itemClicks(listView)
                 .compose(bindToLifecycle())
                 .throttleFirst(ViewConfiguration.getDoubleTapTimeout(), TimeUnit.MILLISECONDS)
-                .subscribe(position -> RxPermissions.getInstance(LaunchActivity.this)
+                .subscribe(position -> permissions
                         .request(
                                 Manifest.permission.CAMERA,
                                 Manifest.permission.SYSTEM_ALERT_WINDOW,
@@ -173,7 +175,7 @@ public class LaunchActivity extends BaseActivity {
         String Tag = "日志打印";
         Log.v(Tag, " Log.v");
         Log.d(Tag, " Log.d");
-        if (Log.isLoggable(Tag,Log.ERROR)){
+        if (Log.isLoggable(Tag, Log.ERROR)) {
 
         }
         Log.i(Tag, " Log.i");
@@ -186,8 +188,6 @@ public class LaunchActivity extends BaseActivity {
      *
      */
     private void libSdkTest() {
-        Log.e("libTestJava", new LibJavaTest().getStringFromLib());
-
         LibTestAndroid test = new LibTestAndroid();
         test.toast(this, "用android library来用");
         Log.e("libTestAndroid", test.testOtherLib());
@@ -338,32 +338,26 @@ public class LaunchActivity extends BaseActivity {
      */
     private void showRationaleDialog(String messageResId) {
         new AlertDialog.Builder(this)
-                .setPositiveButton("允许", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(@NonNull DialogInterface dialog, int which) {
-                        RxPermissions.getInstance(LaunchActivity.this)
-                                .setLogging(true)
-                                .request(
-                                        Manifest.permission.CAMERA,
-                                        Manifest.permission.SYSTEM_ALERT_WINDOW,
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                        Manifest.permission.BODY_SENSORS,
-                                        Manifest.permission.WRITE_CALENDAR,
-                                        Manifest.permission.READ_PHONE_STATE,
-                                        Manifest.permission.SEND_SMS,
-                                        Manifest.permission.ACCESS_FINE_LOCATION,
-                                        Manifest.permission.WRITE_CONTACTS,
-                                        Manifest.permission.RECORD_AUDIO,
-                                        Manifest.permission.WRITE_SETTINGS)
-                                .subscribe(aBoolean -> {
-                                    if (aBoolean) {
-                                        shotFloatView();
-                                    } else {
-                                        showRationaleDialog("需要开启必要的访问权限");
-                                    }
-                                });
-                    }
-                })
+                .setPositiveButton("允许", (dialog, which) -> permissions
+                        .request(
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.SYSTEM_ALERT_WINDOW,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.BODY_SENSORS,
+                                Manifest.permission.WRITE_CALENDAR,
+                                Manifest.permission.READ_PHONE_STATE,
+                                Manifest.permission.SEND_SMS,
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.WRITE_CONTACTS,
+                                Manifest.permission.RECORD_AUDIO,
+                                Manifest.permission.WRITE_SETTINGS)
+                        .subscribe(aBoolean -> {
+                            if (aBoolean) {
+                                shotFloatView();
+                            } else {
+                                showRationaleDialog("需要开启必要的访问权限");
+                            }
+                        }))
                 .setNegativeButton("取消", (dialog, which) -> finish())
                 .setTitle("帮助")
                 .setCancelable(false)
@@ -665,26 +659,6 @@ public class LaunchActivity extends BaseActivity {
         Log.e("Rxjava学习" + "cast", tag);
     }
 
-
-    private class Animal {
-        protected String name = "Animal";
-
-        Animal() {
-            log("create " + name);
-        }
-
-        String getName() {
-            return name;
-        }
-    }
-
-    private class Dog extends Animal {
-        Dog() {
-            name = getClass().getSimpleName();
-            log("create " + name);
-        }
-    }
-
     /**
      * Rxjava学习
      * http://blog.chinaunix.net/uid-20771867-id-5187376.html
@@ -838,6 +812,73 @@ public class LaunchActivity extends BaseActivity {
     }
 
     /**
+     * @param Tag
+     */
+    private void deferJust(final String Tag) {
+        //defer
+        defer.subscribe(t -> Log.e(Tag + "----defer-repeat", String.valueOf(t)));
+        just.subscribe(aLong -> Log.e(Tag + "----defer-just-repeat", String.valueOf(aLong)));
+    }
+
+    /**
+     * @param test
+     */
+    @Subscribe
+    public void onEvent(NotificationEvent test) {
+//        deferJust(test.event);
+        if (disposable != null && !disposable.isDisposed())
+            disposable.dispose();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        if (recivier != null)
+            unregisterReceiver(recivier);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            onBackPressed();
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.test_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private class Animal {
+        protected String name = "Animal";
+
+        Animal() {
+            log("create " + name);
+        }
+
+        String getName() {
+            return name;
+        }
+    }
+
+    private class Dog extends Animal {
+        Dog() {
+            name = getClass().getSimpleName();
+            log("create " + name);
+        }
+    }
+
+    /**
      *
      */
     private class activityListAdapter extends BaseAdapter {
@@ -899,55 +940,6 @@ public class LaunchActivity extends BaseActivity {
             }
         }
 
-    }
-
-    /**
-     * @param Tag
-     */
-    private void deferJust(final String Tag) {
-        //defer
-        defer.subscribe(t -> Log.e(Tag + "----defer-repeat", String.valueOf(t)));
-        just.subscribe(aLong -> Log.e(Tag + "----defer-just-repeat", String.valueOf(aLong)));
-    }
-
-    /**
-     * @param test
-     */
-    @Subscribe
-    public void onEvent(NotificationEvent test) {
-//        deferJust(test.event);
-        if (disposable != null && !disposable.isDisposed())
-            disposable.dispose();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-        if (recivier != null)
-            unregisterReceiver(recivier);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            onBackPressed();
-        }
-
-        return true;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.test_menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
 }

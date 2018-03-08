@@ -1,6 +1,6 @@
 package com.barswipe;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by SoLi on 2015/12/11.
  */
-public class Myapplication extends Application {
+public class Myapplication extends MultiDexApplication {
 
     private static Myapplication app;
     private static HouseComponent houseComponent;
@@ -34,11 +34,8 @@ public class Myapplication extends Application {
         super.onCreate();
         houseComponent = DaggerHouseComponent.builder().houseModule(new HouseModule()).build();
         app = this;
-//        Fresco.initialize(this);
-//        FrescoUtil.Init(this);
 
         FrescoUtil.Init(this);
-//        Fresco.initialize(this, ImagePipelineConfigUtils.getDefaultImagePipelineConfig(this));
 
         JSONObject object = new JSONObject();
         object.put("UserToken", "sssssdsdwqeewewe");

@@ -21,8 +21,13 @@ import com.barswipe.SwipeLayout.adapter.ListViewAdapter;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.util.Attributes;
 
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+
 public class ListViewExample extends AppCompatActivity {
 
+    private PtrClassicFrameLayout pullRefresh;
     private ListView mListView;
     private ListViewAdapter mAdapter;
     private Context mContext = this;
@@ -31,6 +36,8 @@ public class ListViewExample extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listview);
+        pullRefresh = findViewById(R.id.pullRefresh);
+
         mListView = (ListView) findViewById(R.id.listview);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ActionBar actionBar = getActionBar();
@@ -39,6 +46,12 @@ public class ListViewExample extends AppCompatActivity {
             }
         }
 
+        pullRefresh.setPtrHandler(new PtrDefaultHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                pullRefresh.postDelayed(() -> pullRefresh.refreshComplete(), 2000);
+            }
+        });
         /**
          * The following comment is the com.barswipe.imagescale usage of ArraySwipeAdapter.
          */

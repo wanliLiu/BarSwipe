@@ -50,6 +50,8 @@
     <!--音频播放视图的高度-->
     <dimen name="volume_play_height">104dp</dimen>
 
+    <dimen name="BarSize">58dp</dimen>
+
 </resources>
 
 
