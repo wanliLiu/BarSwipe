@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
@@ -29,24 +28,24 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "com.android.support:appcompat-v7:${supportPackageVersion}"
 
     //RxJava
-    compile "io.reactivex.rxjava2:rxjava:${rxjava_version}"
-    compile "io.reactivex.rxjava2:rxandroid:${rxandroid_version}"
+    api "io.reactivex.rxjava2:rxjava:${rxjava_version}"
+    api "io.reactivex.rxjava2:rxandroid:${rxandroid_version}"
 
     //RxBinding
-    compile "com.jakewharton.rxbinding2:rxbinding:${RxBinding_version}"
-    compile "com.jakewharton.rxbinding2:rxbinding-support-v4:${RxBinding_version}"
-    compile "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${RxBinding_version}"
-    compile "com.jakewharton.rxbinding2:rxbinding-design:${RxBinding_version}"
-    compile "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${RxBinding_version}"
+    api "com.jakewharton.rxbinding2:rxbinding:${RxBinding_version}"
+    api "com.jakewharton.rxbinding2:rxbinding-support-v4:${RxBinding_version}"
+    api "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${RxBinding_version}"
+    api "com.jakewharton.rxbinding2:rxbinding-design:${RxBinding_version}"
+    api "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${RxBinding_version}"
 
 
     //Rxlife
-    compile "com.trello.rxlifecycle2:rxlifecycle:${RxLifeCycle_version}"
-    compile "com.trello.rxlifecycle2:rxlifecycle-android:${RxLifeCycle_version}"
-    compile "com.trello.rxlifecycle2:rxlifecycle-components:${RxLifeCycle_version}"
+    api "com.trello.rxlifecycle2:rxlifecycle:${RxLifeCycle_version}"
+    api "com.trello.rxlifecycle2:rxlifecycle-android:${RxLifeCycle_version}"
+    api "com.trello.rxlifecycle2:rxlifecycle-components:${RxLifeCycle_version}"
 
     //空学习RxPermissionsTest  自己写测试代码   mockito  junit
     //http://blog.csdn.net/sdyy321/article/details/38757135/

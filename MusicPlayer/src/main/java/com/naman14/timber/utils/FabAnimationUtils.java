@@ -19,11 +19,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
-
-import com.naman14.timber.R;
 
 public class FabAnimationUtils {
 
@@ -58,25 +54,25 @@ public class FabAnimationUtils {
                         }
                     }).start();
         } else {
-            Animation anim = AnimationUtils.loadAnimation(fab.getContext(), R.anim.design_fab_out);
-            anim.setDuration(duration);
-            anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                public void onAnimationStart(Animation animation) {
-                    if (callback != null) callback.onAnimationStart();
-                }
-
-                public void onAnimationEnd(Animation animation) {
-                    fab.setVisibility(View.VISIBLE);
-                    if (callback != null) callback.onAnimationEnd();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    //
-                }
-            });
-            fab.startAnimation(anim);
+//            Animation anim = AnimationUtils.loadAnimation(fab.getContext(), R.anim.design_fab_out);
+//            anim.setDuration(duration);
+//            anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
+//            anim.setAnimationListener(new Animation.AnimationListener() {
+//                public void onAnimationStart(Animation animation) {
+//                    if (callback != null) callback.onAnimationStart();
+//                }
+//
+//                public void onAnimationEnd(Animation animation) {
+//                    fab.setVisibility(View.VISIBLE);
+//                    if (callback != null) callback.onAnimationEnd();
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animation animation) {
+//                    //
+//                }
+//            });
+//            fab.startAnimation(anim);
         }
     }
 
@@ -110,25 +106,25 @@ public class FabAnimationUtils {
                         }
                     }).start();
         } else {
-            Animation anim = AnimationUtils.loadAnimation(fab.getContext(), R.anim.design_fab_out);
-            anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
-            anim.setDuration(duration);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                public void onAnimationStart(Animation animation) {
-                    if (callback != null) callback.onAnimationStart();
-                }
-
-                public void onAnimationEnd(Animation animation) {
-                    fab.setVisibility(View.INVISIBLE);
-                    if (callback != null) callback.onAnimationEnd();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                    //
-                }
-            });
-            fab.startAnimation(anim);
+//            Animation anim = AnimationUtils.loadAnimation(fab.getContext(), R.anim.design_fab_out);
+//            anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
+//            anim.setDuration(duration);
+//            anim.setAnimationListener(new Animation.AnimationListener() {
+//                public void onAnimationStart(Animation animation) {
+//                    if (callback != null) callback.onAnimationStart();
+//                }
+//
+//                public void onAnimationEnd(Animation animation) {
+//                    fab.setVisibility(View.INVISIBLE);
+//                    if (callback != null) callback.onAnimationEnd();
+//                }
+//
+//                @Override
+//                public void onAnimationRepeat(Animation animation) {
+//                    //
+//                }
+//            });
+//            fab.startAnimation(anim);
         }
     }
 

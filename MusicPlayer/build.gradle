@@ -41,40 +41,40 @@ android {
 //}
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
-    compile "com.android.support:cardview-v7:${supportPackageVersion}"
-    compile "com.android.support:recyclerview-v7:${supportPackageVersion}"
-    compile "com.android.support:design:${supportPackageVersion}"
-    compile "com.android.support:gridlayout-v7:${supportPackageVersion}"
-    compile "com.android.support:percent:${supportPackageVersion}"
-    compile "com.android.support:palette-v7:${supportPackageVersion}"
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "com.android.support:cardview-v7:${supportPackageVersion}"
+    api "com.android.support:recyclerview-v7:${supportPackageVersion}"
+    api "com.android.support:design:${supportPackageVersion}"
+    api "com.android.support:gridlayout-v7:${supportPackageVersion}"
+    api "com.android.support:percent:${supportPackageVersion}"
+    api "com.android.support:palette-v7:${supportPackageVersion}"
 
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'net.steamcrafted:materialiconlib:1.0.3'
+    api 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    api 'net.steamcrafted:materialiconlib:1.0.3'
 
-    compile "com.squareup.retrofit2:retrofit:${retrofit2_version}"
-    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
-    compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
+    api "com.squareup.retrofit2:retrofit:${retrofit2_version}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
+    api "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
 
-//    compile "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
-    compile 'com.google.code.gson:gson:2.3'
-    compile 'de.Maxr1998:track-selector-lib:1.1'
+//    api "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
+    api 'com.google.code.gson:gson:2.3'
+    api 'de.Maxr1998:track-selector-lib:1.1'
 
-    compile 'com.afollestad.material-dialogs:core:0.9.0.2'
-    compile 'com.afollestad.material-dialogs:commons:0.9.0.2'
+    api 'com.afollestad.material-dialogs:core:0.9.0.2'
+    api 'com.afollestad.material-dialogs:commons:0.9.0.2'
 
-    compile('com.github.naman14:app-theme-engine:0.5.2@aar') {
+    api('com.github.naman14:app-theme-engine:0.5.2@aar') {
         transitive = true
     }
-//    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+//    api('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
 //        transitive = true;
 //    }
-    compile 'com.anjlab.android.iab.v3:library:1.0.+'
+    api 'com.anjlab.android.iab.v3:library:1.0.+'
 
     //Stetho是一个Android应用的调试工具 Chrome Developer Tools
-    compile "com.facebook.stetho:stetho:${stethoVersion}"
-    compile "com.facebook.stetho:stetho-okhttp:${stethoVersion}"
-
+    api "com.facebook.stetho:stetho:${stethoVersion}"
+    api "com.facebook.stetho:stetho-okhttp:${stethoVersion}"
+    api "com.android.support:support-media-compat:$supportPackageVersion"
 
 }

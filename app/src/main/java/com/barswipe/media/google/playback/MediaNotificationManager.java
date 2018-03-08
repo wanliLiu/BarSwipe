@@ -25,13 +25,13 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -360,12 +360,12 @@ public class MediaNotificationManager extends BroadcastReceiver {
         MediaDescriptionCompat description = mMetadata.getDescription();
 
         notificationBuilder
-                .setStyle(new NotificationCompat.MediaStyle()
-                        .setShowCancelButton(true)
-                        .setCancelButtonIntent(mCancleIntent)
-                        .setShowActionsInCompactView(
-                                new int[]{playPauseButtonPosition})  // show only play/pause in compact view  playPauseButtonPosition
-                        .setMediaSession(mSessionToken))
+//                .setStyle(new NotificationCompat.MediaStyle()
+//                        .setShowCancelButton(true)
+//                        .setCancelButtonIntent(mCancleIntent)
+//                        .setShowActionsInCompactView(
+//                                new int[]{playPauseButtonPosition})  // show only play/pause in compact view  playPauseButtonPosition
+//                        .setMediaSession(mSessionToken))
                 .setColor(mNotificationColor)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

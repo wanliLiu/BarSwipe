@@ -37,7 +37,8 @@ public class BaseActivity extends SwipeBackActivity {
                 super.onConnected();
                 try {
                     MediaControllerCompat mMediaController = new MediaControllerCompat(BaseActivity.this, mMediaBrowserCompat.getSessionToken());
-                    setSupportMediaController(mMediaController);
+//                    setSupportMediaController(mMediaController);
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

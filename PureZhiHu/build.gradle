@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion project.ANDROID_COMPILE_SDK_VERSION
@@ -51,43 +50,43 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':RxPermissions')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    api project(':RxPermissions')
 
     testCompile 'junit:junit:4.12'
 
-    compile "com.android.support:appcompat-v7:${supportPackageVersion}"
-    compile "com.android.support:cardview-v7:${supportPackageVersion}"
-    compile "com.android.support:recyclerview-v7:${supportPackageVersion}"
-    compile "com.android.support:design:${supportPackageVersion}"
+    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "com.android.support:cardview-v7:${supportPackageVersion}"
+    api "com.android.support:recyclerview-v7:${supportPackageVersion}"
+    api "com.android.support:design:${supportPackageVersion}"
 
     // retrofit2 + okhttp3
-    compile "com.squareup.retrofit2:retrofit:${retrofit2_version}"
-    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
-    compile "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
+    api "com.squareup.retrofit2:retrofit:${retrofit2_version}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${retrofit2_version}"
+    api "com.squareup.retrofit2:converter-gson:${retrofit2_version}"
 
-//    compile "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
-    compile "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"
+//    api "com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}"
+    api "com.squareup.okhttp3:logging-interceptor:${OKHTTP_VERSION}"
 
     //Stetho是一个Android应用的调试工具 Chrome Developer Tools
-    compile "com.facebook.stetho:stetho:${stethoVersion}"
-    compile "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
+    api "com.facebook.stetho:stetho:${stethoVersion}"
+    api "com.facebook.stetho:stetho-okhttp3:${stethoVersion}"
 
 
 //    //RxBinding
-//    compile "io.reactivex:rxjava:${rxjava_version}"
-//    compile "io.reactivex:rxandroid:${rxandroid_version}"
-//    compile "com.jakewharton.rxbinding:rxbinding:${RxBing_version}"
+//    api "io.reactivex:rxjava:${rxjava_version}"
+//    api "io.reactivex:rxandroid:${rxandroid_version}"
+//    api "com.jakewharton.rxbinding:rxbinding:${RxBing_version}"
 //
 //    //Rxlife
-//    compile "com.trello:rxlifecycle:${RxLifeCycle_version}"
-//    compile "com.trello:rxlifecycle-android:${RxLifeCycle_version}"
-//    compile "com.trello:rxlifecycle-components:${RxLifeCycle_version}"
+//    api "com.trello:rxlifecycle:${RxLifeCycle_version}"
+//    api "com.trello:rxlifecycle-android:${RxLifeCycle_version}"
+//    api "com.trello:rxlifecycle-components:${RxLifeCycle_version}"
 
-    compile "com.jakewharton:butterknife:${butterknife_version}"
+    api "com.jakewharton:butterknife:${butterknife_version}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife_version}"
     
-    compile "com.github.bumptech.glide:glide:${glide_version}"
+    api "com.github.bumptech.glide:glide:${glide_version}"
 
-    compile 'com.yalantis:phoenix:1.2.3'
+    api 'com.yalantis:phoenix:1.2.3'
 }

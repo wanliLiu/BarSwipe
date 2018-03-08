@@ -52,11 +52,11 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.Log;
@@ -1141,7 +1141,7 @@ public class MusicService extends Service {
             mNotificationPostTime = System.currentTimeMillis();
         }
 
-        android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+       NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setLargeIcon(artwork)
                 .setContentIntent(clickIntent)
@@ -1162,10 +1162,10 @@ public class MusicService extends Service {
         }
         if (TimberUtils.isLollipop()) {
             builder.setVisibility(Notification.VISIBILITY_PUBLIC);
-            NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle()
-                    .setMediaSession(mSession.getSessionToken())
-                    .setShowActionsInCompactView(0, 1, 2, 3);
-            builder.setStyle(style);
+//            NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle()
+//                    .setMediaSession(mSession.getSessionToken())
+//                    .setShowActionsInCompactView(0, 1, 2, 3);
+//            builder.setStyle(style);
         }
         if (artwork != null && TimberUtils.isLollipop())
             builder.setColor(Palette.from(artwork).generate().getVibrantColor(Color.parseColor("#403f4d")));

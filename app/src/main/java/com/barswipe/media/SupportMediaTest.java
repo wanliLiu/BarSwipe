@@ -11,7 +11,6 @@ import android.support.v4.app.TaskStackBuilder;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;
-import com.barswipe.media.google.utils.MediaMetaHelper;
 import com.barswipe.volume.wave.AcitivtyWaveTestRecycler;
 import com.jakewharton.rxbinding2.view.RxView;
 
@@ -95,8 +94,8 @@ public class SupportMediaTest extends BaseActivity {
 //            }
 //        });
 
-        RxView.clicks(findViewById(R.id.btnEffic))
-                .subscribe(o -> MediaMetaHelper.decidePlayStatus(getSupportMediaController(), MediaMetaHelper.getData(),null));
+//        RxView.clicks(findViewById(R.id.btnEffic))
+//                .subscribe(o -> MediaMetaHelper.decidePlayStatus(getSupportMediaController(), MediaMetaHelper.getData(),null));
         RxView.clicks(findViewById(R.id.notify1))
                 .subscribe(o -> showNotification());
         RxView.clicks(findViewById(R.id.notify2))
