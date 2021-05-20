@@ -41,7 +41,7 @@ android {
         ndk {
             moduleName "JniTest"
             ldLibs "log", "z", "m", "jnigraphics"
-            abiFilters "armeabi", "armeabi-v7a", "x86", "x86_64"
+            abiFilters "armeabi-v7a", "x86", "x86_64"
         }
 
     }
@@ -78,7 +78,7 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "androidx.appcompat:appcompat:1.0.0"
 
     //RxJava
     api "io.reactivex.rxjava2:rxjava:${rxjava_version}"

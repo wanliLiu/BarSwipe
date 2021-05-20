@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:text="Test" />
 
-        <android.support.v7.widget.GridLayout
+        <androidx.gridlayout.widget.GridLayout
             android:id="@+id/grd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -287,7 +287,7 @@
                 app:layout_rowWeight="1" />
 
 
-        </android.support.v7.widget.GridLayout>
+        </androidx.gridlayout.widget.GridLayout>
     </LinearLayout>
 </ScrollView>
 

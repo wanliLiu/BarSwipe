@@ -21,7 +21,7 @@ android {
             }
         }
         ndk {
-            abiFilters "armeabi", "armeabi-v7a"//, "x86", "x86_64"
+            abiFilters "armeabi-v7a"//, "x86", "x86_64"
         }
     }
     buildTypes {
@@ -50,6 +50,6 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api "com.android.support:appcompat-v7:${supportPackageVersion}"
-    api 'com.android.support.constraint:constraint-layout:1.0.2'
+    api "androidx.appcompat:appcompat:1.0.0"
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

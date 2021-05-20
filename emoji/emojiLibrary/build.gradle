@@ -15,10 +15,10 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    api "com.android.support:appcompat-v7:${supportPackageVersion}"
-    api "com.android.support:cardview-v7:${supportPackageVersion}"
-    api "com.android.support:recyclerview-v7:${supportPackageVersion}"
-    api "com.android.support:design:${supportPackageVersion}"
-    api "com.android.support:gridlayout-v7:${supportPackageVersion}"
-    api "com.android.support:percent:${supportPackageVersion}"
+    api "androidx.appcompat:appcompat:1.0.0"
+    api "androidx.cardview:cardview:1.0.0"
+    api "androidx.recyclerview:recyclerview:1.0.0"
+    api "com.google.android.material:material:1.0.0"
+    api "androidx.gridlayout:gridlayout:1.0.0"
+    api "androidx.percentlayout:percentlayout:1.0.0"
 }

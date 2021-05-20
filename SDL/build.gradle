@@ -9,7 +9,7 @@ android {
         targetSdkVersion 22
 
         ndk {
-            abiFilters "armeabi"//, "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a"//, "armeabi-v7a", "x86"
             moduleName "main"
             ldLibs "log", "z", "m", "jnigraphics", "android"
         }
@@ -37,5 +37,5 @@ android {
 }
 
 dependencies {
-    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "androidx.appcompat:appcompat:1.0.0"
 }

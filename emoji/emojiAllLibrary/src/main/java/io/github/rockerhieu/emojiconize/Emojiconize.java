@@ -15,9 +15,9 @@
  */
 package io.github.rockerhieu.emojiconize;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.LayoutInflaterCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.view.LayoutInflaterCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.style.DynamicDrawableSpan;
 import android.view.View;
 import android.view.ViewGroup;

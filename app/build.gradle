@@ -24,14 +24,14 @@ android {
         versionName project.VERSION_NAME
         versionCode Integer.parseInt(project.VERSION_CODE)
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 //        // dex突破65535的限制
         multiDexEnabled true
 
         ndk {
             moduleName "jnidemo"
             ldLibs "log", "z", "m", "jnigraphics"
-            abiFilters "armeabi", "armeabi-v7a", "x86"
+            abiFilters  "armeabi-v7a", "x86"
         }
 
         //Lambda表达式 jack编译工具
@@ -156,8 +156,8 @@ dependencies {
     if (project.jnistudyIsLibrary)
         api project(':jnistudy')
 
-    api project(":Sdk:java")
-    api project(":Sdk:android")
+//    api project(":Sdk:java")
+//    api project(":Sdk:android")
 
     //constraint-layout 学习  constraint_layout.xml
     api "com.jakewharton:butterknife:${butterknife_version}"
@@ -175,10 +175,10 @@ dependencies {
     api "com.alibaba:fastjson:${FAST_JSON_VERSION}"
     api 'com.google.code.gson:gson:2.7'
 
-    api 'com.android.support.constraint:constraint-layout:1.0.2'
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
@@ -213,5 +213,5 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1'
     api 'com.zhy:base-adapter:2.0.1'
-    api "com.android.support:support-media-compat:$supportPackageVersion"
+    api "androidx.media:media:1.3.1"
 }

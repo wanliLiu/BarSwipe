@@ -16,7 +16,7 @@ android {
         ndk {
             moduleName "mp3lame"
             ldLibs "log", "z", "m", "jnigraphics"
-            abiFilters "armeabi", "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a", "x86"
         }
 
     }
@@ -47,6 +47,6 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
 
-    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "androidx.appcompat:appcompat:1.0.0"
     api "com.danikula:videocache:${videocache}"
 }

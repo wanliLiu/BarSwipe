@@ -1,8 +1,8 @@
 package com.barswipe;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.gridlayout.widget.GridLayout;
 import android.view.View;
 
 import com.jakewharton.rxbinding2.view.RxView;

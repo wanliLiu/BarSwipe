@@ -7,7 +7,7 @@
         android:imeOptions="actionSearch"
         android:inputType="textCapWords"
         android:title="@string/search_edit_box"
-        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
 
     <item

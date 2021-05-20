@@ -1,7 +1,7 @@
 package io.github.laucherish.purezhihud.ui.adapter;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by laucherish on 16/3/4.

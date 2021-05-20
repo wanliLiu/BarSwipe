@@ -13,7 +13,7 @@ android {
         ndk {
             moduleName "amr-codec"
             ldLibs "log", "z", "m","jnigraphics"
-            abiFilters "armeabi", "armeabi-v7a", "x86"
+            abiFilters  "armeabi-v7a", "x86"
         }
     }
 

@@ -16,7 +16,7 @@
 
 package io.github.rockerhieu.emojicon;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import io.github.rockerhieu.emojicon.emoji.Emojicon;
 

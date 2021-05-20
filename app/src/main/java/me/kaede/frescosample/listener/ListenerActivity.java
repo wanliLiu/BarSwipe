@@ -3,7 +3,7 @@ package me.kaede.frescosample.listener;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.Toast;
 
 import com.barswipe.BaseActivity;

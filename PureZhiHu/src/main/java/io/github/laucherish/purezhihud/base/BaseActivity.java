@@ -2,7 +2,7 @@ package io.github.laucherish.purezhihud.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;

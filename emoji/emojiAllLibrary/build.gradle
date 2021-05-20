@@ -43,6 +43,6 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api "com.android.support:appcompat-v7:${supportPackageVersion}"
+    api "androidx.appcompat:appcompat:1.0.0"
     api project(':emoji:emojiLibrary')
 }

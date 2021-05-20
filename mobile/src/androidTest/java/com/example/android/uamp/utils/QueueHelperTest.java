@@ -17,7 +17,7 @@ package com.example.android.uamp.utils;
 
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 

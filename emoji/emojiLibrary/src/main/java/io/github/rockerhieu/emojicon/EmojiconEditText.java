@@ -17,7 +17,7 @@ package io.github.rockerhieu.emojicon;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
 

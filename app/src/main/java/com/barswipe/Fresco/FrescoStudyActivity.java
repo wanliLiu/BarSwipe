@@ -2,7 +2,7 @@ package com.barswipe.Fresco;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import androidx.annotation.IdRes;
 
 import com.barswipe.BaseActivity;
 import com.barswipe.R;

@@ -1,9 +1,9 @@
 package com.barswipe.fram;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.view.ViewCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.barswipe.R;
 import com.jakewharton.rxbinding2.view.RxView;

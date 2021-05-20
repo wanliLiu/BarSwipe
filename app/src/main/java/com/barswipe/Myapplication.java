@@ -1,6 +1,6 @@
 package com.barswipe;
 
-import android.support.multidex.MultiDexApplication;
+import androidx.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;

@@ -1,6 +1,6 @@
 package com.barswipe.luban.library;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public final class Preconditions {
 
